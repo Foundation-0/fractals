@@ -15,3 +15,10 @@ Claims made during the exploration that did not survive it, kept so the record s
    checking the grain size.
 4. **"Within a factor of 3" of the Joos–Zeh table.** Stated for all three environments. Sunlight is within a
    factor of 4.4; the afterglow and air are within 3.
+5. **Dark matter's missing witnesses and the galaxy-sized wave.** Claimed (README and page): having no witnesses
+   "is part of what makes a galaxy-sized dark matter wave possible". Too strong, and it points the wrong way. The
+   galaxy-sized wave is a crowd, about 10⁹³ particles to each lump of the wave near the Sun for a 10⁻²² eV
+   particle, acting as one classical wave. Its lumps, about 10⁵ Suns each, are recorded by every star they pass,
+   through gravity. The wave survives because recording a classical wave does not erase it, not because nothing
+   watches it. What the per-particle result does say is that nothing knocks single particles out of the wave.
+   See "The crowd wave" in the README.

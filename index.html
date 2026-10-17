@@ -153,6 +153,15 @@ select { font: inherit; font-size: 0.95rem; color: var(--ink); background: var(-
 .who-row .num { text-align: right; font-size: 0.8rem; color: var(--muted); }
 .note { font-size: 0.9rem; color: var(--muted); }
 
+/* The crowd: a separate panel, never on the W axis */
+.crowd { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 18px 16px; display: grid; gap: 14px; }
+.crowd-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 6px 16px; }
+.tag { font-family: var(--font-data); font-size: 0.8rem; padding: 3px 9px; border-radius: 999px; border: 1px dashed var(--muted); color: var(--muted); white-space: nowrap; }
+.crowd-list { display: grid; gap: 0; }
+.crowd-card { display: grid; gap: 10px; padding: 14px 0; border-top: 1px solid var(--line); }
+.crowd-card:last-child { padding-bottom: 0; }
+.crowd-card .name .n { font-size: 1rem; }
+
 /* Prose sections */
 .notes { display: grid; gap: 14px; }
 .notes ul { margin: 0; padding-left: 1.1rem; display: grid; gap: 8px; max-width: 68ch; }
@@ -240,6 +249,14 @@ select { font: inherit; font-size: 0.95rem; color: var(--ink); background: var(-
     <ul id="findings"></ul>
   </section>
 
+  <section class="crowd" aria-labelledby="crowdTitle">
+    <div class="crowd-head"><h2 id="crowdTitle">The crowd: where the map stops</h2><span class="tag">not a witness number</span></div>
+    <p>Every row above asks about one particle. Wave dark matter in a galaxy is never one particle. Its wave breaks into lumps, and each lump is shared by so many particles that together they act as one ordinary wave, the way countless photons make one radio wave. The crowd keeps its own clocks, and they are measured against the age of the universe, not against a gap.</p>
+    <p>And the crowd is watched. One particle's pull is far too weak to leave a record, but a lump is a vast number of particles pulling together, and every star it passes is nudged. A nudge of that size is enormous by quantum standards, so the star now holds a record of where the lump was. The wave survives anyway: recording the shape of an ordinary wave does not erase it, any more than measuring a sea wave flattens the sea.</p>
+    <div class="crowd-list" id="crowdList"></div>
+    <p class="note">Order of magnitude, like the map. Lump lifetime ħ/(mσ²), lump mass π<sup>3/2</sup>ρ(ħ/mσ)³ and stirring time from <a class="srclink" href="https://arxiv.org/abs/1809.07673">Bar-Or, Fouvry &amp; Tremaine 2019</a>; the core is the ground state of the Schrödinger–Poisson equations, checked against <a class="srclink" href="https://arxiv.org/abs/1406.6586">Schive et al. 2014</a> and <a class="srclink" href="https://arxiv.org/abs/1912.09483">2020</a>; breathing from <a class="srclink" href="https://arxiv.org/abs/1804.09647">Veltmaat et al. 2018</a>. Inputs and derivations: <a class="srclink" href="https://github.com/Foundation-0/fractals#the-crowd-wave-where-the-map-stops">README</a>.</p>
+  </section>
+
   <section class="method">
     <h2>How it's computed</h2>
     <p>Everything runs live in this page from first principles. Treat the numbers as order-of-magnitude: the method is good to within a factor of a few, and the map spans more than 150 powers of ten.</p>
@@ -248,29 +265,31 @@ select { font: inherit; font-size: 0.95rem; color: var(--ink); background: var(-
       <li><b>Hits per second.</b> Photons from the surroundings (a full thermal spectrum at each source's temperature), gas atoms, solar wind, and the object's own heat glow. Cross-sections are geometric for objects bigger than the wavelength and fall off as (size/wavelength)⁴ for smaller ones. Electrons use the standard electron–photon value. Molecules glow 100× weaker than solid grains.</li>
       <li><b>Information per hit.</b> A hit with wavelength λ can only tell the two places apart if the gap is comparable to λ. The fraction is 1 − exp(−(2πΔx/λ)²/3): tiny for gaps much smaller than λ, one full record for larger gaps.</li>
       <li><b>Black hole horizon.</b> Γ = G⁶M⁵m²Δx⁴ / (ħc¹⁰b¹⁰) for distance b, and an electric version for the electron. Valid only when the gap is much smaller than the distance.</li>
+      <li><b>The crowd.</b> For particle mass m, density ρ and speed spread σ: lumps about πħ/(mσ) across, living ħ/(mσ²), each pulling like a body of mass π<sup>3/2</sup>ρ(ħ/mσ)³. The stirring time is how long their tugs take to change a star's speed by as much as the halo's own spread of speeds.</li>
     </ul>
     <h3>Checks against published numbers</h3>
     <ul>
       <li>Light and gas scattering on a 10 µm grain match the Joos–Zeh decoherence table to within a factor of 3 for the Big Bang afterglow and air, and 4.4 for sunlight. The table gives powers of ten only.</li>
       <li>The horizon formula reproduces both worked examples in the Wald paper: Earth split by its own radius beside a Sun-mass black hole (paper: ~10 µs, here: ~20 µs) and an electron split by 1 m (paper: ~10⁴³ years, here: ~4×10⁴² years).</li>
       <li>A buckyball here loses its wave behavior when heated to about 2,500–3,000 K, in line with the 2004 Vienna heating experiment.</li>
+      <li>The crowd's lump mass and stirring time reproduce the worked numbers of Bar-Or, Fouvry and Tremaine (2019) to 2%. The core, solved here from first principles, matches the density and mass formulas of Schive, Chiueh and Broadhurst (2014) to about 2% and their core wave period (2020) to 1%.</li>
       <li>All of these run as <a class="srclink" href="https://github.com/Foundation-0/fractals/blob/main/tests/checks.mjs">automated checks</a> (<code>npm test</code>). Mistakes found along the way are in <a class="srclink" href="https://github.com/Foundation-0/fractals/blob/main/CORRECTIONS.md">CORRECTIONS.md</a>.</li>
     </ul>
     <h3>What it leaves out</h3>
     <ul>
       <li>Objects are treated as sitting still. Fast motion, internal structure and spin are ignored.</li>
-      <li>W is per particle. Wave dark matter's galaxy-wide wave is a crowd effect, enormous numbers of particles sharing one wave, which this map doesn't model.</li>
+      <li>W is per particle. Wave dark matter's galaxy-wide wave is a crowd effect, enormous numbers of particles sharing one wave. The crowd panel above gives its clocks; it has no witness number.</li>
       <li>Gravity's only witness here is a black hole horizon. Gravitational nudges from passing stars are treated as zero.</li>
     </ul>
     <p class="src">Code: <a href="https://github.com/Foundation-0/fractals">Foundation-0/fractals</a> · <a href="https://github.com/Foundation-0/fractals/issues">open questions</a></p>
-    <p class="src">Sources: <a href="https://doi.org/10.1007/BF01725541">Joos &amp; Zeh 1985</a> · <a href="https://arxiv.org/abs/2205.06279">Danielson, Satishchandran &amp; Wald 2022</a> · <a href="https://www.doi.org/10.1038/25653">Dürr, Nonn &amp; Rempe 1998</a> · <a href="https://arxiv.org/abs/2211.00449">Bild et al. 2023</a> · <a href="https://arxiv.org/pdf/1001.3419">Riedel &amp; Zurek 2010</a></p>
+    <p class="src">Sources: <a href="https://doi.org/10.1007/BF01725541">Joos &amp; Zeh 1985</a> · <a href="https://arxiv.org/abs/2205.06279">Danielson, Satishchandran &amp; Wald 2022</a> · <a href="https://www.doi.org/10.1038/25653">Dürr, Nonn &amp; Rempe 1998</a> · <a href="https://arxiv.org/abs/2211.00449">Bild et al. 2023</a> · <a href="https://arxiv.org/pdf/1001.3419">Riedel &amp; Zurek 2010</a> · <a href="https://arxiv.org/abs/1610.08297">Hui, Ostriker, Tremaine &amp; Witten 2017</a> · <a href="https://arxiv.org/abs/1809.07673">Bar-Or, Fouvry &amp; Tremaine 2019</a> · <a href="https://arxiv.org/abs/2005.12287">Allali &amp; Hertzberg 2020</a></p>
   </section>
 </div>
 
 <script src="witness-map/model.js"></script>
 <script>
 // The model lives in witness-map/model.js (window.WM), the same file npm test checks.
-const { C, ENVS, OBJECTS, rates, BH_M, RS } = window.WM;
+const { C, ENVS, OBJECTS, rates, BH_M, RS, crowd, CROWDS } = window.WM;
 
 // ---------- formatting ----------
 const SUPMAP = { "-": "−" };
@@ -426,7 +445,8 @@ function renderDetail({ o, env, r, dx }) {
     </div>
     ${parts.length ? `<div class="who"><h3>Who's watching, by share of records</h3>${whoRows}</div>` : ""}
     ${bhLine}
-    ${o.seen ? `<p class="note">Seen behaving as a wave in experiments (${o.seen}), at gaps of roughly a few hundred nanometres or less.</p>` : ""}`;
+    ${o.seen ? `<p class="note">Seen behaving as a wave in experiments (${o.seen}), at gaps of roughly a few hundred nanometres or less.</p>` : ""}
+    ${o.id === "fdm" ? `<p class="note">This row is one particle alone. In a galaxy these particles come in crowds, about ${pow10(crowd(CROWDS[0]).perLump)} to each lump of the wave near the Sun, and the crowd is watched by every star. See the crowd panel further down.</p>` : ""}`;
 }
 
 function renderFindings(res) {
@@ -442,13 +462,44 @@ function renderFindings(res) {
     `<b>Lab-proven waves sit on the wave side.</b> At the current gap (${fmtLen(dx)}), ${seenWave} of the ${seen.length} objects that have been seen acting as waves in experiments land left of the line. Slide the gap up and the giant molecule crosses first, watched by its own heat glow.`,
     closest ? `<b>Everything bigger is flooded with witnesses at home.</b> The closest call among the rest is the ${closest.o.name.toLowerCase()}, at W ≈ ${pow10only(closest.r.W)} in ${(state.env === "natural" ? ENVS[closest.o.home] : ENVS[state.env]).name.toLowerCase()}.` : "",
     `<b>Silence the witnesses and size matters less.</b> A virus moved into a 4 K vacuum scores W ≈ ${pow10only(vCold)} at this gap. That is why physicists have proposed putting a virus in two places at once inside a cold vacuum.`,
-    `<b>Dark matter has no witnesses at all here.</b> It is the only thing on the map that stays on the wave side at every gap, however heavy the particle. That lack of witnesses is part of what makes a galaxy-sized dark matter wave possible at all.`,
+    `<b>Dark matter has no witnesses at all here.</b> It is the only thing on the map that stays on the wave side at every gap, however heavy the particle. That is true of one particle. The galaxy-sized dark matter wave is a crowd, and its lumps are felt by every star (see the crowd panel).`,
     `<b>A black hole watches, but feebly.</b> Even 10 horizon radii from the Milky Way's black hole, a wave dark matter particle split across a 1 µm gap would wait about ${fmtTime(1 / rates(OBJECTS.find(o => o.id === "fdm"), ENVS.intergalactic, 1e-6, { M: BH_M, b: 10 * RS }).gamma)} for the horizon to record it. The horizon only beats ordinary witnesses for objects that are already classical.`,
     `<b>Mass still counts, through the wave clock.</b> Heavier objects spread slowly, so they need to stay unwatched for longer. At this gap the Sun's wave clock is ${fmtTime(sun.tWave)}, so even a trickle of witnesses settles it.`,
   ].filter(Boolean);
   $("findings").innerHTML = items.map(t => `<li>${t}</li>`).join("");
 }
 
+// ---------- the crowd: a whole halo of wave dark matter, not a witness number ----------
+function fmtDist(m) { return m < 9.46e14 ? p2(m / C.au) + " AU" : m < C.kpc ? p2(m / C.ly) + " light-years" : p2(m / C.kpc) + " kpc"; }
+function fmtYears(s) { const y = s / YEAR; if (y < 1e6) return p2(y) + " years"; if (y < 1e9) return p2(y / 1e6) + " million years"; if (y < 1e12) return p2(y / 1e9) + " billion years"; return pow10(y) + " years"; }
+function fmtSpeed(v) { return v >= 1 ? p2(v) + " m/s" : v >= 1e-3 ? p2(v * 1e3) + " mm/s" : p2(v * 1e6) + " µm/s"; }
+function fmtSuns(kg) { return pow10(kg / C.Msun) + " Suns"; }
+function earths(kg) { return kg < 1e-3 * C.Msun ? `about ${p2(kg / OBJECTS.find(o => o.id === "earth").m)} Earths; ` : ""; }
+function ageRatio(s) { const r = s / AGE; return r >= 1 ? `${r < 1e4 ? p2(r) : pow10(r)} times the age of the universe` : `${p2(100 * r)}% of the age of the universe`; }
+function renderCrowd() {
+  const fact = (k, v, sub) => `<div class="fact"><span class="k">${k}</span><span class="v">${v}</span><span class="s">${sub}</span></div>`;
+  $("crowdList").innerHTML = CROWDS.map(h => {
+    const r = crowd(h);
+    const facts = r.kind === "halo" ? [
+      fact("Lump size", fmtDist(r.size), "half a de Broglie wavelength"),
+      fact("Lump mass", fmtSuns(r.mLump), `${earths(r.mLump)}${pow10(r.perLump)} particles share it`),
+      fact("Lump lifetime", fmtYears(r.tLump), `one particle's wave clock at a ${fmtDist(r.lam)} gap`),
+      fact("Stirring time", fmtYears(r.tStir), ageRatio(r.tStir)),
+      fact("Kick from one lump", fmtSpeed(r.kick), "on each star it passes"),
+      fact("Witnessed?", "Yes, by gravity", "every star it nudges holds a record"),
+    ] : [
+      fact("Core radius", fmtDist(h.rc), "one standing wave, no lumps inside"),
+      fact("Core mass", fmtSuns(r.mSol), `${pow10(r.perLump)} particles share it`),
+      fact("Peak density", `${p2(r.rhoC / (C.Msun / Math.pow(C.kpc / 1e3, 3)))} Suns per pc³`, `${p2(r.rhoC / CROWDS[0].rho)} times the dark matter density near the Sun`),
+      fact("Wave turns over every", fmtYears(r.tWave), "the core wanders on this time"),
+      fact("Breathes every", fmtYears(r.tBreath), "central density swings more than twofold"),
+      fact("Witnessed?", "Yes, by gravity", "its stars are shaken by it"),
+    ];
+    return `<div class="crowd-card"><span class="name"><span class="n">${h.name}</span><span class="m">${h.note}</span></span><div class="facts">${facts.join("")}</div></div>`;
+  }).join("");
+}
+
+renderCrowd();
 update();
 </script>
 </body>
