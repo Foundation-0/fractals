@@ -66,7 +66,7 @@ Interactive version: **https://foundation-0.github.io/fractals/** (`index.html` 
 
 ## Run it
 
-Needs Node 18 or later, nothing else.
+Needs Node 18 or later, nothing else. The checks run on every pull request, on Node 18, 20 and 22.
 
 ```
 npm test                                 # checks the model against published numbers
