@@ -1,0 +1,455 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="Every object from an electron to the Milky Way, asked whether it can be in two places at once. An order-of-magnitude model of how fast surroundings erase wave behaviour. Exploration, not peer reviewed.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Witness Map: where quantum turns classical">
+<meta property="og:description" content="Every object from an electron to the Milky Way, asked whether it can be in two places at once. An order-of-magnitude model of how fast surroundings erase wave behaviour. Exploration, not peer reviewed.">
+<meta property="og:url" content="https://foundation-0.github.io/fractals/">
+<title>Witness Map</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=IBM+Plex+Mono:wght@400;500&family=Literata:opsz,wght@7..72,500;7..72,600&display=swap">
+<style>
+.srclink { color: var(--accent); }
+code { font-family: var(--font-data); font-size: 0.9em; }
+/* Layout: one reading column; a ruled instrument panel of rows (one per object) on a log scale of "witness number", detail readout below. */
+:root {
+  --bg: #f4f5f7;
+  --surface: #ffffff;
+  --ink: #15181d;
+  --muted: #59606d;
+  --faint: #8a909b;
+  --line: #dde0e6;
+  --accent: #0f6e66;
+  --accent-soft: #e2f0ee;
+  --wave: #2a78d6;
+  --wave-tint: rgba(42,120,214,0.07);
+  --watch: #e34948;
+  --watch-tint: rgba(227,73,72,0.06);
+  --edge: #8a8f99;
+  --bar: #3c4350;
+  --font-display: "Literata", "Iowan Old Style", Georgia, serif;
+  --font-body: "Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
+  --font-data: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #101216; --surface: #171a1f; --ink: #e8eaee; --muted: #a3a9b5; --faint: #7b818c;
+    --line: #2a2e36; --accent: #4fb3a9; --accent-soft: #1b2e2c; --wave: #3987e5;
+    --wave-tint: rgba(57,135,229,0.10); --watch: #e66767; --watch-tint: rgba(230,103,103,0.08);
+    --edge: #8d929c; --bar: #c4c9d2; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #101216; --surface: #171a1f; --ink: #e8eaee; --muted: #a3a9b5; --faint: #7b818c;
+  --line: #2a2e36; --accent: #4fb3a9; --accent-soft: #1b2e2c; --wave: #3987e5;
+  --wave-tint: rgba(57,135,229,0.10); --watch: #e66767; --watch-tint: rgba(230,103,103,0.08);
+  --edge: #8d929c; --bar: #c4c9d2; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 16px; line-height: 1.55;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 28px 56px;
+}
+.wrap { max-width: 860px; margin: 0 auto; display: grid; gap: 28px; }
+h1, h2, h3 { font-family: var(--font-display); font-weight: 600; text-wrap: balance; margin: 0; line-height: 1.15; }
+h1 { font-size: clamp(2rem, 6vw, 2.9rem); letter-spacing: -0.01em; }
+h2 { font-size: 1.35rem; }
+h3 { font-size: 1.05rem; }
+p { margin: 0; max-width: 65ch; }
+.eyebrow { font-family: var(--font-data); font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.lede { color: var(--muted); font-size: 1.05rem; }
+header { display: grid; gap: 10px; }
+.mono, .num { font-family: var(--font-data); font-variant-numeric: tabular-nums; }
+sup { font-size: 0.72em; line-height: 0; }
+
+/* Two clocks */
+.clocks { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.clock { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; display: grid; gap: 6px; min-width: 0; }
+.clock .k { font-family: var(--font-data); font-size: 0.72rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+.ratio { grid-column: 1 / -1; display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 14px; padding: 4px 2px; }
+.ratio .eq { font-family: var(--font-display); font-size: 1.15rem; }
+.ratio .eq b { font-weight: 600; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 0.9rem; color: var(--muted); }
+.key { display: inline-flex; align-items: center; gap: 6px; }
+.sw { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+.sw.wave { background: var(--wave); } .sw.watch { background: var(--watch); } .sw.edge { background: var(--edge); }
+.sw.none { background: transparent; border: 2px solid var(--wave); }
+
+/* Controls */
+.controls { display: grid; gap: 16px; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 16px; }
+.ctl { display: grid; gap: 8px; min-width: 0; }
+.ctl-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+label, .lbl { font-weight: 700; font-size: 0.92rem; }
+.gapread { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.gapread .num { font-size: 1.1rem; color: var(--accent); }
+input[type="range"] { width: 100%; accent-color: var(--accent); }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { font: inherit; font-size: 0.82rem; border: 1px solid var(--line); background: var(--bg); color: var(--ink); border-radius: 999px; padding: 4px 10px; cursor: pointer; }
+.chip:hover { border-color: var(--accent); }
+.chip[aria-pressed="true"] { background: var(--accent-soft); border-color: var(--accent); color: var(--ink); }
+select { font: inherit; font-size: 0.95rem; color: var(--ink); background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; width: 100%; }
+.check { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 0.92rem; }
+.check input { accent-color: var(--accent); width: 18px; height: 18px; }
+.hint { font-size: 0.85rem; color: var(--muted); }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* Chart */
+.chart { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 12px 0 8px; overflow: hidden; }
+.grid { display: grid; grid-template-columns: minmax(0, 210px) minmax(0, 1fr) 82px; column-gap: 14px; align-items: center; padding: 0 16px; }
+.axis { padding-bottom: 6px; }
+.axis .track { height: 40px; }
+.regions { position: absolute; inset: 0 0 auto 0; height: 18px; font-size: 0.75rem; font-family: var(--font-data); letter-spacing: 0.04em; }
+.regions span { position: absolute; top: 0; white-space: nowrap; }
+.reg-wave { color: var(--wave); left: 0; }
+.reg-watch { color: var(--watch); transform: translateX(6px); }
+.regions .short { display: none; }
+.tick { position: absolute; top: 22px; transform: translateX(-50%); font-family: var(--font-data); font-size: 0.72rem; color: var(--muted); white-space: nowrap; }
+.axis-cap { font-family: var(--font-data); font-size: 0.72rem; color: var(--muted); text-align: right; }
+.rows { display: grid; }
+.row { all: unset; box-sizing: border-box; display: grid; grid-template-columns: minmax(0, 210px) minmax(0, 1fr) 82px; column-gap: 14px; align-items: center; padding: 7px 16px; cursor: pointer; border-top: 1px solid var(--line); }
+.row:hover { background: var(--bg); }
+.row[aria-pressed="true"] { background: var(--accent-soft); }
+.row:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+.name { min-width: 0; display: grid; gap: 1px; }
+.name .n { font-weight: 700; font-size: 0.94rem; line-height: 1.25; }
+.name .m { font-family: var(--font-data); font-size: 0.72rem; color: var(--muted); }
+.seen { font-family: var(--font-data); font-size: 0.66rem; letter-spacing: 0.04em; text-transform: uppercase; color: var(--wave); margin-left: 6px; white-space: nowrap; }
+.track { position: relative; height: 24px; }
+.band-wave, .band-watch { position: absolute; top: 0; bottom: 0; }
+.band-wave { left: 0; background: var(--wave-tint); }
+.band-watch { right: 0; background: var(--watch-tint); }
+.zero { position: absolute; top: -8px; bottom: -8px; width: 0; border-left: 1.5px solid var(--ink); opacity: 0.55; }
+.axis .zero { top: 18px; bottom: 0; }
+.gridline { position: absolute; top: 0; bottom: 0; width: 0; border-left: 1px dashed var(--line); }
+.dot { position: absolute; top: 50%; width: 12px; height: 12px; border-radius: 50%; transform: translate(-50%, -50%); background: var(--edge); box-shadow: 0 0 0 2px var(--surface); transition: left 260ms ease, background-color 260ms ease; }
+.dot.wave { background: var(--wave); } .dot.watch { background: var(--watch); }
+.dot.none { background: var(--surface); border: 2px solid var(--wave); }
+.dot.clip::after { content: ""; position: absolute; top: 50%; width: 0; height: 0; border-block: 5px solid transparent; transform: translateY(-50%); }
+.dot.clip-l::after { right: 14px; border-right: 7px solid var(--wave); }
+.dot.clip-r::after { left: 14px; border-left: 7px solid var(--watch); }
+.val { font-family: var(--font-data); font-size: 0.82rem; text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.val.none { color: var(--wave); font-size: 0.72rem; white-space: normal; line-height: 1.2; }
+@media (prefers-reduced-motion: reduce) { .dot { transition: none; } }
+
+/* Detail */
+.detail { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 18px 16px; display: grid; gap: 16px; }
+.detail-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 6px 16px; }
+.verdict { font-family: var(--font-data); font-size: 0.8rem; padding: 3px 9px; border-radius: 999px; border: 1px solid currentColor; white-space: nowrap; }
+.verdict.wave { color: var(--wave); } .verdict.watch { color: var(--watch); } .verdict.edge { color: var(--edge); }
+.facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.fact { display: grid; gap: 2px; min-width: 0; }
+.fact .k { font-size: 0.8rem; color: var(--muted); }
+.fact .v { font-family: var(--font-data); font-size: 1rem; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.fact .s { font-size: 0.8rem; color: var(--muted); }
+.who { display: grid; gap: 8px; }
+.who-row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr) 66px; gap: 10px; align-items: center; font-size: 0.9rem; }
+.who-bar { height: 8px; background: var(--line); border-radius: 0 4px 4px 0; position: relative; }
+.who-bar i { position: absolute; inset: 0 auto 0 0; background: var(--bar); border-radius: 0 4px 4px 0; }
+.who-row .num { text-align: right; font-size: 0.8rem; color: var(--muted); }
+.note { font-size: 0.9rem; color: var(--muted); }
+
+/* Prose sections */
+.notes { display: grid; gap: 14px; }
+.notes ul { margin: 0; padding-left: 1.1rem; display: grid; gap: 8px; max-width: 68ch; }
+.method { display: grid; gap: 12px; font-size: 0.95rem; }
+.method p, .method li { color: var(--muted); }
+.method ul { margin: 0; padding-left: 1.1rem; display: grid; gap: 6px; max-width: 68ch; }
+.src a { color: var(--accent); }
+.formula { font-family: var(--font-data); font-size: 0.86rem; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; overflow-x: auto; white-space: nowrap; color: var(--ink); }
+
+@media (max-width: 640px) {
+  .clocks, .ctl-row { grid-template-columns: 1fr; }
+  .grid { grid-template-columns: minmax(0, 1fr); }
+  .grid .spacer, .grid .axis-cap { display: none; }
+  .row { grid-template-columns: minmax(0, 1fr) auto; grid-template-areas: "name val" "track track"; row-gap: 6px; padding: 9px 16px; }
+  .row .name { grid-area: name; } .row .val { grid-area: val; } .row .track { grid-area: track; }
+  .facts { grid-template-columns: 1fr 1fr; }
+  .regions .long { display: none; } .regions .short { display: inline; }
+  .who-row { grid-template-columns: minmax(0, 1fr) 70px; }
+  .who-row .who-bar { grid-column: 1 / -1; grid-row: 2; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="eyebrow">fractals · first study · where quantum turns classical</div>
+    <h1>Witness Map</h1>
+    <p class="lede">Every object here is asked the same question: can it be in two places at once, a set gap apart? The answer comes down to a race between two clocks.</p>
+    <p class="hint">Exploration, not peer reviewed, no new result claimed. By Aska Digital with Claude (Anthropic) for Foundation0. Model, checks and open questions: <a class="srclink" href="https://github.com/Foundation-0/fractals">Foundation-0/fractals</a>.</p>
+  </header>
+
+  <section class="clocks" aria-label="The two clocks">
+    <div class="clock">
+      <span class="k">Wave clock</span>
+      <p>How long the object's wave needs to spread across the gap. Heavier things spread slower, so their clock runs long.</p>
+    </div>
+    <div class="clock">
+      <span class="k">Witness clock</span>
+      <p>How long until something in its surroundings (a photon, a gas atom, its own heat glow) carries off a record of which place it's in.</p>
+    </div>
+    <div class="ratio">
+      <span class="eq">Witness number <b>W</b> = wave clock ÷ witness clock</span>
+      <div class="legend">
+        <span class="key"><span class="sw wave"></span>W below 1: the wave wins, it can act quantum</span>
+        <span class="key"><span class="sw watch"></span>W above 1: witnesses win, it acts classical</span>
+        <span class="key"><span class="sw edge"></span>within 10× of the line</span>
+        <span class="key"><span class="sw none"></span>nothing witnesses it</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="controls" aria-label="Settings">
+    <div class="ctl">
+      <div class="gapread"><label for="gap">Gap between the two places</label><span class="num" id="gapText">250 nm</span></div>
+      <input type="range" id="gap" min="-9" max="20" step="0.01" value="-6.602">
+      <div class="chips" id="chips"></div>
+    </div>
+    <div class="ctl-row">
+      <div class="ctl">
+        <label for="env">Surroundings</label>
+        <select id="env"></select>
+        <span class="hint" id="envHint">Each object sits where it's normally found.</span>
+      </div>
+      <div class="ctl">
+        <label class="check"><input type="checkbox" id="bh"> Add the Milky Way's black hole as a witness</label>
+        <select id="bhDist" aria-label="Distance from the black hole" disabled></select>
+        <span class="hint" id="bhHint">Sagittarius A*, 4.3 million Suns. Uses the horizon formula of Danielson, Satishchandran and Wald.</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="chart" aria-label="Witness number for each object">
+    <div class="grid axis">
+      <span class="spacer"></span>
+      <div class="track" id="axisTrack"></div>
+      <span class="axis-cap">W</span>
+    </div>
+    <div class="rows" id="rows"></div>
+  </section>
+
+  <section class="detail" id="detail" aria-live="polite"></section>
+
+  <section class="notes">
+    <h2>What the map shows</h2>
+    <ul id="findings"></ul>
+  </section>
+
+  <section class="method">
+    <h2>How it's computed</h2>
+    <p>Everything runs live in this page from first principles. Treat the numbers as order-of-magnitude: the method is good to within a factor of a few, and the map spans more than 150 powers of ten.</p>
+    <div class="formula">wave clock = m·Δx² / ħ &nbsp;&nbsp;·&nbsp;&nbsp; witness rate Γ = Σ (hits per second) × (information per hit) &nbsp;&nbsp;·&nbsp;&nbsp; W = Γ × wave clock</div>
+    <ul>
+      <li><b>Hits per second.</b> Photons from the surroundings (a full thermal spectrum at each source's temperature), gas atoms, solar wind, and the object's own heat glow. Cross-sections are geometric for objects bigger than the wavelength and fall off as (size/wavelength)⁴ for smaller ones. Electrons use the standard electron–photon value. Molecules glow 100× weaker than solid grains.</li>
+      <li><b>Information per hit.</b> A hit with wavelength λ can only tell the two places apart if the gap is comparable to λ. The fraction is 1 − exp(−(2πΔx/λ)²/3): tiny for gaps much smaller than λ, one full record for larger gaps.</li>
+      <li><b>Black hole horizon.</b> Γ = G⁶M⁵m²Δx⁴ / (ħc¹⁰b¹⁰) for distance b, and an electric version for the electron. Valid only when the gap is much smaller than the distance.</li>
+    </ul>
+    <h3>Checks against published numbers</h3>
+    <ul>
+      <li>Light and gas scattering on a 10 µm grain match the Joos–Zeh decoherence table to within a factor of 3 for the Big Bang afterglow and air, and 4.4 for sunlight. The table gives powers of ten only.</li>
+      <li>The horizon formula reproduces both worked examples in the Wald paper: Earth split by its own radius beside a Sun-mass black hole (paper: ~10 µs, here: ~20 µs) and an electron split by 1 m (paper: ~10⁴³ years, here: ~4×10⁴² years).</li>
+      <li>A buckyball here loses its wave behavior when heated to about 2,500–3,000 K, in line with the 2004 Vienna heating experiment.</li>
+      <li>All of these run as <a class="srclink" href="https://github.com/Foundation-0/fractals/blob/main/tests/checks.mjs">automated checks</a> (<code>npm test</code>). Mistakes found along the way are in <a class="srclink" href="https://github.com/Foundation-0/fractals/blob/main/CORRECTIONS.md">CORRECTIONS.md</a>.</li>
+    </ul>
+    <h3>What it leaves out</h3>
+    <ul>
+      <li>Objects are treated as sitting still. Fast motion, internal structure and spin are ignored.</li>
+      <li>W is per particle. Wave dark matter's galaxy-wide wave is a crowd effect, enormous numbers of particles sharing one wave, which this map doesn't model.</li>
+      <li>Gravity's only witness here is a black hole horizon. Gravitational nudges from passing stars are treated as zero.</li>
+    </ul>
+    <p class="src">Code: <a href="https://github.com/Foundation-0/fractals">Foundation-0/fractals</a> · <a href="https://github.com/Foundation-0/fractals/issues">open questions</a></p>
+    <p class="src">Sources: <a href="https://doi.org/10.1007/BF01725541">Joos &amp; Zeh 1985</a> · <a href="https://arxiv.org/abs/2205.06279">Danielson, Satishchandran &amp; Wald 2022</a> · <a href="https://www.doi.org/10.1038/25653">Dürr, Nonn &amp; Rempe 1998</a> · <a href="https://arxiv.org/abs/2211.00449">Bild et al. 2023</a> · <a href="https://arxiv.org/pdf/1001.3419">Riedel &amp; Zurek 2010</a></p>
+  </section>
+</div>
+
+<script src="witness-map/model.js"></script>
+<script>
+// The model lives in witness-map/model.js (window.WM), the same file npm test checks.
+const { C, ENVS, OBJECTS, rates, BH_M, RS } = window.WM;
+
+// ---------- formatting ----------
+const SUPMAP = { "-": "−" };
+function pow10(x) { // HTML for a positive number as a×10^n
+  if (!isFinite(x)) return "∞";
+  if (x === 0) return "0";
+  const e = Math.floor(Math.log10(x)); const m = x / Math.pow(10, e);
+  if (e >= -2 && e <= 3) return x >= 100 ? Math.round(x).toLocaleString("en-US") : (x >= 1 ? x.toPrecision(2) : x.toPrecision(2));
+  const ms = m.toFixed(1).replace(/\.0$/, "");
+  const es = String(e).replace("-", "−");
+  return (ms === "1" ? "" : ms + "×") + "10<sup>" + es + "</sup>";
+}
+function pow10only(x) {
+  if (x === 0) return "0";
+  const e = Math.round(Math.log10(x));
+  if (e === 0) return "1"; if (e === 1) return "10";
+  return "10<sup>" + String(e).replace("-", "−") + "</sup>";
+}
+function fmtLen(m) {
+  const n = (v, u) => (v >= 100 ? Math.round(v).toLocaleString("en-US") : v.toPrecision(2).replace(/\.0+$/, "")) + " " + u;
+  if (m < 1e-6) return n(m * 1e9, "nm");
+  if (m < 1e-3) return n(m * 1e6, "µm");
+  if (m < 1) return n(m * 1e3, "mm");
+  if (m < 1e3) return n(m, "m");
+  if (m < 1e10) return n(m / 1e3, "km");
+  if (m < 9.46e14) return n(m / C.au, "AU");
+  if (m < 3.086e19) return n(m / C.ly, "light-years");
+  return n(m / 3.086e19, "kpc");
+}
+const YEAR = 3.156e7, AGE = 4.35e17;
+const p2 = v => Number(v.toPrecision(2)).toLocaleString("en-US", { maximumSignificantDigits: 2 });
+function fmtTime(s) {
+  if (!isFinite(s)) return "never";
+  if (s < 1e-12) return pow10(s) + " s";
+  if (s < 1e-9) return p2(s * 1e12) + " ps";
+  if (s < 1e-6) return p2(s * 1e9) + " ns";
+  if (s < 1e-3) return p2(s * 1e6) + " µs";
+  if (s < 1) return p2(s * 1e3) + " ms";
+  if (s < 120) return p2(s) + " s";
+  if (s < 7200) return p2(s / 60) + " min";
+  if (s < 2 * 86400) return p2(s / 3600) + " hours";
+  if (s < YEAR) return p2(s / 86400) + " days";
+  if (s < 1e4 * YEAR) return Math.round(s / YEAR).toLocaleString("en-US") + " years";
+  return pow10(s / YEAR) + " years";
+}
+function fmtMass(kg) { return pow10(kg) + " kg"; }
+function supText(n) { const m = { "0": "⁰", "1": "¹", "2": "²", "3": "³", "4": "⁴", "5": "⁵", "6": "⁶", "7": "⁷", "8": "⁸", "9": "⁹", "-": "⁻" }; return String(n).split("").map(c => m[c] || c).join(""); }
+
+// ---------- state + controls ----------
+const state = { lgap: -6.602, env: "natural", bh: false, bhR: 10, sel: "bigmol" };
+const PRESETS = [
+  { lg: -9, t: "1 nm" }, { lg: -6.602, t: "250 nm · molecule experiments" }, { lg: -3, t: "1 mm" },
+  { lg: 0, t: "1 m" }, { lg: Math.log10(1.274e7), t: "Earth's width" }, { lg: Math.log10(3.086e19), t: "1 kpc · wave dark matter scale" },
+];
+const BH_OPTS = [3, 10, 100, 1e4, 1e6, 1e8];
+const $ = id => document.getElementById(id);
+try { const saved = JSON.parse(localStorage.getItem("witness-map") || "null"); if (saved && typeof saved === "object") Object.assign(state, saved); } catch (e) {}
+function save() { try { localStorage.setItem("witness-map", JSON.stringify(state)); } catch (e) {} }
+
+const chips = $("chips");
+PRESETS.forEach(p => { const b = document.createElement("button"); b.type = "button"; b.className = "chip"; b.textContent = p.t; b.dataset.lg = p.lg;
+  b.addEventListener("click", () => { state.lgap = p.lg; $("gap").value = p.lg; update(); }); chips.appendChild(b); });
+const envSel = $("env");
+envSel.innerHTML = '<option value="natural">Each in its natural home</option>' + Object.entries(ENVS).map(([k, v]) => `<option value="${k}">Everything in: ${v.name}</option>`).join("");
+const bhSel = $("bhDist");
+bhSel.innerHTML = BH_OPTS.map(r => { const d = r * RS; const far = d / C.ly; const where = far >= 0.1 ? far.toPrecision(2) + " light-years" : (d / C.au).toPrecision(2) + " AU";
+  return `<option value="${r}">${r >= 1e4 ? "10" + supText(Math.round(Math.log10(r))) : r} horizon radii (${where})</option>`; }).join("");
+$("gap").value = state.lgap; envSel.value = state.env; $("bh").checked = state.bh; bhSel.value = String(state.bhR); bhSel.disabled = !state.bh;
+$("gap").addEventListener("input", e => { state.lgap = parseFloat(e.target.value); update(); });
+envSel.addEventListener("change", e => { state.env = e.target.value; update(); });
+$("bh").addEventListener("change", e => { state.bh = e.target.checked; bhSel.disabled = !state.bh; update(); });
+bhSel.addEventListener("change", e => { state.bhR = parseFloat(e.target.value); update(); });
+
+// rows
+const rowsEl = $("rows");
+const rowEls = {};
+OBJECTS.forEach(o => {
+  const b = document.createElement("button"); b.type = "button"; b.className = "row"; b.setAttribute("aria-pressed", "false");
+  b.innerHTML = `<span class="name"><span class="n">${o.name}${o.seen ? '<span class="seen">seen as a wave</span>' : ""}</span><span class="m">${fmtMass(o.m)}</span></span>
+    <span class="track"><span class="band-wave"></span><span class="band-watch"></span><span class="zero"></span><span class="dot"></span></span><span class="val"></span>`;
+  b.addEventListener("click", () => { state.sel = o.id; update(); if (window.matchMedia("(max-width: 640px)").matches) { const d = $("detail"); const r = d.getBoundingClientRect(); if (r.top > window.innerHeight) d.scrollIntoView({ behavior: "smooth", block: "start" }); } });
+  rowsEl.appendChild(b); rowEls[o.id] = b;
+});
+
+function compute() {
+  const dx = Math.pow(10, state.lgap);
+  const bh = state.bh ? { M: BH_M, b: state.bhR * RS } : null;
+  return OBJECTS.map(o => { const env = ENVS[state.env === "natural" ? o.home : state.env]; return { o, env, r: rates(o, env, dx, bh), dx }; });
+}
+
+function update() {
+  save();
+  const dx = Math.pow(10, state.lgap);
+  $("gapText").textContent = fmtLen(dx);
+  chips.querySelectorAll(".chip").forEach(c => c.setAttribute("aria-pressed", Math.abs(parseFloat(c.dataset.lg) - state.lgap) < 0.02 ? "true" : "false"));
+  $("envHint").textContent = state.env === "natural" ? "Each object sits where it's normally found." : "Lab and space objects all moved into the same surroundings. Living or self-heated things keep their own temperature.";
+  const res = compute();
+  const logs = res.filter(x => x.r.W > 0).map(x => Math.log10(x.r.W));
+  let lo = Math.max(-60, Math.min(-20, ...logs)), hi = Math.min(200, Math.max(20, ...logs));
+  const step = (hi - lo) > 120 ? 40 : 20;
+  lo = Math.floor(lo / step) * step; hi = Math.ceil(hi / step) * step;
+  const pct = v => ((Math.min(hi, Math.max(lo, v)) - lo) / (hi - lo)) * 100;
+  const z = pct(0);
+  // axis
+  let ax = `<div class="regions"><span class="reg-wave">◀ wave<span class="long"> wins</span></span><span class="reg-watch" style="left:${z}%">witness<span class="long">es win</span><span class="short">ed</span> ▶</span></div><span class="zero" style="left:${z}%"></span>`;
+  for (let t = lo; t <= hi; t += step) ax += `<span class="tick" style="left:${pct(t)}%">${pow10only(Math.pow(10, t))}</span>`;
+  $("axisTrack").innerHTML = ax;
+  res.forEach(({ o, r }) => {
+    const el = rowEls[o.id]; const dot = el.querySelector(".dot"); const val = el.querySelector(".val");
+    el.querySelector(".band-wave").style.width = z + "%"; el.querySelector(".band-watch").style.width = (100 - z) + "%"; el.querySelector(".zero").style.left = z + "%";
+    el.setAttribute("aria-pressed", state.sel === o.id ? "true" : "false");
+    dot.className = "dot";
+    if (r.W === 0) { dot.classList.add("none"); dot.style.left = "1.5%"; val.className = "val none"; val.textContent = "no witnesses"; el.title = o.name + ": nothing in its surroundings can record where it is"; return; }
+    const lw = Math.log10(r.W);
+    dot.classList.add(lw < -1 ? "wave" : lw > 1 ? "watch" : "edge");
+    if (lw < lo) { dot.classList.add("clip", "clip-l"); dot.style.left = "5%"; } else if (lw > hi) { dot.classList.add("clip", "clip-r"); dot.style.left = "95%"; } else dot.style.left = pct(lw) + "%";
+    val.className = "val"; val.innerHTML = pow10only(r.W);
+    const top = r.parts.slice().sort((a, b) => b.rate - a.rate)[0];
+    el.title = `${o.name}: W ≈ 10^${Math.round(lw)}${top ? ". Main witness: " + top.label.toLowerCase() : ""}`;
+  });
+  renderDetail(res.find(x => x.o.id === state.sel) || res[0]);
+  renderFindings(res);
+}
+
+function verdictOf(W) {
+  if (W === 0) return ["wave", "Nothing watches it"];
+  const l = Math.log10(W);
+  if (l < -1) return ["wave", "Wave wins"]; if (l > 1) return ["watch", "Witnesses win"]; return ["edge", "Right at the line"];
+}
+function renderDetail({ o, env, r, dx }) {
+  const [cls, txt] = verdictOf(r.W);
+  const total = r.gamma;
+  const parts = r.parts.slice().sort((a, b) => b.rate - a.rate);
+  const maxShare = parts.length ? parts[0].rate / total : 1;
+  const whoRows = parts.map(p => { const sh = p.rate / total; const w = Math.max(0.6, (sh / maxShare) * 100);
+    return `<div class="who-row"><span>${p.label}</span><span class="who-bar"><i style="width:${w}%"></i></span><span class="num">${sh >= 0.001 ? (sh * 100).toPrecision(2).replace(/\.0+$/, "") + "%" : "<0.1%"}</span></div>`; }).join("");
+  const lw = r.W > 0 ? Math.log10(r.W) : null;
+  let explain;
+  if (r.W === 0) explain = o.dark ? "No light bounces off it and it doesn't collide with gas. Only gravity touches it, and with the black hole off, nothing in this model records where it is. Its wave can spread as long as it likes." : "Nothing in these surroundings interacts with it.";
+  else if (lw < -1) explain = `Its wave crosses the gap about ${pow10only(1 / r.W)} times faster than the surroundings can record which side it's on.`;
+  else if (lw > 1) explain = `The surroundings record which side it's on about ${pow10only(r.W)} times before its wave could even spread across the gap.`;
+  else explain = "The two clocks run at about the same speed. Small changes to the gap or the surroundings tip it either way.";
+  const bhPart = r.parts.find(p => p.label.startsWith("Black hole horizon (gravity)"));
+  let bhLine = "";
+  if (state.bh) bhLine = r.bhNote ? `<p class="note">${r.bhNote}</p>` : `<p class="note">Black hole horizon alone: one record every ${fmtTime(1 / bhPart.rate)}${isFinite(1 / bhPart.rate) && 1 / bhPart.rate > AGE ? ", far longer than the age of the universe" : ""}.</p>`;
+  $("detail").innerHTML = `
+    <div class="detail-head"><h2>${o.name}</h2><span class="verdict ${cls}">${txt}${r.W > 0 ? " · W ≈ " + pow10only(r.W) : ""}</span></div>
+    <p>${explain}</p>
+    <div class="facts">
+      <div class="fact"><span class="k">Wave clock</span><span class="v">${fmtTime(r.tWave)}</span><span class="s">to spread across ${fmtLen(dx)}</span></div>
+      <div class="fact"><span class="k">Witness clock</span><span class="v">${fmtTime(r.tau)}</span><span class="s">until a record of its place exists</span></div>
+      <div class="fact"><span class="k">Surroundings</span><span class="v" style="font-family:var(--font-body);font-size:.95rem">${env.name}</span><span class="s">${fmtMass(o.m)}${o.a ? " · " + fmtLen(o.a * 2) + " across" : ""}</span></div>
+    </div>
+    ${parts.length ? `<div class="who"><h3>Who's watching, by share of records</h3>${whoRows}</div>` : ""}
+    ${bhLine}
+    ${o.seen ? `<p class="note">Seen behaving as a wave in experiments (${o.seen}), at gaps of roughly a few hundred nanometres or less.</p>` : ""}`;
+}
+
+function renderFindings(res) {
+  const get = id => res.find(x => x.o.id === id).r;
+  const dx = Math.pow(10, state.lgap);
+  const seen = res.filter(x => x.o.seen);
+  const seenWave = seen.filter(x => x.r.W > 0 && x.r.W < 1).length;
+  const big = res.filter(x => !x.o.seen && !x.o.dark);
+  const closest = big.filter(x => x.r.W > 0).sort((a, b) => a.r.W - b.r.W)[0];
+  const vCold = rates(OBJECTS.find(o => o.id === "virus"), ENVS.cryo, dx, null).W;
+  const sun = get("sun");
+  const items = [
+    `<b>Lab-proven waves sit on the wave side.</b> At the current gap (${fmtLen(dx)}), ${seenWave} of the ${seen.length} objects that have been seen acting as waves in experiments land left of the line. Slide the gap up and the giant molecule crosses first, watched by its own heat glow.`,
+    closest ? `<b>Everything bigger is flooded with witnesses at home.</b> The closest call among the rest is the ${closest.o.name.toLowerCase()}, at W ≈ ${pow10only(closest.r.W)} in ${(state.env === "natural" ? ENVS[closest.o.home] : ENVS[state.env]).name.toLowerCase()}.` : "",
+    `<b>Silence the witnesses and size matters less.</b> A virus moved into a 4 K vacuum scores W ≈ ${pow10only(vCold)} at this gap. That is why physicists have proposed putting a virus in two places at once inside a cold vacuum.`,
+    `<b>Dark matter has no witnesses at all here.</b> It is the only thing on the map that stays on the wave side at every gap, however heavy the particle. That lack of witnesses is part of what makes a galaxy-sized dark matter wave possible at all.`,
+    `<b>A black hole watches, but feebly.</b> Even 10 horizon radii from the Milky Way's black hole, a wave dark matter particle split across a 1 µm gap would wait about ${fmtTime(1 / rates(OBJECTS.find(o => o.id === "fdm"), ENVS.intergalactic, 1e-6, { M: BH_M, b: 10 * RS }).gamma)} for the horizon to record it. The horizon only beats ordinary witnesses for objects that are already classical.`,
+    `<b>Mass still counts, through the wave clock.</b> Heavier objects spread slowly, so they need to stay unwatched for longer. At this gap the Sun's wave clock is ${fmtTime(sun.tWave)}, so even a trickle of witnesses settles it.`,
+  ].filter(Boolean);
+  $("findings").innerHTML = items.map(t => `<li>${t}</li>`).join("");
+}
+
+update();
+</script>
+</body>
+</html>

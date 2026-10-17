@@ -62,7 +62,7 @@ What it shows:
    ten horizon radii from the Milky Way's black hole, a wave dark matter particle split by 1 µm waits about
    10¹⁷⁰ years to be recorded.
 
-Interactive version: [the Witness Map on the Foundation0 site](https://github.com/Foundation-0/f0/pull/11).
+Interactive version: **https://foundation-0.github.io/fractals/** (`index.html` at the root of this repository, served by GitHub Pages; it loads `witness-map/model.js` directly).
 
 ## Run it
 
