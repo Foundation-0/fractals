@@ -64,6 +64,15 @@ What it shows:
 
 Interactive version: **https://foundation-0.github.io/fractals/** (`index.html` at the root of this repository, served by GitHub Pages; it loads `witness-map/model.js` directly).
 
+## Second question: does a black hole shape wave dark matter?
+
+A spinning black hole can grow a cloud of very light particles with hydrogen-like levels (superradiance). For wave
+dark matter at 10⁻²² eV around a galaxy's central black hole of 10⁸ to 10⁹ Suns, it cannot in practice: the cloud
+would take 10¹⁶ to 10²⁴ times the age of the universe to grow, and out where it would sit the galaxy, not the black
+hole, holds the particles. The black hole can still squeeze the galaxy's dense dark matter core by plain gravity,
+but only within about 100 pc of the centre, too far in for the lensed images to feel. Details, the lens systems
+with anomaly and black hole data, and a reshaped test: [notes/bh-lensing.md](notes/bh-lensing.md) (issue #1).
+
 ## Run it
 
 Needs Node 18 or later, nothing else.
@@ -72,9 +81,11 @@ Needs Node 18 or later, nothing else.
 npm test                                 # checks the model against published numbers
 node witness-map/table.mjs               # every object at a 250 nm gap
 node witness-map/table.mjs 1e-6 cryo     # 1 µm gap, everything in a 4 K vacuum
+node notes/bh-lensing.mjs                # every number in the black hole note
 ```
 
-`witness-map/model.js` is the whole model. It loads in Node (`require`) and in a browser (`window.WM`).
+`witness-map/model.js` is the whole model, including `gravAtom` for the black hole note. It loads in Node
+(`require`) and in a browser (`window.WM`).
 
 ## Checks
 
@@ -88,6 +99,10 @@ node witness-map/table.mjs 1e-6 cryo     # 1 µm gap, everything in a 4 K vacuum
 | Earth split by its radius beside a Sun-mass black hole (Wald et al., eq. 20) | ~10 µs | 22 µs |
 | Electron split by 1 m, same black hole (eq. 16) | ~10⁴³ years | 4×10⁴² years |
 | Heated buckyball loses interference (Hackermüller et al. 2004) | a few thousand K | ~1 photon per transit between 2,000 and 3,500 K |
+| Coupling α, 3 M☉ black hole and 10⁻¹² eV particle (Baumann, Chia and Porto 2019, eq. 2.6) | 0.02 | 0.022 |
+| Cloud growth time at their smallest growing α, 0.005 (eq. 2.14) | the age of the universe | 1.2×10¹⁰ years |
+| Largest α that grows at spin 0.8 (same paper) | 0.25 | 0.252 |
+| Heaviest particle M87*'s spin can grow (Davoudiasl and Denton 2019) | 4.6×10⁻²¹ eV | 4.7×10⁻²¹ eV |
 
 The published table values are themselves powers of ten, so agreement within a few times is as close as
 the comparison can go.
@@ -113,7 +128,8 @@ Mistakes found along the way are in [CORRECTIONS.md](CORRECTIONS.md). Open quest
 - M. Bild et al., *Schrödinger cat states of a 16-microgram mechanical oscillator*, Science (2023). https://arxiv.org/abs/2211.00449
 - L. F. Abbott and M. B. Wise, *Dimension of a quantum-mechanical path*, Am. J. Phys. 49, 37 (1981).
 - M. Scrimgeour et al., *The WiggleZ Dark Energy Survey: the transition to large-scale cosmic homogeneity* (2012). https://arxiv.org/abs/1205.6812
-- D. Baumann, H. S. Chia and R. A. Porto, *Probing ultralight bosons with binary black holes*, Phys. Rev. D 99, 044001 (2019).
+- D. Baumann, H. S. Chia and R. A. Porto, *Probing ultralight bosons with binary black holes*, Phys. Rev. D 99, 044001 (2019). https://arxiv.org/abs/1804.03208
+- H. Davoudiasl and P. B. Denton, *Ultralight boson dark matter and Event Horizon Telescope observations of M87\**, Phys. Rev. Lett. 123, 021102 (2019). https://arxiv.org/abs/1904.09242
 - A. Amruth et al., *Einstein rings modulated by wavelike dark matter from anomalies in gravitationally lensed images*, Nature Astronomy (2023). https://arxiv.org/abs/2304.09895
 
 ## Licence

@@ -8,6 +8,7 @@
  * Information per hit with wavenumber k: 1 - exp(-(k dx)^2 / 3) (Joos & Zeh 1985 long- and short-wavelength limits).
  * Black hole horizon (Danielson, Satishchandran & Wald 2022, eqs. 15 and 19), valid for dx << b:
  *   gravity  Gamma = G^6 M^5 m^2 dx^4 / (hbar c^10 b^10);  electric  Gamma = G^3 M^3 q^2 dx^2 / (eps0 hbar c^6 b^6)
+ * gravAtom: a light boson bound to a spinning black hole, used by notes/bh-lensing.md.
  */
 (function (root) {
   'use strict';
@@ -101,7 +102,20 @@
     const tWave = o.m * dx * dx / C.hbar;
     return { parts, gamma, tWave, tau: 1 / gamma, W: gamma * tWave, bhNote };
   }
+  // Gravitational atom: a boson of mass muEV (eV) around a black hole of mass M (kg) and spin a (0 to 1), in the
+  // level that grows fastest, |n l m> = |2 1 1> (Baumann, Chia & Porto 2019, arXiv:1804.03208, eqs. 2.1-2.13):
+  //   alpha = G M mu / (hbar c); the cloud peaks at n^2 r_g / alpha^2 and oscillates at mu (1 - alpha^2 / 8).
+  //   It grows only while that is slower than the horizon spins, at Detweiler's rate with the corrected 1/48.
+  //   Derived for alpha << 1, and it assumes the black hole's pull dominates out to the cloud.
+  function gravAtom(M, muEV, a) {
+    const rg = C.G * M / (C.c * C.c), mu = muEV * C.e / (C.c * C.c);
+    const alpha = C.G * M * mu / (C.hbar * C.c), w = mu * C.c * C.c / C.hbar * (1 - alpha * alpha / 8);
+    const rp = 1 + Math.sqrt(1 - a * a), omegaH = a * C.c / (2 * rg * rp); // horizon radius / r_g, horizon spin rate
+    const grow = 2 * rp * ((1 - a * a + Math.pow(a - 2 * rp * alpha, 2)) / 48) * (omegaH - w) * Math.pow(alpha, 9);
+    return { alpha, rg, rBohr: rg / (alpha * alpha), rCloud: 4 * rg / (alpha * alpha), vBohr: alpha * C.c / 2,
+      superradiant: w < omegaH, tGrow: grow > 0 ? 1 / grow : Infinity };
+  }
   const BH_M = 4.3e6 * C.Msun, RS = 2 * C.G * BH_M / (C.c * C.c);
-  const api = { C, ENVS, OBJECTS, rates, planckIntegral, BH_M, RS, DEFAULT_LOG_GAP: Math.log10(2.5e-7) };
+  const api = { C, ENVS, OBJECTS, rates, planckIntegral, gravAtom, BH_M, RS, DEFAULT_LOG_GAP: Math.log10(2.5e-7) };
   if (typeof module !== 'undefined' && module.exports) module.exports = api; else root.WM = api;
 })(typeof window !== 'undefined' ? window : globalThis);
