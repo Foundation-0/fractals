@@ -245,25 +245,26 @@ select { font: inherit; font-size: 0.95rem; color: var(--ink); background: var(-
     <p>Everything runs live in this page from first principles. Treat the numbers as order-of-magnitude: the method is good to within a factor of a few, and the map spans more than 150 powers of ten.</p>
     <div class="formula">wave clock = m·Δx² / ħ &nbsp;&nbsp;·&nbsp;&nbsp; witness rate Γ = Σ (hits per second) × (information per hit) &nbsp;&nbsp;·&nbsp;&nbsp; W = Γ × wave clock</div>
     <ul>
-      <li><b>Hits per second.</b> Photons from the surroundings (a full thermal spectrum at each source's temperature), gas atoms, solar wind, and the object's own heat glow. Cross-sections are geometric for objects bigger than the wavelength and fall off as (size/wavelength)⁴ for smaller ones. Electrons use the standard electron–photon value. Molecules glow 100× weaker than solid grains.</li>
-      <li><b>Information per hit.</b> A hit with wavelength λ can only tell the two places apart if the gap is comparable to λ. The fraction is 1 − exp(−(2πΔx/λ)²/3): tiny for gaps much smaller than λ, one full record for larger gaps.</li>
+      <li><b>Hits per second.</b> Photons from the surroundings (a full thermal spectrum at each source's temperature), gas atoms, solar wind, and the object's own heat glow. Cross-sections are geometric for objects bigger than the wavelength and fall off as (size/wavelength)⁴ for smaller ones. Electrons use the standard electron–photon value. Molecules glow through one fitted number, set so a heated fullerene loses its interference at the measured temperature.</li>
+      <li><b>Information per hit.</b> A hit with wavelength λ can only tell the two places apart if the gap is comparable to λ. The fraction is 1 − exp(−(2πΔx/λ)²/3) for a scattered photon and 1 − sin(2πΔx/λ)/(2πΔx/λ) for one the object gives off: tiny for gaps much smaller than λ, one full record for larger gaps.</li>
       <li><b>Black hole horizon.</b> Γ = G⁶M⁵m²Δx⁴ / (ħc¹⁰b¹⁰) for distance b, and an electric version for the electron. Valid only when the gap is much smaller than the distance.</li>
     </ul>
     <h3>Checks against published numbers</h3>
     <ul>
-      <li>Light and gas scattering on a 10 µm grain match the Joos–Zeh decoherence table to within a factor of 3 for the Big Bang afterglow and air, and 4.4 for sunlight. The table gives powers of ten only.</li>
+      <li>Light and gas scattering match the closed-form decoherence formulas to within 2%. They match 11 of the 15 entries of the Joos–Zeh table and 7 of the 8 entries of Schlosshauer's table to within a factor of 5. The tables give powers of ten only, and where they disagree with the model they also disagree with each other.</li>
       <li>The horizon formula reproduces both worked examples in the Wald paper: Earth split by its own radius beside a Sun-mass black hole (paper: ~10 µs, here: ~20 µs) and an electron split by 1 m (paper: ~10⁴³ years, here: ~4×10⁴² years).</li>
-      <li>A buckyball here loses its wave behavior when heated to about 2,500–3,000 K, in line with the 2004 Vienna heating experiment.</li>
-      <li>All of these run as <a class="srclink" href="https://github.com/Foundation-0/fractals/blob/main/tests/checks.mjs">automated checks</a> (<code>npm test</code>). Mistakes found along the way are in <a class="srclink" href="https://github.com/Foundation-0/fractals/blob/main/CORRECTIONS.md">CORRECTIONS.md</a>.</li>
+      <li>Heated C₇₀, the molecule of the 2004 Vienna heating experiment, loses half its fringe visibility here at about 2,475 K, against about 2,500 K measured. The glow is fitted to that point, and the fit gets the light itself wrong: too little of it is visible.</li>
+      <li>All of these run as <a class="srclink" href="https://github.com/Foundation-0/fractals/blob/main/tests/checks.mjs">automated checks</a> (<code>npm test</code>). Mistakes and disagreements found along the way are in <a class="srclink" href="https://github.com/Foundation-0/fractals/blob/main/CORRECTIONS.md">CORRECTIONS.md</a>.</li>
     </ul>
     <h3>What it leaves out</h3>
     <ul>
       <li>Objects are treated as sitting still. Fast motion, internal structure and spin are ignored.</li>
       <li>W is per particle. Wave dark matter's galaxy-wide wave is a crowd effect, enormous numbers of particles sharing one wave, which this map doesn't model.</li>
       <li>Gravity's only witness here is a black hole horizon. Gravitational nudges from passing stars are treated as zero.</li>
+      <li>Light an object absorbs from its surroundings is not counted. Molecules have no electronic gap, and their glow below 2,000 K is unchecked.</li>
     </ul>
     <p class="src">Code: <a href="https://github.com/Foundation-0/fractals">Foundation-0/fractals</a> · <a href="https://github.com/Foundation-0/fractals/issues">open questions</a></p>
-    <p class="src">Sources: <a href="https://doi.org/10.1007/BF01725541">Joos &amp; Zeh 1985</a> · <a href="https://arxiv.org/abs/2205.06279">Danielson, Satishchandran &amp; Wald 2022</a> · <a href="https://www.doi.org/10.1038/25653">Dürr, Nonn &amp; Rempe 1998</a> · <a href="https://arxiv.org/abs/2211.00449">Bild et al. 2023</a> · <a href="https://arxiv.org/pdf/1001.3419">Riedel &amp; Zurek 2010</a></p>
+    <p class="src">Sources: <a href="https://doi.org/10.1007/BF01725541">Joos &amp; Zeh 1985</a> · <a href="https://arxiv.org/abs/2205.06279">Danielson, Satishchandran &amp; Wald 2022</a> · <a href="https://www.doi.org/10.1038/25653">Dürr, Nonn &amp; Rempe 1998</a> · <a href="https://arxiv.org/abs/2211.00449">Bild et al. 2023</a> · <a href="https://arxiv.org/pdf/1001.3419">Riedel &amp; Zurek 2010</a> · <a href="https://doi.org/10.1038/nature02276">Hackermüller et al. 2004</a> · <a href="https://arxiv.org/abs/quant-ph/0412003">Hornberger et al. 2005</a> · <a href="https://arxiv.org/abs/1911.06282">Schlosshauer 2019</a></p>
   </section>
 </div>
 

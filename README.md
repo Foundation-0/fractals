@@ -43,7 +43,7 @@ At a 250 nm gap, each object in its usual surroundings:
 | Electron (lab vacuum) | ~10⁻¹³ | leftover gas |
 | Rubidium atom | ~10⁻⁷ | leftover gas |
 | Buckyball, C₆₀ | ~10⁻⁴ | its own heat glow |
-| Giant molecule, ~2,000 atoms | ~0.05 | its own heat glow |
+| Giant molecule, ~2,000 atoms | ~0.03 | its own heat glow |
 | Interstellar dust grain | ~10⁷ | starlight |
 | Virus (air) | ~10¹⁶ | air molecules |
 | Cat | ~10⁴⁸ | air molecules |
@@ -78,19 +78,32 @@ node witness-map/table.mjs 1e-6 cryo     # 1 µm gap, everything in a 4 K vacuum
 
 ## Checks
 
-`npm test` compares the model with published numbers:
+`npm test` compares the model with published numbers. A line marked DIFF is a disagreement recorded in
+[CORRECTIONS.md](CORRECTIONS.md); it still passes, but fails if the size of the disagreement changes.
 
 | Check | Published | Model |
 |---|---|---|
-| Localisation by the Big Bang afterglow, 10 µm grain (Joos and Zeh 1985) | 10¹⁰ m⁻² s⁻¹ | 1.6×10¹⁰ |
-| Localisation by sunlight, same grain | 10²⁵ | 4.4×10²⁵ |
-| Localisation by air, same grain | 10⁴¹ | 2.7×10⁴¹ |
+| Closed-form localisation rates: small grain and large grain in light, grain in air, small glowing sphere | formulas (Schlosshauer 2007; Romero-Isart 2011) | within 2% |
+| Joos and Zeh's table: three grain sizes in five surroundings | powers of ten | 11 of 15 within ×5 |
+| From it, a 10 µm grain: Big Bang afterglow / sunlight / air (m⁻² s⁻¹) | 10¹⁰ / 10²⁵ / 10⁴⁰ | 1.6×10¹⁰ / 4.4×10²⁵ / 8.6×10⁴⁰ (air: DIFF) |
+| Schlosshauer's decoherence times: two sizes in four surroundings | powers of ten | 7 of 8 within ×5 |
 | Earth split by its radius beside a Sun-mass black hole (Wald et al., eq. 20) | ~10 µs | 22 µs |
 | Electron split by 1 m, same black hole (eq. 16) | ~10⁴³ years | 4×10⁴² years |
-| Heated buckyball loses interference (Hackermüller et al. 2004) | a few thousand K | ~1 photon per transit between 2,000 and 3,500 K |
+| Heated C₇₀ loses half its fringe visibility, 190 m/s beam (Hornberger et al. 2005, Fig. 9) | about 2,500 K | 2,475 K (the point the glow is fitted to) |
+| Same, 100 m/s beam | about 2,450 K | 1,960 K (DIFF) |
+| Photons given off while the visibility halves (Hackermüller et al. 2004) | one to two | 1.4 |
+| C₇₀ glow at 2,500 K: photons above 1.6 eV in a 4 ms transit | about 3 | 0.09 (DIFF) |
+| C₇₀ glow power at 3,000 K | 1.1×10⁴ eV/s | 770 eV/s (DIFF) |
 
-The published table values are themselves powers of ten, so agreement within a few times is as close as
-the comparison can go.
+The published tables give powers of ten only, so agreement within a few times is as close as the comparison
+can go. The tolerance is ×5: half a power of ten for rounding, and a little more for inputs the tables do not
+state.
+
+What the re-check found (issue #5, details in CORRECTIONS.md): two coefficient errors, now fixed; a molecule's
+glow that is fitted, and gets the onset of decoherence right but the light wrong; and four places where the
+published tables are inconsistent, with each other, with their own labels, or with where their formulas apply.
+Schlosshauer's 2007 book and Joos and Zeh's 1985 paper were not available; the check uses open copies of their
+tables.
 
 ## What the model leaves out
 
@@ -98,6 +111,11 @@ the comparison can go.
 - W is per particle. Wave dark matter's galaxy-wide wave is a crowd effect, enormous numbers of particles
   sharing one wave, which is not modelled.
 - Gravity's only witness is a black hole horizon. Nudges from passing stars are treated as zero.
+- Molecules glow through one fitted number and no electronic gap. The fit puts the loss of C₇₀ interference at
+  the measured temperature, but real C₇₀ gives off no light below 1.6 eV and its glow rises as T¹¹, against T⁵
+  here (Hornberger et al. 2005). Below 2,000 K nothing checks the molecules' glow.
+- Light an object absorbs from its surroundings is not counted. For an object as warm as its surroundings it
+  would add as much again as its own glow.
 - Every number is good to a factor of a few.
 
 Mistakes found along the way are in [CORRECTIONS.md](CORRECTIONS.md). Open questions are the
@@ -107,7 +125,16 @@ Mistakes found along the way are in [CORRECTIONS.md](CORRECTIONS.md). Open quest
 
 - E. Joos and H. D. Zeh, *The emergence of classical properties through interaction with the environment*, Z. Phys. B 59, 223 (1985). https://doi.org/10.1007/BF01725541
 - S. Dürr, T. Nonn and G. Rempe, *Origin of quantum-mechanical complementarity probed by a "which-way" experiment in an atom interferometer*, Nature 395, 33 (1998). https://doi.org/10.1038/25653
-- L. Hackermüller et al., *Decoherence of matter waves by thermal emission of radiation*, Nature 427, 711 (2004).
+- L. Hackermüller et al., *Decoherence of matter waves by thermal emission of radiation*, Nature 427, 711 (2004). https://doi.org/10.1038/nature02276 (https://arxiv.org/abs/quant-ph/0402146)
+- K. Hornberger, L. Hackermüller and M. Arndt, *Influence of molecular temperature on the coherence of fullerenes in a near-field interferometer*, Phys. Rev. A 71, 023601 (2005). https://arxiv.org/abs/quant-ph/0412003
+- M. Schlosshauer, *Decoherence and the Quantum-to-Classical Transition* (Springer, 2007). Not consulted directly; see the next two.
+- M. Schlosshauer, *The quantum-to-classical transition and decoherence* (2014), Table I. https://arxiv.org/abs/1404.2635
+- M. Schlosshauer, *Quantum decoherence*, Phys. Rep. 831, 1 (2019), Table 1 and eqs. 65–70. https://arxiv.org/abs/1911.06282
+- Copies of the Joos–Zeh table: C. Kiefer and E. Joos (1998), https://arxiv.org/abs/quant-ph/9803052 ; E. Joos (1999), https://arxiv.org/abs/quant-ph/9908008 ; C. Kiefer (1999), https://arxiv.org/abs/gr-qc/9906100 ; E. Joos, Séminaire Poincaré 2, 1 (2005), https://arxiv.org/abs/quant-ph/0512079
+- M. Tegmark, *Apparent wave function collapse caused by scattering*, Found. Phys. Lett. 6, 571 (1993). https://arxiv.org/abs/gr-qc/9310032
+- O. Romero-Isart, *Quantum superposition of massive objects and collapse models*, Phys. Rev. A 84, 052121 (2011), eqs. 26, 28, 29. https://arxiv.org/abs/1110.4495
+- M. Schut et al., *Improving resilience of the Quantum Gravity Induced Entanglement of Masses (QGEM) to decoherence using 3 superpositions* (2021), eq. B5, which quotes Schlosshauer's air formula. https://arxiv.org/abs/2110.14695
+- C. F. Bohren and D. R. Huffman, *Absorption and Scattering of Light by Small Particles* (Wiley, 1983), ch. 5.
 - D. L. Danielson, G. Satishchandran and R. M. Wald, *Black holes decohere quantum superpositions* (2022). https://arxiv.org/abs/2205.06279
 - C. J. Riedel and W. H. Zurek, *Quantum Darwinism in an everyday environment* (2010). https://arxiv.org/abs/1001.3419
 - M. Bild et al., *Schrödinger cat states of a 16-microgram mechanical oscillator*, Science (2023). https://arxiv.org/abs/2211.00449
