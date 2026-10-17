@@ -1,0 +1,10 @@
+{
+  "name": "fractals",
+  "private": true,
+  "description": "Self-similarity across scales, tested with first principles. First study: the Witness Map.",
+  "license": "Apache-2.0",
+  "scripts": {
+    "test": "node tests/checks.mjs",
+    "table": "node witness-map/table.mjs"
+  }
+}
