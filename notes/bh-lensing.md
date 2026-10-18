@@ -41,7 +41,7 @@ For μ = 10⁻²² eV, λ_c = 2.0×10¹⁵ m, or 0.064 pc. A 10⁸ M☉ black ho
 | α | 7.5×10⁻⁵ | 7.5×10⁻⁴ |
 | Spin needed for any growth | above 3×10⁻⁴ | above 3×10⁻³ |
 | Cloud peak, 4 r_g/α² | 3.4 kpc | 0.34 kpc |
-| Orbital speed in the cloud, αc/2 | 11 km/s | 110 km/s |
+| Bohr speed in the cloud, αc/2 | 11 km/s | 110 km/s |
 | Growth time (spin 0.99) | 1×10³⁴ years | 1×10²⁶ years |
 | ... in ages of the universe | 7×10²³ | 7×10¹⁵ |
 | Velocity dispersion of the host's stars (M–σ) | 150 km/s | 260 km/s |
@@ -64,7 +64,7 @@ How each row comes out:
   dominates out to the cloud. It does so only out to GM/σ², the sphere of influence, where σ is the velocity
   dispersion of the surrounding stars (Kormendy and Ho 2013). Taking σ from their M–σ relation,
   M = 3.1×10⁸ M☉ (σ / 200 km/s)^4.38 (eq. 7), the sphere of influence is 18 pc for 10⁸ M☉ and 63 pc for 10⁹ M☉:
-  5 to 190 times smaller than the would-be cloud. Put another way, the orbital speed in the cloud, 11 to 110 km/s,
+  5 to 190 times smaller than the would-be cloud. Put another way, the cloud's Bohr speed, 11 to 110 km/s,
   is below the stars' 150 to 260 km/s. At those radii the galaxy holds the particles: they belong to its wave dark
   matter core and halo, not to a gravitational atom.
 
@@ -196,7 +196,7 @@ I found no spin measurement for any lens galaxy's black hole.
 
 ## The model
 
-`gravAtom(M, muEV, spin)` in `witness-map/model.js` returns α, the |211⟩ cloud size, its orbital speed, whether it
+`gravAtom(M, muEV, spin)` in `witness-map/model.js` returns α, the |211⟩ cloud size, its Bohr speed, whether it
 is inside the superradiant window, and its growth time. `npm test` checks it against published numbers:
 
 | Check | Published | Model |
@@ -209,37 +209,42 @@ is inside the superradiant window, and its growth time. `npm test` checks it aga
 Two more checks guard this note's main claims: the 10⁻²² eV clouds above take over 10¹⁵ ages of the universe to
 grow, and no cloud that grows within that time around 10⁸ to 10⁹ M☉ peaks beyond 1 pc.
 
+Seven more check that `gravAtom` agrees with `gravitational-atom/atom.js`, the second study's fuller version of
+the same algebra (`tests/bh-lensing.mjs`). α, the Bohr radius, the cloud's peak and the Bohr speed agree to the
+2.5×10⁻⁴ by which their constants differ. The growth rate agrees to 0.2%, and to rounding when both are given the
+same α and r_g. The largest α that grows agrees to rounding.
+
 What it leaves out: the cloud's own gravity and the surrounding dark matter, levels other than |211⟩, and any
 self-interaction of the particle. It assumes the black hole dominates out to the cloud, which section 1 shows fails
 at 10⁻²² eV.
 
 ## Sources
 
-- A. Amruth et al., *Einstein rings modulated by wavelike dark matter from anomalies in gravitationally lensed images*, Nature Astronomy 7, 736 (2023). https://arxiv.org/abs/2304.09895
-- N. Bar, K. Blum, T. Lacroix and P. Panci, *Looking for ultralight dark matter near supermassive black holes*, JCAP 07, 045 (2019). https://arxiv.org/abs/1905.11745
+- A. Amruth et al., *Einstein rings modulated by wavelike dark matter from anomalies in gravitationally lensed images*, Nature Astronomy 7, 736 (2023). https://doi.org/10.1038/s41550-023-01943-9 (https://arxiv.org/abs/2304.09895)
+- N. Bar, K. Blum, T. Lacroix and P. Panci, *Looking for ultralight dark matter near supermassive black holes*, JCAP 07, 045 (2019). https://doi.org/10.1088/1475-7516/2019/07/045 (https://arxiv.org/abs/1905.11745)
 - D. Baumann, H. S. Chia and R. A. Porto, *Probing ultralight bosons with binary black holes*, Phys. Rev. D 99, 044001 (2019). https://arxiv.org/abs/1804.03208
-- R. Brito, V. Cardoso and P. Pani, *Superradiance*, Lect. Notes Phys. 971 (2020). https://arxiv.org/abs/1501.06570
-- N. Dalal and A. Kravtsov, *Not so fuzzy: excluding FDM with sizes and stellar kinematics of ultra-faint dwarf galaxies* (2022). https://arxiv.org/abs/2203.05750
-- H. Davoudiasl and P. B. Denton, *Ultralight boson dark matter and Event Horizon Telescope observations of M87\**, Phys. Rev. Lett. 123, 021102 (2019). https://arxiv.org/abs/1904.09242
+- R. Brito, V. Cardoso and P. Pani, *Superradiance: New Frontiers in Black Hole Physics*, Lect. Notes Phys. 971 (2020). https://doi.org/10.1007/978-3-030-46622-0 (https://arxiv.org/abs/1501.06570)
+- N. Dalal and A. Kravtsov, *Excluding fuzzy dark matter with sizes and stellar kinematics of ultrafaint dwarf galaxies*, Phys. Rev. D 106, 063517 (2022). https://doi.org/10.1103/PhysRevD.106.063517 (https://arxiv.org/abs/2203.05750)
+- H. Davoudiasl and P. B. Denton, *Ultralight boson dark matter and Event Horizon Telescope observations of M87\**, Phys. Rev. Lett. 123, 021102 (2019). https://doi.org/10.1103/PhysRevLett.123.021102 (https://arxiv.org/abs/1904.09242)
 - E. Y. Davies and P. Mocz, *Fuzzy dark matter soliton cores around supermassive black holes*, MNRAS 492, 5721 (2020). https://arxiv.org/abs/1908.04790
 - S. Detweiler, *Klein-Gordon equation and rotating black holes*, Phys. Rev. D 22, 2323 (1980). https://doi.org/10.1103/PhysRevD.22.2323
 - D. Gilman et al., *Warm dark matter chills out: constraints on the halo mass function and the free-streaming length of dark matter with eight quadruple-image strong gravitational lenses*, MNRAS 491, 6077 (2020). https://arxiv.org/abs/1908.06983
-- P. Hartley, N. Jackson, D. Sluse, H. R. Stacey and H. Vives-Arias, *Strong lensing reveals jets in a sub-microJy radio-quiet quasar*, MNRAS 485, 3009 (2019). https://arxiv.org/abs/1901.05791
-- Y. D. Hezaveh et al., *Detection of lensing substructure using ALMA observations of the dusty galaxy SDP.81*, ApJ 823, 37 (2016). https://arxiv.org/abs/1601.01388
+- P. Hartley, N. Jackson, D. Sluse, H. R. Stacey and H. Vives-Arias, *Strong lensing reveals jets in a sub-microJy radio-quiet quasar*, MNRAS 485, 3009 (2019). https://doi.org/10.1093/mnras/stz510 (https://arxiv.org/abs/1901.05791)
+- Y. D. Hezaveh et al., *Detection of lensing substructure using ALMA observations of the dusty galaxy SDP.81*, ApJ 823, 37 (2016). https://doi.org/10.3847/0004-637X/823/1/37 (https://arxiv.org/abs/1601.01388)
 - S. Hou et al., *Flux-ratio anomalies in cusp quasars reveal dark matter beyond CDM* (2026). https://arxiv.org/abs/2601.16818
-- J. Kormendy and L. C. Ho, *Coevolution (or not) of supermassive black holes and host galaxies*, ARA&A 51, 511 (2013). https://arxiv.org/abs/1304.7762
-- A. Laroche, D. Gilman, X. Li, J. Bovy and X. Du, *Quantum fluctuations masquerade as haloes: bounds on ultra-light dark matter from quadruply-imaged quasars*, MNRAS 517, 1867 (2022). https://arxiv.org/abs/2206.11269
-- K. Mehrgan et al., *A 40 billion solar mass black hole in the extreme core of Holm 15A, the central galaxy of Abell 85*, ApJ 887, 195 (2019). https://arxiv.org/abs/1907.10608
+- J. Kormendy and L. C. Ho, *Coevolution (or not) of supermassive black holes and host galaxies*, ARA&A 51, 511 (2013). https://doi.org/10.1146/annurev-astro-082708-101811 (https://arxiv.org/abs/1304.7762)
+- A. Laroche, D. Gilman, X. Li, J. Bovy and X. Du, *Quantum fluctuations masquerade as haloes: bounds on ultra-light dark matter from quadruply imaged quasars*, MNRAS 517, 1867 (2022). https://doi.org/10.1093/mnras/stac2677 (https://arxiv.org/abs/2206.11269)
+- K. Mehrgan et al., *A 40 billion solar mass black hole in the extreme core of Holm 15A, the central galaxy of Abell 85*, ApJ 887, 195 (2019). https://doi.org/10.3847/1538-4357/ab5856 (https://arxiv.org/abs/1907.10608)
 - A. M. Nierenberg et al., *Double dark matter vision: twice the number of compact-source lenses with narrow-line lensing and the WFC3 grism*, MNRAS 492, 5314 (2020). https://arxiv.org/abs/1908.06344
 - M. Oguri and N. Kubo, *Fuzzy dark matter soliton core hosting a supermassive black hole as a dense low-mass perturber in strong gravitational lensing*, JCAP 07, 088 (2026). https://arxiv.org/abs/2601.15718
-- P. Pani, V. Cardoso, L. Gualtieri, E. Berti and A. Ishibashi, *Perturbations of slowly rotating black holes: massive vector fields in the Kerr metric*, Phys. Rev. D 86, 104017 (2012). https://arxiv.org/abs/1209.0773
+- P. Pani, V. Cardoso, L. Gualtieri, E. Berti and A. Ishibashi, *Perturbations of slowly rotating black holes: massive vector fields in the Kerr metric*, Phys. Rev. D 86, 104017 (2012). https://doi.org/10.1103/PhysRevD.86.104017 (https://arxiv.org/abs/1209.0773)
 - Planck Collaboration, *Planck 2018 results. VI. Cosmological parameters*, A&A 641, A6 (2020). https://arxiv.org/abs/1807.06209
-- D. M. Powell et al., *A lensed radio jet at milli-arcsecond resolution II: constraints on fuzzy dark matter from an extended gravitational arc*, MNRAS Letters 524, L84 (2023). https://arxiv.org/abs/2302.10941
+- D. M. Powell et al., *A lensed radio jet at milli-arcsecond resolution II: constraints on fuzzy dark matter from an extended gravitational arc*, MNRAS Letters 524, L84 (2023). https://doi.org/10.1093/mnrasl/slad074 (https://arxiv.org/abs/2302.10941)
 - D. M. Powell et al., *A million-solar-mass object detected at a cosmological distance using gravitational imaging*, Nature Astronomy 9, 1714 (2025), as cited by Oguri and Kubo. https://arxiv.org/abs/2510.07382
-- K. K. Rogers and H. V. Peiris, *Strong bound on canonical ultralight axion dark matter from the Lyman-alpha forest*, Phys. Rev. Lett. 126, 071302 (2021). https://arxiv.org/abs/2007.12705
-- H.-Y. Schive et al., *Understanding the core-halo relation of quantum wave dark matter from 3D simulations*, Phys. Rev. Lett. 113, 261302 (2014). https://arxiv.org/abs/1407.7762
-- M. J. Stott and D. J. E. Marsh, *Black hole spin constraints on the mass spectrum and number of axion-like fields*, Phys. Rev. D 98, 083006 (2018). https://arxiv.org/abs/1805.02016
-- Y. Tamura et al., *High-resolution ALMA observations of SDP.81. I. The innermost mass profile of the lensing elliptical galaxy probed by 30 milli-arcsecond images*, PASJ 67, 72 (2015). https://arxiv.org/abs/1503.07605
-- C. Unal, F. Pacucci and A. Loeb, *Properties of ultralight bosons from heavy quasar spins via superradiance*, JCAP 05, 007 (2021). https://arxiv.org/abs/2012.12790
+- K. K. Rogers and H. V. Peiris, *Strong bound on canonical ultralight axion dark matter from the Lyman-alpha forest*, Phys. Rev. Lett. 126, 071302 (2021). https://doi.org/10.1103/PhysRevLett.126.071302 (https://arxiv.org/abs/2007.12705)
+- H.-Y. Schive et al., *Understanding the core-halo relation of quantum wave dark matter from 3D simulations*, Phys. Rev. Lett. 113, 261302 (2014). https://doi.org/10.1103/PhysRevLett.113.261302 (https://arxiv.org/abs/1407.7762)
+- M. J. Stott and D. J. E. Marsh, *Black hole spin constraints on the mass spectrum and number of axion-like fields*, Phys. Rev. D 98, 083006 (2018). https://doi.org/10.1103/PhysRevD.98.083006 (https://arxiv.org/abs/1805.02016)
+- Y. Tamura et al., *High-resolution ALMA observations of SDP.81. I. The innermost mass profile of the lensing elliptical galaxy probed by 30 milli-arcsecond images*, PASJ 67, 72 (2015). https://doi.org/10.1093/pasj/psv040 (https://arxiv.org/abs/1503.07605)
+- C. Unal, F. Pacucci and A. Loeb, *Properties of ultralight bosons from heavy quasar spins via superradiance*, JCAP 05, 007 (2021). https://doi.org/10.1088/1475-7516/2021/05/007 (https://arxiv.org/abs/2012.12790)
 - J. N. Winn, D. Rusin and C. S. Kochanek, *The central image of a gravitationally lensed quasar*, Nature 427, 613 (2004). https://arxiv.org/abs/astro-ph/0312136
 - K. C. Wong, S. H. Suyu and S. Matsushita, *The innermost mass distribution of the gravitational lens SDP.81 from ALMA observations*, ApJ 811, 115 (2015). https://arxiv.org/abs/1503.05558
