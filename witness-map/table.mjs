@@ -1,9 +1,11 @@
-// Prints the witness number of every object. Usage: node witness-map/table.mjs [gap in metres] [surroundings]
+// Prints the witness number of every object. Usage: node witness-map/table.mjs [gap in metres, > 0] [surroundings]
 // Surroundings: natural (default), uhv, cryo, air, sunlit, interstellar, intergalactic.
 import { createRequire } from 'node:module';
 const { ENVS, OBJECTS, rates } = createRequire(import.meta.url)('./model.js');
-const dx = parseFloat(process.argv[2] || '2.5e-7'), envKey = process.argv[3] || 'natural';
+const dx = Number(process.argv[2] || '2.5e-7'), envKey = process.argv[3] || 'natural';
 const f = x => (x === 0 ? '0' : !isFinite(x) ? 'never' : x.toExponential(1));
+if (!(dx > 0 && isFinite(dx))) { console.error(`gap must be a positive number in metres, got "${process.argv[2]}"`); process.exit(1); }
+if (envKey !== 'natural' && !Object.hasOwn(ENVS, envKey)) { console.error(`unknown surroundings "${envKey}": use natural, ${Object.keys(ENVS).join(', ')}`); process.exit(1); }
 console.log(`gap ${dx} m, surroundings: ${envKey}\n`);
 console.log('object'.padEnd(32) + 'W'.padStart(10) + 'wave clock s'.padStart(14) + 'witness s'.padStart(12) + '  main witness');
 for (const o of OBJECTS) {
