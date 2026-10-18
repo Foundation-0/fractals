@@ -9,9 +9,10 @@ with Claude (Anthropic), for [Foundation0](https://github.com/Foundation-0/f0).
 
 ## Where the intuition holds, and where it breaks
 
-- **Atoms are not little solar systems.** An electron does not follow an orbit; it has a spread of
-  possible positions, and that spread does not shrink with better instruments. Planets show nothing like
-  it. The two follow different equations.
+- **Atoms are not little solar systems.** In a stationary atomic state, an electron has a spread of
+  possible positions rather than a planet's orbit. Repeated measurements on identically prepared atoms
+  reveal that spread, even with better instruments. Each reading gives one position. Planets obey the
+  same quantum rules, but records left in their surroundings keep their motion close to classical orbits.
 - **Except in one case, where gravity builds a real atom.** Very light particles around a spinning black
   hole settle into a cloud with the same shapes and the same pattern of energy levels as a hydrogen atom,
   with gravity in place of electric attraction (the "gravitational atom"). It is still a wave cloud, not
@@ -36,6 +37,8 @@ at once, a gap Δx apart?
 
 What destroys the wave is the *record*, not the push of the detector: in 1998 Dürr, Nonn and Rempe marked
 which path atoms took with a push far too small to matter, and the interference still vanished.
+The idea that scattered light carries records of an object's position is also studied by Riedel and
+Zurek (2010).
 
 At a 250 nm gap, each object in its usual surroundings:
 
@@ -202,8 +205,8 @@ below).
 | Joos and Zeh's table: three grain sizes in five surroundings | powers of ten | 11 of 15 within ×5 |
 | From it, a 10 µm grain: Big Bang afterglow / sunlight / air (m⁻² s⁻¹) | 10¹⁰ / 10²⁵ / 10⁴⁰ | 1.6×10¹⁰ / 4.4×10²⁵ / 8.6×10⁴⁰ (air: DIFF) |
 | Schlosshauer's decoherence times: two sizes in four surroundings | powers of ten | 7 of 8 within ×5 |
-| Earth split by its radius beside a Sun-mass black hole (Wald et al., eq. 20) | ~10 µs | 22 µs |
-| Electron split by 1 m, same black hole (eq. 16) | ~10⁴³ years | 4×10⁴² years |
+| Gravitational channel: Earth split by its radius beside a Sun-mass black hole (Danielson et al., v2, eq. 20) | ~10 µs | 22 µs |
+| Electric channel: electron split by 1 m, same black hole (Danielson et al., v2, eq. 16) | ~10⁴³ years | 4×10⁴² years |
 | Heated C₇₀ loses half its fringe visibility, 190 m/s beam (Hornberger et al. 2005, Fig. 9) | about 2,500 K | 2,475 K (the point the glow is fitted to) |
 | Same, 100 m/s beam | about 2,450 K | 1,960 K (DIFF) |
 | Photons given off while the visibility halves (Hackermüller et al. 2004) | one to two | 1.4 |
@@ -220,6 +223,9 @@ below).
 | Cloud growth time at their smallest growing α, 0.005 (eq. 2.14) | the age of the universe | 1.2×10¹⁰ years |
 | Largest α that grows at spin 0.8 (same paper) | 0.25 | 0.252 |
 | Heaviest particle M87*'s spin can grow (Davoudiasl and Denton 2019) | 4.6×10⁻²¹ eV | 4.7×10⁻²¹ eV |
+
+The horizon rows use equation numbers from [arXiv:2205.06279v2](https://arxiv.org/html/2205.06279v2).
+Its electric formula (eq. 15) includes the SI vacuum permittivity ε₀ explicitly, as the model does.
 
 The published tables give powers of ten only, so agreement within a few times is as close as the comparison
 can go. The tolerance is ×5: half a power of ten for rounding, and a little more for inputs the tables do not
@@ -314,11 +320,10 @@ Mistakes found along the way are in [CORRECTIONS.md](CORRECTIONS.md). Open quest
 - O. Romero-Isart, *Quantum superposition of massive objects and collapse models*, Phys. Rev. A 84, 052121 (2011), eqs. 26, 28, 29. https://arxiv.org/abs/1110.4495
 - M. Schut et al., *Improving resilience of the Quantum Gravity Induced Entanglement of Masses (QGEM) to decoherence using 3 superpositions* (2021), eq. B5, which quotes Schlosshauer's air formula. https://arxiv.org/abs/2110.14695
 - C. F. Bohren and D. R. Huffman, *Absorption and Scattering of Light by Small Particles* (Wiley, 1983), ch. 5.
-- D. L. Danielson, G. Satishchandran and R. M. Wald, *Black holes decohere quantum superpositions* (2022). https://arxiv.org/abs/2205.06279
-- C. J. Riedel and W. H. Zurek, *Quantum Darwinism in an everyday environment* (2010). https://arxiv.org/abs/1001.3419
-- M. Bild et al., *Schrödinger cat states of a 16-microgram mechanical oscillator*, Science (2023). https://arxiv.org/abs/2211.00449
+- D. L. Danielson, G. Satishchandran and R. M. Wald, *Black holes decohere quantum superpositions*, Int. J. Mod. Phys. D 31, 2241003 (2022). https://doi.org/10.1142/S0218271822410036 (https://arxiv.org/abs/2205.06279v2)
+- C. J. Riedel and W. H. Zurek, *Quantum Darwinism in an everyday environment: huge redundancy in scattered photons*, Phys. Rev. Lett. 105, 020404 (2010). https://doi.org/10.1103/PhysRevLett.105.020404 (https://arxiv.org/abs/1001.3419)
 - L. F. Abbott and M. B. Wise, *Dimension of a quantum-mechanical path*, Am. J. Phys. 49, 37 (1981).
-- M. Scrimgeour et al., *The WiggleZ Dark Energy Survey: the transition to large-scale cosmic homogeneity* (2012). https://arxiv.org/abs/1205.6812
+- M. Scrimgeour et al., *The WiggleZ Dark Energy Survey: the transition to large-scale cosmic homogeneity*, MNRAS 425, 116–134 (2012). https://doi.org/10.1111/j.1365-2966.2012.21402.x (https://arxiv.org/abs/1205.6812)
 - D. Baumann, H. S. Chia and R. A. Porto, *Probing ultralight bosons with binary black holes*, Phys. Rev. D 99, 044001 (2019). https://arxiv.org/abs/1804.03208
 - R. Brito, V. Cardoso and P. Pani, *Superradiance: New Frontiers in Black Hole Physics*, Lect. Notes Phys. 971 (2020). https://arxiv.org/abs/1501.06570
 - A. Arvanitaki, M. Baryakhtar and X. Huang, *Discovering the QCD axion with black holes and gravitational waves*, Phys. Rev. D 91, 084011 (2015). https://arxiv.org/abs/1411.2263
@@ -330,7 +335,6 @@ Mistakes found along the way are in [CORRECTIONS.md](CORRECTIONS.md). Open quest
 - Planck Collaboration, *Planck 2018 results. VI. Cosmological parameters*, Astron. Astrophys. 641, A6 (2020), for the age of the universe, 13.8 billion years. https://arxiv.org/abs/1807.06209
 - D. J. Griffiths and D. F. Schroeter, *Introduction to Quantum Mechanics*, 3rd ed. (Cambridge, 2018), sec. 4.2, for the hydrogen wavefunctions.
 - H. Davoudiasl and P. B. Denton, *Ultralight boson dark matter and Event Horizon Telescope observations of M87\**, Phys. Rev. Lett. 123, 021102 (2019). https://arxiv.org/abs/1904.09242
-- A. Amruth et al., *Einstein rings modulated by wavelike dark matter from anomalies in gravitationally lensed images*, Nature Astronomy (2023). https://arxiv.org/abs/2304.09895
 
 The crowd wave:
 
@@ -349,7 +353,6 @@ The crowd wave:
 - P. F. de Salas and A. Widmark, *Dark matter local density determination: recent observations and future prospects*, Rep. Prog. Phys. 84, 104901 (2021). https://arxiv.org/abs/2012.11477
 - A.-C. Eilers, D. W. Hogg, H.-W. Rix and M. K. Ness, *The circular velocity curve of the Milky Way from 5 to 25 kpc*, ApJ 871, 120 (2019). https://arxiv.org/abs/1810.09466
 - GRAVITY Collaboration, *A geometric distance measurement to the Galactic Center black hole with 0.3% uncertainty*, A&A 625, L10 (2019). https://arxiv.org/abs/1904.05721
-- Planck Collaboration, *Planck 2018 results. VI. Cosmological parameters*, A&A 641, A6 (2020). https://arxiv.org/abs/1807.06209
 
 ## Licence
 
