@@ -85,3 +85,13 @@ Claims made during the exploration that did not survive it, kept so the record s
     energies. In the same example the levels are 2×10¹⁹ times closer together than hydrogen's, and the pattern
     holds only to leading order in α: there the first correction to the 211 level is −11%, against about 10⁻⁵ in
     hydrogen.
+
+## 16 October 2026: the crowd wave (issue #2)
+
+14. **Dark matter's missing witnesses and the galaxy-sized wave.** Claimed (README and page): having no witnesses
+    "is part of what makes a galaxy-sized dark matter wave possible". Too strong, and it points the wrong way. The
+    galaxy-sized wave is a crowd, about 10⁹³ particles to each lump of the wave near the Sun for a 10⁻²² eV
+    particle, acting as one classical wave. Its lumps, about 10⁵ Suns each, are recorded by every star they pass,
+    through gravity. The wave survives because recording a classical wave does not erase it, not because nothing
+    watches it. What the per-particle result does say is that nothing knocks single particles out of the wave.
+    See "The crowd wave" in the README.

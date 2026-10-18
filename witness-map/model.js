@@ -16,6 +16,7 @@
     h: 6.62607015e-34, hbar: 1.054571817e-34, c: 2.99792458e8, kB: 1.380649e-23,
     G: 6.674e-11, eps0: 8.8541878128e-12, e: 1.602176634e-19, Msun: 1.989e30,
     sigmaT: 6.6524587e-29, amu: 1.66054e-27, rGas: 1.5e-10, ly: 9.4607e15, au: 1.496e11, kpc: 3.086e19,
+    yr: 3.156e7, eV: 1.602176634e-19 / (2.99792458e8 * 2.99792458e8), // eV: kilograms per eV/c^2
   };
   // Witness populations. dil = photon density relative to a full black body at T (sunlight at 1 AU is 5.4e-6).
   const ENVS = {
@@ -108,7 +109,73 @@
     const tWave = o.m * dx * dx / C.hbar;
     return { parts, gamma, tWave, tau: 1 / gamma, W: gamma * tWave, bhNote };
   }
+
+  /* The crowd (issue #2). NOT a witness number, and never plotted on the W axis.
+   * In a galaxy, wave dark matter particles are never alone: near the Sun each lump of the wave holds ~1e93
+   * particles of 1e-22 eV, so the crowd acts as one classical wave (Hui, Ostriker, Tremaine & Witten 2017).
+   * Its clocks, for particle mass m, local density rho and one-dimensional speed spread sigma at radius r
+   * (Bar-Or, Fouvry & Tremaine 2019, "BFT"):
+   *   lump scale     lam   = hbar / (m sigma): density is correlated over this distance (BFT eq. 62)
+   *   lump size      size  = pi lam, half a de Broglie wavelength (Hui et al. 2017)
+   *   lump lifetime  tLump = hbar / (m sigma^2) = m lam^2 / hbar, the map's wave clock at a gap of lam (BFT eq. 62)
+   *   lump mass      mLump = pi^1.5 rho lam^3                                       (BFT eq. 59)
+   *   stirring time  tStir = 3 sigma^3 / (16 sqrt(pi) G^2 rho mLump lnL), lnL = ln(2 r / lam)   (BFT eqs. 61, 85)
+   *   kick           2 G mLump / (lam sigma): a star's change of speed as one lump passes it (impulse estimate)
+   * Core (soliton) of half-density radius rc: the ground state of the Schroedinger-Poisson equations, solved below.
+   *   wave period    2 pi hbar / |E|, E its energy level
+   *   breathing      1 / f, f = 10.94 (rho_c / 1e9 Msun kpc^-3)^0.5 per Gyr (Veltmaat, Niemeyer & Schwabe 2018, eq. 16)
+   */
+  // Core shape, in units hbar = m = 4 pi G rho_c = 1: f'' + 2f'/x = 2(phi - e) f, phi'' + 2phi'/x = f^2, f(0) = 1, no node.
+  // Shoot on e; I(x) = x^2 phi'(x) is the mass inside x (in units of 4 pi rho_c L^3), eInf the level with phi(inf) = 0.
+  const SOL = (function () {
+    const h = 4e-3, d = (x, y, e) => [y[1], 2 * (y[2] - e) * y[0] - 2 * y[1] / x, y[3], y[0] * y[0] - 2 * y[3] / x];
+    const add = (y, k, s) => [y[0] + s * k[0], y[1] + s * k[1], y[2] + s * k[2], y[3] + s * k[3]];
+    function run(e, onStep) { // RK4 out from the centre; -1: f crossed zero (e too high), +1: f turned up (e too low)
+      let x = h, y = [1 - e * h * h / 3, -2 * e * h / 3, h * h / 6, h / 3];
+      while (x < 12) {
+        const k1 = d(x, y, e), k2 = d(x + h / 2, add(y, k1, h / 2), e), k3 = d(x + h / 2, add(y, k2, h / 2), e), k4 = d(x + h, add(y, k3, h), e);
+        const prev = y; y = [0, 1, 2, 3].map(i => y[i] + h / 6 * (k1[i] + 2 * k2[i] + 2 * k3[i] + k4[i])); x += h;
+        if (onStep) onStep(x, y, prev);
+        if (y[0] < 0) return -1; if (y[1] > 0) return 1;
+      }
+      return 0;
+    }
+    let lo = 0.1, hi = 2;
+    for (let i = 0; i < 44; i++) { const mid = (lo + hi) / 2; if (run(mid) > 0) lo = mid; else hi = mid; }
+    const e = (lo + hi) / 2; let xc = 0, Ic = 0, end = null;
+    run(e, (x, y, p) => { if (!xc && y[0] * y[0] < 0.5) { const t = (p[0] * p[0] - 0.5) / (p[0] * p[0] - y[0] * y[0]);
+      xc = x - h + t * h; Ic = xc * xc * (p[3] + t * (y[3] - p[3])); } end = [x, y]; });
+    const [x, y] = end;
+    return { xc, Ic, I: x * x * y[3], eInf: e - (y[2] + x * y[3]) };
+  })();
+  const GYR = 1e9 * C.yr, MSUN_KPC3 = C.Msun / Math.pow(C.kpc, 3), GEV_CM3 = 1e9 * C.eV * 1e6;
+  function crowd(h) {
+    if (h.rc) {
+      const L = h.rc / SOL.xc, rhoC = C.hbar * C.hbar / (4 * Math.PI * C.G * h.m * h.m * Math.pow(L, 4)), k = 4 * Math.PI * rhoC * L * L * L;
+      return { kind: 'core', rhoC, mCore: k * SOL.Ic, mSol: k * SOL.I, perLump: k * SOL.I / h.m,
+        tWave: 2 * Math.PI * h.m * L * L / (C.hbar * Math.abs(SOL.eInf)), tBreath: GYR / (10.94 * Math.sqrt(rhoC / (1e9 * MSUN_KPC3))) };
+    }
+    const lam = C.hbar / (h.m * h.sigma), mLump = Math.pow(Math.PI, 1.5) * h.rho * lam * lam * lam, lnL = Math.log(2 * h.r / lam);
+    return { kind: 'halo', lam, size: Math.PI * lam, tLump: lam / h.sigma, mLump, perLump: mLump / h.m, lnL, valid: h.r > 2 * Math.PI * lam,
+      tStir: 3 * Math.pow(h.sigma, 3) / (16 * Math.sqrt(Math.PI) * C.G * C.G * h.rho * mLump * lnL), kick: 2 * C.G * mLump / (lam * h.sigma) };
+  }
+  // Singular isothermal sphere of circular speed vc: rho = vc^2 / (4 pi G r^2), sigma = vc / sqrt 2 (BFT eq. 63).
+  const sis = (vc, r) => ({ rho: vc * vc / (4 * Math.PI * C.G * r * r), sigma: vc / Math.SQRT2, r });
+  // Sun's orbit: 8.18 kpc from the centre (GRAVITY 2019), circular speed 229 km/s (Eilers et al. 2019),
+  // dark matter density 0.4 GeV/cm^3 (de Salas & Widmark 2021 review: 0.3-0.6). Lower mass limit 3e-19 eV (Dalal & Kravtsov 2022).
+  // Eridanus II-like dwarf: simulated halo of Schive, Chiueh & Broadhurst 2020, m = 8e-23 eV, core half-density radius 0.7 kpc.
+  const SUN = { rho: 0.4 * GEV_CM3, sigma: 2.29e5 / Math.SQRT2, r: 8.18 * C.kpc };
+  const CROWDS = [
+    { id: 'sun', name: "Milky Way halo at the Sun's orbit", note: "particle of 10⁻²² eV, the map's wave dark matter particle", m: 1e-22 * C.eV, ...SUN },
+    { id: 'sun-heavy', name: "Milky Way halo at the Sun's orbit", note: 'particle of 3×10⁻¹⁹ eV, the lowest mass dwarf-galaxy stars allow', m: 3e-19 * C.eV, ...SUN },
+    { id: 'core', name: 'Core of a dwarf galaxy like Eridanus II', note: 'particle of 8×10⁻²³ eV, core 0.7 kpc in radius (simulated)', m: 8e-23 * C.eV, rc: 0.7 * C.kpc },
+  ];
+
   const BH_M = 4.3e6 * C.Msun, RS = 2 * C.G * BH_M / (C.c * C.c);
-  const api = { C, ENVS, OBJECTS, rates, planckIntegral, sigmaAbs, BH_M, RS, DEFAULT_LOG_GAP: Math.log10(2.5e-7) };
+  const api = {
+    C, ENVS, OBJECTS, rates, planckIntegral, BH_M, RS, DEFAULT_LOG_GAP: Math.log10(2.5e-7),
+    sigmaAbs,
+    crowd, CROWDS, SOL, sis, GEV_CM3, AGE: 13.8 * GYR, // age of the universe, 13.8 Gyr (Planck 2018)
+  };
   if (typeof module !== 'undefined' && module.exports) module.exports = api; else root.WM = api;
 })(typeof window !== 'undefined' ? window : globalThis);
