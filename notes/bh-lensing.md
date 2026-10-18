@@ -21,9 +21,9 @@ the opposite question: can a galaxy's central black hole shape its wave dark mat
   central image can.
 - **So the test changes shape.** As of 18 October 2026 I found no study that tests lensing anomalies against the
   lens galaxy's black hole mass or spin (section 4). No lens I found has both a small-scale anomaly and a bound on
-  its black hole. SDP.81 had both until Stacey et al. (2025) found its two reported dark lumps not robust (section
-  5). Masses read off the M–σ relation would only restate the galaxy's velocity dispersion, which also sets the
-  size of the wave granules. Section 6 gives testable versions.
+  its black hole. SDP.81 had both until Stacey et al. (2025) found both reported anomalies not robust (section 5).
+  Masses read off the M–σ relation would only restate the galaxy's velocity dispersion, which also sets the size of
+  the wave granules. Section 6 gives testable versions.
 
 ## 1. The gravitational atom, step by step
 
@@ -144,12 +144,12 @@ I found no such study. A test here means a study that fits a small-scale anomaly
 astrometric anomaly, or a detected dark lump) with a model that includes the lens galaxy's own black hole, or
 compares such anomalies with that black hole's mass or spin. Models that use the black hole only in the smooth
 macro-model or for a central image's flux, as Tamura et al. (2015) and Wong et al. (2015) do for SDP.81, do not
-count; the models of SDP.81's lump (Hezaveh et al. 2016; Stacey et al. 2025) do not include its black hole. The
-search used the arXiv API, INSPIRE full-text search, citation chasing from this note's sources and web searches;
-ADS was not queried. Microlensing and X-ray work on lensed quasars does involve black hole mass and spin, but the
-source quasar's, not the lens's: microlensing light curves give accretion disc sizes that scale as M_BH^(0.80±0.17)
-(Morgan et al. 2010), and X-ray spectra brightened by lensing give the spin of the quasar in RX J1131−1231, a =
-0.87 (Reis et al. 2014). The closest work:
+count; the models of SDP.81's anomalies (Hezaveh et al. 2016; Inoue et al. 2016; Stacey et al. 2025) do not include
+its black hole. The search used the arXiv API, INSPIRE full-text search, citation chasing from this note's sources
+and web searches; ADS was not queried. Microlensing and X-ray work on lensed quasars does involve black hole mass
+and spin, but the source quasar's, not the lens's: microlensing light curves give accretion disc sizes that scale
+as M_BH^(0.80±0.17) (Morgan et al. 2010), and X-ray spectra brightened by lensing give the spin of the quasar in RX
+J1131−1231, a = 0.87 (Reis et al. 2014). The closest work:
 
 - **Oguri and Kubo (2026)**: a soliton whose centre is deepened by a black hole makes a dense, hard-to-strip lump.
   The 10⁶ M☉ dark lump in JVAS B1938+666 fits a particle of about 4×10⁻²¹ eV with a 4×10⁵ M☉ black hole. That black
@@ -159,8 +159,8 @@ source quasar's, not the lens's: microlensing light curves give accretion disc s
   their model. Oguri and Kubo take the point mass to be the black hole. Other readings need no wave dark matter.
   Vegetti et al. note that, if the lump is dark matter, its structure is incompatible with cold dark matter but may
   fit a self-interacting halo whose centre has collapsed into a black hole. Zhang and Yu (2026) instead match
-  Vegetti et al.'s pseudo-Jaffe plus point mass model, which the data disfavour (Δln E = −30 against the best fit)
-  and has a 1.9×10⁵ M☉ point mass: with a self-interacting halo deep in collapse, or with the tidally stripped
+  Vegetti et al.'s pseudo-Jaffe plus point mass model, a model the data disfavour (Δln E = −30 against the best
+  fit), with a 1.9×10⁵ M☉ point mass: with a self-interacting halo deep in collapse, or with the tidally stripped
   remnant of a cold dark matter halo hosting a black hole of that mass, the halo having lost about 5 orders of
   magnitude of its mass. The two black hole masses, 4×10⁵ and 1.9×10⁵ M☉, come from different fits to the same
   data. In Zeng et al. (2026, a preprint) a black hole seeded by the collapse grows to 5 to 12% of the halo's mass
@@ -197,7 +197,7 @@ source quasar's, not the lens's: microlensing light curves give accretion disc s
 | System | Anomaly measurement | Wave dark matter analysis | Lens galaxy's black hole |
 |---|---|---|---|
 | HS 0810+2554 | Radio jets with VLBI (Hartley et al. 2019); narrow-line fluxes (Nierenberg et al. 2020) | Amruth et al. 2023 and Zhou et al. 2026: reproduced at ~10⁻²² eV; cold dark matter also fits (section 4) | Not measured. M–σ estimate ~6×10⁸ M☉ (section 3) |
-| SDP.81 | A 10^(8.96±0.12) M☉ dark lump at 6.9σ (Hezaveh et al. 2016), most likely spurious: poorly fitted multipoles; a second reported lump (Inoue et al. 2016) is not robust either (Stacey et al. 2025) | None found | Above 3×10⁸ M☉ from the missing central image (Tamura et al. 2015; Wong et al. 2015) |
+| SDP.81 | A 10^(8.96±0.12) M☉ dark lump at 6.9σ (Hezaveh et al. 2016), most likely spurious: poorly fitted multipoles; a line-of-sight dark clump suggested at 2–3σ (Inoue et al. 2016) is not robust either (Stacey et al. 2025) | None found | Above 3×10⁸ M☉ from the missing central image (Tamura et al. 2015; Wong et al. 2015) |
 | PMN J1632−0033 | None found | None found | Below 2×10⁸ M☉ from the central image (Winn, Rusin and Kochanek 2004) |
 | JVAS B1938+666 | A 10⁶ M☉ dark lump at 26σ (Powell et al. 2025) | Oguri and Kubo 2026: soliton plus a 4×10⁵ M☉ black hole inside the lump; self-interacting and cold dark matter readings too (section 4) | Not measured |
 | MG J0751+2716 | Extended arc at milliarcsecond resolution | Powell et al. 2023: up to 4.4×10⁻²¹ eV ruled out | Not measured |
@@ -205,17 +205,17 @@ source quasar's, not the lens's: microlensing light curves give accretion disc s
 | 17 cusp quads, e.g. J1042+1641 | Microlensing-free fluxes, many from JWST | Hou et al. 2026: FDM preferred | Not measured |
 
 No system I found has both a small-scale anomaly and a bound on its black hole. SDP.81 had both until Stacey et al.
-(2025) found its two reported dark lumps (Hezaveh et al. 2016; Inoue et al. 2016) not robust: Hezaveh et al.'s most
-likely spurious, from poorly fitted multipoles, and Inoue et al.'s explained by limits of the earlier method and
-the lens's angular structure. "Not measured" means I found no direct measurement, and none is expected from stars
-alone: at these redshifts a black hole's sphere of influence (18 to 63 pc) spans 2 to 14 milliarcseconds, well
-inside the 36 milliarcsecond core of the Hubble image blur that a stellar-dynamical mass must resolve (Kormendy and
-Ho 2013). Lensing does better. Central images have so far given bounds (the table above); lensed images near the
-centre have measured two black holes, of (3.3 ± 2.1)×10¹⁰ M☉ (3σ range) in Abell 1201 at z = 0.17 (Nightingale et
-al. 2023; one model without a black hole fits comparably, which the authors argue is unphysical) and 3.6×10¹⁰ M☉ in
-the Cosmic Horseshoe at z = 0.44, with stellar kinematics (Melo-Carneiro et al. 2025): both about 10¹⁰ M☉, ten
-times or more heavier than those in section 1. Neither is among the anomaly lenses above. I found no spin
-measurement for any lens galaxy's black hole.
+(2025) found both reported anomalies not robust. Hezaveh et al.'s (2016) dark lump in the lens was most likely
+spurious, from poorly fitted multipoles; Inoue et al.'s (2016) 2–3σ line-of-sight dark clump can be explained by
+limits of the earlier method and the lens's angular structure. "Not measured" means I found no direct measurement,
+and none is expected from stars alone: at these redshifts a black hole's sphere of influence (18 to 63 pc) spans 2
+to 14 milliarcseconds, well inside the 36 milliarcsecond core of the Hubble image blur that a stellar-dynamical
+mass must resolve (Kormendy and Ho 2013). Lensing does better. Central images have so far given bounds (the table
+above); lensed images near the centre have measured two black holes, of (3.3 ± 2.1)×10¹⁰ M☉ (3σ range) in Abell
+1201 at z = 0.17 (Nightingale et al. 2023; one model without a black hole fits comparably, which the authors argue
+is unphysical) and 3.6×10¹⁰ M☉ in the Cosmic Horseshoe at z = 0.44, with stellar kinematics (Melo-Carneiro et al.
+2025): both about 10¹⁰ M☉, ten times or more heavier than those in section 1. Neither is among the anomaly lenses
+above. I found no spin measurement for any lens galaxy's black hole.
 
 ## 6. How the question changes shape
 
