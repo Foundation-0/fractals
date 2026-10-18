@@ -36,7 +36,7 @@ at once, a gap Δx apart?
   quantum. Above 1 the witnesses win and it acts classical.
 
 What destroys the wave is the *record*, not the push of the detector: in 1998 Dürr, Nonn and Rempe marked
-which path atoms took with a push far too small to matter, and the interference still vanished.
+which path atoms took with a classical kick far too small to matter, and the interference still vanished.
 The idea that scattered light carries records of an object's position is also studied by Riedel and
 Zurek (2010).
 
@@ -65,7 +65,9 @@ What it shows:
    pass (see [The crowd wave](#the-crowd-wave-where-the-map-stops) below).
 4. A black hole horizon is a real witness (Danielson, Satishchandran and Wald, 2022) but a feeble one:
    ten horizon radii from the Milky Way's black hole, a wave dark matter particle split by 1 µm waits about
-   10¹⁷⁰ years to be recorded.
+   10¹⁷⁰ years to be recorded in the formula. This is a formal extrapolation below the particle's reduced
+   Compton wavelength, ħ/(mc), about 0.06 pc for 10⁻²² eV. It is not a validated prediction for a particle
+   confined to such a small region.
 
 Interactive version: **https://foundation-0.github.io/fractals/** (`index.html` at the root of this repository, served by GitHub Pages; it loads `witness-map/model.js` directly).
 
@@ -241,6 +243,9 @@ tables.
 ## What the model leaves out
 
 - Objects sit still. Fast motion, internal structure and spin are ignored.
+- The wave clock assumes speeds far below light speed and is unreliable for gaps below ħ/(mc), the
+  reduced Compton wavelength. The particle horizon example also assumes a source confined to a small
+  region, which is not justified at those scales.
 - W is per particle. Wave dark matter's galaxy-wide wave is a crowd effect, enormous numbers of particles
   sharing one wave. Its clocks are sketched in [The crowd wave](#the-crowd-wave-where-the-map-stops); it gets no
   witness number.
