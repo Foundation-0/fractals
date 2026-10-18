@@ -1,0 +1,485 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="A hydrogen atom and a gravitational atom, a cloud of very light particles around a spinning black hole, drawn side by side at the same scale. Same equation, same shapes, same ladder of levels. Exploration, not peer reviewed.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Gravitational atom beside hydrogen">
+<meta property="og:description" content="Hydrogen and a black-hole atom drawn at the same scale: same shapes, same levels, different pull and a horizon at the centre. Exploration, not peer reviewed.">
+<meta property="og:url" content="https://foundation-0.github.io/fractals/gravitational-atom/">
+<title>Gravitational Atom</title>
+<style>
+/* One reading column. A matched-scale figure (rows: 211 and 322; columns: hydrogen, gravitational atom), then the
+   ladder of levels, the numbers side by side, and the prose. No external files except ./atom.js, the model npm test checks. */
+:root {
+  --bg: #f4f5f7; --surface: #ffffff; --ink: #15181d; --muted: #59606d; --faint: #8a909b; --line: #dde0e6;
+  --accent: #0f6e66; --accent-soft: #e2f0ee;
+  --cloud: #2a78d6;            /* the density: one hue, stacked contours deepen it */
+  --proton: #e34948;           /* centre of hydrogen */
+  --hole: #000000;             /* the horizon is black in both themes; its rim takes --ink */
+  --warn-bg: #fdf3e1; --warn-line: #e3c58f;
+  --font-display: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  --font-body: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-data: ui-monospace, "SFMono-Regular", "SF Mono", Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #101216; --surface: #171a1f; --ink: #e8eaee; --muted: #a3a9b5; --faint: #7b818c; --line: #2a2e36;
+    --accent: #4fb3a9; --accent-soft: #1b2e2c; --cloud: #4d95ea; --proton: #ef6f6e;
+    --warn-bg: #2a2416; --warn-line: #6b5a32; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #101216; --surface: #171a1f; --ink: #e8eaee; --muted: #a3a9b5; --faint: #7b818c; --line: #2a2e36;
+  --accent: #4fb3a9; --accent-soft: #1b2e2c; --cloud: #4d95ea; --proton: #ef6f6e;
+  --warn-bg: #2a2416; --warn-line: #6b5a32; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 16px; line-height: 1.55;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 28px 56px;
+}
+.wrap { max-width: 880px; margin: 0 auto; display: grid; gap: 28px; }
+h1, h2, h3 { font-family: var(--font-display); font-weight: 600; text-wrap: balance; margin: 0; line-height: 1.15; }
+h1 { font-size: clamp(2rem, 6vw, 2.8rem); letter-spacing: -0.01em; }
+h2 { font-size: 1.35rem; }
+h3 { font-size: 1.05rem; }
+p { margin: 0; max-width: 68ch; }
+a { color: var(--accent); }
+sup { font-size: 0.72em; line-height: 0; }
+.eyebrow { font-family: var(--font-data); font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.lede { color: var(--muted); font-size: 1.05rem; }
+.hint { font-size: 0.85rem; color: var(--muted); }
+.num { font-family: var(--font-data); font-variant-numeric: tabular-nums; }
+header { display: grid; gap: 10px; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 16px; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* Controls */
+.controls { display: grid; gap: 16px; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { font: inherit; font-size: 0.82rem; border: 1px solid var(--line); background: var(--bg); color: var(--ink); border-radius: 999px; padding: 4px 10px; cursor: pointer; }
+.chip:hover { border-color: var(--accent); }
+.chip[aria-pressed="true"] { background: var(--accent-soft); border-color: var(--accent); }
+.sliders { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.ctl { display: grid; gap: 6px; min-width: 0; }
+.ctl label { font-weight: 700; font-size: 0.9rem; }
+.ctl .read { font-family: var(--font-data); font-size: 0.95rem; color: var(--accent); }
+input[type="range"] { width: 100%; accent-color: var(--accent); }
+.alpha { display: grid; gap: 4px; border-top: 1px solid var(--line); padding-top: 12px; }
+.alpha .big { font-family: var(--font-display); font-size: 1.25rem; }
+.alpha .big b { font-family: var(--font-data); font-weight: 500; }
+.deriv { font-family: var(--font-data); font-size: 0.8rem; color: var(--muted); overflow-wrap: anywhere; }
+.warn { background: var(--warn-bg); border: 1px solid var(--warn-line); border-radius: 8px; padding: 8px 10px; font-size: 0.9rem; }
+.warn[hidden] { display: none; }
+
+/* Figure */
+.figure { display: grid; gap: 14px; }
+.colheads, .pair { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.colheads span { font-family: var(--font-display); font-weight: 600; font-size: 1.05rem; }
+.rowhead { margin-top: 10px; display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; }
+.rowhead .tag { font-family: var(--font-data); font-size: 0.78rem; color: var(--muted); }
+.panel { margin: 0; display: grid; gap: 6px; min-width: 0; }
+.panel .head { display: none; font-family: var(--font-display); font-weight: 600; }
+.panel svg { width: 100%; height: auto; display: block; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; touch-action: none; }
+.panel figcaption { font-size: 0.82rem; color: var(--muted); }
+.readout { font-size: 0.85rem; color: var(--muted); min-height: 1.4em; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 0.85rem; color: var(--muted); }
+.key { display: inline-flex; align-items: center; gap: 6px; }
+.sw { width: 12px; height: 12px; border-radius: 50%; display: inline-block; }
+.sw.cloud { background: var(--cloud); opacity: 0.6; } .sw.proton { background: var(--proton); }
+.sw.hole { background: var(--hole); box-shadow: 0 0 0 1px var(--ink); }
+.sw.ring { border: 1.5px dashed var(--faint); }
+svg text { font-family: var(--font-body); }
+.t-axis { fill: var(--muted); font-size: 13px; }
+.t-small { fill: var(--muted); font-size: 12px; }
+.t-scale { fill: var(--ink); font-size: 13px; }
+.halo { paint-order: stroke; stroke: var(--surface); stroke-width: 4px; stroke-linejoin: round; }
+
+/* Ladder + scale factor */
+.scale { display: grid; gap: 14px; }
+.factors { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.factor { display: grid; gap: 2px; min-width: 0; }
+.factor .k { font-size: 0.82rem; color: var(--muted); }
+.factor .v { font-family: var(--font-display); font-size: 1.45rem; font-variant-numeric: tabular-nums; }
+.factor .s { font-size: 0.82rem; color: var(--muted); }
+.ladder svg { width: 100%; max-width: 560px; height: auto; display: block; }
+
+/* Numbers table */
+.tablewrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+th, td { text-align: left; vertical-align: top; padding: 8px 10px; border-top: 1px solid var(--line); }
+thead th { border-top: none; font-family: var(--font-display); font-size: 1rem; }
+td.num { white-space: nowrap; }
+tbody th { font-weight: 400; color: var(--muted); width: 34%; }
+.grow-yes { color: var(--accent); font-weight: 700; } .grow-no { color: var(--muted); font-weight: 700; }
+
+/* Prose */
+.notes { display: grid; gap: 12px; }
+.notes ul, .method ul { margin: 0; padding-left: 1.1rem; display: grid; gap: 8px; max-width: 70ch; }
+.method { display: grid; gap: 12px; font-size: 0.95rem; }
+.method p, .method li { color: var(--muted); }
+.formula { font-family: var(--font-data); font-size: 0.84rem; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; color: var(--ink); display: flex; flex-wrap: wrap; gap: 4px 18px; }
+.formula span { white-space: nowrap; }
+
+@media (max-width: 720px) { .sliders { grid-template-columns: 1fr; } }
+@media (max-width: 540px) {
+  .colheads { display: none; }
+  .pair { grid-template-columns: 1fr; gap: 18px; }
+  .panel .head { display: block; }
+  .factors { grid-template-columns: 1fr; }
+  #table thead { display: none; }
+  #table tr { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: 12px; border-top: 1px solid var(--line); padding: 8px 0; }
+  #table tbody th, #table td { border-top: none; padding: 2px 0; width: auto; }
+  #table tbody th { grid-column: 1 / -1; font-weight: 700; color: var(--ink); }
+  #table td::before { content: attr(data-l); display: block; font-size: 0.75rem; color: var(--muted); }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="eyebrow">fractals · second study · one equation at two scales</div>
+    <h1>Gravitational atom beside hydrogen</h1>
+    <p class="lede">Hydrogen, and a cloud of very light particles around a spinning black hole. Drawn at the same scale they have the same shapes and the same ladder of levels. Gravity does the pulling instead of electric charge, and the centre is a horizon that can feed the cloud or swallow it.</p>
+    <p class="hint">Exploration, not peer reviewed, no new result claimed. By Aska Digital with Claude (Anthropic) for Foundation0. Model, checks and open questions: <a href="https://github.com/Foundation-0/fractals">Foundation-0/fractals</a>. First study: <a href="../">the Witness Map</a>.</p>
+  </header>
+
+  <section class="card controls" aria-label="Choose the black hole and the particle">
+    <div class="chips" id="chips"></div>
+    <div class="sliders">
+      <div class="ctl">
+        <label for="mass">Black hole mass</label>
+        <input type="range" id="mass" min="0.4" max="10.5" step="0.01">
+        <span class="read" id="massRead"></span>
+      </div>
+      <div class="ctl">
+        <label for="mu">Particle mass, as energy</label>
+        <input type="range" id="mu" min="-21" max="-9" step="0.01">
+        <span class="read" id="muRead"></span>
+      </div>
+      <div class="ctl">
+        <label for="spin">Black hole spin</label>
+        <input type="range" id="spin" min="0" max="0.998" step="0.001">
+        <span class="read" id="spinRead"></span>
+      </div>
+    </div>
+    <div class="alpha" aria-live="polite">
+      <span class="big">Strength of the pull, <b id="alphaRead"></b></span>
+      <span class="deriv" id="alphaDeriv"></span>
+      <span class="hint">Hydrogen's is fixed by nature: α = e²/(4πε₀ħc) = 1/137. A gravitational atom's is the hole's size over the particle's wavelength, so it can be anything.</span>
+      <p class="warn" id="warn" hidden></p>
+    </div>
+  </section>
+
+  <section class="figure" aria-label="The two atoms at the same scale">
+    <h2>Same shapes, same scale</h2>
+    <p>Each panel is a slice through the axis. In three dimensions each state is a doughnut around that axis. One Bohr radius, a₀, is the same length on screen in every panel; only what a₀ means in metres changes.</p>
+    <div class="colheads" aria-hidden="true"><span>Hydrogen</span><span>Gravitational atom</span></div>
+    <div id="rows"></div>
+    <div class="legend">
+      <span class="key"><span class="sw cloud"></span>lines of equal |ψ|², at 5, 15, 30, 50, 70 and 90% of the peak</span>
+      <span class="key"><span class="sw ring"></span>r = 4a₀ and 9a₀: the most likely distance for 211 and 322 (the density itself peaks closer in, at 2a₀ and 6a₀, but shells farther out hold more volume)</span>
+      <span class="key"><span class="sw proton"></span>proton</span>
+      <span class="key"><span class="sw hole"></span>horizon</span>
+    </div>
+  </section>
+
+  <section class="card scale" aria-label="Scale factor and levels">
+    <h2>The scale factor</h2>
+    <div class="factors">
+      <div class="factor"><span class="k">Size: Bohr radius</span><span class="v" id="fSize"></span><span class="s" id="fSizeS"></span></div>
+      <div class="factor"><span class="k">Energy: spacing of the levels</span><span class="v" id="fEnergy"></span><span class="s" id="fEnergyS"></span></div>
+    </div>
+    <p>Both ladders follow E = μc²(1 − α²/2n²): the particle's rest energy μc², less a binding energy that falls as 1/n². Drawn in units of each atom's own ground-state binding, the two ladders are the same.</p>
+    <div class="ladder" id="ladder"></div>
+  </section>
+
+  <section class="card" aria-label="The two atoms in numbers">
+    <h2 style="margin-bottom:10px">Side by side</h2>
+    <div class="tablewrap"><table id="table"></table></div>
+  </section>
+
+  <section class="notes">
+    <h2>What is the same</h2>
+    <ul>
+      <li><b>One equation.</b> Far from the hole, the wave of a light particle obeys the same Schrödinger equation as hydrogen's electron, with a pull that weakens as 1/r (Baumann, Chia and Porto 2019, BCP below, eq. 2.5). Only the strength α and the particle's mass μ change.</li>
+      <li><b>So the same solutions.</b> Measured in its own Bohr radius a₀ = ħ/(μcα), each state has the same shape in both atoms. The two columns above are drawn from the same lines; only the labels differ.</li>
+      <li><b>The same ladder.</b> Levels at μc²(1 − α²/2n²) in both (eq. 2.8), and each cloud is most likely found at n²a₀ from the centre (eq. 2.9).</li>
+    </ul>
+    <h2>What differs</h2>
+    <ul id="differs"></ul>
+    <h2>Why 211 and 322</h2>
+    <ul id="why"></ul>
+  </section>
+
+  <section class="method">
+    <h2>How it's computed</h2>
+    <p>Everything runs live in this page from <a href="https://github.com/Foundation-0/fractals/blob/main/gravitational-atom/atom.js">gravitational-atom/atom.js</a>, the same file <code>npm test</code> checks. It is the leading order in α: hydrogen's formulas with gravity's α.</p>
+    <div class="formula"><span>α = GMμ/(ħc) = r<sub>g</sub>/λ<sub>c</sub></span><span>a₀ = ħ/(μcα) = r<sub>g</sub>/α²</span><span>E<sub>n</sub> = μc²(1 − α²/2n²)</span><span>r₊ = r<sub>g</sub>(1 + √(1 − χ²))</span><span>grows if ω/m &lt; Ω<sub>H</sub> = χc/(2r₊)</span></div>
+    <h3>Checks against published numbers</h3>
+    <ul>
+      <li>Hydrogen: 13.6057 eV and 0.529177 Å, the CODATA 2022 Rydberg energy and Bohr radius to 1 part in 10⁸. Letting the proton recoil gives 13.5983 eV against the measured 13.5984 eV; the gap is mostly fine structure, which this model leaves out.</li>
+      <li>Baumann, Chia and Porto 2019: α ≈ 0.02 for 3 Suns and 10⁻¹² eV (eq. 2.6); α ≈ 0.37 and gravitational waves at about 5 mHz for 5 million Suns and 10⁻¹⁷ eV (section 4.3); 484 Hz per 10⁻¹² eV (eq. 4.1); the 211 level grows only below α ≈ 0.25 at spin 0.8 (section 2.2); clouds peak at n²a₀ (eq. 2.9).</li>
+      <li>Growth rates: the 211 e-folding time is within 5× of Arvanitaki, Baryakhtar and Huang (2015, Table I) at α = 0.3, and 16× too slow at the fastest growth found numerically by Dolan (2007). Bosons in a grown cloud: 8×10⁷⁶ for 10 Suns, which Arvanitaki, Baryakhtar and Huang round to 10⁷⁶ (eq. 8).</li>
+      <li>The wavefunctions add up to one particle and match the textbook closed forms. The drawn lines sit on their density levels to 1 part in 10⁹.</li>
+      <li>All of these run as <a href="https://github.com/Foundation-0/fractals/blob/main/tests/gravitational-atom.mjs">automated checks</a>. Mistakes found along the way are in <a href="https://github.com/Foundation-0/fractals/blob/main/CORRECTIONS.md">CORRECTIONS.md</a>.</li>
+    </ul>
+    <h3>What it leaves out</h3>
+    <ul>
+      <li>Everything past leading order. Corrections to the levels are of relative size about α² (BCP 2019, eq. 2.10), shown above for the current α. Near the hole, and for α above about 0.3, the true cloud is only roughly hydrogen-like; accurate clouds and growth rates need numerical work (for example Dolan 2007).</li>
+      <li>Accurate growth rates. The rates here are leading order (Detweiler 1980, with the factor of 2 corrected as noted in BCP 2019, eq. 2.12). They are good at small α but too slow near the fastest growth: about 4× at α = 0.3 against Arvanitaki, Baryakhtar and Huang (2015, Table I) and 16× at α = 0.42 against the numerical peak of Dolan (2007). Read the times as upper limits there.</li>
+      <li>The cloud's own gravity, the hole's small loss of mass as it spins down, the particles' interactions with each other, and anything else near the hole (gas, a companion star).</li>
+      <li>For a real field the density is not exactly a still doughnut: a small part rotates with the pattern, and that part radiates the gravitational waves (BCP 2019, section 2.3).</li>
+      <li>The centre is held fixed. In hydrogen the proton's recoil shifts the levels by about 1 part in 1,800; in the gravitational atom by μ/M, shown in the table.</li>
+    </ul>
+    <p class="src">Sources: <a href="https://arxiv.org/abs/1804.03208">Baumann, Chia &amp; Porto 2019</a> · <a href="https://arxiv.org/abs/1501.06570">Brito, Cardoso &amp; Pani, <i>Superradiance</i> (2020)</a> · <a href="https://arxiv.org/abs/1411.2263">Arvanitaki, Baryakhtar &amp; Huang 2015</a> · <a href="https://doi.org/10.1103/PhysRevD.22.2323">Detweiler 1980</a> · <a href="https://arxiv.org/abs/0705.2880">Dolan 2007</a> · <a href="https://physics.nist.gov/constants">CODATA 2022</a> · <a href="https://physics.nist.gov/asd">NIST Atomic Spectra Database</a> · <a href="https://arxiv.org/abs/1605.09788">IAU 2015 nominal solar values</a></p>
+  </section>
+</div>
+
+<script src="atom.js"></script>
+<script>
+// The model lives in gravitational-atom/atom.js (window.GA), the same file npm test checks.
+const { C, hydrogen, grav, binding, horizon, omegaRg, grows, alphaMax, spinAfter, nextOrder, gwFrequency, growthRate, occupation, density, contour } = window.GA;
+const H = hydrogen();
+const LEVELS = [0.05, 0.15, 0.3, 0.5, 0.7, 0.9];
+const K = 9;                       // drawing units per Bohr radius, the same in every panel
+const ZOOM = { cx: 128, cy: -128, R: 44, k: 36 }; // inset: the centre, 4x closer
+const STATES = [{ n: 2, l: 1, m: 1 }, { n: 3, l: 2, m: 2 }];
+const PRESETS = [
+  { t: "BCP 2019 example: 5 million Suns, 10⁻¹⁷ eV", lm: Math.log10(5e6), lmu: -17, chi: 0.99 },
+  { t: "BCP 2019 scale: 3 Suns, 10⁻¹² eV", lm: Math.log10(3), lmu: -12, chi: 0.99 },
+];
+const PC = 3.0856775814913673e16, YEAR = 3.15576e7;
+const $ = id => document.getElementById(id);
+const state = { lm: PRESETS[0].lm, lmu: PRESETS[0].lmu, chi: PRESETS[0].chi };
+try { const s = JSON.parse(localStorage.getItem("gravitational-atom") || "null"); if (s && typeof s === "object") for (const k of ["lm", "lmu", "chi"]) if (isFinite(s[k])) state[k] = s[k]; } catch (e) {}
+function save() { try { localStorage.setItem("gravitational-atom", JSON.stringify(state)); } catch (e) {} }
+
+// ---------- formatting ----------
+const SUP = { "0": "⁰", "1": "¹", "2": "²", "3": "³", "4": "⁴", "5": "⁵", "6": "⁶", "7": "⁷", "8": "⁸", "9": "⁹", "-": "⁻" };
+function sci(x, p) { // plain text: 3.5×10⁻¹⁹ or 0.374
+  p = p || 2; if (x === 0) return "0"; if (!isFinite(x)) return "∞";
+  const s = x < 0 ? "−" : ""; x = Math.abs(x);
+  const e = Math.floor(Math.log10(x) + 1e-12);
+  if (e >= -3 && e <= 4) return s + Number(x.toPrecision(p)).toLocaleString("en-US", { maximumSignificantDigits: p });
+  let m = Number((x / Math.pow(10, e)).toPrecision(p)), ee = e; if (m >= 10) { m /= 10; ee++; }
+  return s + (m === 1 ? "" : String(m) + "×") + "10" + String(ee).split("").map(c => SUP[c]).join("");
+}
+function fmtLen(m, p) {
+  const n = (v, u) => sci(v, p || 2) + " " + u;
+  if (m < 1e-9) return n(m * 1e10, "Å");
+  if (m < 1e-6) return n(m * 1e9, "nm");
+  if (m < 1e-3) return n(m * 1e6, "µm");
+  if (m < 1) return n(m * 1e3, "mm");
+  if (m < 1e4) return n(m, "m");
+  if (m < 1e9) return n(m / 1e3, "km");
+  if (m < 0.05 * C.ly) return n(m / C.au, "AU");
+  if (m < 3e4 * C.ly) return n(m / C.ly, "light-years");
+  return n(m / (1e3 * PC), "kpc");
+}
+function fmtE(eV) {
+  if (eV >= 1e6) return sci(eV / 1e6, 3) + " MeV";
+  if (eV >= 1e3) return sci(eV / 1e3, 3) + " keV";
+  return sci(eV, 3) + " eV";
+}
+const AGE = 13.8e9 * YEAR; // age of the universe, Planck 2018
+function fmtTime(t) {
+  if (!isFinite(t)) return "never";
+  if (t < 120) return sci(t, 2) + " s"; if (t < 7200) return sci(t / 60, 2) + " minutes";
+  if (t < 2 * 86400) return sci(t / 3600, 2) + " hours"; if (t < YEAR) return sci(t / 86400, 2) + " days";
+  return sci(t / YEAR, 2) + " years";
+}
+function fmtHz(f) {
+  if (f >= 1e3) return sci(f / 1e3, 2) + " kHz"; if (f >= 1) return sci(f, 3) + " Hz";
+  if (f >= 1e-3) return sci(f * 1e3, 2) + " mHz"; if (f >= 1e-6) return sci(f * 1e6, 2) + " µHz";
+  return sci(f, 2) + " Hz";
+}
+const pct = x => (x >= 0 ? "+" : "−") + sci(Math.abs(x) * 100, 2) + "%";
+const fmtSuns = Msun => sci(Msun, 2) + (Msun === 1 ? " Sun" : " Suns");
+
+// ---------- the drawing: computed once, because in units of a₀ it never changes ----------
+const pathOf = (pts, sx, k, ox, oy) => pts.map(([x, z], i) => (i ? "L" : "M") + (ox + sx * x * k).toFixed(2) + " " + (oy - z * k).toFixed(2)).join("") + "Z";
+const LOBES = {}, INNER = {};
+for (const s of STATES) {
+  LOBES[s.n] = LEVELS.map(f => { const p = contour(s.n, f, 56); return pathOf(p, 1, K, 0, 0) + pathOf(p, -1, K, 0, 0); });
+  INNER[s.n] = LEVELS.map(f => { const p = contour(s.n, f, 56); return pathOf(p, 1, ZOOM.k, ZOOM.cx, ZOOM.cy) + pathOf(p, -1, ZOOM.k, ZOOM.cx, ZOOM.cy); });
+}
+function cloud(paths, op) {
+  return paths.map(d => `<path d="${d}" fill="var(--cloud)" fill-opacity="${op}" stroke="var(--cloud)" stroke-opacity="0.6" stroke-width="1"/>`).join("");
+}
+// One panel. kind: "H" or "G". a: the atom (for labels and the centre).
+function panel(s, kind, a, idx) {
+  const isG = kind === "G";
+  const coreA0 = a.core / a.a0;                       // centre radius in Bohr radii
+  const rMain = Math.max(coreA0 * K, 1.8), rZoom = Math.max(coreA0 * ZOOM.k, 1.8);
+  const centre = (r, x, y) => isG
+    ? `<circle cx="${x}" cy="${y}" r="${r.toFixed(2)}" fill="var(--hole)" stroke="var(--ink)" stroke-width="0.8"/>`
+    : `<circle cx="${x}" cy="${y}" r="${r.toFixed(2)}" fill="var(--proton)"/>`;
+  const spinArrow = isG ? `<path d="M -16 -150 A 16 4.5 0 1 0 16 -150" fill="none" stroke="var(--muted)" stroke-width="1.2"/><path d="M 16 -150 l -6 -3 m 6 3 l -6 3" stroke="var(--muted)" stroke-width="1.2" fill="none" transform="rotate(-60 16 -150)"/>` : "";
+  const label = `${isG ? "Gravitational atom" : "Hydrogen"}, state ${s.n}${s.l}${s.m}`;
+  return `<svg viewBox="-180 -180 360 360" role="img" aria-label="${label}: a slice through the axis, two lobes of a doughnut-shaped cloud" data-row="${idx}" data-kind="${kind}">
+    <defs><clipPath id="clip-${kind}-${idx}"><circle cx="${ZOOM.cx}" cy="${ZOOM.cy}" r="${ZOOM.R}"/></clipPath></defs>
+    <line x1="0" y1="-168" x2="0" y2="168" stroke="var(--faint)" stroke-width="1" stroke-dasharray="3 4"/>
+    <circle r="${4 * K}" fill="none" stroke="var(--faint)" stroke-width="1" stroke-dasharray="2 4"/>
+    <circle r="${9 * K}" fill="none" stroke="var(--faint)" stroke-width="1" stroke-dasharray="2 4"/>
+    ${cloud(LOBES[s.n], 0.13)}
+    <text x="4" y="${-4 * K - 4}" class="t-small halo">4a₀</text><text x="4" y="${-9 * K - 4}" class="t-small halo">9a₀</text>
+    <text x="6" y="-164" class="t-axis">${isG ? "spin axis" : "z axis"}</text>
+    ${spinArrow}
+    ${centre(rMain, 0, 0)}
+    <g>
+      <circle cx="${ZOOM.cx}" cy="${ZOOM.cy}" r="${ZOOM.R}" fill="var(--surface)" stroke="var(--line)" stroke-width="1.2"/>
+      <g clip-path="url(#clip-${kind}-${idx})">${cloud(INNER[s.n], 0.13)}<line x1="${ZOOM.cx}" y1="${ZOOM.cy - ZOOM.R}" x2="${ZOOM.cx}" y2="${ZOOM.cy + ZOOM.R}" stroke="var(--faint)" stroke-dasharray="3 4"/></g>
+      ${centre(rZoom, ZOOM.cx, ZOOM.cy)}
+      <text x="${ZOOM.cx - ZOOM.R - 6}" y="${ZOOM.cy - 3}" text-anchor="end" class="t-small halo">centre,</text><text x="${ZOOM.cx - ZOOM.R - 6}" y="${ZOOM.cy + 12}" text-anchor="end" class="t-small halo">4× closer</text>
+    </g>
+    <g transform="translate(-164 160)">
+      <line x1="0" y1="0" x2="${5 * K}" y2="0" stroke="var(--ink)" stroke-width="1.6"/>
+      <line x1="0" y1="-4" x2="0" y2="4" stroke="var(--ink)" stroke-width="1.6"/><line x1="${5 * K}" y1="-4" x2="${5 * K}" y2="4" stroke="var(--ink)" stroke-width="1.6"/>
+      <text x="0" y="-9" class="t-scale">5a₀ = ${fmtLen(5 * a.a0)}</text>
+    </g>
+    <g class="cursor" visibility="hidden"><circle r="4" fill="none" stroke="var(--ink)" stroke-width="1.4"/><circle r="1.4" fill="var(--ink)"/></g>
+  </svg>`;
+}
+function centreNote(a, isG) {
+  const r = a.core / a.a0;
+  const drawn = r * ZOOM.k >= 1.8 ? "to scale in the inset" : "enlarged, too small to draw";
+  return isG ? `Horizon: r₊ = ${sci(r, 2)} a₀ (${fmtLen(a.core)}), ${drawn}.`
+             : `Proton: ${sci(r, 2)} a₀ (0.84 fm), enlarged, too small to draw.`;
+}
+
+// ---------- controls ----------
+const chips = $("chips");
+PRESETS.forEach((p, i) => { const b = document.createElement("button"); b.type = "button"; b.className = "chip"; b.textContent = p.t; b.dataset.i = i;
+  b.addEventListener("click", () => { Object.assign(state, { lm: p.lm, lmu: p.lmu, chi: p.chi }); sync(); update(); }); chips.appendChild(b); });
+function sync() { $("mass").value = state.lm; $("mu").value = state.lmu; $("spin").value = state.chi; }
+$("mass").addEventListener("input", e => { state.lm = parseFloat(e.target.value); update(); });
+$("mu").addEventListener("input", e => { state.lmu = parseFloat(e.target.value); update(); });
+$("spin").addEventListener("input", e => { state.chi = parseFloat(e.target.value); update(); });
+sync();
+
+// rows of panels
+const rowsEl = $("rows");
+STATES.forEach((s, i) => {
+  const row = document.createElement("div"); row.className = "figure";
+  row.innerHTML = `<div class="rowhead"><h3>State ${s.n}${s.l}${s.m}</h3><span class="tag">n = ${s.n}, ℓ = ${s.l}, m = ${s.m} · most likely at ${s.n * s.n}a₀</span></div>
+    <div class="pair"><figure class="panel" id="pH${i}"></figure><figure class="panel" id="pG${i}"></figure></div>
+    <div class="readout" id="read${i}">Point at (or tap) a panel to compare the same spot in both atoms.</div>`;
+  rowsEl.appendChild(row);
+});
+
+function hover(e) {
+  const svg = e.currentTarget, i = +svg.dataset.row, s = STATES[i];
+  const pt = svg.createSVGPoint(); pt.x = e.clientX; pt.y = e.clientY;
+  const p = pt.matrixTransform(svg.getScreenCTM().inverse());
+  if (Math.abs(p.x) > 180 || Math.abs(p.y) > 180) return;
+  const inZoom = Math.hypot(p.x - ZOOM.cx, p.y - ZOOM.cy) < ZOOM.R;
+  const x = inZoom ? (p.x - ZOOM.cx) / ZOOM.k : p.x / K, z = inZoom ? -(p.y - ZOOM.cy) / ZOOM.k : -p.y / K, r = Math.hypot(x, z);
+  const th = Math.atan2(Math.abs(x), z), f = density(s.n, s.l, s.m, r, th) / density(s.n, s.l, s.m, s.n * s.l, Math.PI / 2);
+  document.querySelectorAll(`svg[data-row="${i}"] .cursor`).forEach(c => { c.setAttribute("visibility", "visible"); c.setAttribute("transform", `translate(${p.x.toFixed(1)} ${p.y.toFixed(1)})`); });
+  $("read" + i).textContent = `r = ${sci(r, 2)} a₀: ${fmtLen(r * H.a0)} in hydrogen, ${fmtLen(r * current.a0)} in the gravitational atom. ${Math.round(th * 180 / Math.PI)}° from the axis. Density ${f >= 0.005 ? Math.round(f * 100) + "%" : "under 1%"} of the peak in both.`;
+}
+function leave(e) { const i = +e.currentTarget.dataset.row; document.querySelectorAll(`svg[data-row="${i}"] .cursor`).forEach(c => c.setAttribute("visibility", "hidden")); }
+
+// ---------- ladder ----------
+function ladder(G) {
+  const y0 = 40, y1 = 216, y = n => y0 + (y1 - y0) / (n * n);
+  const col = (x, a, name) => {
+    let s = `<text x="${x}" y="16" class="t-scale" style="font-weight:700">${name}</text>`;
+    s += `<line x1="${x}" y1="${y0}" x2="${x + 80}" y2="${y0}" stroke="var(--faint)" stroke-dasharray="3 3"/><text x="${x + 86}" y="${y0 + 4}" class="t-small">0: free</text>`;
+    for (let n = 7; n >= 1; n--) {
+      const hi = n === 2 || n === 3, w = hi ? 2.4 : n === 1 ? 1.8 : 1;
+      s += `<line x1="${x}" y1="${y(n).toFixed(1)}" x2="${x + 80}" y2="${y(n).toFixed(1)}" stroke="${hi ? "var(--cloud)" : n === 1 ? "var(--ink)" : "var(--faint)"}" stroke-width="${w}"/>`;
+      if (n <= 3) s += `<text x="${x + 86}" y="${(y(n) + 4).toFixed(1)}" class="t-scale">−${fmtE(binding(a, n))}</text>`;
+    }
+    return s;
+  };
+  let s = `<svg viewBox="0 0 420 232" role="img" aria-label="Energy levels n = 1 to 7 for both atoms, each in units of its own binding energy: the same ladder">`;
+  for (const n of [1, 2, 3]) s += `<text x="0" y="${(y(n) + 4).toFixed(1)}" class="t-small">n = ${n}</text>`;
+  s += col(44, H, "Hydrogen") + col(234, G, "Gravitational atom") + "</svg>";
+  return s;
+}
+
+// ---------- main ----------
+let current = null;
+function update() {
+  save();
+  const Msun = Math.pow(10, state.lm), muEV = Math.pow(10, state.lmu), chi = state.chi;
+  const G = grav(Msun, muEV, chi); current = G;
+  chips.querySelectorAll(".chip").forEach(c => { const p = PRESETS[+c.dataset.i];
+    c.setAttribute("aria-pressed", Math.abs(p.lm - state.lm) < 0.005 && Math.abs(p.lmu - state.lmu) < 0.005 && Math.abs(p.chi - chi) < 0.0005 ? "true" : "false"); });
+  $("massRead").textContent = fmtSuns(Msun);
+  $("muRead").textContent = sci(muEV, 2) + " eV";
+  $("spinRead").textContent = `χ = ${chi.toFixed(3)} (at most 1)`;
+  $("alphaRead").textContent = "α = " + sci(G.alpha, 3);
+  $("alphaDeriv").innerHTML = `α = r<sub>g</sub>/λ<sub>c</sub> = (GM/c²)/(ħ/μc) = ${fmtLen(G.rg)} ÷ ${fmtLen(G.lambdaC)} = ${sci(G.alpha, 3)}. &nbsp;a₀ = r<sub>g</sub>/α² = ${fmtLen(G.a0, 3)}.`;
+
+  const c211 = nextOrder(2, 1, 1, G.alpha, chi), c322 = nextOrder(3, 2, 2, G.alpha, chi);
+  const warn = $("warn");
+  if (G.alpha >= 1) { warn.hidden = false; warn.textContent = "α is above 1: the particle's wavelength is smaller than the hole. The hydrogen-like formulas on this page do not apply here, so treat the numbers below as meaningless."; }
+  else if (Math.abs(c211.relBinding) > 0.2) { warn.hidden = false; warn.textContent = `A strong pull. The first correction to the 211 level is ${pct(c211.relBinding)} of its binding (BCP 2019, eq. 2.10), so the hydrogen-like picture is only a rough guide at this α.`; }
+  else warn.hidden = true;
+
+  STATES.forEach((s, i) => {
+    $("pH" + i).innerHTML = `<span class="head">Hydrogen</span>${panel(s, "H", H, i)}<figcaption>${centreNote(H, false)}</figcaption>`;
+    $("pG" + i).innerHTML = `<span class="head">Gravitational atom</span>${panel(s, "G", G, i)}<figcaption>${centreNote(G, true)}</figcaption>`;
+  });
+  document.querySelectorAll("#rows svg").forEach(svg => { svg.addEventListener("pointermove", hover); svg.addEventListener("pointerdown", hover); svg.addEventListener("pointerleave", leave); });
+
+  const size = G.a0 / H.a0, en = G.E1 / H.E1;
+  $("fSize").textContent = sci(size, 2) + " × hydrogen";
+  $("fSizeS").textContent = `a₀ = ${fmtLen(H.a0, 3)} → ${fmtLen(G.a0, 3)}`;
+  $("fEnergy").textContent = sci(en, 2) + " × hydrogen";
+  $("fEnergyS").textContent = `ground-state binding ${fmtE(H.E1)} → ${fmtE(G.E1)}`;
+  $("ladder").innerHTML = ladder(G);
+
+  // growth
+  const hz = horizon(chi), w211 = omegaRg(2, G.alpha), w322 = omegaRg(3, G.alpha);
+  const g211 = grows(2, 1, G.alpha, chi), g322 = grows(3, 2, G.alpha, chi);
+  const after = spinAfter(2, 1, G.alpha), g322after = grows(3, 2, G.alpha, after);
+  const yes = (b, t1, t2) => `<span class="${b ? "grow-yes" : "grow-no"}">${b ? t1 : t2}</span>`;
+  const fac = G.alpha < 1;
+  const rgc = G.rg / C.c;                                                   // the hole's light-crossing time, s
+  const t211 = rgc / Math.abs(growthRate(2, 1, 1, G.alpha, chi)), t322 = rgc / Math.abs(growthRate(3, 2, 2, G.alpha, chi));
+  const N211 = occupation(G.M, Math.max(0, chi - after), 1);
+  const rows = [
+    ["What pulls", "electric charge", "gravity"],
+    ["Strength of the pull, α", `e²/(4πε₀ħc) = ${sci(H.alpha, 3)} (1/137)`, `GMμ/(ħc) = ${sci(G.alpha, 3)}`],
+    ["Orbiting particle, rest energy μc²", `electron, ${fmtE(H.muEV)}`, `light boson, ${fmtE(G.muEV)}`],
+    ["Bohr radius a₀ = ħ/(μcα)", fmtLen(H.a0, 3), fmtLen(G.a0, 3)],
+    ["Ground-state binding μc²α²/2", fmtE(H.E1), fmtE(G.E1)],
+    ["Binding as a share of rest energy, α²/2", sci(H.alpha * H.alpha / 2, 2), sci(G.alpha * G.alpha / 2, 2)],
+    ["First correction to the 211 binding", "about 10⁻⁵ (fine structure)", `${pct(c211.relBinding)} (322: ${pct(c322.relBinding)}), BCP eq. 2.10`],
+    ["Centre, in Bohr radii", `proton, ${sci(H.core / H.a0, 2)}`, `horizon, ${sci(G.core / G.a0, 2)}`],
+    ["Recoil of the centre, μ/M", sci(C.me / C.mp, 2), sci(G.muEV * C.e / (G.Mkg * C.c * C.c), 2)],
+    ["Particles in one state", "one electron", "a vast number of bosons"],
+    ["Fate of the 211 state", "drops to 100 in 1.6 ns, giving off ultraviolet light", fac ? (g211 ? yes(true, "grows", "") + `: its pattern turns at ω = ${sci(w211, 3)} c/r<sub>g</sub>, slower than the horizon's Ω<sub>H</sub> = ${sci(hz.omega, 3)} c/r<sub>g</sub>. Grows by a factor e every ${fmtTime(t211)}.` : yes(false, "", "drains into the hole") + `: ω = ${sci(w211, 3)} c/r<sub>g</sub> is above Ω<sub>H</sub> = ${sci(hz.omega, 3)} c/r<sub>g</sub>. Shrinks by a factor e every ${fmtTime(t211)}.`) : "—"],
+    ["Fate of the 322 state", "drops to 211 in 15.5 ns, giving off red light", fac ? (g322 ? yes(true, "grows", "") + `: pattern speed ω/2 = ${sci(w322 / 2, 3)} c/r<sub>g</sub> is below Ω<sub>H</sub>. Grows by a factor e every ${fmtTime(t322)}.` : yes(false, "", "drains into the hole") + `: pattern speed ω/2 = ${sci(w322 / 2, 3)} c/r<sub>g</sub> is above Ω<sub>H</sub>. Shrinks by a factor e every ${fmtTime(t322)}.`) : "—"],
+    ["Time to grow a full 211 cloud", "—", fac && g211 ? `about ${Math.round(Math.log(N211))} e-folds, from one particle to ${sci(N211, 1)} (Arvanitaki, Baryakhtar and Huang 2015, eq. 8): ${fmtTime(Math.log(N211) * t211)}${Math.log(N211) * t211 > AGE ? ", longer than the age of the universe (13.8 billion years, Planck 2018)" : ""}. ${G.alpha < 0.1 ? "Leading order, which is good at this small α." : "Leading order: at this α the true time is likely several times shorter."}` : "—"],
+    ["Steady glow", "none", `gravitational waves at ${fmtHz(gwFrequency(G.muEV))}, for a real field (BCP eq. 4.1)`],
+  ];
+  $("table").innerHTML = `<thead><tr><th></th><th>Hydrogen</th><th>Gravitational atom</th></tr></thead><tbody>` +
+    rows.map(r => `<tr><th scope="row">${r[0]}</th><td data-l="Hydrogen">${r[1]}</td><td data-l="Gravitational atom">${r[2]}</td></tr>`).join("") + "</tbody>";
+
+  // prose that depends on the numbers
+  $("differs").innerHTML = [
+    `<b>The strength of the pull.</b> Hydrogen's α is 1/137 in every hydrogen atom. Here α = r<sub>g</sub>/λ<sub>c</sub>, the hole's size over the particle's wavelength, is ${sci(G.alpha, 3)}. A cloud forms when the two are comparable (Arvanitaki, Baryakhtar and Huang 2015); for the 211 state to grow, α must be below about ${sci(alphaMax(2, 1, chi), 2)} at this spin.`,
+    `<b>How tightly it is held.</b> Hydrogen's electron is bound by ${sci(H.alpha * H.alpha / 2 * 1e6, 2)} parts per million of its rest energy. This cloud is bound by ${sci(G.alpha * G.alpha / 2 * 100, 2)}%. The tighter the hold, the more relativity matters: the first correction to the 211 level is ${pct(c211.relBinding)} here, against about 10⁻⁵ in hydrogen.`,
+    `<b>The centre.</b> A proton is ${sci(H.a0 / H.core, 2)} times smaller than a₀ and does not absorb the electron. The horizon's radius is ${sci(G.core / G.a0, 2)} a₀, and it is not a wall: waves that reach it can fall in. So the levels are not quite steady (BCP 2019, eq. 2.11). A level whose pattern turns slower than the horizon, ω/m below Ω<sub>H</sub>, is fed by the hole's spin and grows; the rest drain into the hole (eq. 2.1; Brito, Cardoso and Pani 2020).`,
+    `<b>One electron, or a crowd.</b> Hydrogen has one electron. The cloud's particles are bosons, which pile into the same state, so a grown cloud holds an enormous number of them: GM²Δχ/(ħc) ≈ 8×10⁷⁶ for a 10-Sun hole that gives up 0.1 of its spin to the 211 state (Arvanitaki, Baryakhtar and Huang 2015, eq. 8, who round it to 10⁷⁶). That many particles in one state act as a classical wave.`,
+    `<b>Excited, then what?</b> Hydrogen's 211 and 322 states give up their energy as light within nanoseconds (NIST transition rates). Around a spinning hole the same states can grow instead, and a cloud of a real field hums in gravitational waves at twice the particle's frequency, here ${fmtHz(gwFrequency(G.muEV))} (BCP 2019, eq. 4.1).`,
+  ].map(t => `<li>${t}</li>`).join("");
+  $("why").innerHTML = [
+    `<b>Only states that turn with the hole can grow</b> (m above zero), and growth slows steeply with ℓ: at small α the rate scales as α<sup>4ℓ+5</sup> in units of c/r<sub>g</sub> (Detweiler 1980; BCP 2019, eq. 2.12). So 211, with ℓ = 1, grows fastest (BCP 2019, section 2.2)${fac && g211 && g322 ? `: here it grows by a factor e every ${fmtTime(t211)}, 322 every ${fmtTime(t322)} (leading order)` : ""}.`,
+    !fac ? `<b>At α above 1</b> neither 211 nor 322 forms a hydrogen-like cloud, and the growth story above does not apply.`
+      : g211 ? `<b>211 grows until it stops qualifying.</b> It takes spin from the hole until the horizon turns as slowly as its pattern: spin ${chi.toFixed(3)} falls to ${after.toFixed(3)} (BCP 2019, eq. 2.2, ignoring the small loss of mass), if there is time. The 322 pattern turns at about half the rate (m = 2), so it ${g322after ? "still qualifies there and grows next, far more slowly" : "does not qualify there either"} (Arvanitaki, Baryakhtar and Huang 2015, section II B).`
+      : `<b>At these settings 211 cannot grow:</b> the horizon already turns more slowly than the 211 pattern (${w211 < 0.5 ? "it would need a spin above " + after.toFixed(3) : "no spin is enough: even the fastest-spinning hole turns too slowly"}). The 322 pattern turns at about half the rate (m = 2), so it ${g322 ? "can still grow here, though far more slowly than 211 would" : "cannot grow either"}.`,
+  ].map(t => `<li>${t}</li>`).join("");
+}
+update();
+</script>
+</body>
+</html>

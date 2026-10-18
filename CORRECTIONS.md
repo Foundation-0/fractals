@@ -72,3 +72,35 @@ Claims made during the exploration that did not survive it, kept so the record s
 11. **Not consulted.** Schlosshauer's 2007 book and Joos and Zeh's 1985 paper were not available. The comparisons
     use Schlosshauer's own open copies of his book's timescale table (2014, 2019) and four copies of the 1985
     table by Joos and by Kiefer. Anything in the book that is not in those copies is unchecked.
+
+## 16 October 2026: the gravitational atom (issue #4)
+
+12. **Atoms as little solar systems.** Claimed (README, and issue #4): "Atoms are not little solar systems ... Except
+    in one case, where they are", the one place where that picture "becomes literally true". Too strong. In the
+    gravitational atom the light particles form a wave cloud with hydrogen's shapes and levels; nothing in it moves
+    on an orbit. What carries over from a solar system is the force, gravity, and for a heavy hole the size: in
+    Baumann, Chia and Porto's 2019 example the 211 cloud is most likely found 1.4 AU out. The README now says
+    gravity builds a real atom.
+13. **"The same energy levels as a hydrogen atom."** Means the same pattern, falling as 1/n², not the same
+    energies. In the same example the levels are 2×10¹⁹ times closer together than hydrogen's, and the pattern
+    holds only to leading order in α: there the first correction to the 211 level is −11%, against about 10⁻⁵ in
+    hydrogen.
+
+## 16 October 2026: the crowd wave (issue #2)
+
+14. **Dark matter's missing witnesses and the galaxy-sized wave.** Claimed (README and page): having no witnesses
+    "is part of what makes a galaxy-sized dark matter wave possible". Too strong, and it points the wrong way. The
+    galaxy-sized wave is a crowd, about 10⁹³ particles to each lump of the wave near the Sun for a 10⁻²² eV
+    particle, acting as one classical wave. Its lumps, about 10⁵ Suns each, are recorded by every star they pass,
+    through gravity. The wave survives because recording a classical wave does not erase it, not because nothing
+    watches it. What the per-particle result does say is that nothing knocks single particles out of the wave.
+    See "The crowd wave" in the README.
+
+## 16 October 2026: black hole and wave dark matter lensing (issue #1)
+
+15. **Superradiance as a second route.** Issue #1 said a spinning black hole amplifying very light particles into a
+    cloud was not ruled out as a way for a galaxy's central black hole to shape wave dark matter where lensing looks.
+    For a 10⁻²² eV particle and a 10⁸ to 10⁹ M☉ black hole it is ruled out: the cloud would take 10²⁶ to 10³⁴ years
+    to grow, and at its radius the galaxy, not the black hole, holds the particles. Any cloud these black holes can
+    grow within the age of the universe, at any particle mass, peaks within about 0.1 pc. See
+    [notes/bh-lensing.md](notes/bh-lensing.md).
