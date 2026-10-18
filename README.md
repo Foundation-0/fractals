@@ -9,9 +9,11 @@ with Claude (Anthropic), for [Foundation0](https://github.com/Foundation-0/f0).
 
 ## Where the intuition holds, and where it breaks
 
-- **Atoms are not little solar systems.** An electron does not follow an orbit; it has a spread of
-  possible positions, and that spread does not shrink with better instruments. Planets show nothing like
-  it. The two follow different equations.
+- **Atoms are not little solar systems.** An electron in an atom does not follow an orbit. Find it in many
+  identically prepared atoms and the positions scatter; better instruments sharpen each reading but do not
+  narrow the scatter, which belongs to the atom's state. Planets obey the same quantum rules, but Earth's orbital
+  angular momentum is about 2.5×10⁷⁴ ħ, deep where quantum and classical predictions agree, and its surroundings
+  record where it is all the time (the Witness Map, below).
 - **Except in one case, where gravity builds a real atom.** Very light particles around a spinning black
   hole settle into a cloud with the same shapes and the same pattern of energy levels as a hydrogen atom,
   with gravity in place of electric attraction (the "gravitational atom"). It is still a wave cloud, not
@@ -173,8 +175,10 @@ A spinning black hole can grow a cloud of very light particles with hydrogen-lik
 dark matter at 10⁻²² eV around a galaxy's central black hole of 10⁸ to 10⁹ Suns, it cannot in practice: the cloud
 would take 10¹⁶ to 10²⁴ times the age of the universe to grow, and out where it would sit the galaxy, not the black
 hole, holds the particles. The black hole can still squeeze the galaxy's dense dark matter core by plain gravity,
-but only within about 100 pc of the centre, too far in for the lensed images to feel. Details, the lens systems
-with anomaly and black hole data, and a reshaped test: [notes/bh-lensing.md](notes/bh-lensing.md) (issue #1).
+but only within about 100 pc of the centre, too far in for the lensed images to feel. The cloud is the
+[gravitational atom](#second-study-the-gravitational-atom) of the second study; the note's `gravAtom` is a compact
+copy of its algebra, and `npm test` fails if the two disagree. Details, the lens systems with anomaly and black
+hole data, and a reshaped test: [notes/bh-lensing.md](notes/bh-lensing.md) (issue #1).
 
 ## Run it
 
@@ -202,8 +206,8 @@ below).
 | Joos and Zeh's table: three grain sizes in five surroundings | powers of ten | 11 of 15 within ×5 |
 | From it, a 10 µm grain: Big Bang afterglow / sunlight / air (m⁻² s⁻¹) | 10¹⁰ / 10²⁵ / 10⁴⁰ | 1.6×10¹⁰ / 4.4×10²⁵ / 8.6×10⁴⁰ (air: DIFF) |
 | Schlosshauer's decoherence times: two sizes in four surroundings | powers of ten | 7 of 8 within ×5 |
-| Earth split by its radius beside a Sun-mass black hole (Wald et al., eq. 20) | ~10 µs | 22 µs |
-| Electron split by 1 m, same black hole (eq. 16) | ~10⁴³ years | 4×10⁴² years |
+| Earth split by its radius beside a Sun-mass black hole (Danielson, Satishchandran and Wald 2022, eq. 20) | ~10 µs | 22 µs |
+| Electron split by 1 m, same black hole, through its charge (eq. 16) | ~10⁴³ years | 4×10⁴² years |
 | Heated C₇₀ loses half its fringe visibility, 190 m/s beam (Hornberger et al. 2005, Fig. 9) | about 2,500 K | 2,475 K (the point the glow is fitted to) |
 | Same, 100 m/s beam | about 2,450 K | 1,960 K (DIFF) |
 | Photons given off while the visibility halves (Hackermüller et al. 2004) | one to two | 1.4 |
@@ -216,15 +220,13 @@ below).
 | Core mass inside the core radius (same paper, eq. 3) | 5.5×10⁹ Suns | 5.4×10⁹ |
 | Core wave period at 0.1 Suns per pc³ (Schive et al. 2020) | ~120 million years | 121 million |
 | Core breathing frequency (Veltmaat et al. 2018, eq. 16) | 0.16 per (Gρ_c)^(-1/2) | 0.22 (frozen-gravity estimate) |
-| Coupling α, 3 M☉ black hole and 10⁻¹² eV particle (Baumann, Chia and Porto 2019, eq. 2.6) | 0.02 | 0.022 |
-| Cloud growth time at their smallest growing α, 0.005 (eq. 2.14) | the age of the universe | 1.2×10¹⁰ years |
-| Largest α that grows at spin 0.8 (same paper) | 0.25 | 0.252 |
-| Heaviest particle M87*'s spin can grow (Davoudiasl and Denton 2019) | 4.6×10⁻²¹ eV | 4.7×10⁻²¹ eV |
 
 The published tables give powers of ten only, so agreement within a few times is as close as the comparison
 can go. The tolerance is ×5: half a power of ten for rounding, and a little more for inputs the tables do not
 state. The crowd rows compare formulas and fits, so they agree more closely; the core is solved here from
-first principles (the ground state of the Schrödinger–Poisson equations), not taken from the fits.
+first principles (the ground state of the Schrödinger–Poisson equations), not taken from the fits. The electron
+row is the electric channel; through gravity alone the same electron would wait 5×10¹²⁴ years. The black hole
+note's checks are listed in [notes/bh-lensing.md](notes/bh-lensing.md), the gravitational atom's below.
 
 What the re-check found (issue #5, details in CORRECTIONS.md): two coefficient errors, now fixed; a molecule's
 glow that is fitted, and gets the onset of decoherence right but the light wrong; and four places where the

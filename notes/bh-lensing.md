@@ -41,7 +41,7 @@ For μ = 10⁻²² eV, λ_c = 2.0×10¹⁵ m, or 0.064 pc. A 10⁸ M☉ black ho
 | α | 7.5×10⁻⁵ | 7.5×10⁻⁴ |
 | Spin needed for any growth | above 3×10⁻⁴ | above 3×10⁻³ |
 | Cloud peak, 4 r_g/α² | 3.4 kpc | 0.34 kpc |
-| Orbital speed in the cloud, αc/2 | 11 km/s | 110 km/s |
+| Bohr speed in the cloud, αc/2 | 11 km/s | 110 km/s |
 | Growth time (spin 0.99) | 1×10³⁴ years | 1×10²⁶ years |
 | ... in ages of the universe | 7×10²³ | 7×10¹⁵ |
 | Velocity dispersion of the host's stars (M–σ) | 150 km/s | 260 km/s |
@@ -64,7 +64,7 @@ How each row comes out:
   dominates out to the cloud. It does so only out to GM/σ², the sphere of influence, where σ is the velocity
   dispersion of the surrounding stars (Kormendy and Ho 2013). Taking σ from their M–σ relation,
   M = 3.1×10⁸ M☉ (σ / 200 km/s)^4.38 (eq. 7), the sphere of influence is 18 pc for 10⁸ M☉ and 63 pc for 10⁹ M☉:
-  5 to 190 times smaller than the would-be cloud. Put another way, the orbital speed in the cloud, 11 to 110 km/s,
+  5 to 190 times smaller than the would-be cloud. Put another way, the cloud's Bohr speed, 11 to 110 km/s,
   is below the stars' 150 to 260 km/s. At those radii the galaxy holds the particles: they belong to its wave dark
   matter core and halo, not to a gravitational atom.
 
@@ -196,7 +196,7 @@ I found no spin measurement for any lens galaxy's black hole.
 
 ## The model
 
-`gravAtom(M, muEV, spin)` in `witness-map/model.js` returns α, the |211⟩ cloud size, its orbital speed, whether it
+`gravAtom(M, muEV, spin)` in `witness-map/model.js` returns α, the |211⟩ cloud size, its Bohr speed, whether it
 is inside the superradiant window, and its growth time. `npm test` checks it against published numbers:
 
 | Check | Published | Model |
@@ -208,6 +208,10 @@ is inside the superradiant window, and its growth time. `npm test` checks it aga
 
 Two more checks guard this note's main claims: the 10⁻²² eV clouds above take over 10¹⁵ ages of the universe to
 grow, and no cloud that grows within that time around 10⁸ to 10⁹ M☉ peaks beyond 1 pc.
+
+Four more check that `gravAtom` agrees with `gravitational-atom/atom.js`, the second study's fuller version of the
+same algebra: α and the cloud size to the 2.5×10⁻⁴ by which their constants differ, and the growth rate and the
+largest α that grows to rounding (`tests/bh-lensing.mjs`).
 
 What it leaves out: the cloud's own gravity and the surrounding dark matter, levels other than |211⟩, and any
 self-interaction of the particle. It assumes the black hole dominates out to the cloud, which section 1 shows fails
