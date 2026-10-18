@@ -18,30 +18,32 @@ function check(name, ok, detail, src) {
 const S12 = 'Scrimgeour et al., MNRAS 425, 116 (2012), arXiv:1205.6812';
 
 // 1. Scrimgeour et al.'s own LCDM prediction for WiggleZ: their fiducial cosmology, and each slice's measured bias b^2
-//    (Table 4) and redshift-space beta (Table 3). Linear theory with the Kaiser factor only.
+//    (Table 4, fitted separately for the D2 and the N statistic) and redshift-space beta (Table 3). Linear theory with
+//    the Kaiser factor only.
 const sc = H.cosmology(H.SCRIMGEOUR12);
 const rows = H.WIGGLEZ.map(s => {
-  const amp = H.amplitude(sc, { z: s.z, b2: s.b2, beta: s.beta, redshiftSpace: true });
-  return { ...s, model: H.homogeneityScale(sc, amp), modelN: H.homogeneityScale(sc, amp, { by: 'N' }) };
+  const amp = b2 => H.amplitude(sc, { z: s.z, b2, beta: s.beta, redshiftSpace: true });
+  return { ...s, model: H.homogeneityScale(sc, amp(s.b2D)), modelN: H.homogeneityScale(sc, amp(s.b2N), { by: 'N' }) };
 });
 check('WiggleZ LCDM homogeneity scale (D2 = 2.97), four slices, within 3 h^-1 Mpc',
   rows.every(s => Math.abs(s.model - s.RHlcdm) <= 3),
-  rows.map(s => `z ${s.z}: ${s.model.toFixed(1)} vs ${s.RHlcdm}`).join('; '), S12 + ', Sec. 5');
+  rows.map(s => `z ${s.z}: ${s.model.toFixed(1)} vs ${s.RHlcdm}`).join('; '), S12 + ', Table 4 and Conclusions');
 check('Measured WiggleZ homogeneity scales lie within 2 sigma of the model',
   rows.every(s => Math.abs(s.model - s.RH) <= 2 * s.err),
   rows.map(s => `z ${s.z}: ${s.RH}±${s.err} vs ${s.model.toFixed(1)}`).join('; '), S12 + ', abstract');
-const lcdmN = [80, 83, 85, 82];
 check('The other definition (N = 1.01) gives a few h^-1 Mpc more, as in their LCDM counts, within 3 h^-1 Mpc',
-  rows.every((s, i) => Math.abs(s.modelN - lcdmN[i]) <= 3 && s.modelN > s.model),
-  rows.map((s, i) => `z ${s.z}: ${s.modelN.toFixed(1)} vs ${lcdmN[i]}`).join('; '), S12 + ', Table 4 (read from search text)');
+  rows.every(s => Math.abs(s.modelN - s.RHlcdmN) <= 3 && s.modelN > s.model),
+  rows.map(s => `z ${s.z}: ${s.modelN.toFixed(1)} vs ${s.RHlcdmN}`).join('; '), S12 + ', Table 4');
 
-// 2. Ntelis et al. (2017), BOSS CMASS galaxies at 0.43 < z < 0.7 (effective z ~ 0.57), corrected for bias and
-//    redshift-space distortion: LCDM predicts R_H = 62.0 h^-1 Mpc for the matter distribution.
-const pc = H.cosmology(H.PLANCK18);
-within('Matter homogeneity scale at z = 0.57, Planck 2018 (h^-1 Mpc)', H.homogeneityScale(pc, H.amplitude(pc, { z: 0.57 })), 62.0, 1.05,
-  'Ntelis et al., JCAP 06 (2017) 019, arXiv:1702.02159 (LCDM value for matter)');
+// 2. Ntelis et al. (2017), BOSS CMASS galaxies, corrected for bias and redshift-space distortion: their abstract gives
+//    LCDM R_H = 62.0 h^-1 Mpc, a real-space matter value (Sec. 5.5, Table 5), in their fiducial Planck 2015 cosmology.
+//    The paper attaches no redshift to it; z = 0.57 is the CMASS effective redshift.
+const p15 = H.cosmology(H.PLANCK15);
+within('Matter homogeneity scale at z = 0.57, Planck 2015 (h^-1 Mpc)', H.homogeneityScale(p15, H.amplitude(p15, { z: 0.57 })), 62.0, 1.05,
+  'Ntelis et al., JCAP 06 (2017) 019, arXiv:1702.02159, abstract (LCDM value for matter)');
 
 // 3. The linear spectrum itself.
+const pc = H.cosmology(H.PLANCK18);
 within('Sound horizon at Planck\'s drag redshift (z = 1059.94), Eisenstein-Hu eq. 6 (Mpc)', pc.tf.soundHorizon(H.PLANCK18.zdrag), H.PLANCK18.rdrag, 1.01,
   'Planck 2018 r_drag (TT,TE,EE+lowE+lensing); at their own fitted z_d = 1021 the same formula gives 150.9');
 within('Baryon acoustic peak in the linear correlation function (sanity check)', H.baoPeak(pc), 100, 1.05, 'Eisenstein et al., ApJ 633, 560 (2005), ~100 h^-1 Mpc');

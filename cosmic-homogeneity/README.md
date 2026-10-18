@@ -18,8 +18,9 @@ D₂(r) = 3 + d ln N / d ln r = 3 + 3 (ξ − ξ̄) / (1 + ξ̄)
 ```
 
 Scrimgeour et al. (2012) define the homogeneity scale R_H as the radius beyond which D₂ stays within 1% of 3
-(D₂ = 2.97). A second definition, where N comes within 1% of 1, gives R_H a few h⁻¹ Mpc larger; every number
-here uses D₂ unless it says N. Lengths are comoving and in h⁻¹ Mpc, the surveys' unit (see Units below).
+(D₂ = 2.97). A second definition, where N comes within 1% of 1, gives R_H a few h⁻¹ Mpc larger in ΛCDM (in the
+WiggleZ data not always: 78 against 81 at z ≈ 0.6); every number here uses D₂ unless it says N. Lengths are
+comoving and in h⁻¹ Mpc, the surveys' unit (see Units below).
 
 ## Small scales: about 1.2, not 2
 
@@ -45,26 +46,32 @@ gives ξ and ξ̄. Galaxies trace matter with a bias b (ξ_g = b²ξ), and redsh
 factor 1 + 2β/3 + β²/5.
 
 **WiggleZ.** With Scrimgeour et al.'s fiducial cosmology and each slice's measured bias and β, the model
-gives their own ΛCDM homogeneity scales:
+gives their own ΛCDM homogeneity scales to within about 1 h⁻¹ Mpc. The paper fits the bias separately for each
+statistic (Table 4); the b² here is the fit for D₂:
 
 | z | b² | Model | Their ΛCDM | Measured |
 |---|---|---|---|---|
-| 0.2 | 0.68 | 76.2 | 76 | 71 ± 8 |
+| 0.2 | 0.70 | 77.1 | 76 | 71 ± 8 |
 | 0.4 | 0.87 | 78.6 | 78 | 70 ± 5 |
-| 0.6 | 1.23 | 81.0 | 81 | 81 ± 5 |
-| 0.8 | 1.43 | 78.0 | 78 | 75 ± 4 |
+| 0.6 | 1.25 | 81.5 | 81 | 81 ± 5 |
+| 0.8 | 1.46 | 78.7 | 78 | 75 ± 4 |
 
-R_H barely moves with redshift because the galaxies' bias grows as the clustering of matter weakens, as the
-paper says. The other definition gives 80.7, 83.0, 85.3 and 82.5, against their ΛCDM counts of 80, 83, 85 and
-82 (Table 4).
+The model runs 0.5 to 1.1 above their values: they use a nonlinear spectrum and damp the redshift-space signal
+(see What the model leaves out). R_H barely moves with redshift because the galaxies' bias grows as the
+clustering of matter weakens, as the paper says. The other definition, with the bias fitted to the counts
+(b² = 0.68, 0.87, 1.23, 1.43), gives 80.7, 83.0, 85.3 and 82.5, against their ΛCDM counts of 80, 83, 85 and 82
+(Table 4).
 
 Other surveys use different criteria and tracers. Hogg et al. (2005) found SDSS luminous red galaxy counts
 consistent with r³ beyond about 70 h⁻¹ Mpc, within their errors; for such strongly biased galaxies (b ≈ 2) the
 model's 1% scale is about 130. Yadav et al. (2005) and Sarkar et al. (2009) found 60 to 70 h⁻¹ Mpc from
 multifractal dimensions. Ntelis et al. (2017) used D₂ = 2.97 on BOSS CMASS galaxies, corrected the counts for bias
-and redshift-space distortion, and found 63.3 ± 0.7 h⁻¹ Mpc for the matter distribution, against a ΛCDM 62.0.
-For matter at the sample's redshift (z ≈ 0.57) with Planck 2018 parameters the model gives 59.9; a b ≈ 2 galaxy
-tracer would give over 120.
+and redshift-space distortion, and found 63.3 ± 0.7 h⁻¹ Mpc for the matter distribution, against a ΛCDM 62.0
+(abstract; their Conclusions give 61.9 ± 0.8 for 0.538 < z < 0.592). The 62.0 is a real-space matter value: the
+paper's matter values (Sec. 5.5, Table 5) run from 59 to 67, its galaxy values from 109 to 147. In their
+fiducial cosmology, Planck 2015, the model gives 61.2 for matter at z = 0.57, near the middle of that slice (the
+paper attaches no redshift to 62.0). With Planck 2018 it gives 59.9, mostly because σ₈ is lower (0.811 against 0.831).
+For galaxies of their bias in that slice (b ≈ 1.94) in redshift space the model gives 124; they measure 114 ± 6.
 
 ## The scale is a convention
 
@@ -136,10 +143,10 @@ npm test                             # includes tests/cosmic-homogeneity.mjs
 
 | Check | Published | Model |
 |---|---|---|
-| WiggleZ ΛCDM R_H, four slices (Scrimgeour et al. 2012) | 76, 78, 81, 78 | 76.2, 78.6, 81.0, 78.0 |
+| WiggleZ ΛCDM R_H, four slices (Scrimgeour et al. 2012) | 76, 78, 81, 78 | 77.1, 78.6, 81.5, 78.7 |
 | Measured WiggleZ R_H within 2σ of the model | 71±8, 70±5, 81±5, 75±4 | yes |
 | WiggleZ ΛCDM R_H by the counts definition (their Table 4) | 80, 83, 85, 82 | 80.7, 83.0, 85.3, 82.5 |
-| Matter R_H at z = 0.57 (Ntelis et al. 2017, ΛCDM, matter) | 62.0 | 59.9 |
+| Matter R_H at z = 0.57, Planck 2015 (Ntelis et al. 2017, ΛCDM, matter) | 62.0 | 61.2 |
 | Sound horizon at Planck's drag redshift (Planck 2018) | 147.09 Mpc | 147.25 Mpc |
 | Baryon acoustic peak in ξ, sanity check (Eisenstein et al. 2005) | ~100 | 99.6 |
 | D₂ deep inside r₀ (model; γ = 1.8 from Zehavi et al. 2005) | 3 − γ = 1.2 | 1.20 |
@@ -150,13 +157,18 @@ npm test                             # includes tests/cosmic-homogeneity.mjs
 ## What the model leaves out
 
 - Linear theory: no nonlinear clustering, which matters below about 20 h⁻¹ Mpc, apart from the optional
-  smoothing of the acoustic peak, and no velocity damping of the redshift-space signal (Scrimgeour et al.
-  include a Lorentzian term; the Kaiser factor alone still matches their numbers to 0.6 h⁻¹ Mpc).
-- The Eisenstein–Hu formulas were checked against two independent code transcriptions that carry the paper's
-  equation numbers (colossus and hmf), not against the paper text. Their fitted drag redshift (1021) is lower
-  than Planck's (1060), so their sound horizon is 2.6% larger by construction; at Planck's drag redshift the
-  same formula gives 147.25 Mpc against Planck's 147.09.
-- The WiggleZ bias and β values were read from the paper's tables through search-engine text, not the PDF.
+  smoothing of the acoustic peak, and no velocity damping of the redshift-space signal. Scrimgeour et al.'s
+  ΛCDM uses a nonlinear spectrum (CAMB with HALOFIT) and a Lorentzian damping term; with linear Eisenstein–Hu
+  and the Kaiser factor alone the model comes out 0.5 to 1.1 h⁻¹ Mpc above their D₂ values and 0 to 0.7 above
+  their counts values.
+- The Eisenstein–Hu equations, constants and equation numbers were checked against the paper's arXiv LaTeX
+  source (astro-ph/9709112v1) in review on #26: an independent transcription gives the same T(k) to within
+  7 × 10⁻¹⁶. Hu's own code (tf_fit.c) differs slightly from the paper text, moving T by at most 0.06% and R_H by
+  at most 0.02 h⁻¹ Mpc; this model follows the paper. Their fitted drag redshift (1021) is lower than Planck's
+  (1060), by construction (the paper reduces z_d by a factor of 0.96), so their sound horizon is 2.6% larger;
+  at Planck's drag redshift the same formula gives 147.25 Mpc against Planck's 147.09.
+- The WiggleZ bias, β and R_H values and the Ntelis et al. values were checked against the papers' arXiv
+  LaTeX sources in review on #26.
 - The galaxy power law is a fit below about 10 to 20 h⁻¹ Mpc: r₀ and γ change with galaxy luminosity, and γ
   steepens for the brightest. The 1-to-30 average extrapolates it.
 - Neutrinos are left out: Planck's Ωm includes about 0.06 eV of neutrino mass, which the Eisenstein–Hu fit
@@ -169,6 +181,7 @@ npm test                             # includes tests/cosmic-homogeneity.mjs
 - M. I. Scrimgeour et al., *The WiggleZ Dark Energy Survey: the transition to large-scale cosmic homogeneity*, MNRAS 425, 116 (2012). https://arxiv.org/abs/1205.6812
 - D. J. Eisenstein and W. Hu, *Baryonic features in the matter transfer function*, ApJ 496, 605 (1998). https://arxiv.org/abs/astro-ph/9709112
 - Planck Collaboration, *Planck 2018 results. VI. Cosmological parameters*, A&A 641, A6 (2020). https://arxiv.org/abs/1807.06209
+- Planck Collaboration, *Planck 2015 results. XIII. Cosmological parameters*, A&A 594, A13 (2016). https://arxiv.org/abs/1502.01589
 - D. W. Hogg et al., *Cosmic homogeneity demonstrated with luminous red galaxies*, ApJ 624, 54 (2005). https://arxiv.org/abs/astro-ph/0411197
 - J. Yadav, S. Bharadwaj, B. Pandey and T. R. Seshadri, MNRAS 364, 601 (2005). https://arxiv.org/abs/astro-ph/0504315
 - P. Sarkar, J. Yadav, B. Pandey and S. Bharadwaj, MNRAS 399, L128 (2009). https://arxiv.org/abs/0906.3431

@@ -17,15 +17,19 @@
   // Planck 2018, TT,TE,EE+lowE+lensing (Planck Collaboration VI, A&A 641, A6 (2020)), with its drag redshift and
   // sound horizon at the drag epoch (Mpc).
   const PLANCK18 = { h: 0.6736, Om: 0.3153, Ob: 0.02237 / (0.6736 * 0.6736), ns: 0.9649, sigma8: 0.8111, Tcmb: 2.7255, zdrag: 1059.94, rdrag: 147.09 };
+  // Planck 2015, TT,TE,EE+lowP (Planck Collaboration XIII, A&A 594, A13 (2016), Table 4): the fiducial cosmology of
+  // Ntelis et al. (2017).
+  const PLANCK15 = { h: 0.6727, Om: 0.3156, Ob: 0.02225 / (0.6727 * 0.6727), ns: 0.9645, sigma8: 0.831, Tcmb: 2.7255 };
   // The fiducial cosmology of Scrimgeour et al. (2012), as in Blake et al. (2011).
   const SCRIMGEOUR12 = { h: 0.71, Om: 0.27, Ob: 0.04482, ns: 0.96, sigma8: 0.8, Tcmb: 2.725 };
-  // WiggleZ redshift slices (Scrimgeour et al. 2012): measured bias b^2 (Table 4) and beta (Table 3); measured R_H from
-  // D2 = 2.97 (abstract) and the paper's LCDM values with best-fitting bias (Sec. 5), h^-1 Mpc.
+  // WiggleZ redshift slices (Scrimgeour et al. 2012). Table 4 fits the bias b^2 separately for each statistic: b2D in the
+  // D2 block, b2N in the N(<r) block. beta from Table 3. Measured R_H from D2 = 2.97 (abstract), and the paper's LCDM
+  // values with best-fitting bias by D2 (RHlcdm) and by N (RHlcdmN) from Table 4, h^-1 Mpc.
   const WIGGLEZ = [
-    { z: 0.2, b2: 0.68, beta: 0.69, RH: 71, err: 8, RHlcdm: 76 },
-    { z: 0.4, b2: 0.87, beta: 0.73, RH: 70, err: 5, RHlcdm: 78 },
-    { z: 0.6, b2: 1.23, beta: 0.60, RH: 81, err: 5, RHlcdm: 81 },
-    { z: 0.8, b2: 1.43, beta: 0.51, RH: 75, err: 4, RHlcdm: 78 },
+    { z: 0.2, b2D: 0.70, b2N: 0.68, beta: 0.69, RH: 71, err: 8, RHlcdm: 76, RHlcdmN: 80 },
+    { z: 0.4, b2D: 0.87, b2N: 0.87, beta: 0.73, RH: 70, err: 5, RHlcdm: 78, RHlcdmN: 83 },
+    { z: 0.6, b2D: 1.25, b2N: 1.23, beta: 0.60, RH: 81, err: 5, RHlcdm: 81, RHlcdmN: 85 },
+    { z: 0.8, b2D: 1.46, b2N: 1.43, beta: 0.51, RH: 75, err: 4, RHlcdm: 78, RHlcdmN: 82 },
   ];
 
   // Eisenstein & Hu 1998, ApJ 496, 605: matter transfer function with baryon wiggles (eqs. 2-24).
@@ -153,6 +157,6 @@
     return (lnN(r2) - lnN(r1)) / Math.log(r2 / r1);
   }
 
-  const api = { PLANCK18, SCRIMGEOUR12, WIGGLEZ, transferEH, growth, cosmology, amplitude, D2, counts, homogeneityScale, baoPeak, D2powerLaw, slopePowerLaw };
+  const api = { PLANCK18, PLANCK15, SCRIMGEOUR12, WIGGLEZ, transferEH, growth, cosmology, amplitude, D2, counts, homogeneityScale, baoPeak, D2powerLaw, slopePowerLaw };
   if (typeof module !== 'undefined' && module.exports) module.exports = api; else root.HOMOGENEITY = api;
 })(typeof window !== 'undefined' ? window : globalThis);
