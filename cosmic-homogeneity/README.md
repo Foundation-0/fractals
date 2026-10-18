@@ -35,7 +35,7 @@ Well inside r₀ the neighbour counts grow as r^1.2, a fractal-like dimension of
 average as r^1.9 (endpoint slope; a least-squares fit to log-spaced points gives about 1.86), an average through
 the climb, and one reading of the "D ≈ 2" of Sylos Labini, Pietronero and colleagues, who argue the distribution
 stays fractal to the largest scales. Their 2009 value, D = 2.1 ± 0.1 up to about 30 h⁻¹ Mpc, is about 2σ above
-this real-space average. It is measured in redshift space, and the power law is fitted only below about 10 to
+this average. Their estimator and sample differ, and the power law here is fitted only below about 10 to
 20 h⁻¹ Mpc, so the comparison is rough.
 
 ## Large scales: the homogeneity scale
@@ -61,10 +61,10 @@ paper says. The other definition gives 80.7, 83.0, 85.3 and 82.5, against their 
 Other surveys use different criteria and tracers. Hogg et al. (2005) found SDSS luminous red galaxy counts
 consistent with r³ beyond about 70 h⁻¹ Mpc, within their errors; for such strongly biased galaxies (b ≈ 2) the
 model's 1% scale is about 130. Yadav et al. (2005) and Sarkar et al. (2009) found 60 to 70 h⁻¹ Mpc from
-multifractal dimensions. Ntelis et al. (2017) used D₂ = 2.97 on BOSS CMASS galaxies and found 63.3 ± 0.7 h⁻¹ Mpc,
-against a ΛCDM 62.0. For matter at the sample's redshift (z ≈ 0.57) with Planck 2018 parameters the model gives
-59.9, so their numbers are presumably for matter after correcting for bias and redshift-space distortion (a
-b ≈ 2 tracer would give over 120); that is an inference, not read from their paper.
+multifractal dimensions. Ntelis et al. (2017) used D₂ = 2.97 on BOSS CMASS galaxies, corrected the counts for bias
+and redshift-space distortion, and found 63.3 ± 0.7 h⁻¹ Mpc for the matter distribution, against a ΛCDM 62.0.
+For matter at the sample's redshift (z ≈ 0.57) with Planck 2018 parameters the model gives 59.9; a b ≈ 2 galaxy
+tracer would give over 120.
 
 ## The scale is a convention
 
@@ -90,9 +90,9 @@ statistical scatter, and an entropy measure gives about 140 h⁻¹ Mpc for SDSS 
 The baryon acoustic peak shows up too. The linear ξ has a bump at 99.6 h⁻¹ Mpc (Eisenstein et al. 2005 found
 the peak near 100), and it holds D₂ almost flat between about 100 and 120 h⁻¹ Mpc. In linear theory D₂ even dips
 slightly near 113, and then R_H jumps: for a b = 2 tracer at z = 0.5 in real space (R_H = 99), half a percent
-more clustering amplitude, near ×1.055, moves R_H by 13 h⁻¹ Mpc. Nonlinear motions smooth the peak (by
-Σ ≈ 6 to 8 h⁻¹ Mpc), and with Σ = 7 the dip and the jump are gone, the peak moves to 97 and the 1% scale for
-matter today is unchanged (77.0).
+more clustering amplitude, near ×1.055, moves R_H by 13 h⁻¹ Mpc. Nonlinear motions smooth the peak: fits to BOSS
+galaxies before reconstruction give Σ ≈ 8 h⁻¹ Mpc (Beutler et al. 2017). With Σ = 7 to 10 h⁻¹ Mpc the dip and
+the jump are gone, the peak moves to about 96, and the 1% scale for matter today is unchanged (77).
 
 ## Where the README's "80 to 300" came from
 
@@ -139,7 +139,7 @@ npm test                             # includes tests/cosmic-homogeneity.mjs
 | WiggleZ ΛCDM R_H, four slices (Scrimgeour et al. 2012) | 76, 78, 81, 78 | 76.2, 78.6, 81.0, 78.0 |
 | Measured WiggleZ R_H within 2σ of the model | 71±8, 70±5, 81±5, 75±4 | yes |
 | WiggleZ ΛCDM R_H by the counts definition (their Table 4) | 80, 83, 85, 82 | 80.7, 83.0, 85.3, 82.5 |
-| Matter R_H at z = 0.57 (Ntelis et al. 2017 ΛCDM, matter assumed) | 62.0 | 59.9 |
+| Matter R_H at z = 0.57 (Ntelis et al. 2017, ΛCDM, matter) | 62.0 | 59.9 |
 | Sound horizon at Planck's drag redshift (Planck 2018) | 147.09 Mpc | 147.25 Mpc |
 | Baryon acoustic peak in ξ, sanity check (Eisenstein et al. 2005) | ~100 | 99.6 |
 | D₂ deep inside r₀ (model; γ = 1.8 from Zehavi et al. 2005) | 3 − γ = 1.2 | 1.20 |
@@ -181,6 +181,7 @@ npm test                             # includes tests/cosmic-homogeneity.mjs
 - F. Sylos Labini, N. L. Vasilyev, L. Pietronero and Y. V. Baryshev, EPL 86, 49001 (2009). https://arxiv.org/abs/0805.1132
 - R. G. Clowes et al., MNRAS 429, 2910 (2013). https://arxiv.org/abs/1211.6256
 - S. Nadathur, *Seeing patterns in noise: gigaparsec-scale 'structures' that do not violate homogeneity*, MNRAS 434, 398 (2013). https://arxiv.org/abs/1306.1700
+- F. Beutler et al., *The clustering of galaxies in the completed SDSS-III Baryon Oscillation Spectroscopic Survey: baryon acoustic oscillations in the Fourier space*, MNRAS 464, 3409 (2017). https://arxiv.org/abs/1607.03149
 - A. M. Lopez, R. G. Clowes and G. M. Williger, MNRAS 516, 1557 (2022). https://arxiv.org/abs/2201.06875
 - A. M. Lopez et al., *A Big Ring on the sky*, JCAP (2024). https://arxiv.org/abs/2402.07591
 - T. Sawala et al., MNRAS Letters 541, L22 (2025). https://arxiv.org/abs/2502.03515

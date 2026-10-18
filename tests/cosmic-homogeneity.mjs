@@ -35,11 +35,11 @@ check('The other definition (N = 1.01) gives a few h^-1 Mpc more, as in their LC
   rows.every((s, i) => Math.abs(s.modelN - lcdmN[i]) <= 3 && s.modelN > s.model),
   rows.map((s, i) => `z ${s.z}: ${s.modelN.toFixed(1)} vs ${lcdmN[i]}`).join('; '), S12 + ', Table 4 (read from search text)');
 
-// 2. Ntelis et al. (2017), BOSS CMASS galaxies at 0.43 < z < 0.7 (effective z ~ 0.57): LCDM predicts R_H = 62.0
-//    h^-1 Mpc. Assumed to be the matter (bias- and RSD-corrected) value: a b ~ 2 tracer would give over 120.
+// 2. Ntelis et al. (2017), BOSS CMASS galaxies at 0.43 < z < 0.7 (effective z ~ 0.57), corrected for bias and
+//    redshift-space distortion: LCDM predicts R_H = 62.0 h^-1 Mpc for the matter distribution.
 const pc = H.cosmology(H.PLANCK18);
 within('Matter homogeneity scale at z = 0.57, Planck 2018 (h^-1 Mpc)', H.homogeneityScale(pc, H.amplitude(pc, { z: 0.57 })), 62.0, 1.05,
-  'Ntelis et al., JCAP 06 (2017) 019, arXiv:1702.02159 (LCDM value; matter assumed)');
+  'Ntelis et al., JCAP 06 (2017) 019, arXiv:1702.02159 (LCDM value for matter)');
 
 // 3. The linear spectrum itself.
 within('Sound horizon at Planck\'s drag redshift (z = 1059.94), Eisenstein-Hu eq. 6 (Mpc)', pc.tf.soundHorizon(H.PLANCK18.zdrag), H.PLANCK18.rdrag, 1.01,
@@ -61,7 +61,7 @@ check('A ten times stricter threshold more than doubles R_H; R_H falls with reds
   r01 > 2 * r1 && rz.every((v, i) => i === 0 || v < rz[i - 1]),
   `matter, z = 0: ${r1.toFixed(0)} (1%) and ${r01.toFixed(0)} (0.1%) h^-1 Mpc; z = 0, 0.5, 1, 2.4: ${rz.map(v => v.toFixed(0)).join(', ')}`, 'model');
 // The acoustic peak makes the linear D2 dip slightly near 113 h^-1 Mpc, so there R_H can jump. Nonlinear motions
-// smooth the peak (Sigma ~ 6-8 h^-1 Mpc) and the jump goes away.
+// smooth the peak (Sigma ~ 8 h^-1 Mpc before reconstruction in BOSS, Beutler et al. 2017) and the jump goes away.
 function largestJump(cos) {
   const a = H.amplitude(cos, { z: 0.5, b2: 4 }); let prev = null, best = 0;
   for (let f = 1; f <= 1.15001; f += 0.005) { const r = H.homogeneityScale(cos, a * f); if (prev !== null) best = Math.max(best, r - prev); prev = r; }
