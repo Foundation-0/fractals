@@ -2,7 +2,8 @@
 // critical/table.mjs (about 65 s). The runs are the same fixed-seed runs that tests/critical.mjs makes, so the numbers
 // match; not every number printed here is checked (critical/README.md says which are). Percolation runs with nine
 // seeds, and its checks use their mean: printed here with each seed's values, the standard error of the mean, the
-// slopes of the spanning cluster's mass between successive sizes, and how much leaving out L = 32 raises its fit.
+// slopes of the spanning cluster's mass between successive sizes, and how much leaving out L = 32 raises its fit; and
+// the means beside Ziff & Newman's measurements on this same system (2002, Table 1).
 // (node critical/table.mjs scatter, which used to print eight of those seeds on their own, now prints the same.)
 // No script prints the numbers critical/README.md takes from the one-off repeat with 120 other sets of seeds, or the
 // finite-size shifts it works out from published formulas other than the open-edge shifts printed below; the README
@@ -87,7 +88,7 @@ console.log(`\nPercolation pooled over nine seeds (${seeds[0]}, then ${seeds.sli
   'each seed with its jackknife error, then the mean with its standard error');
 const cols = [['p_c, L = 32/128', r => r.wide[0].p, pool.wide[0].p, PERC.pc, 5, CR.edgeShift(32, 128)],
   ['p_c, L = 64/256', r => r.wide[1].p, pool.wide[1].p, PERC.pc, 5, CR.edgeShift(64, 256)],
-  ['D, L = 64-256', r => r.D, pool.D, PERC.D, 4], ['p(R = 1/2), L = 256', r => r.half[last], pool.half, PERC.pc, 5],
+  ['D, L = 64-256', r => r.D, pool.D, PERC.D, 4], ['p(R = 1/2), L = 256', r => r.half[last], pool.half[last], PERC.pc, 5],
   ['D, L = 32-256', r => r.Dall, pool.Dall, PERC.D, 4]];
 console.log(col('seed', 6) + cols.map(c => col(c[0], 22)).join(''));
 pool.each.forEach((r, i) => console.log(col(seeds[i], 6) + cols.map(c => col(pm(c[1](r), c[4]), 22)).join('')));
@@ -104,4 +105,30 @@ console.log('  change from one of those slopes to the next, seed by seed: ' + po
   `L = ${x.L1}-${x.L2} to ${x.L2}-${x.L3}: ${pm(x.D, 3)}`).join(', '));
 console.log(`  D over L = 64-256 less D over L = 32-256: ${pm(pool.rise, 3)}, positive for ${pool.rise.v.filter(x => x > 0).length} of ` +
   `${pool.rise.v.length} seeds`);
+
+// The nine seeds' means against Ziff & Newman's measurements on this same system at the same sizes (their Table 1),
+// with z = (mean - theirs) / standard error of the mean; their own errors are in the last digit quoted. The crossing
+// at L is that of L/2 and L. Then how far open edges move their values from the L -> infinity ones, in the same units.
+const zn = PERC.zn, zi = L => zn.Ls.indexOf(L), z = (m, v) => (m.value - v) / m.err;
+const adj = L => pool.adjacent.find(x => x.L2 === L), zs = [];
+console.log('\nPercolation against Ziff & Newman\'s measurements on the same system (2002, Table 1), means of the nine seeds');
+console.log(col('L', 5) + col('R(p_c)', 18) + col('Z&N', 10) + col('z', 7) + col('p where R = 1/2', 20) + col('Z&N', 11) + col('z', 7) +
+  col('crossing L/2, L', 20) + col('Z&N', 10) + col('z', 7));
+p.Ls.forEach((L, i) => {
+  const R = pool.atPc[i], h = pool.half[i], c = adj(L), j = zi(L);
+  zs.push(z(R, zn.atPc[j]), z(h, zn.half[j]));
+  if (c) zs.push(z(c.p, zn.cross[j]));
+  console.log(col(L, 5) + col(pm(R, 4), 18) + col(zn.atPc[j], 10) + col(z(R, zn.atPc[j]).toFixed(2), 7) + col(pm(h, 5), 20) +
+    col(zn.half[j], 11) + col(z(h, zn.half[j]).toFixed(2), 7) +
+    (c ? col(pm(c.p, 5), 20) + col(zn.cross[j], 10) + col(z(c.p, zn.cross[j]).toFixed(2), 7) : col('-', 20)));
+});
+console.log(`  ${zs.length} comparisons, largest |z| ${Math.max(...zs.map(Math.abs)).toFixed(2)}`);
+const eff = (f, from) => p.Ls.map((L, i) => from(i) ? (f(i) / from(i).err).toFixed(1) : '-').join(', ');
+console.log(`  open-edge effect in their values, in standard errors of the mean, L = ${p.Ls.join(', ')}:\n    R(p_c) - 1/2: ` +
+  eff(i => zn.atPc[zi(p.Ls[i])] - 0.5, i => pool.atPc[i]) + '; p_c - p where R = 1/2: ' +
+  eff(i => PERC.pc - zn.half[zi(p.Ls[i])], i => pool.half[i]) + '; crossing - p_c: ' +
+  eff(i => zn.cross[zi(p.Ls[i])] - PERC.pc, i => adj(p.Ls[i]) && adj(p.Ls[i]).p));
+const h32 = pool.half[p.Ls.indexOf(32)];
+console.log(`  at L = 32: p_c less their p where R = 1/2 = ${(PERC.pc - zn.half[zi(32)]).toFixed(5)}; the mean is ` +
+  `${((PERC.pc - h32.value) / h32.err).toFixed(1)} standard errors below p_c (tests/critical.mjs checks it against theirs)`);
 console.log(`\nruntime ${((Date.now() - start) / 1000).toFixed(1)} s on Node ${process.versions.node}`);

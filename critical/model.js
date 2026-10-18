@@ -32,6 +32,9 @@
  *   Open edges: R_L(p) = 1/2 + a1 (p - p_c) L^(1/nu) + b0 / L + ..., nu = 4/3 (Ziff & Newman 2002, sec. I), with
  *   b0 = 0.322 and a1 = 0.765 (their sec. IV). As in their sec. II, the p where R_L1 and R_L2 cross then sits above
  *   p_c by (b0/a1)(1/L1 - 1/L2) / (L2^(3/4) - L1^(3/4)): +0.00040 for L = 32 and 128, +0.00012 for 64 and 256.
+ *   Their Table 1 gives their measurements on this same system, with errors "generally in the last digit quoted".
+ *   PERC.zn holds those for L = 32 to 256: R_L(p_c); p_0.5, where R_L(p) = 1/2; and the crossing of R_L/2 and R_L
+ *   (their p_c-c^(2)).
  * Random numbers: xoshiro128** seeded through splitmix32, integer arithmetic only, so a seed gives the same run on
  * every JavaScript engine.
  */
@@ -40,7 +43,9 @@
   const TC = 2 / Math.log(1 + Math.SQRT2);
   const KC = 1 / TC;
   const EXP = { beta: 1 / 8, nu: 1, eta: 1 / 4, gamma: 7 / 4 };
-  const PERC = { pc: 0.59274621, D: 91 / 48, oneArm: 5 / 48, nu: 4 / 3, b0: 0.322, a1: 0.765 };
+  const PERC = { pc: 0.59274621, D: 91 / 48, oneArm: 5 / 48, nu: 4 / 3, b0: 0.322, a1: 0.765,
+    zn: { Ls: [32, 64, 128, 256], atPc: [0.509535, 0.504890, 0.502476, 0.50124], // Ziff & Newman 2002, Table 1
+      half: [0.5918352, 0.5924657, 0.5926613, 0.5927208], cross: [0.594825, 0.593413, 0.592952, 0.592808] } };
   const TWO32 = 4294967296;
 
   // ---------- random numbers ----------
@@ -419,9 +424,10 @@
       Dbig: jackknife(B, b => logSlope(Ls.slice(1), sums.slice(1).map(s => masses(s, b).big))) };
   }
   // Percolation pooled over nine independent seeds, the study seed and the eight of STUDY.perc.pool. Each estimate is
-  // the nine seeds' mean; its error is the standard error of that mean, the scatter between seeds (sd) over 3. Also:
-  // the slope of ln(mass) against ln L between successive sizes, the change from one of those slopes to the next, and
-  // how much leaving out L = 32 raises the fit.
+  // the nine seeds' mean; its error is the standard error of that mean, the scatter between seeds (sd) over 3. At
+  // every L: R(p_c) and the p where R = 1/2; above L = 32, the crossing with the next smaller size. Also: the slope
+  // of ln(mass) against ln L between successive sizes, the change from one of those slopes to the next, and how much
+  // leaving out L = 32 raises the fit.
   function studyPooled() {
     const P = STUDY.perc, seeds = [P.seed].concat(P.pool), each = seeds.map(s => studyPercolation(s)), Ls = each[0].Ls;
     const pool = f => {
@@ -432,7 +438,8 @@
     const slope = (r, i) => Math.log(r.span[i + 1].value / r.span[i].value) / Math.log(Ls[i + 1] / Ls[i]);
     return { seeds, Ls, each,
       wide: each[0].wide.map((c, k) => ({ L1: c.L1, L2: c.L2, p: pool(r => r.wide[k].p.value) })),
-      half: pool(r => r.half[r.half.length - 1].value), // p where R = 1/2 at the largest L
+      atPc: Ls.map((L, i) => pool(r => r.atPc[i].value)), half: Ls.map((L, i) => pool(r => r.half[i].value)),
+      adjacent: each[0].adjacent.map((c, k) => ({ L1: c.L1, L2: c.L2, p: pool(r => r.adjacent[k].p.value) })),
       D: pool(r => r.D.value), Dall: pool(r => r.Dall.value),
       local: Ls.slice(1).map((L, i) => ({ L1: Ls[i], L2: L, D: pool(r => slope(r, i)) })),
       change: Ls.slice(2).map((L, i) => ({ L1: Ls[i], L2: Ls[i + 1], L3: L,

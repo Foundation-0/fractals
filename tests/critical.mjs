@@ -1,30 +1,35 @@
 // Checks the critical-point study (critical/model.js, issue #20) against exact results: Onsager's T_c and energy,
 // Yang's magnetisation, the exact correlation length, the 2D Ising exponents, the Binder cumulant at T_c, the
-// measurement trap in cluster runs, Newman and Ziff's percolation threshold and the 91/48 dimension. Run: npm test (or
-// node tests/critical.mjs).
+// measurement trap in cluster runs, Newman and Ziff's percolation threshold and the 91/48 dimension; and against one
+// of Ziff and Newman's measurements of the same percolation system at a finite size. Run: npm test (or node
+// tests/critical.mjs).
 // Each check states the source, the exact value, the model's value and the tolerance. The Monte Carlo runs use fixed
 // seeds and integer-only random numbers, so every run, on every Node version, prints the same numbers. Ising error
 // bars are jackknife estimates over 40 blocks. The percolation checks use the mean over nine seeds, the study seed and
 // eight others, with the standard error of that mean as error bar: the scatter between the nine seeds over 3. Each
 // tolerance is a fixed number, 3 to 5 standard deviations of the noisiest estimate it covers, plus any finite-size
-// shift: worked out from published results, except for D, whose shortfall is measured from these runs. For D, the two
-// p_c crossings and the Binder cumulant at L = 16 the two sides are bounded separately, so the shift widens one side
-// only; every other check has one tolerance for both sides. A sigma count below is (tolerance - shift) / sigma, with
-// sigma and shift as quoted, on the side the shift points to; on the other side it is tolerance / sigma and allows no
-// shift. Runs at several temperatures share one tolerance, so the quieter runs are held to it more loosely: |m| at
-// T = 2.0 and 2.1 to 17 and 10 sigma, the energy at T = 2.0, 2.1, 2.4 and 2.5 to between 5 and 8 sigma. For the Ising
-// runs the standard deviation is the jackknife error. Over the 120 repeat seeds below it matches the scatter between
-// seeds within about 10% on average, but this seed's errors from the runs reweighted to T_c (L = 8 to 128) come out 6%
-// to 17% below that scatter, so those checks also quote the scatter. For percolation it is the standard error of the
-// nine-seed mean. It comes out 9% above the repeat's scatter of a nine-seed mean (its scatter between seeds over 3)
-// for the crossing of L = 32 and 128, 44% above for 64 and 256 and 20% below for D, so those checks also quote that
-// scatter. Against the seed-to-seed scatter the tightest checks are gamma/nu (3.0 sigma after its +0.0012 finite-size
-// bias), D (3.1 sigma on each side, beyond its measured shortfall on the low side) and the Binder crossing of L = 64
-// and 128 (3.5 sigma). In a one-off repeat at these tolerances with 120 other sets of seeds (each study seed plus
-// 10000k, k = 1 to 120; not one of the repository's scripts), 119 passed every Ising check; the other missed the
+// shift: worked out from published results, except for D, whose shortfall is measured, in these runs and in the
+// independent 120-seed repeat below, which give the same bound. For D, the two p_c crossings and the Binder cumulant
+// at L = 16 the two sides are bounded separately, so the shift widens one side only; every other check has one
+// tolerance for both sides. A sigma count below is (tolerance - shift) / sigma, with sigma and shift as quoted, on the
+// side the shift points to; on the other side it is tolerance / sigma and allows no shift. Runs at several
+// temperatures share one tolerance, so the quieter runs are held to it more loosely: |m| at T = 2.0 and 2.1 to 17 and
+// 10 sigma, the energy at T = 2.0, 2.1, 2.4 and 2.5 to between 5 and 8 sigma. For the Ising runs the standard
+// deviation is the jackknife error. Over the 120 repeat seeds below it matches the scatter between seeds within about
+// 10% on average, but this seed's errors from the runs reweighted to T_c (L = 8 to 128) come out 6% to 17% below that
+// scatter, so those checks also quote the scatter. For percolation it is the standard error of the nine-seed mean. It
+// comes out 9% above the repeat's scatter of a nine-seed mean (its scatter between seeds over 3) for the crossing of
+// L = 32 and 128, 44% above for 64 and 256, 16% above for the point where R = 1/2 at L = 32 and 20% below for D, so
+// those checks also quote that scatter. Against the seed-to-seed scatter the tightest checks are gamma/nu (3.0 sigma
+// after its +0.0012 finite-size bias), D (3.1 sigma on the low side, beyond its measured shortfall; its high side sits
+// about 9 sigma above the value expected at these sizes and guards only against gross errors) and the Binder crossing
+// of L = 64 and 128 (3.5 sigma). In a one-off repeat at these tolerances with 120 other sets of seeds (each study seed
+// plus 10000k, k = 1 to 120; not one of the repository's scripts), 119 passed every Ising check; the other missed the
 // crossing of L = 64 and 128 by 0.0003. The repeat predates the pooled percolation checks, but it saved each seed's
-// percolation crossings and D: split into 13 sets of nine seeds, all 13 pass the pooled checks, and of 200000 sets of
-// nine drawn at random from the 120, 3 fail, all on D. Each line prints the margin it passes by.
+// percolation crossings and D, and a rerun of its percolation seeds, which reproduced those exactly, saved the points
+// where R = 1/2 too: split into 13 sets of nine seeds, all 13 pass the pooled checks, and of 200000 sets of nine drawn
+// at random from the 120, 37 fail, 3 on D and 34 on the point where R = 1/2 at L = 32. Each line prints the margin it
+// passes by.
 import { createRequire } from 'node:module';
 const require = createRequire(import.meta.url);
 const CR = require('../critical/model.js');
@@ -40,10 +45,11 @@ function check(name, ok, detail, src) {
 }
 // A Monte Carlo estimate {value, err} against an exact value: passes if exact - lo <= model <= exact + hi, where tol is
 // one number (lo = hi = tol) or [lo, hi], and the error bar is finite (a jackknife replicate can fail and give NaN).
-function near(name, est, want, tol, src, why, d) {
+// `label` names the value compared with when it is a published measurement rather than an exact value.
+function near(name, est, want, tol, src, why, d, label = 'exact') {
   const [lo, hi] = Array.isArray(tol) ? tol : [tol, tol], dev = est.value - want;
   const finite = Number.isFinite(est.err), ok = finite && dev >= -lo && dev <= hi;
-  console.log(`${ok ? 'PASS' : 'FAIL'}  ${name}\n      model ${fmt(est.value, d)} ± ${fmt(est.err, d)}  exact ${fmt(want, d)}  ` +
+  console.log(`${ok ? 'PASS' : 'FAIL'}  ${name}\n      model ${fmt(est.value, d)} ± ${fmt(est.err, d)}  ${label} ${fmt(want, d)}  ` +
     `(within ${lo === hi ? fmt(hi, d) : `-${fmt(lo, d)}/+${fmt(hi, d)}`}; off by ${fmt(dev, d)} = ${(dev / est.err).toFixed(1)} sigma; ` +
     `margin ${fmt(Math.min(hi - dev, dev + lo), d)})  ${src}` + (finite ? '' : '\n      the error bar is not finite') + (why ? `\n      ${why}` : ''));
   if (!ok) fails++;
@@ -84,10 +90,13 @@ check('Near T_c the same correlation length is A/t with A = 1/(4 K_c) = 0.567296
   `t xi = ${amp.toFixed(8)} at t = 1e-6: it is the exponential correlation length, not the second-moment one (A = 0.5670683)`,
   'Caselle, Hasenbusch, Pelissetto & Vicari 2000 (arXiv:hep-th/0003049), sec. 2');
 // Percolation on a square with open edges: where the spanning probabilities of two sizes cross, from Ziff & Newman's
-// expansion of R_L(p) (critical/model.js header), against the coefficient they quote for sizes L/2 and L.
+// expansion of R_L(p) (critical/model.js header), against the coefficient they predict from the same b0 and a1 for
+// sizes L/2 and L. That catches a slip in the algebra, not a shift that misdescribes the system: section 7 compares
+// the runs with their measurements for that.
 const ZN = 'Ziff & Newman 2002 (arXiv:cond-mat/0203496)', coef = CR.edgeShift(32, 64) * Math.pow(64, 7 / 4);
 check('Open edges shift the crossing of R_L1(p) and R_L2(p) above p_c by (b0/a1)(1/L1 - 1/L2)/(L2^(3/4) - L1^(3/4)); for ' +
-  "L1 = L/2 and L2 = L that is Ziff & Newman's 1.04 L^-7/4", Math.abs(coef - 1.04) < 0.005,
+  "L1 = L/2 and L2 = L that is the 1.04 L^-7/4 Ziff & Newman predict from the same b0 and a1 (they measured 1.02)",
+  Math.abs(coef - 1.04) < 0.005,
   `coefficient ${coef.toFixed(3)} from their b0 = ${PERC.b0} and a1 = ${PERC.a1}; the shifts used in section 6 below: ` +
   `+${fmt(CR.edgeShift(32, 128), 5)} for L = 32 and 128, +${fmt(CR.edgeShift(64, 256), 5)} for 64 and 256`, `${ZN}, secs. I, II and IV`);
 const r1 = CR.rng(1);
@@ -162,7 +171,7 @@ check('Energy per spin at the same five temperatures, within 0.005 (3.7 sigma of
     `off by ${x.dev.toFixed(4)} (${(x.dev / x.err).toFixed(1)} sigma)`).join('; ') +
   `; margin ${(0.005 - Math.max(...eHot.map(x => Math.abs(x.dev)))).toFixed(4)}`, ONS);
 
-// 6. Site percolation, open edges, spanning top to bottom. The crossings and D are means over nine independent seeds
+// 6. Site percolation, open edges, spanning top to bottom. Each result is a mean over nine independent seeds
 //    (the study seed and the eight of STUDY.perc.pool), and sigma is the standard error of the mean: the scatter
 //    between the nine seeds over 3. The tolerances are fixed numbers, set once from that scatter. The open-edge shifts
 //    are the ones checked in section 1. The details also quote the scatter of a nine-seed mean in the 120-seed repeat.
@@ -177,16 +186,34 @@ for (const c of pool.wide) near(`p_c from the crossing of the spanning probabili
       'crossing of L = 64 and 256 is the check that rules such an offset out. The mean sits 0.8 sigma above the shift'
     : 'tolerance: sigma = 0.00023; the low side is 3.9 sigma and allows no shift, the high side 3.8 sigma above the ' +
       'open-edge shift, +0.00012; 5.6 and 5.5 sigma of the seed-to-seed scatter of a nine-seed mean (0.00016), as these ' +
-      'nine seeds scatter more than the repeat\'s 120. A mean more than 0.0010 above p_c or 0.0009 below fails, so an ' +
-      'offset of 0.0012 fails (the study seed alone sits 0.0013 high). The mean sits 0.2 sigma above the shift', 5);
+      'nine seeds scatter more than the repeat\'s 120. About half of that excess is the study seed\'s: it sits 0.0013 ' +
+      'high, about 2.4 standard deviations of a single seed beyond the shift (single seeds scatter by about 0.0005 in ' +
+      'the repeat; 0.0006 for the eight other seeds). A mean more than 0.0010 above p_c or 0.0009 below fails, so an ' +
+      'offset of 0.0012 fails. The mean sits 0.2 sigma above the shift', 5);
 near(`Fractal dimension of the spanning cluster at p_c: mass ~ L^D, least squares over L = ${pool.Ls.slice(1).join(', ')}, mean of ${n} seeds`,
   pool.D, PERC.D, [0.024, 0.008], 'D = 2 - 5/48 = 91/48: Lawler, Schramm & Werner 2002 (one-arm exponent 5/48)',
   'tolerance: the slope between successive sizes rises with L (1.861, 1.876 and 1.884 from L = 32 to 256, means of the ' +
-  'nine seeds), so a fit over L = 64 to 256 falls short of 91/48. The shortfall, 0.016, is measured from these runs, not ' +
-  'predicted (the 120-seed repeat in the header gives 0.014 +- 0.001), so this check does not test it. The low side ' +
-  'allows it plus 4.0 sigma (sigma = 0.0020): a D more than 0.024 (1.3%) below 91/48 fails. The high side, 4.0 sigma, ' +
-  'allows no shift: more than 0.008 above fails. Each side is 3.1 sigma of the seed-to-seed scatter of a nine-seed ' +
-  'mean (0.0026), one of the tightest checks', 4);
+  'nine seeds), so a fit over L = 64 to 256 falls short of 91/48. The shortfall is measured, not predicted, so this ' +
+  'check does not test it. The low side allows these runs\' shortfall, 0.016, plus 4.0 sigma (sigma = 0.0020): a D ' +
+  'more than 0.024 (1.3%) below 91/48 fails. The independent 120-seed repeat in the header, which shares no seeds ' +
+  'with these runs, gives the same bound: its shortfall is 0.014 +- 0.001 and its scatter of a nine-seed mean 0.0026, ' +
+  'and 0.014 + 4 x 0.0026 = 0.024. Beyond these runs\' shortfall the low side is 3.1 times that scatter, one of the ' +
+  'tightest checks. The high side is not tight: it is 4.0 sigma and allows no shift, as on the far side of every ' +
+  'shifted check here, so a D more than 0.008 above 91/48 fails. That is 0.022 above the value the repeat expects at these ' +
+  'sizes, about 9 times its scatter, so the high side guards only against gross errors', 4);
+
+// 7. The same percolation runs against Ziff & Newman's measurements on this same system at the same size (their
+//    Table 1), not against a value for L -> infinity. critical/table.mjs prints eleven such comparisons, for L = 32 to
+//    256, and all agree within 1.04 sigma. This one is the clearest: open edges move it 4.3 sigma from its
+//    L -> infinity value, p_c (R(p_c) at L = 32 comes next, at 4.2; the rest are under 2).
+const zn = PERC.zn, h32 = pool.half[pool.Ls.indexOf(32)];
+near(`Where the spanning probability is 1/2 at L = 32, mean of ${n} seeds, against Ziff & Newman's measurement, 0.5918352`, h32,
+  zn.half[zn.Ls.indexOf(32)], 0.0007, `${ZN}, Table 1`,
+  'tolerance 3.3 sigma (sigma = 0.00021), 3.9 sigma of the seed-to-seed scatter of a nine-seed mean (0.00018), with ' +
+  'no shift: both are at L = 32. Open edges put this point 0.00091 below p_c, so a mean at p_c fails, by 1.0 sigma: ' +
+  'the check tests the model\'s finite-size behaviour against published measurements, not only the threshold. Only ' +
+  'modestly: with the 120-seed repeat\'s values moved to centre on p_c, about one set of nine seeds in eight would ' +
+  'still pass. The mean sits 4.5 sigma below p_c', 5, 'measured');
 
 const secs = (Date.now() - start) / 1000;
 console.log(`\nruntime ${secs.toFixed(1)} s on Node ${process.versions.node}`);
