@@ -77,7 +77,7 @@
     return 6 * Math.PI * eta * r / Cc; // force per unit speed
   }
   // Drag on a sphere much smaller than the mean free path, specular reflection (Epstein 1924): (4 pi/3) a^2 n m_g vbar.
-  // Diffuse reflection with full accommodation multiplies it by 1 + pi/8.
+  // Diffuse reflection with full accommodation multiplies it by 1 + pi/8 (conducting sphere) or 1 + 9 pi/64 (insulating).
   const epsteinDrag = ({ a, n, mg, T }) => (4 * Math.PI / 3) * a * a * n * mg * Math.sqrt(8 * C.kB * T / (Math.PI * mg));
   // Long-wavelength localisation rate of a sphere in a gas, Gamma = Lambda dx^2 (Schlosshauer 2019, eqs. 67-68).
   const gasLambda = ({ a, n, mg, T }) => 8 * n * Math.sqrt(2 * Math.PI * mg) * a * a * Math.pow(C.kB * T, 1.5) / (3 * C.hbar * C.hbar);

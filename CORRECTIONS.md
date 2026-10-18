@@ -113,8 +113,8 @@ Claims made during the exploration that did not survive it, kept so the record s
     makes it 1 again below ħ/mc. The records also make the roughness: each kicks the momentum, the kicks add up,
     and over N records the rough stretch widens to roughly √N ħ/p, so a long record is not one fixed fractal.
     See [quantum-paths](quantum-paths/).
-17. **"The same roughness as a pollen grain jostled by molecules."** Two slips. Brown watched particles about a
-    micron across released from inside pollen grains, which are about 100 µm long, not the grains themselves
+17. **"The same roughness as a pollen grain jostled by molecules."** Two slips. Brown watched particles about 1 to
+    5 µm across released from inside pollen grains, which are about 100 µm across, not the grains themselves
     (Pearle et al. 2010). And a Brownian path has dimension 2 only above its ballistic length, about 20 nm from
     Li et al.'s (2010) numbers for a 3 µm bead in air; below it the path is straight. The dimension matches, but
     the quantum path is rough at small scales and the Brownian one at large scales.

@@ -52,18 +52,18 @@ within('Repeated records: recorded length over the single-interval length, N = 4
 
 // 4. de Broglie wavelengths that set hbar/p for real particles.
 within('C60 at 220 m/s: h/mv (m)', QP.deBroglie(720 * C.u, 220), 2.5e-12, 1.02, 'arithmetic; Arndt et al., Nature 401, 680 (1999) quote 2.5 pm');
-within('Electron at 54 eV: de Broglie wavelength (m)', QP.deBroglie(C.me, Math.sqrt(2 * 54 * C.e / C.me)), 1.65e-10, 1.02, 'Davisson & Germer (1927), measured 1.65 Angstrom');
+within('Electron at 54 eV: de Broglie wavelength (m)', QP.deBroglie(C.me, Math.sqrt(2 * 54 * C.e / C.me)), 1.65e-10, 1.02, 'Davisson & Germer (1927), 1.65 Angstrom as usually quoted (2.15 Angstrom x sin 50 deg)');
 
 // 5. A Brownian particle is smooth below its ballistic length. Li, Kheifets, Medellin & Raizen (Science 328, 1673
-//    (2010)) held a 3 um silica bead in an optical trap in air: momentum relaxation 48 us at 99.8 kPa and 147 us at
-//    2.75 kPa, rms speed 0.42 mm/s. Model: Stokes drag with the Cunningham slip correction, using the mass the
+//    (2010)) held a 3 um silica bead in an optical trap in air: momentum relaxation 48.5 us at 99.8 kPa and 147.3 us
+//    at 2.75 kPa (fits to the velocity autocorrelation), rms speed 0.42 mm/s. Model: Stokes drag with the Cunningham slip correction, using the mass the
 //    measured speed implies (density ~1,600 kg/m^3; bulk silica's ~2,000 would give ~58 us).
 const LI = 'Li et al., Science 328, 1673 (2010); Li & Raizen, Ann. Phys. 525, 281 (2013)';
 const vrms = 0.4235e-3, Tb = 297, mb = C.kB * Tb / (vrms * vrms);
 const taup = P => mb / QP.stokesCunningham({ r: 1.5e-6, eta: 1.81e-5, mfp: 68e-9 * 101.325e3 / P });
-within('Bead in air at 99.8 kPa: momentum relaxation time (s)', taup(99.8e3), 48e-6, 1.1, LI);
-within('Bead in air at 2.75 kPa: momentum relaxation time (s)', taup(2.75e3), 147e-6, 1.1, LI);
-const bead = { sigmaV: vrms, taup: 48e-6 }, Sb = t => brownianS(t, bead);
+within('Bead in air at 99.8 kPa: momentum relaxation time (s)', taup(99.8e3), 48.5e-6, 1.1, LI);
+within('Bead in air at 2.75 kPa: momentum relaxation time (s)', taup(2.75e3), 147.3e-6, 1.1, LI);
+const bead = { sigmaV: vrms, taup: 48.5e-6 }, Sb = t => brownianS(t, bead);
 check('A free bead with these numbers is smooth below its ballistic length (~20 nm) and rough above it',
   dimensionFromS(Sb, 1e-7) < 1.01 && dimensionFromS(Sb, 1e-1) > 1.99,
   `D = ${dimensionFromS(Sb, 1e-7).toFixed(3)} over ${(Math.sqrt(Sb(1e-7)) * 1e9).toFixed(2)} nm, ${dimensionFromS(Sb, 1e-1).toFixed(3)} over ${(Math.sqrt(Sb(1e-1)) * 1e6).toFixed(1)} um`,

@@ -16,8 +16,8 @@ Hausdorff dimension two". Their dimension is defined by how the joined path's le
 ⟨l⟩ ∝ Δx^(1−D).
 
 Each record leaves the particle with a momentum spread ħ/(2Δx). If the records are far enough apart for the wave
-to outgrow its starting width (Lake 2022 restates the condition as Δt ≳ 4mΔx²/ħ, four of the Witness Map's wave
-clocks), the mean length over a time T is
+to outgrow its starting width (Lake 2022 restates the condition as Δt ≫ 4mΔx²/ħ; 4mΔx²/ħ, four of the Witness
+Map's wave clocks, is the shortest spacing he allows), the mean length over a time T is
 
 ```
 <l> = (T/m) E|p + δp|,   δp ~ Normal(0, (ħ/2Δx)²) in each direction
@@ -79,8 +79,8 @@ v_rms·τ_p it moves in straight lines (D = 1). Above it, collisions have scramb
 rough (D = 2).
 
 - Li, Kheifets, Medellin and Raizen (2010) resolved the ballistic part for a 3 µm silica bead held in an optical
-  trap in air. Its momentum relaxation time was 48 µs at 99.8 kPa and 147 µs at 2.75 kPa, with an rms speed of
-  0.42 mm/s.
+  trap in air. Fits to its measured velocity autocorrelation gave a momentum relaxation time of 48.5 µs at
+  99.8 kPa and 147.3 µs at 2.75 kPa, and its rms speed was 0.42 mm/s.
 - Stokes drag with the Cunningham slip correction gives 47 and 154 µs, using the mass that rms speed implies.
   That mass corresponds to a density of about 1,600 kg/m³; bulk silica's ~2,000 would give about 58 µs.
 - From their numbers the ballistic length is about 20 nm. A free bead would be rough above that. In the trap,
@@ -90,8 +90,8 @@ Both kinds of path are smooth, then rough, then smooth. The quantum one is rough
 Brownian one is rough between v_rms·τ_p and whatever confines it or carries it along. "The same roughness" is
 right about the dimension, 2, but not about where it lives.
 
-Robert Brown did not watch pollen grains move. He watched particles about a micron across released from inside
-pollen grains, which are about 100 µm long (Pearle et al. 2010). A whole grain does jiggle, but in water it moves
+Robert Brown did not watch pollen grains move. He watched particles about 1 to 5 µm across, lipid spherosomes and
+starch amyloplasts, released from inside pollen grains about 100 µm across (Pearle et al. 2010). A whole grain does jiggle, but in water it moves
 only about 0.1 µm in a second, too little for him to see.
 
 ## Who draws the path: the Witness Map link
@@ -155,7 +155,8 @@ outside the high-temperature regime this holds in. For the virus in air (Kn ≈ 
 reflection) the relation predicts 44.9 and the map gives 44.8. Before the map's gas rate was corrected (#9), it
 gave 33.7, low by π^(1/4), the same factor. That makes fluctuation-dissipation plus Epstein's drag a route to
 #9's coefficient independent of the closed forms #9 compared against. Both routes assume specular hard-sphere
-scattering; diffuse reflection would raise the rate by 1 + π/8. For sand and the cat, much larger than air's
+scattering; diffuse reflection would raise the rate by 1.39 to 1.44 (Epstein's factors 1 + π/8 and 1 + 9π/64 for
+a conducting and an insulating sphere). For sand and the cat, much larger than air's
 mean free path, the real drag is viscous and much weaker than the collision count suggests. There the map's rate
 exceeds what fluctuation-dissipation allows, so their ratios are lower bounds.
 
@@ -188,8 +189,8 @@ npm test                            # includes tests/quantum-paths.mjs
 | D below ħ/mc, inside the window, above ħ/p | 1, 2, 1 | 1.001, 1.995, 1.000 |
 | Repeated records, N = 400: length over the single-interval formula | (1/N)Σ√k = 13.36 | 13.4 |
 | C₆₀ at 220 m/s: h/mv (the same arithmetic as Arndt et al.) | 2.5 pm | 2.52 pm |
-| Electron at 54 eV, measured by Davisson and Germer | 1.65 Å | 1.67 Å |
-| Bead in air, τ_p at 99.8 and 2.75 kPa (Li et al. 2010) | 48 and 147 µs | 47 and 154 µs |
+| Electron at 54 eV, Davisson and Germer's measurement as usually quoted | 1.65 Å | 1.67 Å |
+| Bead in air, τ_p at 99.8 and 2.75 kPa (Li et al. 2010) | 48.5 and 147.3 µs | 47 and 154 µs |
 | Free bead with those numbers: D over 0.04 nm and 1.3 µm | 1 and 2 | 1.000, 1.999 |
 | Continuously recorded particle: purity, and W at its width | ħ²/4, 1/8 | exact |
 | Gas rate against drag (Schlosshauer 2019, Epstein 1924) | equal | equal |
@@ -217,7 +218,7 @@ npm test                            # includes tests/quantum-paths.mjs
 - L. F. Abbott and M. B. Wise, *Dimension of a quantum-mechanical path*, Am. J. Phys. 49, 37 (1981). https://doi.org/10.1119/1.12657
 - M. J. Lake, Eur. Phys. J. C 82, 928 (2022), which restates the Abbott–Wise argument. https://arxiv.org/abs/2206.00609
 - A. Granik and G. Chapline, Phys. Lett. A 310 (2003), which applies the Abbott–Wise analysis. https://arxiv.org/abs/quant-ph/0302013
-- Y. Ding, Y. C. Ong and H. Xu, *Measurement-induced perturbations of Hausdorff dimension in quantum paths* (2025; Eur. Phys. J. Plus, 2026). https://arxiv.org/abs/2512.13046
+- Y.-W. Ding, Y. C. Ong and H. Xu, *Measurement-induced perturbations of Hausdorff dimension in quantum paths*, Eur. Phys. J. Plus (2026). https://doi.org/10.1140/epjp/s13360-026-07554-3 (https://arxiv.org/abs/2512.13046)
 - H. Kröger, *Fractal geometry in quantum mechanics, field theory and spin systems*, Phys. Rep. 323, 81 (2000).
 - T. Li, S. Kheifets, D. Medellin and M. G. Raizen, *Measurement of the instantaneous velocity of a Brownian particle*, Science 328, 1673 (2010). https://doi.org/10.1126/science.1189403
 - T. Li and M. G. Raizen, *Brownian motion at short time scales*, Ann. Phys. (Berlin) 525, 281 (2013). https://arxiv.org/abs/1211.1458
