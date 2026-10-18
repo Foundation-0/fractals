@@ -4,7 +4,7 @@
   "description": "Self-similarity across scales, tested with first principles. First study: the Witness Map.",
   "license": "Apache-2.0",
   "scripts": {
-    "test": "node tests/checks.mjs",
+    "test": "node tests/run.mjs",
     "table": "node witness-map/table.mjs"
   }
 }
