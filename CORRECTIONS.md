@@ -135,3 +135,28 @@ Claims made during the exploration that did not survive it, kept so the record s
     2.79 µm diameter they used, slip-corrected Stokes drag gives 175 µs at 2.75 kPa against their 147.3 µs;
     `tests/quantum-paths.mjs` records that as a disagreement. (The first draft on #25 used the nominal 3 µm,
     which hid the gap, and called the trapped path smooth, then rough, then smooth; review there caught both.)
+
+## 18 October 2026: turbulence (issue #19)
+
+19. **Issue #19's numbers, written from recall.** Six did not survive the literature check (all through search
+    text; see [turbulence](turbulence/)).
+    - "σ = 0.72 S^0.5 km/s": Solomon et al.'s 0.72 goes with the effective radius R = 1.91 S; in S the fit is
+      1.0 S^0.5. The 0.07 pc sonic scale it gave is a radius, 0.14 pc across.
+    - "The Kolmogorov scale is about a millimetre in the atmosphere and upper ocean": for typical upper-ocean
+      dissipation it is 2 to 3 mm; in air it runs from 0.3 mm in strong wind to over a centimetre on a quiet night.
+    - "Taylor's hypothesis puts the spectral break near 0.6 Hz": V/(2π d_i) does give 0.6 Hz, but observed ion
+      breaks sit at 0.4 to 0.5 Hz.
+    - "The Kolmogorov constant (~1.5)": that is the 3D spectral constant. Sreenivasan (1995) measured the 1D one,
+      0.53 ± 0.055, which isotropy turns into 1.62.
+    - Larson's σ ∝ L^0.38 against Solomon et al.'s 0.5 as "a change of cascade": Larson's clouds are supersonic
+      too (Mach 1.4 to 19), so the difference lies in his sample and size definition.
+    - Nastrom and Gage's k⁻³ range "above ~500 km": the transition is quoted between 400 and 1,000 km, most often
+      near 600.
+20. **"A fractional-Brownian estimate gives 7/6" for cloud edges.** The wrong formula. 7/6 = 2 − H is the dimension
+    of all the contours at one level together; a perimeter-area relation over separate clouds measures single
+    loops, (3 − H)/2 (Kondev and Henley 1995), 13/12 for projected Kolmogorov density. Computed on Gaussian
+    surfaces, the loops follow (3 − H)/2: across six spectra their dimension falls with H at a slope of
+    −0.53 ± 0.05, not −1. The issue's conclusion survives: projected Kolmogorov density gives 1.15 there, not 1.36.
+    Falgarone et al.'s 1.36 corresponds to a projected spectrum near β = 2.6 to 2.8, close to measured CO maps,
+    while the laboratory's 1.3 to 1.4 comes from planar slices of a Kolmogorov field (4/3), so the agreement is a
+    coincidence.

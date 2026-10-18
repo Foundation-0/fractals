@@ -186,17 +186,76 @@ Below that spacing the energy travels along single lines as Kelvin waves (Bareng
 
 ## Cloud edges: is the agreement with the laboratory real?
 
-(pending: contour-loop computation)
+Cloud edges in projected CO maps follow a perimeter-area relation P ∝ A^(D/2) with D = 1.36 ± 0.02, the same
+from about 100 pc down to 0.1 pc (Falgarone, Phillips and Walker 1991). The error is a formal fit error: other
+data for the same part of Taurus gave 1.51 (Stutzki 1993, as quoted by Sánchez et al. 2005). Rain and cloud areas
+in the atmosphere give 1.35 ± 0.05 (Lovejoy 1982). Planar sections through laboratory turbulent interfaces give 1.3
+to 1.4, from surfaces of dimension 2.3 to 2.4 (Sreenivasan and colleagues). The match is often cited.
+
+A fractional-Brownian estimate depends on which dimension the relation measures. For a Gaussian random surface
+with power spectrum k^(−β), so H = (β − 2)/2:
+
+- all the contours at one level together have dimension 2 − H (Mandelbrot);
+- a single contour loop has dimension (3 − H)/2 (Kondev and Henley 1995).
+
+A perimeter-area relation over separate clouds measures single loops. `contours.js` checks this by making the
+surfaces and measuring both. The table below uses 32 surfaces of 2048 × 2048 points per spectrum:
+
+| β | H | (3 − H)/2 | 2 − H | Loops, P ∝ R_g^D | Loops, P ∝ A^(D/2) | All contours together |
+|---|---|---|---|---|---|---|
+| 2.4 | 0.20 | 1.400 | 1.800 | 1.429 ± 0.012 | 1.430 ± 0.013 | 1.716 |
+| 8/3 | 0.33 | 1.333 | 1.667 | 1.357 ± 0.017 | 1.364 ± 0.022 | 1.623 |
+| 2.8 | 0.40 | 1.300 | 1.600 | 1.335 ± 0.013 | 1.346 ± 0.017 | 1.570 |
+| 3 | 0.50 | 1.250 | 1.500 | 1.275 ± 0.025 | 1.294 ± 0.025 | 1.485 |
+| 3.4 | 0.70 | 1.150 | 1.300 | 1.219 ± 0.040 | 1.215 ± 0.039 | 1.309 |
+| 11/3 | 0.83 | 1.083 | 1.167 | 1.150 ± 0.025 | 1.145 ± 0.020 | 1.209 |
+
+R_g is a loop's radius of gyration, fitted over 8 to 128 grid spacings. The errors combine a jackknife over
+surfaces with the spread over fit windows. The last column comes from the total contour length measured on
+coarser and coarser grids.
+
+- **Loops follow Kondev and Henley.** A periodic box makes the surfaces a little smoother than their spectrum
+  says. Measured over the same range of sizes, the effective roughness H_eff runs from 0.24 to 0.76. The loop
+  dimension falls with it at a slope of −0.53 ± 0.05: single loops predict −1/2, and the whole level set −1, which
+  is 10 standard errors away.
+- **An offset.** Loops sit about 0.04 above (3 − H_eff)/2 at every spectrum. In an independent check the offset did
+  not shrink from 1,024 to 4,096 points per side, and its origin is open.
+- **The whole level set follows Mandelbrot:** its dimension tracks 2 − H_eff to within 0.02.
+- **What does not change the answer:**
+  - the level: the median gives the same loops;
+  - fitting perimeter against size or against area;
+  - counting only the outer boundaries of clouds (the independent check found these agree with all loops to 0.01).
+- **Counting holes does.** Adding a cloud's holes to its perimeter gives a larger number that depends on
+  resolution, 1.65 at β = 2.4, so a measured value depends on whether holes were counted. Which convention
+  Falgarone et al. used was not seen here.
+
+So, on Gaussian surfaces:
+
+- **Projected Kolmogorov density** (β = 11/3) gives 1.15, not 1.36. Single loops predict 13/12; 7/6 is the formula
+  for all contours together.
+- **A planar slice through a Kolmogorov field** (β = 8/3, H = 1/3) gives 1.36, near (3 − 1/3)/2 = 4/3. This is
+  the laboratory's kind of measurement.
+- **CO maps**, whose projected spectra are near β = 2.8 (Stutzki et al. 1998), give 1.34. Falgarone et al.'s
+  1.36 ± 0.02 corresponds to β = 2.58 to 2.77.
+
+The agreement between clouds and laboratory is a coincidence of two different fields. One is a slice through
+incompressible turbulence. The other is a projection of supersonic gas, whose spectrum is shallower than
+Kolmogorov's. Both happen to have H between 1/3 and 0.4. Real column densities are not Gaussian (they are close to
+log-normal and intermittent), and Sánchez et al. (2005) find that the projected perimeter dimension also depends
+on the resolution and on the cloud's 3D dimension, so this settles the formula, not the clouds.
 
 ## Run it
 
 ```
 node turbulence/table.mjs          # everything above, with the long run and the viscosity scan (about a minute)
 node turbulence/table.mjs quick    # the same with the test's short run, no scan (a few seconds)
-npm test                           # includes tests/turbulence.mjs (about 3 s)
+node turbulence/edges.mjs          # the cloud-edge table, 2048 points per side (about 45 s on 4 cores)
+node turbulence/edges.mjs quick    # the same at 256 points per side (about a second)
+npm test                           # includes tests/turbulence.mjs and tests/turbulence-edges.mjs (about 5 s)
 ```
 
-`model.js` is the whole model. It loads in Node (`require`) and in a browser (`window.TURB`).
+`model.js` is the cascade and the scales; `contours.js` is the random surfaces and their contours. Both load in
+Node (`require`) and in a browser (`window.TURB`, `window.CONTOURS`).
 
 ## Checks
 
@@ -220,6 +279,21 @@ npm test                           # includes tests/turbulence.mjs (about 3 s)
 | V/(2π d_i) against the observed ion break (Leamon et al.) | 0.44 Hz, within ×1.5 | 0.63 Hz |
 | Sonic sizes from Larson and Solomon et al. against filament widths | bracket 0.10 pc | 0.041 and 0.137 pc |
 
+`tests/turbulence-edges.mjs`:
+
+| Check | Expected | Model |
+|---|---|---|
+| FFT against the direct DFT; 2D Parseval and round trip | equal | within 4×10⁻¹³ |
+| Random streams: consecutive blocks, overlap refused | | yes |
+| Surfaces against a naive synthesis; fitted spectral slopes | equal; β ± 0.06 | 2×10⁻¹⁴; within 0.012 |
+| Circle: P, A, R_g; the same circle across the torus seams | 2πr₀, πr₀², r₀; identical | within 0.05% |
+| Contours around the torus found and dropped | 2 and 2 | 2 and 2 |
+| Saddle cells joined or split by the cell average | 1, 2, 1, 2 loops | 1, 2, 1, 2 |
+| Random surfaces: walks close, areas add up (Green's theorem) | exact | 2×10⁻¹⁵ |
+| Loops under a shift, a quarter turn, upside down | unchanged | within 7×10⁻¹³ |
+| β = 2.4 and 3: loops nearer (3 − H)/2, level set nearer 2 − H | yes | yes |
+| Fall of the loop dimension from β = 2.4 to 3 against the rise in H_eff | half of it (0.118), not all (0.236) | 0.092 ± 0.026 |
+
 ## What the model leaves out
 
 - The shell model is a caricature of the Navier–Stokes cascade: one mode per octave, local interactions only, no
@@ -231,6 +305,9 @@ npm test                           # includes tests/turbulence.mjs (about 3 s)
 - Kolmogorov scales use published dissipation rates; the η values are arithmetic, not measurements.
 - The solar-wind numbers are for one typical slow wind. The Taylor shift ignores the field-flow angle.
 - Larson's and Solomon et al.'s fits are extrapolated below their data to reach the sonic scale.
+- The cloud-edge computation uses Gaussian surfaces. Real column densities are close to log-normal and
+  intermittent, and observed maps add noise, beams and optical depth. The loops' 0.04 offset above
+  (3 − H_eff)/2 is not explained.
 - Every source was read through search-result text, not the papers (see the PR for the list); numbers marked
   "as seen in search text" in the tests should be checked against the papers.
 
@@ -266,4 +343,10 @@ npm test                           # includes tests/turbulence.mjs (about 3 s)
 - J. E. Pineda et al., ApJ 712, L116 (2010).
 - D. Arzoumanian et al., A&A 529, L6 (2011), https://arxiv.org/abs/1103.0201; A&A 621, A42 (2019).
 - J. Maurer and P. Tabeling, Europhys. Lett. 43, 29 (1998).
+- E. Falgarone, T. G. Phillips and C. K. Walker, *The edges of molecular clouds: fractal boundaries and density structure*, ApJ 378, 186 (1991).
+- S. Lovejoy, *Area-perimeter relation for rain and cloud areas*, Science 216, 185 (1982).
+- K. R. Sreenivasan and C. Meneveau, *The fractal facets of turbulence*, J. Fluid Mech. 173, 357 (1986).
+- J. Kondev and C. L. Henley, *Geometrical exponents of contour loops on random Gaussian surfaces*, Phys. Rev. Lett. 74, 4580 (1995); J. Kondev, C. L. Henley and D. G. Salinas, Phys. Rev. E 61, 104 (2000), https://arxiv.org/abs/cond-mat/9907229
+- J. Stutzki et al., *On the fractal structure of molecular clouds*, A&A 336, 697 (1998).
+- N. Sánchez, E. J. Alfaro and E. Pérez, *The fractal dimension of projected clouds*, ApJ 625, 849 (2005). https://arxiv.org/abs/astro-ph/0501573
 - C. F. Barenghi, L. Skrbek and K. R. Sreenivasan, *Introduction to quantum turbulence*, PNAS 111 (Suppl. 1), 4647 (2014). https://arxiv.org/abs/1404.1909

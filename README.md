@@ -31,7 +31,8 @@ with Claude (Anthropic), for [Foundation0](https://github.com/Foundation-0/f0).
   that follows from it, hold to 0.1%. The bursts do not scale exactly, so the statistics drift from scale to scale
   (intermittency). Where the cascade ends depends on the medium: a few tenths of a millimetre to a centimetre in
   air, 2 to 3 mm in the upper ocean, the ion scales (about 100 km) in the solar wind, where collisions are too rare
-  for viscosity, and the sonic scale (about 0.1 pc) in molecular clouds ([turbulence](turbulence/)).
+  for viscosity, and the sonic scale (about 0.1 pc) in molecular clouds. The fractal edges of those clouds
+  (dimension 1.36) match laboratory turbulence only by coincidence ([turbulence](turbulence/)).
 
 ## First study: the Witness Map
 
