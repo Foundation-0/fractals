@@ -1,0 +1,264 @@
+/* Witness Map page components, scoped under .wm so the shared f0.css classes keep their meaning.
+   Page tokens map onto the f0 tokens; wave/watch are this figure's own, chosen colourblind-safe
+   (blue vs red is replaced by blue vs vermilion-red with a light/dark pair, as before). */
+.wm {
+  --surface: var(--bg-2); --muted: var(--ink-2); --faint: var(--ink-3);
+  --accent: var(--dig); --accent-soft: var(--bg-3);
+  --wave: #2a78d6; --wave-tint: rgba(42,120,214,0.07);
+  --watch: #c93b3a; --watch-tint: rgba(201,59,58,0.06);
+  --edge: #8a8f99; --bar: #3c4350;
+  --font-display: var(--f-serif); --font-body: var(--f-sans); --font-data: var(--f-mono);
+}
+html[data-theme="dark"] .wm, .wm-dark {
+  --wave: #3987e5; --wave-tint: rgba(57,135,229,0.10);
+  --watch: #e66767; --watch-tint: rgba(230,103,103,0.08);
+  --edge: #8d929c; --bar: #c4c9d2;
+}
+@media (prefers-color-scheme: dark) {
+  html:not([data-theme="light"]) .wm {
+    --wave: #3987e5; --wave-tint: rgba(57,135,229,0.10);
+    --watch: #e66767; --watch-tint: rgba(230,103,103,0.08);
+    --edge: #8d929c; --bar: #c4c9d2;
+  }
+}
+html[data-motion="off"] .wm .dot { transition: none; }
+.wm h2, .wm h3 { font-family: var(--font-display); }
+.wm p { max-width: 68ch; }
+.wm .srclink { color: var(--accent); }
+
+.wm code { font-family: var(--font-data); font-size: 0.9em; }
+
+.wm .mono, .wm .num { font-family: var(--font-data); font-variant-numeric: tabular-nums; }
+
+.wm sup { font-size: 0.72em; line-height: 0; }
+
+
+/* Two clocks */
+.wm .clocks { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+.wm .clock { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; display: grid; gap: 6px; min-width: 0; }
+
+.wm .clock .k { font-family: var(--font-data); font-size: 0.72rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+
+.wm .ratio { grid-column: 1 / -1; display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 14px; padding: 4px 2px; }
+
+.wm .ratio .eq { font-family: var(--font-display); font-size: 1.15rem; }
+
+.wm .ratio .eq b { font-weight: 600; }
+
+.wm .legend { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 0.9rem; color: var(--muted); }
+
+.wm .key { display: inline-flex; align-items: center; gap: 6px; }
+
+.wm .sw { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+
+.wm .sw.wave { background: var(--wave); }
+ .wm .sw.watch { background: var(--watch); }
+ .wm .sw.edge { background: var(--edge); }
+
+.wm .sw.none { background: transparent; border: 2px solid var(--wave); }
+
+
+/* Controls */
+.wm .controls { display: grid; gap: 16px; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 16px; }
+
+.wm .ctl { display: grid; gap: 8px; min-width: 0; }
+
+.wm .ctl-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+.wm label, .wm .lbl { font-weight: 700; font-size: 0.92rem; }
+
+.wm .gapread { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+
+.wm .gapread .num { font-size: 1.1rem; color: var(--accent); }
+
+.wm input[type="range"] { width: 100%; accent-color: var(--accent); }
+
+.wm .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+
+.wm .chip { font: inherit; font-size: 0.82rem; border: 1px solid var(--line); background: var(--bg); color: var(--ink); border-radius: 999px; padding: 4px 10px; cursor: pointer; }
+
+.wm .chip:hover { border-color: var(--accent); }
+
+.wm .chip[aria-pressed="true"] { background: var(--accent-soft); border-color: var(--accent); color: var(--ink); }
+
+.wm select { font: inherit; font-size: 0.95rem; color: var(--ink); background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; width: 100%; }
+
+.wm .check { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 0.92rem; }
+
+.wm .check input { accent-color: var(--accent); width: 18px; height: 18px; }
+
+.wm .hint { font-size: 0.85rem; color: var(--muted); }
+
+
+/* Chart */
+.wm .chart { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 12px 0 8px; overflow: hidden; }
+
+.wm .grid { display: grid; grid-template-columns: minmax(0, 210px) minmax(0, 1fr) 82px; column-gap: 14px; align-items: center; padding: 0 16px; }
+
+.wm .axis { padding-bottom: 6px; }
+
+.wm .axis .track { height: 40px; }
+
+.wm .regions { position: absolute; inset: 0 0 auto 0; height: 18px; font-size: 0.75rem; font-family: var(--font-data); letter-spacing: 0.04em; }
+
+.wm .regions span { position: absolute; top: 0; white-space: nowrap; }
+
+.wm .reg-wave { color: var(--wave); left: 0; }
+
+.wm .reg-watch { color: var(--watch); transform: translateX(6px); }
+
+.wm .regions .short { display: none; }
+
+.wm .tick { position: absolute; top: 22px; transform: translateX(-50%); font-family: var(--font-data); font-size: 0.72rem; color: var(--muted); white-space: nowrap; }
+
+.wm .axis-cap { font-family: var(--font-data); font-size: 0.72rem; color: var(--muted); text-align: right; }
+
+.wm .rows { display: grid; }
+
+.wm .row { all: unset; box-sizing: border-box; display: grid; grid-template-columns: minmax(0, 210px) minmax(0, 1fr) 82px; column-gap: 14px; align-items: center; padding: 7px 16px; cursor: pointer; border-top: 1px solid var(--line); }
+
+.wm .row:hover { background: var(--bg); }
+
+.wm .row[aria-pressed="true"] { background: var(--accent-soft); }
+
+.wm .row.name { min-width: 0; display: grid; gap: 1px; }
+
+.wm .name .n { font-weight: 700; font-size: 0.94rem; line-height: 1.25; }
+
+.wm .name .m { font-family: var(--font-data); font-size: 0.72rem; color: var(--muted); }
+
+.wm .seen { font-family: var(--font-data); font-size: 0.66rem; letter-spacing: 0.04em; text-transform: uppercase; color: var(--wave); margin-left: 6px; white-space: nowrap; }
+
+.wm .track { position: relative; height: 24px; }
+
+.wm .band-wave, .wm .band-watch { position: absolute; top: 0; bottom: 0; }
+
+.wm .band-wave { left: 0; background: var(--wave-tint); }
+
+.wm .band-watch { right: 0; background: var(--watch-tint); }
+
+.wm .zero { position: absolute; top: -8px; bottom: -8px; width: 0; border-left: 1.5px solid var(--ink); opacity: 0.55; }
+
+.wm .axis .zero { top: 18px; bottom: 0; }
+
+.wm .gridline { position: absolute; top: 0; bottom: 0; width: 0; border-left: 1px dashed var(--line); }
+
+.wm .dot { position: absolute; top: 50%; width: 12px; height: 12px; border-radius: 50%; transform: translate(-50%, -50%); background: var(--edge); box-shadow: 0 0 0 2px var(--surface); transition: left 260ms ease, background-color 260ms ease; }
+
+.wm .dot.wave { background: var(--wave); }
+ .wm .dot.watch { background: var(--watch); }
+
+.wm .dot.none { background: var(--surface); border: 2px solid var(--wave); }
+
+.wm .dot.clip::after { content: ""; position: absolute; top: 50%; width: 0; height: 0; border-block: 5px solid transparent; transform: translateY(-50%); }
+
+.wm .dot.clip-l::after { right: 14px; border-right: 7px solid var(--wave); }
+
+.wm .dot.clip-r::after { left: 14px; border-left: 7px solid var(--watch); }
+
+.wm .val { font-family: var(--font-data); font-size: 0.82rem; text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
+
+.wm .val.none { color: var(--wave); font-size: 0.72rem; white-space: normal; line-height: 1.2; }
+
+@media (prefers-reduced-motion: reduce) { .wm .dot { transition: none; }
+ }
+
+/* Detail */
+.wm .detail { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 18px 16px; display: grid; gap: 16px; }
+
+.wm .detail-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 6px 16px; }
+
+.wm .verdict { font-family: var(--font-data); font-size: 0.8rem; padding: 3px 9px; border-radius: 999px; border: 1px solid currentColor; white-space: nowrap; }
+
+.wm .verdict.wave { color: var(--wave); }
+ .wm .verdict.watch { color: var(--watch); }
+ .wm .verdict.edge { color: var(--edge); }
+
+.wm .facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+
+.wm .fact { display: grid; gap: 2px; min-width: 0; }
+
+.wm .fact .k { font-size: 0.8rem; color: var(--muted); }
+
+.wm .fact .v { font-family: var(--font-data); font-size: 1rem; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+
+.wm .fact .s { font-size: 0.8rem; color: var(--muted); }
+
+.wm .who { display: grid; gap: 8px; }
+
+.wm .who-row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr) 66px; gap: 10px; align-items: center; font-size: 0.9rem; }
+
+.wm .who-bar { height: 8px; background: var(--line); border-radius: 0 4px 4px 0; position: relative; }
+
+.wm .who-bar i { position: absolute; inset: 0 auto 0 0; background: var(--bar); border-radius: 0 4px 4px 0; }
+
+.wm .who-row .num { text-align: right; font-size: 0.8rem; color: var(--muted); }
+
+.wm .note { font-size: 0.9rem; color: var(--muted); }
+
+
+/* The crowd: a separate panel, never on the W axis */
+.wm .crowd { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 18px 16px; display: grid; gap: 14px; }
+
+.wm .crowd-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 6px 16px; }
+
+.wm .tag { font-family: var(--font-data); font-size: 0.8rem; padding: 3px 9px; border-radius: 999px; border: 1px dashed var(--muted); color: var(--muted); white-space: nowrap; }
+
+.wm .crowd-list { display: grid; gap: 0; }
+
+.wm .crowd-card { display: grid; gap: 10px; padding: 14px 0; border-top: 1px solid var(--line); }
+
+.wm .crowd-card:last-child { padding-bottom: 0; }
+
+.wm .crowd-card .name .n { font-size: 1rem; }
+
+
+/* Prose sections */
+.wm .notes { display: grid; gap: 14px; }
+
+.wm .notes ul { margin: 0; padding-left: 1.1rem; display: grid; gap: 8px; max-width: 68ch; }
+
+.wm .method { display: grid; gap: 12px; font-size: 0.95rem; }
+
+.wm .method p, .wm .method li { color: var(--muted); }
+
+.wm .method ul { margin: 0; padding-left: 1.1rem; display: grid; gap: 6px; max-width: 68ch; }
+
+.wm .src a { color: var(--accent); }
+
+.wm .formula { font-family: var(--font-data); font-size: 0.86rem; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; overflow-x: auto; white-space: nowrap; color: var(--ink); }
+
+
+@media (max-width: 640px) {
+  .wm .clocks, .wm .ctl-row { grid-template-columns: 1fr; }
+
+  .wm .grid { grid-template-columns: minmax(0, 1fr); }
+
+  .wm .grid .spacer, .wm .grid .axis-cap { display: none; }
+
+  .wm .row { grid-template-columns: minmax(0, 1fr) auto; grid-template-areas: "name val" "track track"; row-gap: 6px; padding: 9px 16px; }
+
+  .wm .row .name { grid-area: name; }
+ .wm .row .val { grid-area: val; }
+ .wm .row .track { grid-area: track; }
+
+  .wm .facts { grid-template-columns: 1fr 1fr; }
+
+  .wm .regions .long { display: none; }
+ .wm .regions .short { display: inline; }
+
+  .wm .who-row { grid-template-columns: minmax(0, 1fr) 70px; }
+
+  .wm .who-row .who-bar { grid-column: 1 / -1; grid-row: 2; }
+
+}
+
+/* Mobile containment: grid items must be allowed to shrink below their content (the nowrap
+   formula strip otherwise widens the whole page), seen-label gets its own line, legend is bare. */
+.wm .method > *, .wm .notes > *, .wm .crowd > *, .wm .detail > *, .wm .controls > * { min-width: 0; }
+.wm .formula { min-width: 0; }
+.wm .seen { display: block; margin: 2px 0 0; }
+.wm .legend { background: none; border: 0; padding: 0; margin: 0; list-style: none; }
+.wm .name .m { overflow-wrap: anywhere; }
+@media (max-width: 640px) { .kicker { flex-wrap: wrap; } .stat .v { overflow-wrap: anywhere; } }
