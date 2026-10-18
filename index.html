@@ -278,6 +278,7 @@ select { font: inherit; font-size: 0.95rem; color: var(--ink); background: var(-
     <h3>What it leaves out</h3>
     <ul>
       <li>Objects are treated as sitting still. Fast motion, internal structure and spin are ignored.</li>
+      <li>The wave clock assumes speeds far below light speed and is unreliable for gaps below ħ/(mc), the reduced Compton wavelength. The particle horizon example also assumes a source confined to a small region, which is not justified at those scales.</li>
       <li>W is per particle. Wave dark matter's galaxy-wide wave is a crowd effect, enormous numbers of particles sharing one wave. The crowd panel above gives its clocks; it has no witness number.</li>
       <li>Gravity's only witness here is a black hole horizon. Gravitational nudges from passing stars are treated as zero.</li>
       <li>Light an object absorbs from its surroundings is not counted. Molecules have no electronic gap, and their glow below 2,000 K is unchecked.</li>
@@ -464,7 +465,7 @@ function renderFindings(res) {
     closest ? `<b>Everything bigger is flooded with witnesses at home.</b> The closest call among the rest is the ${closest.o.name.toLowerCase()}, at W ≈ ${pow10only(closest.r.W)} in ${(state.env === "natural" ? ENVS[closest.o.home] : ENVS[state.env]).name.toLowerCase()}.` : "",
     `<b>Silence the witnesses and size matters less.</b> A virus moved into a 4 K vacuum scores W ≈ ${pow10only(vCold)} at this gap. That is why physicists have proposed putting a virus in two places at once inside a cold vacuum.`,
     `<b>Dark matter has no witnesses at all here.</b> It is the only thing on the map that stays on the wave side at every gap, however heavy the particle. That is true of one particle. The galaxy-sized dark matter wave is a crowd, and its lumps are felt by every star (see the crowd panel).`,
-    `<b>A black hole watches, but feebly.</b> Even 10 horizon radii from the Milky Way's black hole, a wave dark matter particle split across a 1 µm gap would wait about ${fmtTime(1 / rates(OBJECTS.find(o => o.id === "fdm"), ENVS.intergalactic, 1e-6, { M: BH_M, b: 10 * RS }).gamma)} for the horizon to record it. The horizon only beats ordinary witnesses for objects that are already classical.`,
+    `<b>A black hole watches, but feebly.</b> Even 10 horizon radii from the Milky Way's black hole, a wave dark matter particle split across a 1 µm gap would wait about ${fmtTime(1 / rates(OBJECTS.find(o => o.id === "fdm"), ENVS.intergalactic, 1e-6, { M: BH_M, b: 10 * RS }).gamma)} for the horizon to record it in the formula. This is a formal extrapolation below the particle's reduced Compton wavelength, ħ/(mc), about 0.06 pc for 10⁻²² eV. It is not a validated prediction for a particle confined to such a small region. The horizon only beats ordinary witnesses for objects that are already classical.`,
     `<b>Mass still counts, through the wave clock.</b> Heavier objects spread slowly, so they need to stay unwatched for longer. At this gap the Sun's wave clock is ${fmtTime(sun.tWave)}, so even a trickle of witnesses settles it.`,
   ].filter(Boolean);
   $("findings").innerHTML = items.map(t => `<li>${t}</li>`).join("");
