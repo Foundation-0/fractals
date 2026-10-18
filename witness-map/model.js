@@ -101,7 +101,21 @@
     const tWave = o.m * dx * dx / C.hbar;
     return { parts, gamma, tWave, tau: 1 / gamma, W: gamma * tWave, bhNote };
   }
+  // Gravity-only witness for a dark matter particle superposed by dx: gravitational scattering off
+  // passing masses M (density n, speed v), out to bmax. Phase per encounter at impact b:
+  //   dphi = G M m dx / (hbar v b).  info = 1 when b <= bsat (= phase 1) or in the strong regime
+  //   (b <= G M / v^2); otherwise (dphi)^2, integrated logarithmically.
+  function gravScatter(m, dx, n, M, v, bmax) {
+    const bsat = C.G * M * m * dx / (C.hbar * v);
+    const bstrong = C.G * M / (v * v);
+    const satEnd = Math.min(Math.max(bsat, bstrong), bmax);
+    const sat = Math.PI * n * v * satEnd * satEnd;
+    const log = (satEnd < bmax) ? (2 * Math.PI * n * (C.G * M * m * dx) * (C.G * M * m * dx) / (C.hbar * C.hbar * v)) * Math.log(bmax / satEnd) : 0;
+    const gamma = sat + log;
+    const tWave = m * dx * dx / C.hbar;
+    return { gamma, tWave, W: gamma * tWave, bsat, bstrong };
+  }
   const BH_M = 4.3e6 * C.Msun, RS = 2 * C.G * BH_M / (C.c * C.c);
-  const api = { C, ENVS, OBJECTS, rates, planckIntegral, BH_M, RS, DEFAULT_LOG_GAP: Math.log10(2.5e-7) };
+  const api = { C, ENVS, OBJECTS, rates, planckIntegral, gravScatter, BH_M, RS, DEFAULT_LOG_GAP: Math.log10(2.5e-7) };
   if (typeof module !== 'undefined' && module.exports) module.exports = api; else root.WM = api;
 })(typeof window !== 'undefined' ? window : globalThis);

@@ -56,8 +56,10 @@ What it shows:
 1. The four objects seen acting as waves in experiments all land on the wave side.
 2. Mass enters through the wave clock. Silence the witnesses and big things can cross: a virus in a 4 K
    vacuum scores W ≈ 0.04.
-3. Dark matter has no witnesses at any gap or particle mass, which is part of what makes a galaxy-sized
-   dark matter wave possible.
+3. Wave (fuzzy) dark matter has no witnesses at any gap, which is part of what makes a galaxy-sized
+   dark matter wave possible. Particle (heavy, ~100 GeV) dark matter is different: at kpc separations
+   stellar gravitational scattering is a strong witness (W ~ 10^42), so heavy dark matter
+   superpositions cannot persist across galactic scales. See notes/gravity-witnesses.md.
 4. A black hole horizon is a real witness (Danielson, Satishchandran and Wald, 2022) but a feeble one:
    ten horizon radii from the Milky Way's black hole, a wave dark matter particle split by 1 µm waits about
    10¹⁷⁰ years to be recorded.

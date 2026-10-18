@@ -15,3 +15,8 @@ Claims made during the exploration that did not survive it, kept so the record s
    checking the grain size.
 4. **"Within a factor of 3" of the Joos–Zeh table.** Stated for all three environments. Sunlight is within a
    factor of 4.4; the afterglow and air are within 3.
+
+5. **"Dark matter has no witnesses at any gap or particle mass."** Too strong. It holds for wave (fuzzy,
+   ~1e-22 eV) dark matter, which has no gravity-only witnesses besides a black hole horizon. For particle
+   (~100 GeV) dark matter, gravitational scattering off passing stars is a strong witness at kpc gaps
+   (W ~ 10^42), so heavy dark matter superpositions cannot persist across galactic scales. Issue 3.
