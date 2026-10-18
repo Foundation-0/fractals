@@ -203,7 +203,9 @@ node critical/table.mjs scatter          # its percolation seed scatter (about 4
 
 `witness-map/model.js` is the whole model, including `gravAtom` for the black hole note. It loads in Node
 (`require`) and in a browser (`window.WM`). `npm test` also checks `gravitational-atom/atom.js` (second study,
-below). The third study's checks, `tests/critical.mjs`, add about 20 s of seeded Monte Carlo runs.
+below). The third study's checks, `tests/critical.mjs`, add about 20 s of seeded Monte Carlo runs. CI runs every
+line above except the two `critical/table.mjs` lines: they repeat the tests' seeded runs, or eight more seeds, and
+print the results without checking them.
 
 ## Checks
 
@@ -239,7 +241,8 @@ can go. The tolerance is ×5: half a power of ten for rounding, and a little mor
 state. The crowd rows compare formulas and fits, so they agree more closely; the core is solved here from
 first principles (the ground state of the Schrödinger–Poisson equations), not taken from the fits. Through gravity
 alone, the electron of the electric row would wait 5×10¹²⁴ years. The black hole note's checks are listed in
-[notes/bh-lensing.md](notes/bh-lensing.md), the gravitational atom's below.
+[notes/bh-lensing.md](notes/bh-lensing.md), the gravitational atom's below, and the critical point's in
+[critical/README.md](critical/README.md#what-it-reproduces).
 
 What the re-check found (issue #5, details in CORRECTIONS.md): two coefficient errors, now fixed; a molecule's
 glow that is fitted, and gets the onset of decoherence right but the light wrong; and four places where the
@@ -330,13 +333,13 @@ seeded random numbers in `critical/model.js`, come out at or close to the exact 
 - Percolation: p_c = 0.5940 ± 0.0004, against 0.592746 (Newman and Ziff 2000); this seed sits about 2 standard
   deviations high once the 0.0006 scatter between seeds is counted, and eight other seeds average 0.59278. A
   spanning cluster of fractal dimension 1.881 ± 0.008, 0.8% below 91/48 = 1.896: a finite-size shortfall, as the
-  effective exponent still rises with L.
+  effective exponent rises with L over these sizes.
 - Where the nesting stops: at the lattice spacing below, and at ξ above. The measured ξ falls from 9.9 lattice
   spacings 6% above T_c to 1.1 at 76% above, within 3% of the exact value. At T_c the size of the box is the only
   limit.
 
 Here the scale-free range has to be tuned: the temperature to T_c and the magnetic field to zero. Turbulent
-cascades, and gravitational clustering grown from a nearly scale-free start, are scale-free over a range that
+cascades, and gravitational clustering grown from a nearly scale-invariant start, are scale-free over a range that
 nobody tunes: the flow's Reynolds number, or the time gravity has had to act, sets it (sources in
 [critical/README.md](critical/README.md#tuned-scale-invariance-against-self-organised-ranges); the clustering turns
 smooth on the largest scales, as the [opening section](#where-the-intuition-holds-and-where-it-breaks) describes).
@@ -402,7 +405,7 @@ The critical point (the full list is in [critical/README.md](critical/README.md#
 - M. Caselle, M. Hasenbusch, A. Pelissetto and E. Vicari, *Irrelevant operators in the two-dimensional Ising model*, J. Phys. A 35, 4861 (2002). https://doi.org/10.1088/0305-4470/35/23/305 (https://arxiv.org/abs/cond-mat/0106372)
 - M. E. J. Newman and R. M. Ziff, *Efficient Monte Carlo algorithm and high-precision results for percolation*, Phys. Rev. Lett. 85, 4104 (2000). https://doi.org/10.1103/PhysRevLett.85.4104 (https://arxiv.org/abs/cond-mat/0005264)
 - F. Kos, D. Poland, D. Simmons-Duffin and A. Vichi, *Precision islands in the Ising and O(N) models*, JHEP 08, 036 (2016). https://doi.org/10.1007/JHEP08(2016)036 (https://arxiv.org/abs/1603.04436)
-- P. Linstrom (ed.), *NIST Chemistry WebBook, NIST Standard Reference Database 69*, water, phase change data: critical point 647 ± 2 K and 220.64 bar. https://doi.org/10.18434/T4D303
+- P. J. Linstrom and W. G. Mallard (eds.), *NIST Chemistry WebBook, NIST Standard Reference Database 69* (retrieved 18 October 2026), water, phase change data: critical point 647 ± 2 K and 220.64 bar. https://doi.org/10.18434/T4D303
 - A. Alexakis and L. Biferale, *Cascades and transitions in turbulent flows*, Phys. Rep. 767–769, 1 (2018). https://doi.org/10.1016/j.physrep.2018.08.001 (https://arxiv.org/abs/1808.06186)
 
 ## Licence

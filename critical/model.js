@@ -5,7 +5,8 @@
  * Ising model: spins s = +-1 on an L x L square lattice with periodic edges, H = -J sum over neighbour pairs s_i s_j,
  * J = k_B = 1, so temperatures are in units of J/k_B and lengths in lattice spacings. Updates are Wolff single-cluster
  * flips (Wolff 1989): grow a cluster from a random site, adding each aligned neighbour with probability 1 - e^(-2/T),
- * then flip it. Exact results for the infinite lattice, with K = 1/T:
+ * the bond probability of the cluster representation (Fujimoto & Otsuka 2020, appendix B), then flip it. Exact
+ * results for the infinite lattice, with K = 1/T:
  *   T_c = 2 / ln(1 + sqrt 2) = 2.2692, where sinh 2K = 1 (Onsager 1944).
  *   Spontaneous magnetisation below T_c: M = (1 - sinh(2K)^-4)^(1/8) (Yang 1952).
  *   Energy per spin: u = -coth 2K [1 + (2/pi)(2 tanh^2 2K - 1) K1(k)], k = 2 sinh 2K / cosh^2 2K (Onsager 1944); the
@@ -26,7 +27,8 @@
  * follow by weighting each number of occupied sites n with the binomial probability C(N, n) p^n (1 - p)^(N - n).
  *   p_c = 0.59274621(13) (Newman & Ziff 2000). The incipient spanning cluster has fractal dimension D = 2 - 5/48 = 91/48:
  *   at p_c the chance that a site connects to distance R falls as R^(-5/48) (proved on the triangular lattice by
- *   Lawler, Schramm & Werner 2002; predicted by den Nijs 1979 and Nienhuis, Riedel & Schick 1980).
+ *   Lawler, Schramm & Werner 2002; it follows, through scaling relations, from exponents predicted by den Nijs 1979
+ *   and Nienhuis, Riedel & Schick 1980).
  * Random numbers: xoshiro128** seeded through splitmix32, integer arithmetic only, so a seed gives the same run on
  * every JavaScript engine.
  */
@@ -35,7 +37,7 @@
   const TC = 2 / Math.log(1 + Math.SQRT2);
   const KC = 1 / TC;
   const EXP = { beta: 1 / 8, nu: 1, eta: 1 / 4, gamma: 7 / 4 };
-  const PERC = { pc: 0.59274621, pcErr: 1.3e-7, D: 91 / 48, oneArm: 5 / 48 };
+  const PERC = { pc: 0.59274621, D: 91 / 48, oneArm: 5 / 48 };
   const TWO32 = 4294967296;
 
   // ---------- random numbers ----------
@@ -115,7 +117,7 @@
   // then, stops more often just after a large cluster and over-weights ordered states (at T_c, L = 16, the Binder
   // cumulant comes out 0.629 that way, against 0.610 with a fixed count: studyTrap below, printed by
   // critical/table.mjs and checked by tests/critical.mjs).
-  function flips(sys, k) { let n = 0; for (let i = 0; i < k; i++) n += wolff(sys); return n; }
+  function flips(sys, k) { for (let i = 0; i < k; i++) wolff(sys); }
   function energy(sys) { // total energy
     const s = sys.s, nb = sys.nb; let e = 0;
     for (let i = 0; i < sys.N; i++) e -= s[i] * (s[nb[4 * i]] + s[nb[4 * i + 2]]);
@@ -130,8 +132,10 @@
     }
     return c / (2 * sys.N);
   }
-  // Row-summed correlation C(r) = sum over y of G(r, y), r = 0..L/2, from one configuration, added into out. It falls
-  // as cosh((L/2 - r)/xi) with the exponential correlation length itself, without the 1/sqrt(r) of G(r).
+  // Row-summed correlation C(r) = sum over y of G(r, y), r = 0..L/2, from one configuration, added into out. At large r
+  // it falls as cosh((L/2 - r)/xi) with the exponential correlation length itself, without the 1/sqrt(r) of G(r). At
+  // small r, states of three or more particles add terms that fall at least three times as fast, which shorten a fit
+  // from r = 1 by far less than the statistical errors here.
   function projected(sys, out) {
     const s = sys.s, L = sys.L, col = new Float64Array(L), row = new Float64Array(L);
     for (let y = 0; y < L; y++) for (let x = 0; x < L; x++) { const v = s[y * L + x]; col[x] += v; row[y] += v; }
@@ -143,10 +147,11 @@
   }
   // A run: thermalise for `therm` sweeps, then take `sweeps` measurements, one per sweep. A sweep is a fixed number of
   // cluster flips, k = N / (mean cluster size during thermalisation), so that about N spins turn over per sweep.
-  // Per measurement: m = magnetisation per spin (signed), e = energy per spin; with half: G(L/2); with proj: the
+  // Per measurement: m = magnetisation per spin (signed), e = energy per spin; with half: G(L/2), L even; with proj: the
   // row-summed correlation, summed in `blocks` blocks.
   function simulate(L, T, opts) {
     const o = Object.assign({ seed: 1, therm: 200, sweeps: 1000, half: false, proj: false, blocks: 20 }, opts);
+    if (o.half && L % 2) throw new RangeError('simulate: half: true needs an even L');
     const sys = ising(L, T, o.seed);
     let flipped = 0, count = 0;
     for (let i = 0; i < o.therm; i++) while (flipped < (i + 1) * sys.N) { flipped += wolff(sys); count++; }
@@ -172,9 +177,12 @@
     const mu = avg(part);
     return { value, err: Math.sqrt((B - 1) / B * part.reduce((a, x) => a + (x - mu) * (x - mu), 0)) };
   }
-  const block = (n, b, B) => (b < 0 ? [0, 0] : [Math.floor(b * n / B), Math.floor((b + 1) * n / B)]);
+  // Samples [lo, hi) of n in block b of B: sample t is in block floor(t B / n), the rule simulate, spanningGrid and
+  // massSums use to fill their blocks (b = -1: no samples).
+  const block = (n, b, B) => (b < 0 ? [0, 0] : [Math.ceil(b * n / B), Math.ceil((b + 1) * n / B)]);
   // Averages of |m|, m^2, m^4, G(L/2) and e in a run, without block b, reweighted from the run's temperature to T
-  // (Ferrenberg & Swendsen 1988): each measurement counts with weight exp(-(1/T - 1/T_run) E).
+  // (Ferrenberg & Swendsen 1988): each measurement counts with weight exp(-(1/T - 1/T_run) E), the ratio of the two
+  // Boltzmann weights (as written by Ferrenberg, Xu & Landau 2018, sec. II C).
   function moments(run, T, b) {
     const [lo, hi] = block(run.n, b === undefined ? -1 : b, run.blocks);
     const db = 1 / T - 1 / run.T, N = run.N, m = run.m, e = run.e, g = run.g;
@@ -212,11 +220,13 @@
     return sxy / sxx;
   }
   // Exponential correlation length from the row-summed correlation at r1 < r2 on a ring of L sites:
-  // C(r1)/C(r2) = cosh((L/2 - r1)/xi) / cosh((L/2 - r2)/xi), solved for xi by bisection on 1/xi.
+  // C(r1)/C(r2) = cosh((L/2 - r1)/xi) / cosh((L/2 - r2)/xi), solved for xi by bisection on 1/xi. ln cosh is written
+  // so that it cannot overflow, as cosh does past 710 (in large boxes, at the top of the bracket).
+  const lnCosh = y => Math.abs(y) + Math.log1p(Math.exp(-2 * Math.abs(y))) - Math.LN2;
   function xiFromProjected(C, L, r1, r2) {
     const lr = Math.log(C[r1] / C[r2]), a = L / 2 - r1, b = L / 2 - r2;
     if (!(lr > 0)) return NaN;
-    return 1 / bisect(x => Math.log(Math.cosh(x * a) / Math.cosh(x * b)) - lr, 1e-6, 20, 60);
+    return 1 / bisect(x => lnCosh(x * a) - lnCosh(x * b) - lr, 1e-6, 20, 60);
   }
   // Correlation length of a run made with proj: fitted from r1 = 1 out to r2, the last distance at which the row-summed
   // correlation is still above e^-2 of its value at r = 1 (about two correlation lengths). Jackknife over its blocks.
@@ -326,7 +336,7 @@
   }
   function masses(sums, b) {
     const tot = a => a.reduce((x, y) => x + y, 0) - (b < 0 ? 0 : a[b]);
-    return { span: tot(sums.wm) / tot(sums.ws), big: tot(sums.wb) / tot(sums.cnt), spans: tot(sums.ws) / tot(sums.cnt) };
+    return { span: tot(sums.wm) / tot(sums.ws), big: tot(sums.wb) / tot(sums.cnt) };
   }
 
   // ---------- the runs the study quotes: tests/critical.mjs checks them, critical/table.mjs prints them ----------

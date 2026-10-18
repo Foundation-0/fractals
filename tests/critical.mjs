@@ -4,15 +4,21 @@
 // node tests/critical.mjs).
 // Each check states the source, the exact value, the model's value and the tolerance. The Monte Carlo runs use fixed
 // seeds and integer-only random numbers, so every run, on every Node version, prints the same numbers. Error bars are
-// jackknife estimates over 40 blocks. Each tolerance is 3 to 5 standard deviations of the noisiest estimate it covers,
-// plus any known finite-size shift; runs at several temperatures share one tolerance, so the quieter runs are held to it
-// more loosely. For the Ising runs the standard deviation is the jackknife error, which matches the scatter between
-// seeds to within about 10%; for percolation it is the scatter over eight other seeds, printed by
-// node critical/table.mjs scatter. Against the seed-to-seed scatter the tightest checks are gamma/nu (about 3 sigma
-// after its +0.0015 finite-size bias) and the L = 64/128 Binder crossing (about 3.4 sigma). In a one-off repeat with
-// 120 other sets of seeds (each study seed plus 10000k, k = 1 to 120; not one of the repository's scripts, and made
-// before the measurement-trap checks were added), 119 passed every check; the other missed the L = 64/128 crossing by
-// 0.0003. Each line prints the margin it passes by.
+// jackknife estimates over 40 blocks. Each tolerance is 3 to 5 standard deviations of the noisiest estimate it
+// covers, plus any known finite-size shift. For D and the Binder cumulant at L = 16 the two sides are bounded
+// separately, so the shift widens one side only; every other check has one tolerance for both sides. A sigma count
+// below is (tolerance - known shift) / sigma, with sigma as quoted, on the side the shift points to; on the other side
+// it is tolerance / sigma and allows no shift. Runs at several temperatures share one tolerance, so the quieter runs
+// are held to it more loosely: |m| at T = 2.0 and 2.1 to 17 and 10 sigma, the energy at T = 2.0, 2.1, 2.4 and 2.5 to
+// between 5 and 8 sigma. For the Ising runs the standard deviation is the jackknife error. Over the 120 repeat seeds
+// below it matches the scatter between seeds within about 10% on average, but this seed's errors from the runs
+// reweighted to T_c (L = 8 to 128) come out 6% to 17% below that scatter, so those checks also quote the scatter. For
+// percolation it is the scatter over eight other seeds, printed by node critical/table.mjs scatter. Against the
+// seed-to-seed scatter the tightest checks are gamma/nu (3.0 sigma after its +0.0012 finite-size bias), the p_c
+// crossing of L = 32 and 128 (3.2 sigma after its +0.0005 shift) and the Binder crossing of L = 64 and 128 (3.5
+// sigma). In a one-off repeat at these tolerances with 120 other sets of seeds (each study seed plus 10000k, k = 1 to
+// 120; not one of the repository's scripts), 119 passed every check; the other missed the crossing of L = 64 and 128
+// by 0.0003. Each line prints the margin it passes by.
 import { createRequire } from 'node:module';
 const require = createRequire(import.meta.url);
 const CR = require('../critical/model.js');
@@ -26,20 +32,23 @@ function check(name, ok, detail, src) {
   console.log(`${ok ? 'PASS' : 'FAIL'}  ${name}\n      ${detail}  ${src}`);
   if (!ok) fails++;
 }
-// A Monte Carlo estimate {value, err} against an exact value: passes if |model - exact| <= tol.
+// A Monte Carlo estimate {value, err} against an exact value: passes if exact - lo <= model <= exact + hi, where tol is
+// one number (lo = hi = tol) or [lo, hi], and the error bar is finite (a jackknife replicate can fail and give NaN).
 function near(name, est, want, tol, src, why, d) {
-  const dev = est.value - want, ok = Math.abs(dev) <= tol;
+  const [lo, hi] = Array.isArray(tol) ? tol : [tol, tol], dev = est.value - want;
+  const finite = Number.isFinite(est.err), ok = finite && dev >= -lo && dev <= hi;
   console.log(`${ok ? 'PASS' : 'FAIL'}  ${name}\n      model ${fmt(est.value, d)} ± ${fmt(est.err, d)}  exact ${fmt(want, d)}  ` +
-    `(within ${fmt(tol, d)}; off by ${fmt(dev, d)} = ${(dev / est.err).toFixed(1)} sigma; margin ${fmt(tol - Math.abs(dev), d)})  ${src}` +
-    (why ? `\n      ${why}` : ''));
+    `(within ${lo === hi ? fmt(hi, d) : `-${fmt(lo, d)}/+${fmt(hi, d)}`}; off by ${fmt(dev, d)} = ${(dev / est.err).toFixed(1)} sigma; ` +
+    `margin ${fmt(Math.min(hi - dev, dev + lo), d)})  ${src}` + (finite ? '' : '\n      the error bar is not finite') + (why ? `\n      ${why}` : ''));
   if (!ok) fails++;
 }
 // The same with a relative tolerance.
 function nearRel(name, est, want, rel, src, why) {
-  const dev = est.value / want - 1, ok = Math.abs(dev) <= rel;
+  const dev = est.value / want - 1, finite = Number.isFinite(est.err), ok = finite && Math.abs(dev) <= rel;
   console.log(`${ok ? 'PASS' : 'FAIL'}  ${name}\n      model ${est.value.toFixed(3)} ± ${est.err.toFixed(3)}  exact ${want.toFixed(3)}  ` +
     `(within ${(rel * 100).toFixed(0)}%; off by ${(dev * 100).toFixed(1)}% = ${((est.value - want) / est.err).toFixed(1)} sigma; ` +
-    `margin ${((rel - Math.abs(dev)) * 100).toFixed(1)} points)  ${src}` + (why ? `\n      ${why}` : ''));
+    `margin ${((rel - Math.abs(dev)) * 100).toFixed(1)} points)  ${src}` + (finite ? '' : '\n      the error bar is not finite') +
+    (why ? `\n      ${why}` : ''));
   if (!ok) fails++;
 }
 
@@ -75,6 +84,8 @@ check('Random numbers are integer-only xoshiro128**: seed 1 starts 2442144158, 3
 // 2. Below T_c: magnetisation and energy (L = 64; the correlation length is at most 9.1 lattice spacings, so finite-size
 //    effects, of relative order exp(-L/xi) < 1e-3, stay below the statistical errors). Tolerances: 0.006 in |m| is
 //    3.8 sigma of the noisiest run (T = 2.2, sigma = 0.0016); 0.005 in energy is 3.8 sigma of the noisiest (sigma = 0.0013).
+//    The quieter runs are held to them more loosely: |m| at T = 2.0 and 2.1 to 17 and 10 sigma (sigma = 0.00035 and
+//    0.00060), the energy to 7.6 and 5.2 (0.00066 and 0.00096).
 const ordered = CR.studyOrdered();
 for (const r of ordered) near(`Spontaneous magnetisation <|m|> at T = ${r.T} (L = ${r.L}, ${r.n} measurements)`, r.M, r.Mexact, 0.006, YANG, '', 5);
 for (const r of ordered) near(`Energy per spin at T = ${r.T}`, r.e, r.eExact, 0.005, ONS, '', 5);
@@ -85,26 +96,30 @@ const cross = (L1) => crit.crossings.find(c => c.L1 === L1);
 near(`T_c from the crossing of the Binder cumulants of L = 32 and 64`, cross(32).T, TC, 0.010, ONS,
   'tolerance 4.5 sigma (sigma = 0.0022), 3.8 sigma of the seed-to-seed scatter (0.0026). The leading correction to U at T_c is ' +
   'the L^-7/4 analytic background of chi (Salas & Sokal 2000, sec. 4.1; Caselle et al. 2002, sec. 7.2, D0 = -0.104), so the ' +
-  'crossing approaches T_c as L^-(1/nu + 7/4) = L^-11/4: about 2e-4 below T_c here with Salas & Sokal\'s fitted amplitude ' +
-  '(B4 = -0.48 +- 0.23) and the slope -dU/dT = 0.035 L of these runs, at most about 6e-4 scaling the noisier L = 8/16 shift ' +
-  '(-0.026 +- 0.008) the same way; far inside sigma', 4);
+  'crossing approaches T_c as L^-(1/nu + 7/4) = L^-11/4: about 1.3e-4 below T_c here, from the slope -dU/dT = 0.035 L of these ' +
+  'runs and an L^-7/4 amplitude set by Salas & Sokal\'s measured V4(16) = 1.16586(38), which puts U(16) 0.0007 above its limit ' +
+  '(their fit with the exponent free, Delta = 2.01 +- 0.22 and B4 = -0.48 +- 0.23, gives 1.0e-4); at most about 6e-4 scaling ' +
+  'the noisier L = 8/16 shift (-0.026 +- 0.008) the same way; far inside sigma', 4);
 near(`T_c from the crossing of the Binder cumulants of L = 64 and 128`, cross(64).T, TC, 0.007, ONS,
-  'tolerance 4.1 sigma (sigma = 0.0017), 3.5 sigma of the seed-to-seed scatter (0.0020); the L^-11/4 shift above is about 4e-5 here, ' +
+  'tolerance 4.1 sigma (sigma = 0.0017), 3.5 sigma of the seed-to-seed scatter (0.0020); the L^-11/4 shift above is about 2e-5 here, ' +
   'at most 1e-4', 4);
 near('Binder cumulant at T_c, mean of L = 16 to 128', crit.binderMean, 1 - 1.1679229 / 3, 0.005,
-  'Salas & Sokal 2000: 1 - V4/3, V4 = 1.1679229(47)', 'tolerance 4.5 sigma (sigma = 0.0011), 4.3 sigma of the seed-to-seed scatter ' +
-  '(0.0012); the sizes agree with each other within their errors');
+  'Salas & Sokal 2000: 1 - V4/3, V4 = 1.1679229(47)', 'tolerance 4.5 sigma (sigma = 0.0011), 4.2 sigma of the seed-to-seed scatter ' +
+  '(0.0012); 4.3 and 4.0 after the mean\'s +0.00024 finite-size shift, most of it from L = 16, which sits 0.0007 above its limit ' +
+  '(Salas & Sokal\'s V4(L); the 120 repeat seeds average +0.0002 +- 0.0001); the sizes agree with each other within their errors');
 const Ls = crit.Ls.join(', ');
 near(`beta/nu from <|m|> ~ L^(-beta/nu) at T_c, least squares over L = ${Ls}`, crit.betaNu, EXP.beta / EXP.nu, 0.012,
-  'Pelissetto & Vicari 2002, sec. 3.5: beta = 1/8, nu = 1', 'tolerance 4.6 sigma (sigma = 0.0026), 3.8 sigma of the seed-to-seed scatter (0.0031)');
+  'Pelissetto & Vicari 2002, sec. 3.5: beta = 1/8, nu = 1', 'tolerance 4.6 sigma (sigma = 0.0026), 3.9 sigma of the seed-to-seed scatter (0.0031)');
 near(`gamma/nu from chi = N <m^2> ~ L^(gamma/nu) at T_c, same sizes`, crit.gammaNu, EXP.gamma / EXP.nu, 0.016,
-  'Pelissetto & Vicari 2002, sec. 3.5: gamma = 7/4', 'tolerance 4 sigma (sigma = 0.0040), 3.3 sigma of the seed-to-seed scatter (0.0049) ' +
-  'and about 3 after its +0.0015 finite-size bias; corrections to chi at T_c are of relative order L^-7/4 (Caselle et al. 2002, sec. 7.2)');
+  'Pelissetto & Vicari 2002, sec. 3.5: gamma = 7/4', 'tolerance 4 sigma (sigma = 0.0040), 3.3 sigma of the seed-to-seed scatter (0.0049); ' +
+  '3.7 and 3.0 after its +0.0012 finite-size bias, the slope of the torus chi_L over these sizes less 7/4 (Caselle et al. 2002, ' +
+  'sec. 7.2: exact up to L = 17, their expansion beyond, with corrections of relative order L^-7/4; the 120 repeat seeds average ' +
+  '+0.0015 +- 0.0004)');
 near(`eta from G(L/2) ~ L^-eta at T_c, same sizes`, crit.eta, EXP.eta, 0.020,
   'Pelissetto & Vicari 2002, sec. 3.5: eta = 1/4', 'tolerance 4.3 sigma (sigma = 0.0047), 3.7 sigma of the seed-to-seed scatter (0.0054); ' +
   'G(L/2) is the spin-spin correlation at half the box, along either axis');
 near(`1/nu from the slope of the Binder cumulant, -dU/dT ~ L^(1/nu), at T_c`, crit.invNu, 1 / EXP.nu, 0.13,
-  'Pelissetto & Vicari 2002, sec. 3.5: nu = 1', 'tolerance 4 sigma (sigma = 0.032), 3.7 sigma of the seed-to-seed scatter (0.035); ' +
+  'Pelissetto & Vicari 2002, sec. 3.5: nu = 1', 'tolerance 4.1 sigma (sigma = 0.032), 3.7 sigma of the seed-to-seed scatter (0.035); ' +
   'slope from reweighting to T_c -+ 0.003');
 
 // 4b. The measurement trap (critical/README.md, "A trap in measuring cluster runs"): L = 16 at T_c, 40000 measurements,
@@ -112,8 +127,9 @@ near(`1/nu from the slope of the Binder cumulant, -dU/dT ~ L^(1/nu), at T_c`, cr
 //     up to L^2 spins.
 const trap = CR.studyTrap();
 near(`Binder cumulant at T_c, L = ${trap.L}, measured after a fixed number of cluster flips (${trap.n} measurements)`, trap.fixed,
-  1 - 1.1679229 / 3, 0.005, 'Salas & Sokal 2000: 1 - V4/3', 'tolerance about 4 sigma (sigma = 0.0008) plus the finite-size shift ' +
-  'at L = 16, about +0.001 by Salas & Sokal\'s fit (B4 = -0.48 +- 0.23), rounded up');
+  1 - 1.1679229 / 3, [0.0035, 0.004], 'Salas & Sokal 2000: 1 - V4/3', 'tolerance: at L = 16 U sits +0.0007 above its limit ' +
+  '(Salas & Sokal\'s measured V4(16) = 1.16586(38)), so the high side is 4.1 sigma (sigma = 0.0008) above that shift and the low ' +
+  'side, 4.4 sigma, allows none; 4.4 and 4.7 sigma of the seed-to-seed scatter (0.00075)');
 const gap = trap.until.value - trap.fixed.value, gapErr = Math.hypot(trap.until.err, trap.fixed.err);
 check('Measuring each time the flipped clusters add up to L^2 spins over-weights ordered states: the Binder cumulant comes out higher',
   gap / gapErr > 10, `U = ${fmt(trap.until.value)} ± ${fmt(trap.until.err)} that way, against ${fmt(trap.fixed.value)} ± ` +
@@ -121,13 +137,14 @@ check('Measuring each time the flipped clusters add up to L^2 spins over-weights
 
 // 5. Above T_c: the correlation length falls to about one lattice spacing as the temperature rises. Each run is at least
 //    six correlation lengths across. Tolerance 8%: 3.5 sigma of the noisiest run (T = 4, sigma = 2.3%), 3.8 sigma of
-//    its seed-to-seed scatter (2.1%).
+//    its seed-to-seed scatter (2.1%). The energy's 0.005 holds the quieter runs at T = 2.4 and 2.5 to about 7 and 6
+//    sigma (sigma = 0.0007 and 0.0008).
 const hot = CR.studyHot();
 for (const r of hot) nearRel(`Correlation length at T = ${r.T}, (T - T_c)/T_c = ${r.t.toFixed(3)} (L = ${r.L}, fitted from r = ${r.xi.r1} to ${r.xi.r2})`,
   r.xi, r.exact, 0.08, `1/xi = ln coth(1/T) - 2/T: ${CHPV} eqs. 5.1-5.4`);
 const eHot = hot.map(r => ({ T: r.T, dev: r.e.value - r.eExact, err: r.e.err }));
 check('Energy per spin at the same five temperatures, within 0.005 (3.7 sigma of the noisiest, T = 4, sigma = 0.00136; ' +
-  '3.5 sigma of the seed-to-seed scatter at T = 2.75, 0.0014)', eHot.every(x => Math.abs(x.dev) <= 0.005),
+  '3.6 sigma of the seed-to-seed scatter at T = 2.75, 0.0014)', eHot.every(x => Number.isFinite(x.err) && Math.abs(x.dev) <= 0.005),
   eHot.map(x => `T = ${x.T}: ${(x.dev + hot.find(r => r.T === x.T).eExact).toFixed(4)}, exact ${hot.find(r => r.T === x.T).eExact.toFixed(4)}, ` +
     `off by ${x.dev.toFixed(4)} (${(x.dev / x.err).toFixed(1)} sigma)`).join('; ') +
   `; margin ${(0.005 - Math.max(...eHot.map(x => Math.abs(x.dev)))).toFixed(4)}`, ONS);
@@ -135,12 +152,18 @@ check('Energy per spin at the same five temperatures, within 0.005 (3.7 sigma of
 // 6. Site percolation, open edges, spanning top to bottom.
 const perc = CR.studyPercolation();
 const NZ = 'Newman & Ziff 2000: p_c = 0.59274621(13)';
-for (const c of perc.wide) near(`p_c from the crossing of the spanning probabilities of L = ${c.L1} and ${c.L2}`, c.p, PERC.pc, 0.0025, NZ,
-  c.L1 === 32 ? 'tolerance: over eight other seeds (node critical/table.mjs scatter) this crossing scatters by 0.0007 and sits 0.0005 high (open edges shift it as L^-7/4: Ziff & Newman 2002), so 3 sigma + 0.0005'
-    : 'tolerance about 4 sigma: over eight other seeds (node critical/table.mjs scatter) this crossing scatters by 0.0006, with no detectable shift', 5);
-near(`Fractal dimension of the spanning cluster at p_c: mass ~ L^D, least squares over L = ${perc.Ls.slice(1).join(', ')}`, perc.D, PERC.D, 0.05,
+for (const c of perc.wide) near(`p_c from the crossing of the spanning probabilities of L = ${c.L1} and ${c.L2}`, c.p, PERC.pc, c.L1 === 32 ? 0.0028 : 0.0025, NZ,
+  c.L1 === 32 ? 'tolerance: over eight other seeds (node critical/table.mjs scatter) this crossing scatters by 0.00072 and sits ' +
+      '0.0005 high (open edges shift it as L^-7/4: Ziff & Newman 2002), so the high side is 3.2 sigma above that shift and the low ' +
+      'side, 3.9 sigma, allows none'
+    : 'tolerance 4.2 sigma: over eight other seeds (node critical/table.mjs scatter) this crossing scatters by 0.00059 and sits ' +
+      '0.00003 +- 0.00021 from p_c; open edges should shift it by about +0.0001 (Ziff & Newman 2002), too small for eight seeds to ' +
+      'resolve (4.1 sigma after it)', 5);
+near(`Fractal dimension of the spanning cluster at p_c: mass ~ L^D, least squares over L = ${perc.Ls.slice(1).join(', ')}`, perc.D, PERC.D, [0.045, 0.03],
   'D = 2 - 5/48 = 91/48: Lawler, Schramm & Werner 2002 (one-arm exponent 5/48)',
-  'tolerance: over eight other seeds (node critical/table.mjs scatter) this slope scatters by 0.0065 and sits 0.016 low, the effective exponent still rising with L; 4 sigma + 0.016, rounded up', 4);
+  'tolerance: over eight other seeds (node critical/table.mjs scatter) this slope scatters by 0.0065 and sits 0.016 low, as the slope ' +
+  'between successive sizes rises with L (1.862, 1.875 and 1.884 from L = 32 to 256); the low side is 4.5 sigma beyond that shift, ' +
+  'the high side 4.6 sigma and allows none', 4);
 
 const secs = (Date.now() - start) / 1000;
 console.log(`\nruntime ${secs.toFixed(1)} s on Node ${process.versions.node}`);
