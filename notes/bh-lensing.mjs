@@ -17,7 +17,7 @@ for (const m of [1e8, 1e9]) {
   const M = m * C.Msun, r = gravAtom(M, MU, 0.99), sigma = sigmaOf(M), rInfl = C.G * M / (sigma * sigma);
   const spinMin = 10 ** edge(x => !gravAtom(M, MU, 10 ** x).superradiant, -8, 0);
   console.log(`M = ${f(m)} Msun: r_g = ${f(r.rg)} m, alpha = ${f(r.alpha, 3)}, grows only if spin > ${f(spinMin)}`);
-  console.log(`  cloud peak 4 r_g/alpha^2 = ${p(r.rCloud / C.kpc)} kpc, Bohr speed alpha c/2 = ${p(r.vBohr / 1e3)} km/s`);
+  console.log(`  cloud peak 4 r_g/alpha^2 = ${p(r.rCloud / C.kpc)} kpc, n = 2 Bohr speed alpha c/2 = ${p(r.vBohr / 1e3)} km/s`);
   console.log(`  growth time ${f(r.tGrow / YR)} yr (spin 0.99), ${f(gravAtom(M, MU, 0.5).tGrow / YR)} yr (spin 0.5): ${f(r.tGrow / AGE)} ages of the universe`);
   console.log(`  host stars, M-sigma: sigma = ${p(sigma / 1e3)} km/s; the black hole's pull dominates out to G M / sigma^2 = ${p(rInfl / PC)} pc`);
   console.log(`  cloud / that radius = ${p(r.rCloud / rInfl)}; galaxy mass inside the cloud (isothermal, 2 sigma^2 r / G) = ${p(2 * sigma * sigma * r.rCloud / (C.G * M))} x the black hole`);

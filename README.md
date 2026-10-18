@@ -181,8 +181,10 @@ A spinning black hole can grow a cloud of very light particles with hydrogen-lik
 dark matter at 10⁻²² eV around a galaxy's central black hole of 10⁸ to 10⁹ Suns, it cannot in practice: the cloud
 would take 10¹⁶ to 10²⁴ times the age of the universe to grow, and out where it would sit the galaxy, not the black
 hole, holds the particles. The black hole can still squeeze the galaxy's dense dark matter core by plain gravity,
-but only within about 100 pc of the centre, too far in for the lensed images to feel. Details, the lens systems
-with anomaly and black hole data, and a reshaped test: [notes/bh-lensing.md](notes/bh-lensing.md) (issue #1).
+but only within about 100 pc of the centre, too far in for the lensed images to feel. The cloud is the
+[gravitational atom](#second-study-the-gravitational-atom) of the second study; the note's `gravAtom` is a compact
+copy of its algebra, and `npm test` fails if the two disagree. Details, the lens systems with anomaly and black
+hole data, and a reshaped test: [notes/bh-lensing.md](notes/bh-lensing.md) (issue #1).
 
 ## Run it
 
@@ -224,10 +226,6 @@ below).
 | Core mass inside the core radius (same paper, eq. 3) | 5.5×10⁹ Suns | 5.4×10⁹ |
 | Core wave period at 0.1 Suns per pc³ (Schive et al. 2020) | ~120 million years | 121 million |
 | Core breathing frequency (Veltmaat et al. 2018, eq. 16) | 0.16 per (Gρ_c)^(-1/2) | 0.22 (frozen-gravity estimate) |
-| Coupling α, 3 M☉ black hole and 10⁻¹² eV particle (Baumann, Chia and Porto 2019, eq. 2.6) | 0.02 | 0.022 |
-| Cloud growth time at their smallest growing α, 0.005 (eq. 2.14) | the age of the universe | 1.2×10¹⁰ years |
-| Largest α that grows at spin 0.8 (same paper) | 0.25 | 0.252 |
-| Heaviest particle M87*'s spin can grow (Davoudiasl and Denton 2019) | 4.6×10⁻²¹ eV | 4.7×10⁻²¹ eV |
 
 The horizon rows use equation numbers from [arXiv:2205.06279v2](https://arxiv.org/html/2205.06279v2).
 Its electric formula (eq. 15) includes the SI vacuum permittivity ε₀ explicitly, as the model does.
@@ -235,7 +233,9 @@ Its electric formula (eq. 15) includes the SI vacuum permittivity ε₀ explicit
 The published tables give powers of ten only, so agreement within a few times is as close as the comparison
 can go. The tolerance is ×5: half a power of ten for rounding, and a little more for inputs the tables do not
 state. The crowd rows compare formulas and fits, so they agree more closely; the core is solved here from
-first principles (the ground state of the Schrödinger–Poisson equations), not taken from the fits.
+first principles (the ground state of the Schrödinger–Poisson equations), not taken from the fits. Through gravity
+alone, the electron of the electric row would wait 5×10¹²⁴ years. The black hole note's checks are listed in
+[notes/bh-lensing.md](notes/bh-lensing.md), the gravitational atom's below.
 
 What the re-check found (issue #5, details in CORRECTIONS.md): two coefficient errors, now fixed; a molecule's
 glow that is fitted, and gets the onset of decoherence right but the light wrong; and four places where the
@@ -319,48 +319,48 @@ Mistakes found along the way are in [CORRECTIONS.md](CORRECTIONS.md). Open quest
 - E. Joos and H. D. Zeh, *The emergence of classical properties through interaction with the environment*, Z. Phys. B 59, 223 (1985). https://doi.org/10.1007/BF01725541
 - S. Dürr, T. Nonn and G. Rempe, *Origin of quantum-mechanical complementarity probed by a "which-way" experiment in an atom interferometer*, Nature 395, 33 (1998). https://doi.org/10.1038/25653
 - L. Hackermüller et al., *Decoherence of matter waves by thermal emission of radiation*, Nature 427, 711 (2004). https://doi.org/10.1038/nature02276 (https://arxiv.org/abs/quant-ph/0402146)
-- K. Hornberger, L. Hackermüller and M. Arndt, *Influence of molecular temperature on the coherence of fullerenes in a near-field interferometer*, Phys. Rev. A 71, 023601 (2005). https://arxiv.org/abs/quant-ph/0412003
-- M. Schlosshauer, *Decoherence and the Quantum-to-Classical Transition* (Springer, 2007). Not consulted directly; see the next two.
+- K. Hornberger, L. Hackermüller and M. Arndt, *Influence of molecular temperature on the coherence of fullerenes in a near-field interferometer*, Phys. Rev. A 71, 023601 (2005). https://doi.org/10.1103/PhysRevA.71.023601 (https://arxiv.org/abs/quant-ph/0412003)
+- M. Schlosshauer, *Decoherence and the Quantum-to-Classical Transition* (Springer, 2007). Not consulted directly; see the next two. https://doi.org/10.1007/978-3-540-35775-9
 - M. Schlosshauer, *The quantum-to-classical transition and decoherence* (2014), Table I. https://arxiv.org/abs/1404.2635
-- M. Schlosshauer, *Quantum decoherence*, Phys. Rep. 831, 1 (2019), Table 1 and eqs. 65–70. https://arxiv.org/abs/1911.06282
-- Copies of the Joos–Zeh table: C. Kiefer and E. Joos (1998), https://arxiv.org/abs/quant-ph/9803052 ; E. Joos (1999), https://arxiv.org/abs/quant-ph/9908008 ; C. Kiefer (1999), https://arxiv.org/abs/gr-qc/9906100 ; E. Joos, Séminaire Poincaré 2, 1 (2005), https://arxiv.org/abs/quant-ph/0512079
-- M. Tegmark, *Apparent wave function collapse caused by scattering*, Found. Phys. Lett. 6, 571 (1993). https://arxiv.org/abs/gr-qc/9310032
-- O. Romero-Isart, *Quantum superposition of massive objects and collapse models*, Phys. Rev. A 84, 052121 (2011), eqs. 26, 28, 29. https://arxiv.org/abs/1110.4495
-- M. Schut et al., *Improving resilience of the Quantum Gravity Induced Entanglement of Masses (QGEM) to decoherence using 3 superpositions* (2021), eq. B5, which quotes Schlosshauer's air formula. https://arxiv.org/abs/2110.14695
+- M. Schlosshauer, *Quantum decoherence*, Phys. Rep. 831, 1 (2019), Table 1 and eqs. 65–70. https://doi.org/10.1016/j.physrep.2019.10.001 (https://arxiv.org/abs/1911.06282)
+- Copies of the Joos–Zeh table: C. Kiefer and E. Joos, Lect. Notes Phys. 517, 105 (1999), https://doi.org/10.1007/BFb0105342 (https://arxiv.org/abs/quant-ph/9803052); E. Joos, Lect. Notes Phys. 538, 1 (2000), https://doi.org/10.1007/3-540-46657-6_1 (https://arxiv.org/abs/quant-ph/9908008); C. Kiefer, Lect. Notes Phys. 541, 158 (2000), https://doi.org/10.1007/3-540-46634-7_7 (https://arxiv.org/abs/gr-qc/9906100); E. Joos, Séminaire Poincaré 1, 133 (2005), also in *Quantum Decoherence*, Prog. Math. Phys. 48, 177 (2006), https://doi.org/10.1007/978-3-7643-7808-0_6 (https://arxiv.org/abs/quant-ph/0512079)
+- M. Tegmark, *Apparent wave function collapse caused by scattering*, Found. Phys. Lett. 6, 571 (1993). https://doi.org/10.1007/BF00662807 (https://arxiv.org/abs/gr-qc/9310032)
+- O. Romero-Isart, *Quantum superposition of massive objects and collapse models*, Phys. Rev. A 84, 052121 (2011), eqs. 26, 28, 29. https://doi.org/10.1103/PhysRevA.84.052121 (https://arxiv.org/abs/1110.4495)
+- M. Schut et al., *Improving resilience of quantum-gravity-induced entanglement of masses to decoherence using three superpositions*, Phys. Rev. A 105, 032411 (2022), eq. B5, which quotes Schlosshauer's air formula. https://doi.org/10.1103/PhysRevA.105.032411 (https://arxiv.org/abs/2110.14695)
 - C. F. Bohren and D. R. Huffman, *Absorption and Scattering of Light by Small Particles* (Wiley, 1983), ch. 5.
 - D. L. Danielson, G. Satishchandran and R. M. Wald, *Black holes decohere quantum superpositions*, Int. J. Mod. Phys. D 31, 2241003 (2022). https://doi.org/10.1142/S0218271822410036 (https://arxiv.org/abs/2205.06279v2)
 - C. J. Riedel and W. H. Zurek, *Quantum Darwinism in an everyday environment: huge redundancy in scattered photons*, Phys. Rev. Lett. 105, 020404 (2010). https://doi.org/10.1103/PhysRevLett.105.020404 (https://arxiv.org/abs/1001.3419)
-- L. F. Abbott and M. B. Wise, *Dimension of a quantum-mechanical path*, Am. J. Phys. 49, 37 (1981).
+- L. F. Abbott and M. B. Wise, *Dimension of a quantum-mechanical path*, Am. J. Phys. 49, 37 (1981). https://doi.org/10.1119/1.12657
 - M. Scrimgeour et al., *The WiggleZ Dark Energy Survey: the transition to large-scale cosmic homogeneity*, MNRAS 425, 116–134 (2012). https://doi.org/10.1111/j.1365-2966.2012.21402.x (https://arxiv.org/abs/1205.6812)
-- D. Baumann, H. S. Chia and R. A. Porto, *Probing ultralight bosons with binary black holes*, Phys. Rev. D 99, 044001 (2019). https://arxiv.org/abs/1804.03208
-- R. Brito, V. Cardoso and P. Pani, *Superradiance: New Frontiers in Black Hole Physics*, Lect. Notes Phys. 971 (2020). https://arxiv.org/abs/1501.06570
-- A. Arvanitaki, M. Baryakhtar and X. Huang, *Discovering the QCD axion with black holes and gravitational waves*, Phys. Rev. D 91, 084011 (2015). https://arxiv.org/abs/1411.2263
+- D. Baumann, H. S. Chia and R. A. Porto, *Probing ultralight bosons with binary black holes*, Phys. Rev. D 99, 044001 (2019). https://doi.org/10.1103/PhysRevD.99.044001 (https://arxiv.org/abs/1804.03208)
+- R. Brito, V. Cardoso and P. Pani, *Superradiance: New Frontiers in Black Hole Physics*, Lect. Notes Phys. 971 (2020). https://doi.org/10.1007/978-3-030-46622-0 (https://arxiv.org/abs/1501.06570)
+- A. Arvanitaki, M. Baryakhtar and X. Huang, *Discovering the QCD axion with black holes and gravitational waves*, Phys. Rev. D 91, 084011 (2015). https://doi.org/10.1103/PhysRevD.91.084011 (https://arxiv.org/abs/1411.2263)
 - S. Detweiler, *Klein-Gordon equation and rotating black holes*, Phys. Rev. D 22, 2323 (1980). https://doi.org/10.1103/PhysRevD.22.2323
-- S. R. Dolan, *Instability of the massive Klein-Gordon field on the Kerr spacetime*, Phys. Rev. D 76, 084001 (2007). https://arxiv.org/abs/0705.2880
+- S. R. Dolan, *Instability of the massive Klein-Gordon field on the Kerr spacetime*, Phys. Rev. D 76, 084001 (2007). https://doi.org/10.1103/PhysRevD.76.084001 (https://arxiv.org/abs/0705.2880)
 - CODATA 2022 recommended values of the fundamental physical constants, NIST. https://physics.nist.gov/constants
-- NIST Atomic Spectra Database: ionization energy of hydrogen and the 2p and 3d transition rates. https://physics.nist.gov/asd
-- A. Prša et al., *Nominal values for selected solar and planetary quantities: IAU 2015 Resolution B3*, Astron. J. 152, 41 (2016). https://arxiv.org/abs/1605.09788
-- Planck Collaboration, *Planck 2018 results. VI. Cosmological parameters*, Astron. Astrophys. 641, A6 (2020), for the age of the universe, 13.8 billion years. https://arxiv.org/abs/1807.06209
-- D. J. Griffiths and D. F. Schroeter, *Introduction to Quantum Mechanics*, 3rd ed. (Cambridge, 2018), sec. 4.2, for the hydrogen wavefunctions.
-- H. Davoudiasl and P. B. Denton, *Ultralight boson dark matter and Event Horizon Telescope observations of M87\**, Phys. Rev. Lett. 123, 021102 (2019). https://arxiv.org/abs/1904.09242
+- A. Kramida, Yu. Ralchenko, J. Reader and NIST ASD Team, *NIST Atomic Spectra Database* (ver. 5.12, 2024): ionization energy of hydrogen and the 2p and 3d transition rates. https://doi.org/10.18434/T4W30F (https://physics.nist.gov/asd)
+- A. Prša et al., *Nominal values for selected solar and planetary quantities: IAU 2015 Resolution B3*, Astron. J. 152, 41 (2016). https://doi.org/10.3847/0004-6256/152/2/41 (https://arxiv.org/abs/1605.09788)
+- Planck Collaboration, *Planck 2018 results. VI. Cosmological parameters*, Astron. Astrophys. 641, A6 (2020), for the age of the universe, 13.8 billion years. https://doi.org/10.1051/0004-6361/201833910 (https://arxiv.org/abs/1807.06209)
+- D. J. Griffiths and D. F. Schroeter, *Introduction to Quantum Mechanics*, 3rd ed. (Cambridge, 2018), sec. 4.2, for the hydrogen wavefunctions. https://doi.org/10.1017/9781316995433
+- H. Davoudiasl and P. B. Denton, *Ultralight boson dark matter and Event Horizon Telescope observations of M87\**, Phys. Rev. Lett. 123, 021102 (2019). https://doi.org/10.1103/PhysRevLett.123.021102 (https://arxiv.org/abs/1904.09242)
 
 The crowd wave:
 
-- L. Hui, J. P. Ostriker, S. Tremaine and E. Witten, *Ultralight scalars as cosmological dark matter*, Phys. Rev. D 95, 043541 (2017). https://arxiv.org/abs/1610.08297
-- B. Bar-Or, J.-B. Fouvry and S. Tremaine, *Relaxation in a fuzzy dark matter halo*, ApJ 871, 28 (2019). https://arxiv.org/abs/1809.07673
-- H.-Y. Schive, T. Chiueh and T. Broadhurst, *Cosmic structure as the quantum interference of a coherent dark wave*, Nature Physics 10, 496 (2014). https://arxiv.org/abs/1406.6586
-- H.-Y. Schive et al., *Understanding the core-halo relation of quantum wave dark matter from 3D simulations*, Phys. Rev. Lett. 113, 261302 (2014). https://arxiv.org/abs/1407.7762
-- H.-Y. Schive, T. Chiueh and T. Broadhurst, *Soliton random walk and the cluster-stripping problem in ultralight dark matter*, Phys. Rev. Lett. 124, 201301 (2020). https://arxiv.org/abs/1912.09483
-- J. Veltmaat, J. C. Niemeyer and B. Schwabe, *Formation and structure of ultralight bosonic dark matter halos*, Phys. Rev. D 98, 043509 (2018). https://arxiv.org/abs/1804.09647
-- D. G. Levkov, A. G. Panin and I. I. Tkachev, *Gravitational Bose-Einstein condensation in the kinetic regime*, Phys. Rev. Lett. 121, 151301 (2018). https://arxiv.org/abs/1804.05857
-- I. Allali and M. P. Hertzberg, *Gravitational decoherence of dark matter*, JCAP 07 (2020) 056. https://arxiv.org/abs/2005.12287
-- I. J. Allali and M. P. Hertzberg, *General relativistic decoherence with applications to dark matter detection*, Phys. Rev. Lett. 127, 031301 (2021). https://arxiv.org/abs/2103.15892
-- D. J. E. Marsh and J. C. Niemeyer, *Strong constraints on fuzzy dark matter from ultrafaint dwarf galaxy Eridanus II*, Phys. Rev. Lett. 123, 051103 (2019). https://arxiv.org/abs/1810.08543
-- N. Dalal and A. Kravtsov, *Excluding fuzzy dark matter with sizes and stellar kinematics of ultrafaint dwarf galaxies*, Phys. Rev. D 106, 063517 (2022). https://arxiv.org/abs/2203.05750
-- K. K. Rogers and H. V. Peiris, *Strong bound on canonical ultralight axion dark matter from the Lyman-alpha forest*, Phys. Rev. Lett. 126, 071302 (2021). https://arxiv.org/abs/2007.12705
-- P. F. de Salas and A. Widmark, *Dark matter local density determination: recent observations and future prospects*, Rep. Prog. Phys. 84, 104901 (2021). https://arxiv.org/abs/2012.11477
-- A.-C. Eilers, D. W. Hogg, H.-W. Rix and M. K. Ness, *The circular velocity curve of the Milky Way from 5 to 25 kpc*, ApJ 871, 120 (2019). https://arxiv.org/abs/1810.09466
-- GRAVITY Collaboration, *A geometric distance measurement to the Galactic Center black hole with 0.3% uncertainty*, A&A 625, L10 (2019). https://arxiv.org/abs/1904.05721
+- L. Hui, J. P. Ostriker, S. Tremaine and E. Witten, *Ultralight scalars as cosmological dark matter*, Phys. Rev. D 95, 043541 (2017). https://doi.org/10.1103/PhysRevD.95.043541 (https://arxiv.org/abs/1610.08297)
+- B. Bar-Or, J.-B. Fouvry and S. Tremaine, *Relaxation in a fuzzy dark matter halo*, ApJ 871, 28 (2019). https://doi.org/10.3847/1538-4357/aaf28c (https://arxiv.org/abs/1809.07673)
+- H.-Y. Schive, T. Chiueh and T. Broadhurst, *Cosmic structure as the quantum interference of a coherent dark wave*, Nature Physics 10, 496 (2014). https://doi.org/10.1038/nphys2996 (https://arxiv.org/abs/1406.6586)
+- H.-Y. Schive et al., *Understanding the core-halo relation of quantum wave dark matter from 3D simulations*, Phys. Rev. Lett. 113, 261302 (2014). https://doi.org/10.1103/PhysRevLett.113.261302 (https://arxiv.org/abs/1407.7762)
+- H.-Y. Schive, T. Chiueh and T. Broadhurst, *Soliton random walk and the cluster-stripping problem in ultralight dark matter*, Phys. Rev. Lett. 124, 201301 (2020). https://doi.org/10.1103/PhysRevLett.124.201301 (https://arxiv.org/abs/1912.09483)
+- J. Veltmaat, J. C. Niemeyer and B. Schwabe, *Formation and structure of ultralight bosonic dark matter halos*, Phys. Rev. D 98, 043509 (2018). https://doi.org/10.1103/PhysRevD.98.043509 (https://arxiv.org/abs/1804.09647)
+- D. G. Levkov, A. G. Panin and I. I. Tkachev, *Gravitational Bose-Einstein condensation in the kinetic regime*, Phys. Rev. Lett. 121, 151301 (2018). https://doi.org/10.1103/PhysRevLett.121.151301 (https://arxiv.org/abs/1804.05857)
+- I. Allali and M. P. Hertzberg, *Gravitational decoherence of dark matter*, JCAP 07, 056 (2020). https://doi.org/10.1088/1475-7516/2020/07/056 (https://arxiv.org/abs/2005.12287)
+- I. J. Allali and M. P. Hertzberg, *General relativistic decoherence with applications to dark matter detection*, Phys. Rev. Lett. 127, 031301 (2021). https://doi.org/10.1103/PhysRevLett.127.031301 (https://arxiv.org/abs/2103.15892)
+- D. J. E. Marsh and J. C. Niemeyer, *Strong constraints on fuzzy dark matter from ultrafaint dwarf galaxy Eridanus II*, Phys. Rev. Lett. 123, 051103 (2019). https://doi.org/10.1103/PhysRevLett.123.051103 (https://arxiv.org/abs/1810.08543)
+- N. Dalal and A. Kravtsov, *Excluding fuzzy dark matter with sizes and stellar kinematics of ultrafaint dwarf galaxies*, Phys. Rev. D 106, 063517 (2022). https://doi.org/10.1103/PhysRevD.106.063517 (https://arxiv.org/abs/2203.05750)
+- K. K. Rogers and H. V. Peiris, *Strong bound on canonical ultralight axion dark matter from the Lyman-alpha forest*, Phys. Rev. Lett. 126, 071302 (2021). https://doi.org/10.1103/PhysRevLett.126.071302 (https://arxiv.org/abs/2007.12705)
+- P. F. de Salas and A. Widmark, *Dark matter local density determination: recent observations and future prospects*, Rep. Prog. Phys. 84, 104901 (2021). https://doi.org/10.1088/1361-6633/ac24e7 (https://arxiv.org/abs/2012.11477)
+- A.-C. Eilers, D. W. Hogg, H.-W. Rix and M. K. Ness, *The circular velocity curve of the Milky Way from 5 to 25 kpc*, ApJ 871, 120 (2019). https://doi.org/10.3847/1538-4357/aaf648 (https://arxiv.org/abs/1810.09466)
+- GRAVITY Collaboration, *A geometric distance measurement to the Galactic Center black hole with 0.3% uncertainty*, A&A 625, L10 (2019). https://doi.org/10.1051/0004-6361/201935656 (https://arxiv.org/abs/1904.05721)
 
 ## Licence
 
