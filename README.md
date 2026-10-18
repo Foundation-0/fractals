@@ -12,10 +12,11 @@ with Claude (Anthropic), for [Foundation0](https://github.com/Foundation-0/f0).
 - **Atoms are not little solar systems.** An electron does not follow an orbit; it has a spread of
   possible positions, and that spread does not shrink with better instruments. Planets show nothing like
   it. The two follow different equations.
-- **Except in one case, where they are.** Very light particles around a spinning black hole settle into
-  a cloud with the same energy levels as a hydrogen atom, with gravity in place of electric attraction
-  (the "gravitational atom"). The same equation, a wave held by a pull that weakens with distance, gives
-  the same solution at any scale. The nesting lives in the equations, not the objects.
+- **Except in one case, where gravity builds a real atom.** Very light particles around a spinning black
+  hole settle into a cloud with the same shapes and the same pattern of energy levels as a hydrogen atom,
+  with gravity in place of electric attraction (the "gravitational atom"). It is still a wave cloud, not
+  planets on orbits. The same equation, a wave held by a pull that weakens with distance, gives the same
+  solution at any scale. The nesting lives in the equations, not the objects.
 - **Quantum paths are fractal.** A free quantum particle's path has fractal dimension 2, against 1 for a
   classical trajectory (Abbott and Wise, 1981), the same roughness as a pollen grain jostled by molecules.
 - **Cosmic structure is fractal only up to a point.** Galaxies cluster in a fractal-like way on small
@@ -75,6 +76,7 @@ node witness-map/table.mjs 1e-6 cryo     # 1 µm gap, everything in a 4 K vacuum
 ```
 
 `witness-map/model.js` is the whole model. It loads in Node (`require`) and in a browser (`window.WM`).
+`npm test` also checks `gravitational-atom/atom.js` (second study, below).
 
 ## Checks
 
@@ -118,6 +120,57 @@ tables.
   would add as much again as its own glow.
 - Every number is good to a factor of a few.
 
+## Second study: the gravitational atom
+
+Hydrogen and a gravitational atom drawn side by side at the same scale:
+**https://foundation-0.github.io/fractals/gravitational-atom/** (`gravitational-atom/index.html`, which loads
+`gravitational-atom/atom.js`, the whole model; `window.GA` in a browser, `require` in Node).
+
+A particle of mass μ held by a pull that weakens as 1/r has levels E = μc²(1 − α²/2n²), a Bohr radius
+a₀ = ħ/(μcα), and the same wave shapes in units of a₀. Hydrogen: α = e²/(4πε₀ħc) ≈ 1/137. A black hole of
+mass M and a boson of mass μ: α = GMμ/(ħc), the hole's size over the particle's wavelength, so a₀ = r_g/α²
+(Baumann, Chia and Porto 2019, eqs. 2.5 to 2.9).
+
+In their example, 5 million Suns and a boson of 10⁻¹⁷ eV:
+
+- α = r_g/λ_c = 7.4×10⁹ m ÷ 2.0×10¹⁰ m = 0.37, against 0.0073 for hydrogen.
+- a₀ = 0.35 AU, 10²¹ times hydrogen's 0.529 Å. The 211 cloud is most likely found 4a₀ = 1.4 AU out.
+- The ground state is bound by 7.0×10⁻¹⁹ eV, 5×10⁻²⁰ times hydrogen's 13.6 eV, but that is 7% of the
+  particle's rest energy against 27 parts per million for hydrogen. So relativity matters more: the first
+  correction to the 211 level is −11% (their eq. 2.10).
+- The horizon at the centre has radius 0.16a₀ at spin 0.99. A proton is 1.6×10⁻⁵a₀. The horizon is not a wall:
+  a state whose pattern turns slower than the horizon grows by taking the hole's spin (superradiance), the
+  rest drain in. Here both 211 and 322 can grow; at leading order 211 grows by a factor e every 45 years,
+  322 every 31,000 years.
+
+### Checks
+
+| Check | Published | Model |
+|---|---|---|
+| Hydrogen binding, fixed proton (CODATA 2022 Rydberg energy) | 13.605693 eV | 13.605693 eV |
+| Bohr radius (CODATA 2022) | 0.529177 Å | 0.529177 Å |
+| Hydrogen ionization energy, proton allowed to recoil (NIST ASD) | 13.598435 eV | 13.598287 eV; the gap is mostly fine structure |
+| α for 3 Suns and 10⁻¹² eV (BCP 2019, eq. 2.6) | ≈ 0.02 | 0.0224 |
+| α for 5×10⁶ Suns and 10⁻¹⁷ eV (BCP 2019, sec. 4.3) | ≈ 0.37 | 0.374 |
+| Gravitational waves from a real-field cloud (BCP 2019, eq. 4.1 and sec. 4.3) | 484 Hz per 10⁻¹² eV; ≈ 5 mHz | 483.6 Hz; 4.84 mHz |
+| Largest α at which 211 grows, spin 0.8 (BCP 2019, sec. 2.2, from Dolan 2007) | 0.25 | 0.252 |
+| Most likely radius, n²r_g/α² (BCP 2019, eq. 2.9) | 4a₀ and 9a₀ | 4.000a₀ and 9.000a₀ |
+| 211 e-folding time, 10 Suns, α = 0.3, spin 0.9 (Arvanitaki, Baryakhtar and Huang 2015, Table I) | ~10⁻⁴ years | 4×10⁻⁴ years |
+| Fastest 211 growth, spin 0.99, α = 0.42 (Dolan 2007) | 1.5×10⁻⁷ c/r_g | 9.3×10⁻⁹ c/r_g, 16× too slow |
+| Bosons in a 10-Sun cloud that took 0.1 of the spin (ABH 2015, eq. 8) | ~10⁷⁶ | 8×10⁷⁶ |
+
+The two growth-rate rows show where the model stops: growth rates use the leading-order formula (Detweiler 1980,
+as corrected in BCP 2019, eq. 2.12), which is good at small α and several times too slow near the fastest
+growth. The page says so next to every growth time.
+
+One bound in the sources is looser than the formula behind it. BCP 2019 give α < 0.5 as the upper limit
+for 211 growth, "assuming an initial BH spin of ã = 0.99" (eq. 2.14). Their own condition (eq. 2.1) gives
+about 0.44 at that spin; 0.5 is the limit for a maximally spinning hole (as in Arvanitaki, Baryakhtar and
+Huang 2015, eq. 6).
+
+What the gravitational-atom model leaves out: everything past leading order in α; the cloud's own gravity
+and the hole's loss of mass; interactions between the particles; anything else near the hole.
+
 Mistakes found along the way are in [CORRECTIONS.md](CORRECTIONS.md). Open questions are the
 [issues](https://github.com/Foundation-0/fractals/issues).
 
@@ -140,7 +193,16 @@ Mistakes found along the way are in [CORRECTIONS.md](CORRECTIONS.md). Open quest
 - M. Bild et al., *Schrödinger cat states of a 16-microgram mechanical oscillator*, Science (2023). https://arxiv.org/abs/2211.00449
 - L. F. Abbott and M. B. Wise, *Dimension of a quantum-mechanical path*, Am. J. Phys. 49, 37 (1981).
 - M. Scrimgeour et al., *The WiggleZ Dark Energy Survey: the transition to large-scale cosmic homogeneity* (2012). https://arxiv.org/abs/1205.6812
-- D. Baumann, H. S. Chia and R. A. Porto, *Probing ultralight bosons with binary black holes*, Phys. Rev. D 99, 044001 (2019).
+- D. Baumann, H. S. Chia and R. A. Porto, *Probing ultralight bosons with binary black holes*, Phys. Rev. D 99, 044001 (2019). https://arxiv.org/abs/1804.03208
+- R. Brito, V. Cardoso and P. Pani, *Superradiance: New Frontiers in Black Hole Physics*, Lect. Notes Phys. 971 (2020). https://arxiv.org/abs/1501.06570
+- A. Arvanitaki, M. Baryakhtar and X. Huang, *Discovering the QCD axion with black holes and gravitational waves*, Phys. Rev. D 91, 084011 (2015). https://arxiv.org/abs/1411.2263
+- S. Detweiler, *Klein-Gordon equation and rotating black holes*, Phys. Rev. D 22, 2323 (1980). https://doi.org/10.1103/PhysRevD.22.2323
+- S. R. Dolan, *Instability of the massive Klein-Gordon field on the Kerr spacetime*, Phys. Rev. D 76, 084001 (2007). https://arxiv.org/abs/0705.2880
+- CODATA 2022 recommended values of the fundamental physical constants, NIST. https://physics.nist.gov/constants
+- NIST Atomic Spectra Database: ionization energy of hydrogen and the 2p and 3d transition rates. https://physics.nist.gov/asd
+- A. Prša et al., *Nominal values for selected solar and planetary quantities: IAU 2015 Resolution B3*, Astron. J. 152, 41 (2016). https://arxiv.org/abs/1605.09788
+- Planck Collaboration, *Planck 2018 results. VI. Cosmological parameters*, Astron. Astrophys. 641, A6 (2020), for the age of the universe, 13.8 billion years. https://arxiv.org/abs/1807.06209
+- D. J. Griffiths and D. F. Schroeter, *Introduction to Quantum Mechanics*, 3rd ed. (Cambridge, 2018), sec. 4.2, for the hydrogen wavefunctions.
 - A. Amruth et al., *Einstein rings modulated by wavelike dark matter from anomalies in gravitationally lensed images*, Nature Astronomy (2023). https://arxiv.org/abs/2304.09895
 
 ## Licence

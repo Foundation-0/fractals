@@ -72,3 +72,16 @@ Claims made during the exploration that did not survive it, kept so the record s
 11. **Not consulted.** Schlosshauer's 2007 book and Joos and Zeh's 1985 paper were not available. The comparisons
     use Schlosshauer's own open copies of his book's timescale table (2014, 2019) and four copies of the 1985
     table by Joos and by Kiefer. Anything in the book that is not in those copies is unchecked.
+
+## 16 October 2026: the gravitational atom (issue #4)
+
+12. **Atoms as little solar systems.** Claimed (README, and issue #4): "Atoms are not little solar systems ... Except
+    in one case, where they are", the one place where that picture "becomes literally true". Too strong. In the
+    gravitational atom the light particles form a wave cloud with hydrogen's shapes and levels; nothing in it moves
+    on an orbit. What carries over from a solar system is the force, gravity, and for a heavy hole the size: in
+    Baumann, Chia and Porto's 2019 example the 211 cloud is most likely found 1.4 AU out. The README now says
+    gravity builds a real atom.
+13. **"The same energy levels as a hydrogen atom."** Means the same pattern, falling as 1/n², not the same
+    energies. In the same example the levels are 2×10¹⁹ times closer together than hydrogen's, and the pattern
+    holds only to leading order in α: there the first correction to the 211 level is −11%, against about 10⁻⁵ in
+    hydrogen.
