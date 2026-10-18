@@ -135,3 +135,15 @@ Claims made during the exploration that did not survive it, kept so the record s
     2.79 µm diameter they used, slip-corrected Stokes drag gives 175 µs at 2.75 kPa against their 147.3 µs;
     `tests/quantum-paths.mjs` records that as a disagreement. (The first draft on #25 used the nominal 3 µm,
     which hid the gap, and called the trapped path smooth, then rough, then smooth; review there caught both.)
+
+## 18 October 2026: cosmic homogeneity (issue #17)
+
+19. **"Beyond about 80 to 300 million parsecs (h⁻¹ Mpc, 80 to 300)."** Two errors, and a missing caveat. The 80
+    to 300 h⁻¹ Mpc in Scrimgeour et al. (2012) is the range over which they rule out a fractal with D₂ below
+    2.97, and 300 is the largest scale their survey reached. Their homogeneity scale is 70 to 81 h⁻¹ Mpc: 71 ± 8,
+    70 ± 5, 81 ± 5 and 75 ± 4 at z ≈ 0.2, 0.4, 0.6 and 0.8. And h⁻¹ Mpc is not Mpc: with h = 0.674, 70 to
+    81 h⁻¹ Mpc is 104 to 120 Mpc. The caveat: the scale is a convention, not a fixed length. It depends on the
+    tracer, the epoch and the threshold; a 0.1% threshold instead of 1% puts it at 185 h⁻¹ Mpc for matter today.
+    See [cosmic-homogeneity](cosmic-homogeneity/).
+20. **"The nesting stops, the way a coastline's roughness stops at the size of molecules."** Points the wrong
+    way. A coastline is rough down to a smallest scale; galaxy clustering is clumpy up to a largest one.
