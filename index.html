@@ -426,7 +426,7 @@ function renderDetail({ o, env, r, dx }) {
   const parts = r.parts.slice().sort((a, b) => b.rate - a.rate);
   const maxShare = parts.length ? parts[0].rate / total : 1;
   const whoRows = parts.map(p => { const sh = p.rate / total; const w = Math.max(0.6, (sh / maxShare) * 100);
-    return `<div class="who-row"><span>${p.label}</span><span class="who-bar"><i style="width:${w}%"></i></span><span class="num">${sh >= 0.001 ? (sh * 100).toPrecision(2).replace(/\.0+$/, "") + "%" : "<0.1%"}</span></div>`; }).join("");
+    return `<div class="who-row"><span>${p.label}</span><span class="who-bar"><i style="width:${w}%"></i></span><span class="num">${sh >= 0.995 ? "100%" : sh >= 0.001 ? (sh * 100).toPrecision(2).replace(/\.0+$/, "") + "%" : "<0.1%"}</span></div>`; }).join("");
   const lw = r.W > 0 ? Math.log10(r.W) : null;
   let explain;
   if (r.W === 0) explain = o.dark ? "No light bounces off it and it doesn't collide with gas. Only gravity touches it, and with the black hole off, nothing in this model records where it is. Its wave can spread as long as it likes." : "Nothing in these surroundings interacts with it.";
