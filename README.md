@@ -167,6 +167,15 @@ core is taken at the size found in one simulation. The breathing period is Veltm
 first-principles estimate (the gap between the core's two lowest energy levels in its own frozen gravity) gives a
 frequency 36% higher.
 
+## Does a black hole shape wave dark matter?
+
+A spinning black hole can grow a cloud of very light particles with hydrogen-like levels (superradiance). For wave
+dark matter at 10⁻²² eV around a galaxy's central black hole of 10⁸ to 10⁹ Suns, it cannot in practice: the cloud
+would take 10¹⁶ to 10²⁴ times the age of the universe to grow, and out where it would sit the galaxy, not the black
+hole, holds the particles. The black hole can still squeeze the galaxy's dense dark matter core by plain gravity,
+but only within about 100 pc of the centre, too far in for the lensed images to feel. Details, the lens systems
+with anomaly and black hole data, and a reshaped test: [notes/bh-lensing.md](notes/bh-lensing.md) (issue #1).
+
 ## Run it
 
 Needs Node 18 or later, nothing else.
@@ -175,10 +184,12 @@ Needs Node 18 or later, nothing else.
 npm test                                 # checks the model against published numbers
 node witness-map/table.mjs               # every object at a 250 nm gap, then the crowd
 node witness-map/table.mjs 1e-6 cryo     # 1 µm gap, everything in a 4 K vacuum
+node notes/bh-lensing.mjs                # every number in the black hole note
 ```
 
-`witness-map/model.js` is the whole model. It loads in Node (`require`) and in a browser (`window.WM`).
-`npm test` also checks `gravitational-atom/atom.js` (second study, below).
+`witness-map/model.js` is the whole model, including `gravAtom` for the black hole note. It loads in Node
+(`require`) and in a browser (`window.WM`). `npm test` also checks `gravitational-atom/atom.js` (second study,
+below).
 
 ## Checks
 
@@ -205,6 +216,10 @@ node witness-map/table.mjs 1e-6 cryo     # 1 µm gap, everything in a 4 K vacuum
 | Core mass inside the core radius (same paper, eq. 3) | 5.5×10⁹ Suns | 5.4×10⁹ |
 | Core wave period at 0.1 Suns per pc³ (Schive et al. 2020) | ~120 million years | 121 million |
 | Core breathing frequency (Veltmaat et al. 2018, eq. 16) | 0.16 per (Gρ_c)^(-1/2) | 0.22 (frozen-gravity estimate) |
+| Coupling α, 3 M☉ black hole and 10⁻¹² eV particle (Baumann, Chia and Porto 2019, eq. 2.6) | 0.02 | 0.022 |
+| Cloud growth time at their smallest growing α, 0.005 (eq. 2.14) | the age of the universe | 1.2×10¹⁰ years |
+| Largest α that grows at spin 0.8 (same paper) | 0.25 | 0.252 |
+| Heaviest particle M87*'s spin can grow (Davoudiasl and Denton 2019) | 4.6×10⁻²¹ eV | 4.7×10⁻²¹ eV |
 
 The published tables give powers of ten only, so agreement within a few times is as close as the comparison
 can go. The tolerance is ×5: half a power of ten for rounding, and a little more for inputs the tables do not
@@ -314,6 +329,7 @@ Mistakes found along the way are in [CORRECTIONS.md](CORRECTIONS.md). Open quest
 - A. Prša et al., *Nominal values for selected solar and planetary quantities: IAU 2015 Resolution B3*, Astron. J. 152, 41 (2016). https://arxiv.org/abs/1605.09788
 - Planck Collaboration, *Planck 2018 results. VI. Cosmological parameters*, Astron. Astrophys. 641, A6 (2020), for the age of the universe, 13.8 billion years. https://arxiv.org/abs/1807.06209
 - D. J. Griffiths and D. F. Schroeter, *Introduction to Quantum Mechanics*, 3rd ed. (Cambridge, 2018), sec. 4.2, for the hydrogen wavefunctions.
+- H. Davoudiasl and P. B. Denton, *Ultralight boson dark matter and Event Horizon Telescope observations of M87\**, Phys. Rev. Lett. 123, 021102 (2019). https://arxiv.org/abs/1904.09242
 - A. Amruth et al., *Einstein rings modulated by wavelike dark matter from anomalies in gravitationally lensed images*, Nature Astronomy (2023). https://arxiv.org/abs/2304.09895
 
 The crowd wave:

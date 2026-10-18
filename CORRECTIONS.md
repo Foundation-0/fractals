@@ -95,3 +95,12 @@ Claims made during the exploration that did not survive it, kept so the record s
     through gravity. The wave survives because recording a classical wave does not erase it, not because nothing
     watches it. What the per-particle result does say is that nothing knocks single particles out of the wave.
     See "The crowd wave" in the README.
+
+## 16 October 2026: black hole and wave dark matter lensing (issue #1)
+
+15. **Superradiance as a second route.** Issue #1 said a spinning black hole amplifying very light particles into a
+    cloud was not ruled out as a way for a galaxy's central black hole to shape wave dark matter where lensing looks.
+    For a 10⁻²² eV particle and a 10⁸ to 10⁹ M☉ black hole it is ruled out: the cloud would take 10²⁶ to 10³⁴ years
+    to grow, and at its radius the galaxy, not the black hole, holds the particles. Any cloud these black holes can
+    grow within the age of the universe, at any particle mass, peaks within about 0.1 pc. See
+    [notes/bh-lensing.md](notes/bh-lensing.md).
