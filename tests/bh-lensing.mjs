@@ -41,24 +41,27 @@ check('Any cloud that grows within the age of the universe around 1e8 to 1e9 Msu
   `largest clouds ${biggest.map(r => (r / PC).toPrecision(2)).join(' and ')} pc`, 'model');
 
 // 2. The same algebra lives in gravitational-atom/atom.js (the second study's page). The two copies use slightly
-//    different constants (G M_sun 1.3275e20 here, 1.3271e20 there), so they agree to a few parts in 10^4 in alpha
-//    and to about 1% in the rate, which goes as alpha^9. A change to one copy that is not made in the other fails here.
+//    different constants (G M_sun 1.3275e20 here, 1.3271e20 there), so alpha and the cloud size differ by 2.5 parts
+//    in 10^4. The rate and the growth edge are compared at this file's alpha and r_g, which removes that difference:
+//    there the two copies must agree to rounding. A change to one copy that is not made in the other fails here.
 const GA = require('../gravitational-atom/atom.js');
 const pts = [[3, 1e-12, 0.99], [10, 1e-12, 0.7], [5e6, 1e-17, 0.99], [1e8, 1e-19, 0.9]];
 const pairs = pts.map(([m, mu, a]) => ({ m, mu, a, here: gravAtom(m * C.Msun, mu, a), there: GA.grav(m, mu, a) }));
-const relA = Math.max(...pairs.map(p => Math.abs(p.here.alpha / p.there.alpha - 1)));
-check('alpha agrees with gravitational-atom/atom.js', relA < 1e-3, `largest difference ${fmt(relA)} over ${pts.length} black holes`, 'cross-check');
-const relR = Math.max(...pairs.map(p => {
-  const there = GA.growthRate(2, 1, 1, p.there.alpha, p.a) * C.c / p.there.rg;
-  return Math.abs(1 / p.here.tGrow / there - 1);
-}));
-check('211 growth rate agrees with gravitational-atom/atom.js', pairs.every(p => p.here.superradiant) && relR < 0.01,
+const worst = f => Math.max(...pairs.map(f));
+const relA = worst(p => Math.abs(p.here.alpha / p.there.alpha - 1));
+check('alpha agrees with gravitational-atom/atom.js', relA < 5e-4, `largest difference ${fmt(relA)} over ${pts.length} black holes (the G M_sun gap is 2.5e-4)`, 'cross-check');
+const relB = worst(p => Math.max(Math.abs(p.here.rBohr / p.there.a0 - 1), Math.abs(p.here.rCloud / (4 * p.there.a0) - 1),
+  Math.abs(p.here.vBohr / (p.there.alpha * C.c / 2) - 1)));
+check('Bohr radius, cloud peak (4 a0) and Bohr speed agree with gravitational-atom/atom.js', relB < 5e-4,
+  `largest difference ${fmt(relB)} over the same black holes`, 'cross-check; tests/gravitational-atom.mjs checks the peak is at n^2 a0');
+const relR = worst(p => Math.abs(1 / p.here.tGrow / (GA.growthRate(2, 1, 1, p.here.alpha, p.a) * C.c / p.here.rg) - 1));
+check('211 growth rate agrees with gravitational-atom/atom.js at the same alpha', pairs.every(p => p.here.superradiant) && relR < 1e-9,
   `largest difference ${fmt(relR)} over the same black holes, all growing`, 'cross-check');
 const relT = Math.max(...[0.5, 0.8, 0.99].map(a => {
   const here = edge(x => gravAtom(M3, muFor(x, M3), a).superradiant, 0.01, 0.6);
   return Math.abs(here / GA.alphaMax(2, 1, a) - 1);
 }));
-check('Largest alpha that grows agrees with gravitational-atom/atom.js', relT < 1e-3, `largest difference ${fmt(relT)} at spins 0.5, 0.8 and 0.99`, 'cross-check');
+check('Largest alpha that grows agrees with gravitational-atom/atom.js', relT < 1e-9, `largest difference ${fmt(relT)} at spins 0.5, 0.8 and 0.99`, 'cross-check');
 
 console.log(fails ? `\n${fails} check(s) failed` : '\nall checks pass');
 process.exit(fails ? 1 : 0);
