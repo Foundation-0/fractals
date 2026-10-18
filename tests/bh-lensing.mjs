@@ -41,24 +41,49 @@ check('Any cloud that grows within the age of the universe around 1e8 to 1e9 Msu
   `largest clouds ${biggest.map(r => (r / PC).toPrecision(2)).join(' and ')} pc`, 'model');
 
 // 2. The same algebra lives in gravitational-atom/atom.js (the second study's page). The two copies use slightly
-//    different constants (G M_sun 1.3275e20 here, 1.3271e20 there), so they agree to a few parts in 10^4 in alpha
-//    and to about 1% in the rate, which goes as alpha^9. A change to one copy that is not made in the other fails here.
+//    different constants: G M_sun differs by 0.0252%, giving <0.03% differences in alpha, radius and speed.
+//    The alpha^9 rate amplifies this to at most 0.198% for the cases below; allow 0.21%.
+//    The dimensionless threshold uses identical constants, so only floating-point roundoff is allowed.
 const GA = require('../gravitational-atom/atom.js');
 const pts = [[3, 1e-12, 0.99], [10, 1e-12, 0.7], [5e6, 1e-17, 0.99], [1e8, 1e-19, 0.9]];
 const pairs = pts.map(([m, mu, a]) => ({ m, mu, a, here: gravAtom(m * C.Msun, mu, a), there: GA.grav(m, mu, a) }));
 const relA = Math.max(...pairs.map(p => Math.abs(p.here.alpha / p.there.alpha - 1)));
-check('alpha agrees with gravitational-atom/atom.js', relA < 1e-3, `largest difference ${fmt(relA)} over ${pts.length} black holes`, 'cross-check');
+check('alpha agrees with gravitational-atom/atom.js', relA < 3e-4, `largest difference ${fmt(relA)} over ${pts.length} black holes`, 'cross-check');
+// Locate the 211 radial-probability peak using the separate wavefunction implementation.
+// This is r^2 |R_21|^2, not the spatial-density peak (which lies at 2 a0).
+const radialProbability = x => x * x * GA.radial(2, 1, x) ** 2;
+let lo = 0, hi = 12;
+for (let i = 0; i < 80; i++) {
+  const a = lo + (hi - lo) / 3, b = hi - (hi - lo) / 3;
+  if (radialProbability(a) < radialProbability(b)) lo = a; else hi = b;
+}
+const cloudPeak = (lo + hi) / 2;
+// The virial theorem gives kinetic energy = binding energy, hence v = sqrt(2 E_binding / mu).
+for (const [name, expected] of [
+  ['rBohr', p => p.there.a0],
+  ['rCloud', p => cloudPeak * p.there.a0],
+  ['vBohr', p => Math.sqrt(2 * GA.binding(p.there, 2) * GA.C.e / (p.mu * GA.C.e / GA.C.c ** 2))],
+]) {
+  const rel = Math.max(...pairs.map(p => Math.abs(p.here[name] / expected(p) - 1)));
+  check(`${name} agrees with gravitational-atom/atom.js`, rel < 3e-4,
+    `largest difference ${fmt(rel)} over the same black holes`, 'cross-check');
+}
 const relR = Math.max(...pairs.map(p => {
   const there = GA.growthRate(2, 1, 1, p.there.alpha, p.a) * C.c / p.there.rg;
   return Math.abs(1 / p.here.tGrow / there - 1);
 }));
-check('211 growth rate agrees with gravitational-atom/atom.js', pairs.every(p => p.here.superradiant) && relR < 0.01,
+check('211 growth rate agrees with gravitational-atom/atom.js', pairs.every(p => p.here.superradiant) && relR < 0.0021,
   `largest difference ${fmt(relR)} over the same black holes, all growing`, 'cross-check');
+// Match alpha and r_g to remove the rounded-GM offset and test the rate algebra itself.
+const relMatchedRate = Math.max(...pairs.map(p => Math.abs(
+  (1 / p.here.tGrow) / (GA.growthRate(2, 1, 1, p.here.alpha, p.a) * GA.C.c / p.here.rg) - 1)));
+check('211 growth rate agrees at matched alpha and r_g', relMatchedRate < 1e-12,
+  `largest difference ${fmt(relMatchedRate)} over the same black holes`, 'cross-check');
 const relT = Math.max(...[0.5, 0.8, 0.99].map(a => {
   const here = edge(x => gravAtom(M3, muFor(x, M3), a).superradiant, 0.01, 0.6);
   return Math.abs(here / GA.alphaMax(2, 1, a) - 1);
 }));
-check('Largest alpha that grows agrees with gravitational-atom/atom.js', relT < 1e-3, `largest difference ${fmt(relT)} at spins 0.5, 0.8 and 0.99`, 'cross-check');
+check('Largest alpha that grows agrees with gravitational-atom/atom.js', relT < 1e-12, `largest difference ${fmt(relT)} at spins 0.5, 0.8 and 0.99`, 'cross-check');
 
 console.log(fails ? `\n${fails} check(s) failed` : '\nall checks pass');
 process.exit(fails ? 1 : 0);
