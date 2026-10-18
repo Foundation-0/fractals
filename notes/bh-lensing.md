@@ -209,9 +209,10 @@ is inside the superradiant window, and its growth time. `npm test` checks it aga
 Two more checks guard this note's main claims: the 10⁻²² eV clouds above take over 10¹⁵ ages of the universe to
 grow, and no cloud that grows within that time around 10⁸ to 10⁹ M☉ peaks beyond 1 pc.
 
-Four more check that `gravAtom` agrees with `gravitational-atom/atom.js`, the second study's fuller version of the
-same algebra: α and the cloud size to the 2.5×10⁻⁴ by which their constants differ, and the growth rate and the
-largest α that grows to rounding (`tests/bh-lensing.mjs`).
+Seven more check that `gravAtom` agrees with `gravitational-atom/atom.js`, the second study's fuller version of
+the same algebra (`tests/bh-lensing.mjs`). α, the Bohr radius, the cloud's peak and the Bohr speed agree to the
+2.5×10⁻⁴ by which their constants differ. The growth rate agrees to 0.2%, and to rounding when both are given the
+same α and r_g. The largest α that grows agrees to rounding.
 
 What it leaves out: the cloud's own gravity and the surrounding dark matter, levels other than |211⟩, and any
 self-interaction of the particle. It assumes the black hole dominates out to the cloud, which section 1 shows fails
