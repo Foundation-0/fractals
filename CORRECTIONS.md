@@ -104,3 +104,17 @@ Claims made during the exploration that did not survive it, kept so the record s
     to grow, and at its radius the galaxy, not the black hole, holds the particles. Any cloud these black holes can
     grow within the age of the universe, at any particle mass, peaks within about 0.1 pc. See
     [notes/bh-lensing.md](notes/bh-lensing.md).
+
+## 18 October 2026: quantum paths (issue #16)
+
+16. **"A free quantum particle's path has fractal dimension 2."** Too broad. Abbott and Wise's dimension 2
+    belongs to the path recorded by repeated position measurements, and only at resolutions finer than ħ/p, the
+    de Broglie wavelength over 2π. Coarser, it has dimension 1, and in a single-particle model the speed limit
+    makes it 1 again below ħ/mc. The records also make the roughness: each kicks the momentum, the kicks add up,
+    and over N records the rough stretch widens to roughly √N ħ/p, so a long record is not one fixed fractal.
+    See [quantum-paths](quantum-paths/).
+17. **"The same roughness as a pollen grain jostled by molecules."** Two slips. Brown watched particles about a
+    micron across released from inside pollen grains, which are about 100 µm long, not the grains themselves
+    (Pearle et al. 2010). And a Brownian path has dimension 2 only above its ballistic length, about 20 nm from
+    Li et al.'s (2010) numbers for a 3 µm bead in air; below it the path is straight. The dimension matches, but
+    the quantum path is rough at small scales and the Brownian one at large scales.
