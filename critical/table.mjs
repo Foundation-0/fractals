@@ -1,51 +1,18 @@
 // Prints the Monte Carlo numbers quoted in critical/README.md (issue #20) and the exact values beside them. Usage: node
-// critical/table.mjs (about 20 s). The runs are the same fixed-seed runs that tests/critical.mjs makes, so the numbers
-// match; not every number printed here is checked (critical/README.md says which are).
-// node critical/table.mjs scatter: repeats the percolation runs with eight other seeds (about 45 s) and prints how
-// much the estimates scatter, which sets the percolation tolerances in tests/critical.mjs, and how the slope of the
-// spanning cluster's mass changes with L.
-// No script prints the numbers critical/README.md takes from the one-off repeat with 120 other sets of seeds or from
-// published formulas; the README names them.
+// critical/table.mjs (about 65 s). The runs are the same fixed-seed runs that tests/critical.mjs makes, so the numbers
+// match; not every number printed here is checked (critical/README.md says which are). Percolation runs with nine
+// seeds, and its checks use their mean: printed here with each seed's values, the standard error of the mean, the
+// slopes of the spanning cluster's mass between successive sizes, and how much leaving out L = 32 raises its fit.
+// (node critical/table.mjs scatter, which used to print eight of those seeds on their own, now prints the same.)
+// No script prints the numbers critical/README.md takes from the one-off repeat with 120 other sets of seeds, or the
+// finite-size shifts it works out from published formulas other than the open-edge shifts printed below; the README
+// names them.
 import { createRequire } from 'node:module';
 const CR = createRequire(import.meta.url)('./model.js');
 const { TC, KC, EXP, PERC } = CR;
 const start = Date.now();
 const pm = (j, d) => `${j.value.toFixed(d)} ± ${j.err.toFixed(d)}`;
 const col = (s, w) => String(s).padStart(w);
-
-if (process.argv[2] === 'scatter') {
-  const rows = [], seeds = [];
-  console.log('Percolation repeated with eight other seeds (5010, 5020, ..., 5080)\n');
-  console.log(col('seed', 6) + col('p_c, L = 32/128', 22) + col('p_c, L = 64/256', 22) + col('D, L = 64-256', 20) + col('p(R = 1/2), L = 256', 22) +
-    col('D, L = 32-256', 20));
-  for (let k = 1; k <= 8; k++) {
-    const p = CR.studyPercolation(5000 + 10 * k), last = p.half.length - 1;
-    rows.push([p.wide[0].p, p.wide[1].p, p.D, p.half[last], p.Dall]);
-    seeds.push(p);
-    console.log(col(5000 + 10 * k, 6) + rows[k - 1].map((j, i) => (i === 2 || i === 4 ? col(pm(j, 4), 20) : col(pm(j, 5), 22))).join(''));
-  }
-  const names = ['p_c from L = 32/128', 'p_c from L = 64/256', 'D over L = 64-256', 'p(R = 1/2) at L = 256', 'D over L = 32-256'];
-  const exact = [PERC.pc, PERC.pc, PERC.D, PERC.pc, PERC.D];
-  // Mean of the eight seeds' values, and their scatter (standard deviation).
-  const meanSd = v => { const m = v.reduce((a, x) => a + x, 0) / v.length;
-    return { m, sd: Math.sqrt(v.reduce((a, x) => a + (x - m) * (x - m), 0) / (v.length - 1)) }; };
-  console.log('');
-  names.forEach((name, i) => {
-    const v = rows.map(r => r[i].value), { m, sd } = meanSd(v);
-    const jk = rows.reduce((a, r) => a + r[i].err, 0) / rows.length;
-    console.log(`  ${name}: mean ${m.toFixed(5)}, exact ${exact[i].toFixed(5)}, mean - exact ${(m - exact[i]).toFixed(5)} ` +
-      `(± ${(sd / Math.sqrt(v.length)).toFixed(5)}); scatter ${sd.toFixed(5)}, mean jackknife error ${jk.toFixed(5)}`);
-  });
-  // How the slope of ln(mass) against ln L changes with L: slopes between successive sizes, and how much leaving out
-  // L = 32 raises the fitted slope, seed by seed (mean ± standard error over the eight seeds).
-  const Ls = seeds[0].Ls, pmse = v => { const { m, sd } = meanSd(v); return `${m.toFixed(3)} ± ${(sd / Math.sqrt(v.length)).toFixed(3)}`; };
-  const local = Ls.slice(1).map((L, i) => pmse(seeds.map(p => Math.log(p.span[i + 1].value / p.span[i].value) / Math.log(L / Ls[i]))));
-  console.log(`\n  spanning-cluster mass, slopes between successive sizes: ` + local.map((s, i) => `L = ${Ls[i]}-${Ls[i + 1]}: ${s}`).join(', '));
-  const rise = seeds.map(p => p.D.value - p.Dall.value);
-  console.log(`  D over L = 64-256 less D over L = 32-256: ${pmse(rise)}, positive for ${rise.filter(x => x > 0).length} of ${rise.length} seeds`);
-  console.log(`\nruntime ${((Date.now() - start) / 1000).toFixed(1)} s on Node ${process.versions.node}`);
-  process.exit(0);
-}
 
 console.log('Critical point study (issue #20). J = k_B = 1: temperatures in J/k_B, lengths in lattice spacings.\n');
 console.log('Exact values (infinite lattice)');
@@ -55,7 +22,9 @@ console.log(`  Ising exponents: beta = ${EXP.beta}, nu = ${EXP.nu}, eta = ${EXP.
 console.log(`  correlation length above T_c 1/(ln coth K - 2K); near T_c 1/(4(K_c - K)) = ${(1 / (4 * KC)).toFixed(4)}/t, t = (K_c - K)/K_c; ` +
   `below T_c 1/(4(K - K*)), K* the dual coupling`);
 console.log(`  Binder cumulant at T_c on a periodic square, L -> infinity: 1 - 1.1679229/3 = ${(1 - 1.1679229 / 3).toFixed(5)}`);
-console.log(`  percolation: p_c = ${PERC.pc}, D = 91/48 = ${PERC.D.toFixed(4)} (2 - 5/48)`);
+console.log(`  percolation: p_c = ${PERC.pc}, D = 91/48 = ${PERC.D.toFixed(4)} (2 - 5/48); open edges put the crossing of ` +
+  `R_L1(p) and R_L2(p) above p_c by (b0/a1)(1/L1 - 1/L2)/(L2^(3/4) - L1^(3/4)), b0 = ${PERC.b0}, a1 = ${PERC.a1}: ` +
+  `+${CR.edgeShift(32, 128).toFixed(5)} for L = 32/128, +${CR.edgeShift(64, 256).toFixed(5)} for 64/256`);
 const nu3 = 0.629971;
 console.log(`  3D Ising (liquid-vapour critical points): nu = ${nu3}, eta = 0.0362978; a tenfold approach to T_c multiplies xi by ` +
   `10^nu = ${Math.pow(10, nu3).toFixed(2)} in 3D, ${Math.pow(10, EXP.nu).toFixed(0)} in 2D`);
@@ -100,8 +69,8 @@ for (const r of CR.studyHot()) {
     col((1 / (4 * (KC - 1 / r.T))).toFixed(2), 11) + col(pm(r.e, 4), 20) + col(r.eExact.toFixed(4), 10));
 }
 
-const p = CR.studyPercolation();
-console.log('\nSite percolation, open edges, spanning top to bottom (Newman-Ziff runs; masses at p_c)');
+const pool = CR.studyPooled(), p = pool.each[0], seeds = pool.seeds;
+console.log(`\nSite percolation, open edges, spanning top to bottom (Newman-Ziff runs; masses at p_c), study seed ${seeds[0]}`);
 console.log(col('L', 5) + col('samples', 9) + col('R(p_c)', 18) + col('p where R = 1/2', 20) + col('spanning cluster', 20) + col('largest cluster', 20));
 p.Ls.forEach((L, i) => console.log(col(L, 5) + col(p.samples[i], 9) + col(pm(p.atPc[i], 3), 18) + col(pm(p.half[i], 5), 20) +
   col(pm(p.span[i], 0), 20) + col(pm(p.big[i], 0), 20)));
@@ -112,4 +81,27 @@ const share = i => p.span[i].value / (p.Ls[i] * p.Ls[i]) * 100, last = p.Ls.leng
 console.log(`  share of the sites in the spanning cluster: ${share(0).toFixed(1)}% at L = ${p.Ls[0]}, ${share(last).toFixed(1)}% at ` +
   `L = ${p.Ls[last]} (an exact L^-5/48 fall would give ${(share(0) * Math.pow(p.Ls[last] / p.Ls[0], -PERC.oneArm)).toFixed(1)}%)`);
 
+// The same runs with nine seeds (each seed's runs use it plus 0 to 3). The checks use the mean over the nine seeds,
+// with the standard error of that mean: the scatter between seeds (standard deviation) over 3.
+console.log(`\nPercolation pooled over nine seeds (${seeds[0]}, then ${seeds.slice(1, 3).join(', ')}, ..., ${seeds[seeds.length - 1]}); ` +
+  'each seed with its jackknife error, then the mean with its standard error');
+const cols = [['p_c, L = 32/128', r => r.wide[0].p, pool.wide[0].p, PERC.pc, 5, CR.edgeShift(32, 128)],
+  ['p_c, L = 64/256', r => r.wide[1].p, pool.wide[1].p, PERC.pc, 5, CR.edgeShift(64, 256)],
+  ['D, L = 64-256', r => r.D, pool.D, PERC.D, 4], ['p(R = 1/2), L = 256', r => r.half[last], pool.half, PERC.pc, 5],
+  ['D, L = 32-256', r => r.Dall, pool.Dall, PERC.D, 4]];
+console.log(col('seed', 6) + cols.map(c => col(c[0], 22)).join(''));
+pool.each.forEach((r, i) => console.log(col(seeds[i], 6) + cols.map(c => col(pm(c[1](r), c[4]), 22)).join('')));
+console.log(col('mean', 6) + cols.map(c => col(pm(c[2], c[4]), 22)).join('') + '\n');
+for (const [name, f, m, exact, d, shift] of cols) {
+  const jk = pool.each.reduce((a, r) => a + f(r).err, 0) / pool.each.length;
+  console.log(`  ${name}: mean ${pm(m, d)}, exact ${exact.toFixed(d)}, mean - exact ${(m.value - exact).toFixed(d)}` +
+    (shift ? ` (open-edge shift +${shift.toFixed(d)})` : '') + `; scatter between seeds ${m.sd.toFixed(d)}, mean jackknife error ${jk.toFixed(d)}`);
+}
+// How the slope of ln(mass) against ln L changes with L: slopes between successive sizes, and how much leaving out
+// L = 32 raises the fitted slope, seed by seed (mean ± standard error over the nine seeds).
+console.log('\n  spanning-cluster mass, slopes between successive sizes: ' + pool.local.map(x => `L = ${x.L1}-${x.L2}: ${pm(x.D, 3)}`).join(', '));
+console.log('  change from one of those slopes to the next, seed by seed: ' + pool.change.map(x =>
+  `L = ${x.L1}-${x.L2} to ${x.L2}-${x.L3}: ${pm(x.D, 3)}`).join(', '));
+console.log(`  D over L = 64-256 less D over L = 32-256: ${pm(pool.rise, 3)}, positive for ${pool.rise.v.filter(x => x > 0).length} of ` +
+  `${pool.rise.v.length} seeds`);
 console.log(`\nruntime ${((Date.now() - start) / 1000).toFixed(1)} s on Node ${process.versions.node}`);

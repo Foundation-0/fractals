@@ -1,15 +1,14 @@
 # The critical point: why a lattice repeats itself across scales, and where it stops
 
 Notes for [issue #20](https://github.com/Foundation-0/fractals/issues/20). Exploration, not peer reviewed, no new
-result claimed. `node critical/table.mjs` prints this seed's Monte Carlo numbers below;
-`node critical/table.mjs scatter` (about 45 s) prints those of eight other percolation seeds. No script prints
-three kinds of number: the results of a one-off repeat of the checks with 120 other sets of seeds, described under
-[What it reproduces](#what-it-reproduces); the finite-size shifts worked out from published formulas (the +0.0012
-bias of γ/ν and the +0.0004 and +0.0001 shifts of the percolation crossings); and the 11% uncertainty of an error
+result claimed. `node critical/table.mjs` (about 65 s) prints the Monte Carlo numbers below, the percolation ones
+for each of nine seeds and as their mean. No script prints three kinds of number: the results of a one-off repeat
+of the checks with 120 other sets of seeds, described under [What it reproduces](#what-it-reproduces); γ/ν's
+finite-size bias of +0.0012, worked out from a published formula; and the 11% and 25% uncertainties of an error
 bar. `npm test` (`tests/critical.mjs`) checks the numbers compared with an exact value: the table under "What it
 reproduces", the ξ table, the measurement-trap cumulants and the same numbers in the short answer. The rest are
-printed but not checked: the slopes over other ranges of L, the cluster shares, the size ratios and the seed
-scatter. Exact values are quoted from the sources named beside them. Started 18 October 2026.
+printed but not checked: the slopes over other ranges of L, the cluster shares, the size ratios and each
+percolation seed's results. Exact values are quoted from the sources named beside them. Started 18 October 2026.
 
 The other studies find self-similarity over a range of scales and ask where it stops. This one asks why it appears
 at all, in the one case where the exact answers are known and both ends of the range can be moved at will.
@@ -24,11 +23,11 @@ at all, in the one case where the exact answers are known and both ends of the r
 - **A small model lands on or near the exact numbers.** A 2D Ising lattice with seeded random numbers places T_c at
   2.2704 ± 0.0017 J/k_B, where the Binder cumulants of two sizes cross, against Onsager's 2/ln(1 + √2) = 2.2692. It
   reproduces Yang's spontaneous magnetisation within 0.21%, and gives β/ν = 0.1245 ± 0.0026, γ/ν = 1.751 ± 0.004
-  and η = 0.250 ± 0.005, against 1/8, 7/4 and 1/4. Site percolation on a square lattice gives
-  p_c = 0.5940 ± 0.0004, against 0.592746 (Newman and Ziff 2000): this seed sits about 2 standard deviations high
-  once the 0.0006 scatter between seeds is counted, and eight other seeds average 0.59278. Its spanning cluster has
-  fractal dimension 1.881 ± 0.008, 0.8% below 91/48 = 1.896: a finite-size shortfall, as the effective exponent
-  rises with L over these sizes. Both are explained [below](#what-it-reproduces).
+  and η = 0.250 ± 0.005, against 1/8, 7/4 and 1/4. Site percolation on a square lattice, averaged over nine
+  seeds, gives p_c = 0.59292 ± 0.00023 where the spanning probabilities of L = 64 and 256 cross, against 0.592746
+  (Newman and Ziff 2000): 0.00017 high, of which open edges account for 0.00012 (Ziff and Newman 2002). Its
+  spanning cluster has fractal dimension 1.880 ± 0.002, 0.8% below 91/48 = 1.896: a finite-size shortfall, as the
+  effective exponent rises with L over these sizes. Both are explained [below](#what-it-reproduces).
 - **The nesting stops where the exact solution says.** Below, at the lattice spacing. Above, at ξ: the measured
   correlation length falls from 9.9 ± 0.2 lattice spacings 6% above T_c to 1.11 ± 0.02 at 76% above, within 3% of
   the exact values, 10.2 and 1.10. At T_c the size of the box is the only upper limit: in boxes from 8 to 128
@@ -84,11 +83,13 @@ Werner 2001). The square lattice is expected to share it, by universality.
   with the ratio of the two Boltzmann weights, exp(−(1/T − 1/T_run)E), E the energy of the lattice.
 - **Percolation.** An L × L lattice with open edges. Newman and Ziff's algorithm (2000): occupy sites one at a time
   in random order, join each to its occupied neighbours with union-find, and note when a cluster first touches both
-  the top and the bottom row. Averages at any p follow by weighting each number of occupied sites binomially.
+  the top and the bottom row. Averages at any p follow by weighting each number of occupied sites binomially. The
+  runs are made with nine independent seeds, and the checks use their mean.
 - **Random numbers.** `xoshiro128**`, seeded, integer arithmetic only. The same seed gives the same numbers on
   every engine; the checks print identical values on Node 18 and 22, so they cannot flake.
 - **Error bars.** One standard deviation, from a jackknife over 40 blocks of each run. Error bars of this kind are
-  themselves uncertain by about 1/√(2 × 39) = 11%.
+  themselves uncertain by about 1/√(2 × 39) = 11%. For a mean over the nine percolation seeds the error bar is the
+  standard error of the mean, the scatter between seeds over 3, uncertain by about 1/√(2 × 8) = 25%.
 - **A trap in measuring cluster runs.** Measuring each time the flipped clusters add up to L² spins, instead of
   after a fixed number of flips, over-weights ordered states: it stops more often just after a large cluster has
   flipped, when the lattice holds a large aligned domain. At T_c and L = 16 the Binder cumulant comes out
@@ -108,47 +109,65 @@ Werner 2001). The square lattice is expected to share it, by universality.
 | 1/ν from the slope of U at T_c, ∝ L^(1/ν), same runs | 1 | 1.021 ± 0.032 |
 | ξ at T = 2.4, 2.5, 2.75, 3, 4 (closed form below) | 10.23, 5.96, 3.06, 2.14, 1.10 | 9.93 ± 0.21, 5.90 ± 0.10, 3.05 ± 0.06, 2.17 ± 0.04, 1.11 ± 0.02 |
 | Energy per spin at the same five temperatures (Onsager 1944) | −1.2040 to −0.5573 | all within 1.4 standard deviations |
-| p_c from crossings of the spanning probabilities, L = 32 and 128; 64 and 256 (Newman and Ziff 2000) | 0.59275 | 0.59394 ± 0.00054; 0.59404 ± 0.00040 |
-| Fractal dimension of the spanning cluster at p_c, mass ∝ L^D, L = 64 to 256 | 91/48 = 1.8958 | 1.8806 ± 0.0077 |
+| p_c from crossings of the spanning probabilities, L = 32 and 128; 64 and 256, mean of nine seeds (Newman and Ziff 2000) | 0.59275 | 0.59335 ± 0.00024; 0.59292 ± 0.00023 |
+| Fractal dimension of the spanning cluster at p_c, mass ∝ L^D, L = 64 to 256, mean of nine seeds | 91/48 = 1.8958 | 1.8798 ± 0.0020 |
 
 The exponents come from least-squares slopes of logarithms over L = 8, 16, 32, 64 and 128. They are the 2D Ising
 values of Pelissetto and Vicari (2002, sec. 3.5). The Binder cumulant at T_c tends to 1 − V₄/3 with
 V₄ = 1.1679229(47) on a periodic square (Salas and Sokal 2000).
 
-Each tolerance is 3 to 5 standard deviations of the noisiest estimate it covers, plus any known finite-size shift.
-For D, and for the Binder cumulant at L = 16, the two sides are bounded separately, so the shift widens one side
-only. Every other check, the p_c crossing of L = 32 and 128 among them, has one tolerance for both sides. Runs at
-several temperatures share one tolerance, so the quieter runs are held to it more loosely: ⟨|m|⟩ at T = 2.0 and 2.1
-to 17 and 10 standard deviations, the energy at T = 2.0, 2.1, 2.4 and 2.5 to between 5 and 8. For the Ising runs
-the standard deviation is the jackknife error. Over the 120-seed repeat below it matches the scatter between seeds
-within about 10% on average, but this seed's errors from the runs reweighted to T_c (L = 8 to 128) come out 6% to
-17% below that scatter, so the checks quote both. For percolation the standard deviation is the scatter over eight
-other seeds. `tests/critical.mjs` prints how far inside its tolerance each result falls.
+Each tolerance is a fixed number, 3 to 5 standard deviations of the noisiest estimate it covers, plus any
+finite-size shift: worked out from published results, except for D, whose shortfall is measured from these runs.
+For D, for the two p_c crossings and for the Binder cumulant at L = 16, the two sides are bounded separately, so
+the shift widens one side only. Every other check has one tolerance for both sides. Runs at several temperatures
+share one tolerance, so the quieter runs are held to it more loosely: ⟨|m|⟩ at T = 2.0 and 2.1 to 17 and 10
+standard deviations, the energy at T = 2.0, 2.1, 2.4 and 2.5 to between 5 and 8. For the Ising runs the standard
+deviation is the jackknife error. Over the 120-seed repeat below it matches the scatter between seeds within about
+10% on average, but this seed's errors from the runs reweighted to T_c (L = 8 to 128) come out 6% to 17% below that
+scatter, so the checks quote both. For percolation it is the standard error of the nine-seed mean. It comes out 9%
+above the repeat's scatter of a nine-seed mean (its scatter between seeds over 3) for the crossing of L = 32 and
+128, 44% above for 64 and 256 and 20% below for D, so those checks quote both too. `tests/critical.mjs` prints how
+far inside its tolerance each result falls.
 
-Counting standard deviations of the scatter between seeds, beyond any known shift, the tightest checks are three.
-γ/ν comes to 3.0 after a finite-size bias of +0.0012: over these sizes the slope of the susceptibility on a
-periodic square exceeds 7/4 by that much (Caselle, Hasenbusch, Pelissetto and Vicari 2002, sec. 7.2, exact up to
-L = 17 and from their expansion beyond). The p_c crossing of L = 32 and 128 comes to 3.2 after its +0.0005 shift,
-and the T_c crossing of L = 64 and 128 to 3.5. In a one-off repeat at these tolerances with 120 other sets of seeds
-(each study seed plus 10000k, k = 1 to 120; not one of the repository's scripts), 119 passed every check and the
-other missed the crossing of L = 64 and 128 by 0.0003. The closed forms are checked too: the energy against the
+Counting standard deviations of the scatter between seeds, beyond any shift, the tightest checks are three. γ/ν
+comes to 3.0 after a finite-size bias of +0.0012: over these sizes the slope of the susceptibility on a periodic
+square exceeds 7/4 by that much (Caselle, Hasenbusch, Pelissetto and Vicari 2002, sec. 7.2, exact up to L = 17 and
+from their expansion beyond). The percolation dimension D comes to 3.1 on each side, beyond its measured shortfall
+on the low side (below), against the repeat's scatter of a nine-seed mean, 0.0026. The T_c crossing of L = 64 and
+128 comes to 3.5. In a one-off repeat at these tolerances with 120 other sets of seeds (each study seed plus
+10000k, k = 1 to 120; not one of the repository's scripts), 119 passed every Ising check and the other missed the
+crossing of L = 64 and 128 by 0.0003. The repeat predates the pooled percolation checks, but it saved each seed's
+percolation crossings and D. Split into 13 sets of nine seeds, all 13 pass the pooled checks; of 200,000 sets of
+nine drawn at random from the 120 seeds, 3 fail, all on D. The closed forms are checked too: the energy against the
 derivative of the published free energy (Caselle et al. 2002), to 10⁻⁷; Yang's formula against the same paper's
-form, to rounding.
+form, to rounding; the open-edge shift of a crossing, below, against the coefficient Ziff and Newman (2002) give
+for sizes L/2 and L, 1.04.
 
-Two results sit further from the exact value than the others, and neither is a disagreement:
+The two percolation results need a word each, and neither is a disagreement:
 
-- The percolation crossings for this seed sit 2.2 and 3.3 standard deviations high. Repeated with eight other seeds
-  (`node critical/table.mjs scatter`), the crossing of L = 64 and 256 averages 0.59278, 0.00003 from p_c, with a
-  scatter of 0.0006 between seeds. The crossing of L = 32 and 128 averages 0.0005 ± 0.0003 high: on a square with
-  open edges, the point where two sizes give the same spanning probability approaches p_c as L^(−1−1/ν) = L^(−7/4),
-  with ν = 4/3 for percolation (Ziff and Newman 2002). Their expansion, with the coefficients they use (b₀ = 0.322,
-  a₁ = 0.765), predicts +0.0004 for L = 32 and 128 and +0.0001 for L = 64 and 256.
-- The spanning cluster's dimension comes out 1.881, 0.8% low. Over the eight other seeds it averages 1.880 with a
-  scatter of 0.0065, so the shortfall is systematic. Averaged over those seeds, the slope between successive sizes
-  rises from 1.862 ± 0.002 (L = 32 to 64) to 1.875 ± 0.003 (64 to 128) and 1.884 ± 0.006 (128 to 256), as
-  corrections to scaling fade. The last rise, 0.009, is about one standard error, so eight seeds do not resolve it.
-  Leaving out L = 32 raises the fitted slope by 0.006 ± 0.001, in all eight seeds. The tolerance allows for the
-  shortfall on the low side only.
+- The crossings sit above p_c, as open edges make them. On a square with open edges, the point where two sizes give
+  the same spanning probability approaches p_c as L^(−1−1/ν) = L^(−7/4), with ν = 4/3 for percolation (Ziff and
+  Newman 2002). Their expansion, with the coefficients they use (b₀ = 0.322, a₁ = 0.765), puts the crossing of
+  L = 32 and 128 0.00040 above p_c and that of L = 64 and 256 0.00012 above. Averaged over nine seeds, the
+  crossings sit 0.00060 ± 0.00024 and 0.00017 ± 0.00023 above p_c, 0.8 and 0.2 standard errors beyond those shifts.
+  The study seed alone sits 0.0012 and 0.0013 high, which one seed cannot tell from a fluctuation: single seeds
+  scatter by 0.0007. The mean of nine can. At L = 64 and 256 it rules out an offset of 0.0012 by more than 4
+  standard errors, and the check fails any mean more than 0.0010 above p_c (the shift plus 3.8 standard errors) or
+  0.0009 below (3.9). Against the repeat's scatter of a nine-seed mean, 0.00016, those bounds are 5.5 and 5.6
+  standard deviations: these nine seeds scatter more than the repeat's 120. The crossing of L = 32 and 128 is
+  checked more loosely, failing beyond +0.0013 or −0.0009 (3.8 standard errors each way, beyond its shift on the
+  high side; 4.1 of the repeat's scatter, 0.00022), because its shift is more than three times larger: an offset of
+  0.0012 would pass it. The point where the spanning probability at L = 256 is one half, printed but not checked,
+  averages 0.59277 ± 0.00013.
+- The spanning cluster's dimension comes out 1.880, 0.8% low. Single seeds scatter by 0.006 about that, so the
+  shortfall, 0.016 ± 0.002, is systematic. Averaged over the nine seeds, the slope between successive sizes rises
+  from 1.861 ± 0.002 (L = 32 to 64) to 1.876 ± 0.003 (64 to 128) and 1.884 ± 0.005 (128 to 256), as corrections to
+  scaling fade. The first rise, 0.014 ± 0.004, is clear; the second, 0.008 ± 0.008, is one standard error, so nine
+  seeds do not resolve it. Leaving out L = 32 raises the fitted slope by 0.006 ± 0.001, in all nine seeds. The
+  shortfall is measured from these runs, not predicted (the 120-seed repeat gives 0.014 ± 0.001), so the check does
+  not test it. It accepts D from 0.024 below 91/48, the shortfall plus 4.0 standard errors, to 0.008 above, 4.0
+  standard errors with no shift, and passes with 0.0079 to spare. Against the repeat's scatter of a nine-seed mean,
+  0.0026, each side is 3.1 standard deviations, which makes it one of the three tightest checks.
 
 ## Where the repetition stops
 
@@ -185,7 +204,8 @@ least seven correlation lengths, so finite-size effects are far below the error 
 
 **At T_c: the box.** With ξ infinite, the box is the only upper cutoff, which is why the power laws are measured
 against L. The percolation cluster at p_c is self-similar up to the box too, so it fills a shrinking share of it:
-38.9% of the sites at L = 32, 29.8% at L = 256 (an exact L^(−5/48) fall would give 31.3%).
+in the study seed's runs, 38.9% of the sites at L = 32, 29.8% at L = 256 (an exact L^(−5/48) fall would give
+31.3%).
 
 ## Tuned scale invariance against self-organised ranges
 
@@ -236,8 +256,8 @@ size of a molecule.
 - The correlation length is measured above T_c only, and along the lattice axes only. The exact correlation length
   depends on direction (Fujimoto and Otsuka 2020); the axis value is the one checked.
 - Wolff clusters are a computational device. Only equilibrium averages are physical, not the sequence of states.
-- Runtime is kept near 20 s for each of `npm test`'s critical checks and `critical/table.mjs`, which limits the
-  statistics: errors of 0.2% to 3% on the Ising exponents and ξ.
+- Runtime is kept near 65 s for each of `npm test`'s critical checks and `critical/table.mjs`, most of it the nine
+  percolation seeds, which limits the statistics: errors of 0.2% to 3% on the Ising exponents and ξ.
 
 ## Sources
 

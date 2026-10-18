@@ -29,6 +29,9 @@
  *   at p_c the chance that a site connects to distance R falls as R^(-5/48) (proved on the triangular lattice by
  *   Lawler, Schramm & Werner 2002; it follows, through scaling relations, from exponents predicted by den Nijs 1979
  *   and Nienhuis, Riedel & Schick 1980).
+ *   Open edges: R_L(p) = 1/2 + a1 (p - p_c) L^(1/nu) + b0 / L + ..., nu = 4/3 (Ziff & Newman 2002, sec. I), with
+ *   b0 = 0.322 and a1 = 0.765 (their sec. IV). As in their sec. II, the p where R_L1 and R_L2 cross then sits above
+ *   p_c by (b0/a1)(1/L1 - 1/L2) / (L2^(3/4) - L1^(3/4)): +0.00040 for L = 32 and 128, +0.00012 for 64 and 256.
  * Random numbers: xoshiro128** seeded through splitmix32, integer arithmetic only, so a seed gives the same run on
  * every JavaScript engine.
  */
@@ -37,7 +40,7 @@
   const TC = 2 / Math.log(1 + Math.SQRT2);
   const KC = 1 / TC;
   const EXP = { beta: 1 / 8, nu: 1, eta: 1 / 4, gamma: 7 / 4 };
-  const PERC = { pc: 0.59274621, D: 91 / 48, oneArm: 5 / 48 };
+  const PERC = { pc: 0.59274621, D: 91 / 48, oneArm: 5 / 48, nu: 4 / 3, b0: 0.322, a1: 0.765 };
   const TWO32 = 4294967296;
 
   // ---------- random numbers ----------
@@ -309,6 +312,9 @@
     const tot = sums.reduce((x, y) => x + y, 0), [lo, hi] = block(perc.samples, b, perc.blocks);
     return b < 0 ? tot / perc.samples : (tot - sums[b]) / (perc.samples - (hi - lo));
   }
+  // How far above p_c open edges put the crossing of R_L1 and R_L2, to leading order (Ziff & Newman 2002; header).
+  const edgeShift = (L1, L2) => PERC.b0 / PERC.a1 * (1 / L1 - 1 / L2) /
+    (Math.pow(L2, 1 / PERC.nu) - Math.pow(L1, 1 / PERC.nu));
   // Where f (sampled on the grid ps) changes sign, by linear interpolation between grid points.
   function gridRoot(ps, f) {
     for (let j = 0; j + 1 < ps.length; j++) {
@@ -340,13 +346,15 @@
   }
 
   // ---------- the runs the study quotes: tests/critical.mjs checks them, critical/table.mjs prints them ----------
-  // Seeds are fixed; each run's seed is the listed seed plus its index.
+  // Seeds are fixed; each run's seed is the listed seed plus its index. Percolation runs once with each of nine seeds,
+  // perc.seed and the eight of perc.pool, and the checks use the nine seeds' mean (studyPooled).
   const STUDY = {
     therm: 200, blocks: 40,
     ordered: { L: 64, temps: [2.0, 2.1, 2.2], sweeps: 3000, seed: 101 },
     critical: { T: 2.27, sizes: [[8, 8000], [16, 8000], [32, 8000], [64, 6000], [128, 3000]], dT: 0.003, seed: 201 },
     hot: { runs: [[2.4, 64, 6000], [2.5, 64, 4000], [2.75, 32, 4000], [3.0, 32, 4000], [4.0, 16, 8000]], seed: 301 },
-    perc: { sizes: [[32, 4000], [64, 4000], [128, 2000], [256, 800]], seed: 401 },
+    perc: { sizes: [[32, 4000], [64, 4000], [128, 2000], [256, 800]], seed: 401,
+      pool: [5010, 5020, 5030, 5040, 5050, 5060, 5070, 5080] },
     trap: { L: 16, sweeps: 40000, seed: 77 },
   };
   // Below T_c: |m| against Yang and e against Onsager.
@@ -389,8 +397,8 @@
         e: jackknife(B, b => moments(r, T, b).e), eExact: energyExact(T) };
     });
   }
-  // Percolation: spanning probabilities, their crossings, and the masses at p_c. Another seed gives an independent
-  // repeat (critical/table.mjs scatter).
+  // Percolation with one seed (the study seed if none is given): spanning probabilities, their crossings, and the
+  // masses at p_c.
   function studyPercolation(seed) {
     const P = STUDY.perc, B = STUDY.blocks, ps = [], s0 = seed === undefined ? P.seed : seed;
     for (let p = 0.57; p <= 0.615 + 1e-9; p += 0.00025) ps.push(Math.round(p * 1e5) / 1e5);
@@ -410,6 +418,27 @@
       Dall: jackknife(B, b => logSlope(Ls, sums.map(s => masses(s, b).span))),
       Dbig: jackknife(B, b => logSlope(Ls.slice(1), sums.slice(1).map(s => masses(s, b).big))) };
   }
+  // Percolation pooled over nine independent seeds, the study seed and the eight of STUDY.perc.pool. Each estimate is
+  // the nine seeds' mean; its error is the standard error of that mean, the scatter between seeds (sd) over 3. Also:
+  // the slope of ln(mass) against ln L between successive sizes, the change from one of those slopes to the next, and
+  // how much leaving out L = 32 raises the fit.
+  function studyPooled() {
+    const P = STUDY.perc, seeds = [P.seed].concat(P.pool), each = seeds.map(s => studyPercolation(s)), Ls = each[0].Ls;
+    const pool = f => {
+      const v = each.map(f), m = avg(v), sd = Math.sqrt(v.reduce((a, x) => a + (x - m) * (x - m), 0) / (v.length - 1));
+      return { value: m, err: sd / Math.sqrt(v.length), sd, v };
+    };
+    // The slope of ln(mass) against ln L from Ls[i] to Ls[i + 1].
+    const slope = (r, i) => Math.log(r.span[i + 1].value / r.span[i].value) / Math.log(Ls[i + 1] / Ls[i]);
+    return { seeds, Ls, each,
+      wide: each[0].wide.map((c, k) => ({ L1: c.L1, L2: c.L2, p: pool(r => r.wide[k].p.value) })),
+      half: pool(r => r.half[r.half.length - 1].value), // p where R = 1/2 at the largest L
+      D: pool(r => r.D.value), Dall: pool(r => r.Dall.value),
+      local: Ls.slice(1).map((L, i) => ({ L1: Ls[i], L2: L, D: pool(r => slope(r, i)) })),
+      change: Ls.slice(2).map((L, i) => ({ L1: Ls[i], L2: Ls[i + 1], L3: L,
+        D: pool(r => slope(r, i + 1) - slope(r, i)) })),
+      rise: pool(r => r.D.value - r.Dall.value) };
+  }
 
   // The measurement trap: the Binder cumulant at T_c, L = 16, measured after a fixed number of cluster flips (as every
   // run above is), against measuring each time the flipped clusters add up to N spins (seed + 1).
@@ -426,7 +455,7 @@
 
   const api = { TC, KC, EXP, PERC, STUDY, rng, yangM, ellipticK, energyExact, dualK, xiExact, xiCaselle, ising, wolff,
     flips, energy, correlation, projected, simulate, jackknife, moments, bisect, binderCrossing, logSlope,
-    xiFromProjected, correlationLength, binomial, percolation, spanningGrid, gridValue, gridRoot, massSums, masses,
-    studyOrdered, studyCritical, studyHot, studyPercolation, studyTrap };
+    xiFromProjected, correlationLength, binomial, percolation, spanningGrid, gridValue, edgeShift, gridRoot, massSums,
+    masses, studyOrdered, studyCritical, studyHot, studyPercolation, studyPooled, studyTrap };
   if (typeof module !== 'undefined' && module.exports) module.exports = api; else root.CRIT = api;
 })(typeof window !== 'undefined' ? window : globalThis);

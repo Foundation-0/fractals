@@ -197,15 +197,14 @@ npm test                                 # checks the model against published nu
 node witness-map/table.mjs               # every object at a 250 nm gap, then the crowd
 node witness-map/table.mjs 1e-6 cryo     # 1 µm gap, everything in a 4 K vacuum
 node notes/bh-lensing.mjs                # every number in the black hole note
-node critical/table.mjs                  # the critical-point study's numbers (about 20 s)
-node critical/table.mjs scatter          # its percolation seed scatter (about 45 s)
+node critical/table.mjs                  # the critical-point study's numbers (about 65 s)
 ```
 
 `witness-map/model.js` is the whole model, including `gravAtom` for the black hole note. It loads in Node
 (`require`) and in a browser (`window.WM`). `npm test` also checks `gravitational-atom/atom.js` (second study,
-below). The third study's checks, `tests/critical.mjs`, add about 20 s of seeded Monte Carlo runs. CI runs every
-line above except the two `critical/table.mjs` lines: they repeat the tests' seeded runs, or eight more seeds, and
-print the results without checking them.
+below). The third study's checks, `tests/critical.mjs`, add about 65 s of seeded Monte Carlo runs, most of it
+percolation with nine seeds. CI runs every line above except the `critical/table.mjs` line: it repeats the tests'
+seeded runs and prints the results without checking them.
 
 ## Checks
 
@@ -324,16 +323,17 @@ Why does anything repeat across scales at all? At a critical point, such as wate
 at its Curie temperature, fluctuations of every size appear, from the size of a molecule up to a correlation length
 ξ that grows without limit as the temperature approaches T_c. A 2D Ising lattice and site percolation, run with
 seeded random numbers in `critical/model.js`, come out at or close to the exact answers: the Ising results within
-1.5 standard deviations, the two percolation results a little further out (details in
+1.5 standard deviations, the percolation threshold within one standard error once open edges are allowed for, and
+the spanning cluster's dimension 0.8% low (details in
 [critical/README.md](critical/README.md#what-it-reproduces), issue #20):
 
 - T_c from where the Binder cumulants of two lattice sizes cross: 2.2704 ± 0.0017 J/k_B, against Onsager's
   2/ln(1 + √2) = 2.2692. Yang's spontaneous magnetisation within 0.21%.
 - The exponents β/ν = 0.1245 ± 0.0026, γ/ν = 1.751 ± 0.004 and η = 0.250 ± 0.005, against 1/8, 7/4 and 1/4.
-- Percolation: p_c = 0.5940 ± 0.0004, against 0.592746 (Newman and Ziff 2000); this seed sits about 2 standard
-  deviations high once the 0.0006 scatter between seeds is counted, and eight other seeds average 0.59278. A
-  spanning cluster of fractal dimension 1.881 ± 0.008, 0.8% below 91/48 = 1.896: a finite-size shortfall, as the
-  effective exponent rises with L over these sizes.
+- Percolation, averaged over nine seeds: p_c = 0.59292 ± 0.00023, against 0.592746 (Newman and Ziff 2000), 0.00017
+  high, of which open edges account for 0.00012 (Ziff and Newman 2002). A spanning cluster of fractal dimension
+  1.880 ± 0.002, 0.8% below 91/48 = 1.896: a finite-size shortfall, as the effective exponent rises with L over
+  these sizes.
 - Where the nesting stops: at the lattice spacing below, and at ξ above. The measured ξ falls from 9.9 lattice
   spacings 6% above T_c to 1.1 at 76% above, within 3% of the exact value. At T_c the size of the box is the only
   limit.
@@ -404,6 +404,7 @@ The critical point (the full list is in [critical/README.md](critical/README.md#
 - C. N. Yang, *The spontaneous magnetization of a two-dimensional Ising model*, Phys. Rev. 85, 808 (1952). Not consulted directly; the formula is checked against Caselle et al. (2002). https://doi.org/10.1103/PhysRev.85.808
 - M. Caselle, M. Hasenbusch, A. Pelissetto and E. Vicari, *Irrelevant operators in the two-dimensional Ising model*, J. Phys. A 35, 4861 (2002). https://doi.org/10.1088/0305-4470/35/23/305 (https://arxiv.org/abs/cond-mat/0106372)
 - M. E. J. Newman and R. M. Ziff, *Efficient Monte Carlo algorithm and high-precision results for percolation*, Phys. Rev. Lett. 85, 4104 (2000). https://doi.org/10.1103/PhysRevLett.85.4104 (https://arxiv.org/abs/cond-mat/0005264)
+- R. M. Ziff and M. E. J. Newman, *Convergence of threshold estimates for two-dimensional percolation*, Phys. Rev. E 66, 016129 (2002). https://doi.org/10.1103/PhysRevE.66.016129 (https://arxiv.org/abs/cond-mat/0203496)
 - F. Kos, D. Poland, D. Simmons-Duffin and A. Vichi, *Precision islands in the Ising and O(N) models*, JHEP 08, 036 (2016). https://doi.org/10.1007/JHEP08(2016)036 (https://arxiv.org/abs/1603.04436)
 - P. J. Linstrom and W. G. Mallard (eds.), *NIST Chemistry WebBook, NIST Standard Reference Database 69* (retrieved 18 October 2026), water, phase change data: critical point 647 ± 2 K and 220.64 bar. https://doi.org/10.18434/T4D303
 - A. Alexakis and L. Biferale, *Cascades and transitions in turbulent flows*, Phys. Rep. 767–769, 1 (2018). https://doi.org/10.1016/j.physrep.2018.08.001 (https://arxiv.org/abs/1808.06186)
