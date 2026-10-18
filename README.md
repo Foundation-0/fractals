@@ -18,8 +18,11 @@ with Claude (Anthropic), for [Foundation0](https://github.com/Foundation-0/f0).
   with gravity in place of electric attraction (the "gravitational atom"). It is still a wave cloud, not
   planets on orbits. The same equation, a wave held by a pull that weakens with distance, gives the same
   solution at any scale. The nesting lives in the equations, not the objects.
-- **Quantum paths are fractal.** A free quantum particle's path has fractal dimension 2, against 1 for a
-  classical trajectory (Abbott and Wise, 1981), the same roughness as a pollen grain jostled by molecules.
+- **Quantum paths are fractal, between two lengths.** A free particle's path, recorded by position
+  measurements finer than ħ/p, has fractal dimension 2, against 1 for a classical trajectory (Abbott and Wise,
+  1981); below ħ/mc, in a single-particle model, the speed of light makes it smooth again. Its surroundings draw
+  that roughness only if they kick it harder than its own momentum: a cold atom in a room-temperature vacuum,
+  yes; nothing as warm as, and heavier than, the gas around it ([quantum-paths](quantum-paths/)).
 - **Cosmic structure is fractal only up to a point.** Galaxies cluster in a fractal-like way on small
   scales: well inside 5 h⁻¹ Mpc (the surveys' unit, about 1.5 million parsecs), the number of neighbours
   within a distance r grows as r^1.2 rather than r³. Beyond a radius of about 70 to 80 h⁻¹ Mpc, roughly 100 to
