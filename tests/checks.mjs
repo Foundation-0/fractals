@@ -3,7 +3,7 @@
 import { createRequire } from 'node:module';
 const require = createRequire(import.meta.url);
 const W = require('../witness-map/model.js');
-const { C, ENVS, OBJECTS, rates, planckIntegral, BH_M, RS } = W;
+const { C, ENVS, OBJECTS, rates, planckIntegral, gravScatter, BH_M, RS } = W;
 
 let fails = 0;
 const fmt = x => (x === 0 ? '0' : x.toExponential(2));
@@ -54,6 +54,18 @@ check('Dark matter has no witnesses without a black hole', ['fdm', 'wimp'].every
   'W = 0 for both dark matter particles', 'model');
 check('Planck integral gives the CMB photon density', Math.abs(planckIntegral(2.725, 1, () => 1) / 4.11e8 - 1) < 0.02,
   `n = ${fmt(planckIntegral(2.725, 1, () => 1))} per m^3 (expected 4.11e8)`, 'standard value, 411 per cm^3');
+
+// 6. Gravity-only witnesses for dark matter (issue 3): stellar gravitational scattering.
+const starN = 0.1 / Math.pow(3.086e16, 3);
+const fdmG = gravScatter(1.78e-58, C.kpc, starN, C.Msun, 2e5, C.kpc);
+check('Fuzzy dark matter (1e-22 eV): gravity witnesses negligible at 1 kpc', fdmG.W < 1,
+  `W = ${fmt(fdmG.W)} from stellar scattering`, 'model (issue 3)');
+const wimpG = gravScatter(1.78e-25, C.kpc, starN, C.Msun, 2e5, C.kpc);
+check('Particle dark matter (100 GeV): stellar gravity is a witness at 1 kpc', wimpG.W > 1,
+  `W = ${fmt(wimpG.W)} from stellar scattering`, 'model (issue 3)');
+const fdmGsmall = gravScatter(1.78e-58, 1e-6, starN, C.Msun, 2e5, C.kpc);
+check('Fuzzy dark matter (1e-22 eV): gravity witnesses negligible at 1 um', fdmGsmall.W < 1,
+  `W = ${fmt(fdmGsmall.W)} from stellar scattering`, 'model (issue 3)');
 
 console.log(fails ? `\n${fails} check(s) failed` : '\nall checks pass');
 process.exit(fails ? 1 : 0);
