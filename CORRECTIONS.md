@@ -15,3 +15,60 @@ Claims made during the exploration that did not survive it, kept so the record s
    checking the grain size.
 4. **"Within a factor of 3" of the Joos–Zeh table.** Stated for all three environments. Sunlight is within a
    factor of 4.4; the afterglow and air are within 3.
+
+## 16 October 2026: independent re-check (issue #5)
+
+5. **Gas collisions were π times too strong at the smallest gaps.** The model took the long-wavelength rate as
+   R·(4π/9)·k², with R the collision rate and k² = 3mk_BT/ħ². Averaging n⟨v q²⟩σ/(3ħ²) (Schlosshauer 2019,
+   eqs. 67–68) over a thermal gas gives R·(4/9)·k²; a one-speed beam gives R·k²/3. Fixed. The model now matches
+   the standard air formula, Λ = 8n√(2πm)a²(k_BT)^(3/2)/(3ħ²), to 0.1%. The map does not move: at gaps of 1 nm and
+   more every gas collision is already a full record.
+6. **Light an object gives off was counted as twice as informative as it is.** An emitted photon leaves in one
+   random direction, so it carries 1 − sin(kΔx)/(kΔx) of a record (Hackermüller et al. 2004, eq. 5), not the
+   1 − exp(−(kΔx)²/3) of a scattered photon, which has two. For gaps smaller than the wavelength that is half as
+   much: the model's glow came out 2.0 times the standard formula (Romero-Isart 2011, eq. 29). Fixed. At 250 nm
+   the giant molecule moves from W ≈ 0.05 to 0.03 and the buckyball from 2.6×10⁻⁴ to 1.4×10⁻⁴. Light an object
+   absorbs from its surroundings is still not counted. For an object as warm as its surroundings that would add
+   as much again as its own glow; the old doubled glow happened to give that total.
+7. **The heating experiment used C₇₀, not C₆₀.** README, page and check called it a buckyball (C₆₀) experiment.
+   Hackermüller et al. (2004) heated C₇₀, which absorbs the heating light almost ten times more strongly than C₆₀
+   (Hornberger et al. 2005). The old check also took a 2 ms transit at a fixed 1 µm gap. In the experiment the
+   molecules took 4 ms (two 0.38 m legs at 190 m/s), and the two paths separate from zero to about one grating
+   period (991 nm) and back. The check now follows their eq. 2.
+8. **The molecules' glow is a fit: right onset, wrong light.** The code said molecules glow about 100 times more
+   weakly than solid grains. That is not a measurement; eps = 0.01 was tuned to this experiment. C₇₀'s measured
+   absorption at 514 nm, about 2×10⁻¹⁷ cm² (Hornberger et al. 2005; fitted for the heated molecule, close to the
+   cold one's), needs eps ≈ 1, about 120 times more. The fit works because the model has no electronic gap: it
+   lets the molecule glow in the infrared, where C₇₀ gives off nothing (no transitions below 1.6 eV). Against the
+   two papers:
+   - Agrees. At 190 m/s the visibility halves at 2,475 K (measured: about 2,500 K, the point the fit was made
+     to), and at 1,500 K and 3,000 K the visibility is within 0.1 of the measured curve. While it halves, the
+     model gives off 1.4 photons (published: one to two).
+   - Disagrees. At 2,500 K the model gives off 1.5 photons in a 4 ms transit, but only 0.09 above 1.6 eV
+     (published: about three, all visible). Its power rises as T⁵ between 2,000 and 3,000 K, against T¹¹ for C₇₀
+     (6.3×10⁻³⁵ (T/K)¹¹ eV/s), so at 3,000 K it is 14 times too low. At 100 m/s its visibility halves at 1,960 K,
+     about 500 K below the measured 2,450 K; with C₇₀'s steepness it would halve near 2,240 K. Cooling in flight,
+     which the check ignores, is not the cause: C₇₀'s measured cooling moves the model by 25 K at 100 m/s (220 K
+     at 190 m/s).
+   - Unchecked. The buckyball at 900 K and the giant molecule at 500 K use the same eps far below the fitted
+     range, where molecules glow mainly through infrared vibrations that this model does not describe.
+   Not fixed: giving molecules a gap and measured spectra would change the buckyball and giant-molecule rows, so
+   it needs a decision.
+9. **Joos and Zeh's air entry is 10³⁶, not 10³⁷.** The old check quoted 10³⁷ cm⁻² s⁻¹ (10⁴¹ m⁻² s⁻¹) as Joos and
+   Zeh's. All four copies of their table checked here (Kiefer and Joos 1998; Joos 1999; Kiefer 1999; Joos 2005)
+   give 10³⁶. The 10³⁷ is Schlosshauer's (his 10⁻³¹ s at Δx = 10⁻³ cm), and it matches the closed-form formula
+   (8.6×10³⁶). The two tables differ by ten; the model follows the formula.
+10. **Three disagreements inside the published tables.** Not model errors; recorded so nobody tunes the model to
+    them.
+    - Joos and Zeh's "laboratory vacuum (10³ particles/cm³)" row (10²³, 10¹⁹, 10¹⁷) matches 10⁶ particles/cm³,
+      which is how Joos (2005) labels it; Tegmark (1993) also takes 10⁶ for a laboratory vacuum. At 10³ the
+      model gives 3×10²⁰ for the largest grain. Schlosshauer's "best laboratory vacuum" times match 10³.
+    - 300 K light on a 10 µm grain: Joos and Zeh give 10¹⁹ cm⁻² s⁻¹, Schlosshauer 10²⁴ (from his 10⁻¹⁸ s), the
+      model 3×10²⁰. The grain is not small next to 300 K wavelengths. The small-grain formula gives 4×10²⁴ there,
+      too much; the opaque-sphere limit gives the model's value. The 10¹⁹ is not reproduced.
+    - Schlosshauer's gas times use τ = 1/(Λa²) with the gap equal to the grain's size, 10⁵·⁶ gas wavelengths. At
+      such gaps each collision is already a full record and the rate stops growing (his eq. 65). For a 10 µm
+      grain in air the decoherence time is then the collision time, 3×10⁻¹⁹ s, not 10⁻³¹ s. The model does this.
+11. **Not consulted.** Schlosshauer's 2007 book and Joos and Zeh's 1985 paper were not available. The comparisons
+    use Schlosshauer's own open copies of his book's timescale table (2014, 2019) and four copies of the 1985
+    table by Joos and by Kiefer. Anything in the book that is not in those copies is unchecked.
