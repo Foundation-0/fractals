@@ -20,11 +20,14 @@ for (const [name, mass, v] of [['Electron at 54 eV', C.me, Math.sqrt(2 * 54 * C.
 }
 
 console.log('\nA Brownian path is the other way round on the inside: smooth below its ballistic length v_rms tau_p\n');
+console.log('Li et al. (2010), 2.79 um silica bead in air: tau_p measured and from slip-corrected Stokes drag; trap size v_rms/w0\n');
 const vrms = 0.4235e-3, mb = C.kB * 297 / (vrms * vrms);
-for (const [P, label] of [[99.8e3, '3 um bead in air, 99.8 kPa'], [2.75e3, '3 um bead in air, 2.75 kPa']]) {
-  const tp = mb / QP.stokesCunningham({ r: 1.5e-6, eta: 1.81e-5, mfp: 68e-9 * 101.325e3 / P });
-  console.log(`${label.padEnd(30)} tau_p ${(tp * 1e6).toFixed(0)} us, ballistic length ${(vrms * tp * 1e9).toFixed(0)} nm`);
+for (const [P, meas, f] of [[99.8e3, 48.5e-6, 3064], [2.75e3, 147.3e-6, 3168]]) {
+  const tp = mb / QP.stokesCunningham({ r: 1.395e-6, eta: 1.81e-5, mfp: 68e-9 * 101.325e3 / P });
+  console.log(`${(P / 1e3 + ' kPa').padEnd(10)} tau_p ${(meas * 1e6).toFixed(1)} us measured, ${(tp * 1e6).toFixed(0)} us model; ballistic length ` +
+    `${(vrms * meas * 1e9).toFixed(0)} nm; trap ${(vrms / (2 * Math.PI * f) * 1e9).toFixed(0)} nm`);
 }
+console.log('The trap holds the bead within its ballistic length, so the measured path is never rough; a free bead would be.');
 
 console.log('\nWho draws the path: how finely each Witness Map object\'s own surroundings record it, against its thermal hbar/p\n');
 console.log('object'.padEnd(32) + 'records'.padEnd(14) + 'main witness'.padEnd(32) + 'resolution m'.padStart(13) + 'hbar/p m'.padStart(10) + 'ratio'.padStart(9));

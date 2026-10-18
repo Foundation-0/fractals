@@ -121,11 +121,17 @@ Claims made during the exploration that did not survive it, kept so the record s
 17. **"A free quantum particle's path has fractal dimension 2."** Too broad. Abbott and Wise's dimension 2
     belongs to the path recorded by repeated position measurements, and only at resolutions finer than ħ/p, the
     de Broglie wavelength over 2π. Coarser, it has dimension 1, and in a single-particle model the speed limit
-    makes it 1 again below ħ/mc. The records also make the roughness: each kicks the momentum, the kicks add up,
-    and over N records the rough stretch widens to roughly √N ħ/p, so a long record is not one fixed fractal.
+    makes it 1 again below ħ/mc (that end is not in Abbott and Wise, who are non-relativistic). The records also
+    make the roughness: each kicks the momentum, and the kicks add up. With records a fixed time apart the rough
+    stretch widens to roughly √N ħ/p over N records; with records a fixed number of wave clocks apart, Abbott
+    and Wise's self-similar spacing, the exponent rises to about 3. A long record is not one fixed fractal.
     See [quantum-paths](quantum-paths/).
 18. **"The same roughness as a pollen grain jostled by molecules."** Two slips. Brown watched particles about 1 to
     5 µm across released from inside pollen grains, which are about 100 µm across, not the grains themselves
     (Pearle et al. 2010). And a Brownian path has dimension 2 only above its ballistic length, about 20 nm from
-    Li et al.'s (2010) numbers for a 3 µm bead in air; below it the path is straight. The dimension matches, but
-    the quantum path is rough at small scales and the Brownian one at large scales.
+    Li et al.'s (2010) numbers for their bead in air; below it the path is straight. The dimension matches, but
+    the quantum path is rough at small scales and the Brownian one at large scales, and only if nothing holds
+    it: Li et al.'s bead was trapped within about 22 nm rms, so its measured path is never rough. With the
+    2.79 µm diameter they used, slip-corrected Stokes drag gives 175 µs at 2.75 kPa against their 147.3 µs;
+    `tests/quantum-paths.mjs` records that as a disagreement. (The first draft on #25 used the nominal 3 µm,
+    which hid the gap, and called the trapped path smooth, then rough, then smooth; review there caught both.)

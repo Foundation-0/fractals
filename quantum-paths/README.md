@@ -15,15 +15,18 @@ join the dots. Their abstract: "the observed path of a particle in quantum mecha
 Hausdorff dimension two". Their dimension is defined by how the joined path's length grows as Δx shrinks,
 ⟨l⟩ ∝ Δx^(1−D).
 
-Each record leaves the particle with a momentum spread ħ/(2Δx). If the records are far enough apart for the wave
-to outgrow its starting width (Lake 2022 restates the condition as Δt ≫ 4mΔx²/ħ; 4mΔx²/ħ, four of the Witness
-Map's wave clocks, is the shortest spacing he allows), the mean length over a time T is
+Each record leaves the particle with a momentum spread ħ/(2Δx) (for their Gaussian records). Abbott and Wise
+space the records in two ways. In one they keep the time between records, Δt, fixed as Δx shrinks, so the wave
+soon outgrows its starting width: ħΔt/2mΔx² ≫ 1, or Δt much longer than two of the Witness Map's wave clocks
+mΔx²/ħ. In the other, the one under which they find the path self-similar (their eq. 1.9), Δt ∝ mΔx²/ħ, a fixed
+number of wave clocks. (Lake 2022 asks for at least four wave clocks, from an energy–time argument of his own.)
+In the first, far-field limit the mean length over a time T is
 
 ```
 <l> = (T/m) E|p + δp|,   δp ~ Normal(0, (ħ/2Δx)²) in each direction
 ```
 
-and, in three dimensions:
+and, in three dimensions, with this model's local slope D = 1 − d ln⟨l⟩/d ln Δx at each Δx:
 
 | Δx / (ħ/p) | 0.01 | 0.1 | 0.3 | 1 | 3 | 10 |
 |---|---|---|---|---|---|---|
@@ -31,19 +34,25 @@ and, in three dimensions:
 
 - Below the reduced de Broglie wavelength ħ/p (λ/2π) the spread wins and D = 2: <l> → √(2/π) ħT/(mΔx).
 - Above it the drift wins and D = 1: <l> → pT/m, the classical length.
-- D passes 1.5 at Δx = 0.81 ħ/p (0.44 ħ/p for a path along one direction). The crossover takes about a decade.
-- Records only one wave clock apart give the same two limits. The crossover then moves to 1.8 to 2.4 ħ/p,
-  depending on whether each record's own error is counted.
+- These two limits are Abbott and Wise's. Between them, they write, D "is not well defined since it is rapidly
+  varying with Δx"; the middle of the table is this model's local slope, not their result. By that slope, D
+  passes 1.5 at Δx = 0.81 ħ/p (0.44 ħ/p for a path along one direction), and the crossover takes about a decade.
+- Records closer together give the same two limits, with the crossover further out: 0.90 ħ/p at four wave
+  clocks apart, 1.1 ħ/p at two (Abbott and Wise's ħΔt/2mΔx² = 1), and 1.8 to 2.4 ħ/p at one, depending on
+  whether each record's own error is counted.
 
 So the README's sentence holds only for a recorded path, and only below ħ/p. The roughness is made by the
 records: each one's kick ħ/(2Δx) is what makes the length grow as 1/Δx. Unlike a coastline, the path at
-different Δx is not one curve seen at different magnifications.
+different Δx is not one curve seen at different magnifications. Abbott and Wise do find the path statistically
+self-similar when Δt ∝ mΔx²/ħ, but only because every record restarts the particle with the same mean
+momentum; "What repeated records do" below drops that.
 
 ## The other end: the Compton wavelength
 
 Nothing moves faster than light. With relativistic speeds, v = pc²/E, the recorded length stops growing below the
-reduced Compton wavelength ħ/mc and tends to cT, so the path is smooth again. In a single-particle model, then, a
-recorded path is rough only between ħ/mc and ħ/p, a window that exists only when p ≪ mc:
+reduced Compton wavelength ħ/mc and tends to cT, so the path is smooth again. This end is the model's own:
+Abbott and Wise are non-relativistic throughout. In a single-particle model, then, a recorded path is rough only
+between ħ/mc and ħ/p, a window that exists only when p ≪ mc:
 
 | Particle | ħ/mc | ħ/p | Window |
 |---|---|---|---|
@@ -63,14 +72,15 @@ Gaussian records (`sequential` in `paths.js`) shows three things.
 
 - For a particle starting at rest with records many wave clocks apart, the recorded path is (1/N) Σ√k ≈ (2/3)√N
   times longer than the single-interval formula after N records.
-- With records a fixed time apart the length still grows as 1/Δx, so D = 2 survives. But the length grows as
-  T^(3/2) rather than T. The rough stretch also widens: its upper end moves out roughly as √N ħ/p, to about
-  11 ħ/p after 400 records.
-- If the records are instead spaced a fixed number of wave clocks apart, the length grows as Δx⁻²: an exponent
-  of 3, not 2.
+- With records a fixed time apart (Abbott and Wise's fixed-Δt limit) the length still grows as 1/Δx, so D = 2
+  survives. But the length grows as T^(3/2) rather than T. The rough stretch also widens: its upper end moves
+  out roughly as √N ħ/p, to about 11 ħ/p after 400 records.
+- If the records are instead spaced a fixed number of wave clocks apart (Abbott and Wise's self-similar rule),
+  the length grows as Δx⁻²: D ≈ 3, not 2.
 
-So the dimension of a long record depends on how it is taken. Ding, Ong and Xu (2025) find measurement shifting
-the dimension downward in a different (nonselective) model; the two are not compared here.
+So the dimension of a long record depends on how it is taken, and under Abbott and Wise's self-similar rule their
+D = 2 does not survive the heating, which their reset at every record leaves out. Ding, Ong and Xu (2025) find
+measurement shifting the dimension downward in a different (nonselective) model; the two are not compared here.
 
 ## Brownian motion, and the pollen
 
@@ -78,17 +88,24 @@ A Brownian particle is the reverse: smooth at small scales, rough at large ones.
 v_rms·τ_p it moves in straight lines (D = 1). Above it, collisions have scrambled its velocity and the path is
 rough (D = 2).
 
-- Li, Kheifets, Medellin and Raizen (2010) resolved the ballistic part for a 3 µm silica bead held in an optical
-  trap in air. Fits to its measured velocity autocorrelation gave a momentum relaxation time of 48.5 µs at
-  99.8 kPa and 147.3 µs at 2.75 kPa, and its rms speed was 0.42 mm/s.
-- Stokes drag with the Cunningham slip correction gives 47 and 154 µs, using the mass that rms speed implies.
-  That mass corresponds to a density of about 1,600 kg/m³; bulk silica's ~2,000 would give about 58 µs.
-- From their numbers the ballistic length is about 20 nm. A free bead would be rough above that. In the trap,
-  the roughness is cut off again at the trap's own confinement.
+- Li, Kheifets, Medellin and Raizen (2010) resolved the ballistic part for a silica bead, nominally 3 µm and
+  2.79 µm in their analysis, held in an optical trap in air. Fits to its measured velocity autocorrelation gave
+  a momentum relaxation time of 48.5 µs at 99.8 kPa and 147.3 µs at 2.75 kPa, and its rms speed was 0.42 mm/s.
+- Stokes drag with the Cunningham slip correction, for the 2.79 µm bead and the mass its rms speed implies,
+  gives 51 µs at 99.8 kPa, 5% high, and 175 µs at 2.75 kPa, 19% high. The ratio of the two times does not
+  depend on the mass: 3.43 here against 3.04 measured, so the slip correction used here overstates how much
+  freer the bead gets at low pressure. (The mass is not an independent check: Li et al. computed it from the
+  bead's size and density.) The test records the 2.75 kPa value as a disagreement.
+- From their numbers the ballistic length is about 20 nm. A free bead would be rough above that, from about
+  1 ms and 130 nm on. But the bead they measured was trapped (their eq. 1, trap frequency about 3.1 kHz), and the
+  trap holds it within about 22 nm rms, no more than its ballistic length at 99.8 kPa and a third of it at
+  2.75 kPa. Its path goes from straight to confined with no rough stretch in between: the local dimension comes
+  within 0.1 of 2 only for brief moments, under 0.04 of a decade.
 
-Both kinds of path are smooth, then rough, then smooth. The quantum one is rough between ħ/mc and ħ/p. The
-Brownian one is rough between v_rms·τ_p and whatever confines it or carries it along. "The same roughness" is
-right about the dimension, 2, but not about where it lives.
+Both kinds of path can be smooth, then rough, then smooth. The quantum one is rough between ħ/mc and ħ/p. A
+free Brownian one is rough between v_rms·τ_p and whatever confines it or carries it along, and only if those
+are far apart; for Li et al.'s trapped bead they are not. "The same roughness" is right about the dimension, 2,
+but not about where it lives.
 
 Robert Brown did not watch pollen grains move. He watched particles about 1 to 5 µm across, lipid spherosomes and
 starch amyloplasts, released from inside pollen grains about 100 µm across (Pearle et al. 2010). A whole grain does jiggle, but in water it moves
@@ -133,8 +150,8 @@ Three cases:
   is recorded more coarsely than its own ħ/p, the rubidium atom by the narrowest margin (3.8). A gas molecule
   lighter than the object, at the same temperature, carries less momentum than the object does.
 - **Lighter than its witnesses: drawn at the crossover.** A collision can transfer at most about the lighter
-  body's own momentum. So the electron is recorded at about ħ/|p|, whatever its temperature, where the dimension
-  is about 1.4, halfway between smooth and rough.
+  body's own momentum. So the electron is recorded at about ħ/|p|, whatever its temperature, where the model's local
+  slope is about 1.4, between Abbott and Wise's two limits.
 - **Colder than its witnesses: drawn rough.** A rubidium atom laser-cooled to 1 µK in the same room-temperature
   vacuum is hit by leftover gas molecules carrying far more momentum than it has. Each hit records it 4,500 times
   more finely than its ħ/p, deep in the rough regime, and also knocks it out of its trap.
@@ -185,13 +202,15 @@ npm test                            # includes tests/quantum-paths.mjs
 | Fine records: <l>Δx m/(ħT) (3D) | √(2/π) = 0.798 | 0.798 |
 | Coarse records: <l> | pT/m | pT/m |
 | D at 0.01 and 100 ħ/p (Abbott and Wise) | 2 and 1 | 2.000, 1.000 |
-| Crossover (D = 1.5) | ħ/p, to a factor of 2 | 0.81 ħ/p |
+| Crossover (local slope D = 1.5, the model's; scale ħ/p from Abbott and Wise) | ħ/p, to a factor of 2 | 0.81 ħ/p |
 | D below ħ/mc, inside the window, above ħ/p | 1, 2, 1 | 1.001, 1.995, 1.000 |
 | Repeated records, N = 400: length over the single-interval formula | (1/N)Σ√k = 13.36 | 13.4 |
 | C₆₀ at 220 m/s: h/mv (the same arithmetic as Arndt et al.) | 2.5 pm | 2.52 pm |
 | Electron at 54 eV, Davisson and Germer's measurement as usually quoted | 1.65 Å | 1.67 Å |
-| Bead in air, τ_p at 99.8 and 2.75 kPa (Li et al. 2010) | 48.5 and 147.3 µs | 47 and 154 µs |
+| Bead in air, τ_p at 99.8 kPa (Li et al. 2010) | 48.5 µs | 51 µs |
+| Bead in air, τ_p at 2.75 kPa (Li et al. 2010): recorded disagreement | 147.3 µs | 175 µs (+19%) |
 | Free bead with those numbers: D over 0.04 nm and 1.3 µm | 1 and 2 | 1.000, 1.999 |
+| Li et al.'s trapped bead: longest stretch with D within 0.1 of 2 (model, their eq. 1) | under 0.05 decade | 0.037 and 0.025 decade |
 | Continuously recorded particle: purity, and W at its width | ħ²/4, 1/8 | exact |
 | Gas rate against drag (Schlosshauer 2019, Epstein 1924) | equal | equal |
 | Virus: Δx\*/(ħ/p) against fluctuation-dissipation | 44.9 | 44.8 |
@@ -201,9 +220,9 @@ npm test                            # includes tests/quantum-paths.mjs
 
 ## What the model leaves out
 
-- Abbott and Wise's paper itself was not read: only its abstract and later restatements (Lake 2022; Granik
-  and Chapline 2003). Their exact equations and their rule for spacing the records are unchecked, and so is
-  Cannata and Ferrari's relativistic paper (Am. J. Phys. 56, 721 (1988)).
+- Abbott and Wise's paper was checked in review on #25 against its preprint (SLAC-PUB-2427, 1979), not the
+  journal pages. Cannata and Ferrari's relativistic paper (Am. J. Phys. 56, 721 (1988)) could not be read; the
+  ħ/mc end here is this model's own (spinless, speeds capped at c), not theirs.
 - p is the thermal momentum at the surroundings' temperature. Objects in beams move faster (smaller ħ/p, a wider
   gap). Cooled objects move slower (larger ħ/p), which is where the gap closes, as the rubidium row shows.
 - The resolution uses the main witness at Δx\*. Rarer, sharper witnesses can record finer now and then: gas
@@ -215,8 +234,8 @@ npm test                            # includes tests/quantum-paths.mjs
 
 ## Sources
 
-- L. F. Abbott and M. B. Wise, *Dimension of a quantum-mechanical path*, Am. J. Phys. 49, 37 (1981). https://doi.org/10.1119/1.12657
-- M. J. Lake, Eur. Phys. J. C 82, 928 (2022), which restates the Abbott–Wise argument. https://arxiv.org/abs/2206.00609
+- L. F. Abbott and M. B. Wise, *Dimension of a quantum-mechanical path*, Am. J. Phys. 49, 37 (1981). https://doi.org/10.1119/1.12657 (preprint SLAC-PUB-2427, 1979)
+- M. J. Lake, Eur. Phys. J. C 82, 928 (2022), which revisits the Abbott–Wise argument. https://arxiv.org/abs/2206.00609
 - A. Granik and G. Chapline, Phys. Lett. A 310 (2003), which applies the Abbott–Wise analysis. https://arxiv.org/abs/quant-ph/0302013
 - Y.-W. Ding, Y. C. Ong and H. Xu, *Measurement-induced perturbations of Hausdorff dimension in quantum paths*, Eur. Phys. J. Plus (2026). https://doi.org/10.1140/epjp/s13360-026-07554-3 (https://arxiv.org/abs/2512.13046)
 - H. Kröger, *Fractal geometry in quantum mechanics, field theory and spin systems*, Phys. Rep. 323, 81 (2000).

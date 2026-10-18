@@ -1,13 +1,15 @@
 /* Quantum paths model: how rough is a path, at what scale, and who draws it. No dependencies.
  *
  * Abbott & Wise (1981): record a free particle's position again and again, each time to within dx, and join the
- * dots. The joined path's mean length <l> grows as dx shrinks, and D = 1 - dln<l>/dln dx is its length-scaling
- * (divider) dimension; for a path in three dimensions it is the Hausdorff dimension of the trace. Each record leaves
- * a momentum spread hbar/(2 dx), and with records far enough apart for the wave to outgrow its start,
+ * dots. The joined path's mean length <l> grows as dx shrinks; where <l> ~ dx^(1-D), D is the path's Hausdorff
+ * dimension. Each record leaves a momentum spread hbar/(2 dx) (their Gaussian records), and with the time between
+ * records held fixed as dx shrinks (so hbar dt / 2m dx^2 >> 1, their eq. 2.10), the mean length over a time T is
  *   <l> = (T/m) E|p + dp|,  dp ~ Normal(0, (hbar/2dx)^2) in each direction            (far field, dt >> m dx^2/hbar)
- * D = 2 when dx << hbar/p (the spread wins) and D = 1 when dx >> hbar/p (the drift wins).
- * Relativity caps the speed at c, so below hbar/mc the length stops growing and D falls back to 1.
- * A real Brownian particle is the reverse: smooth (ballistic) below v_th tau_p, rough above it.
+ * They find D = 2 when dx << hbar/p (the spread wins) and D = 1 when dx >> hbar/p (the drift wins), and call D not well
+ * defined in between. This model uses the local slope D = 1 - dln<l>/dln dx there; the crossover values are its own.
+ * Relativity caps the speed at c, so below hbar/mc the length stops growing and D falls back to 1 (this model; Abbott
+ * & Wise are non-relativistic).
+ * A real Brownian particle is the reverse: smooth (ballistic) below v_th tau_p, rough above it, if nothing holds it.
  *
  * Witness Map link: a surroundings records an object about once per wave clock of the gap dx* where W = 1. Weak
  * records (each carrying a little information) add up to a resolution of about dx*; a full record pins the object to
@@ -71,6 +73,15 @@
   // with a steady drift vDrift: smooth below ~sigmaV taup, rough above, smooth again above ~2 sigmaV^2 taup / vDrift.
   const brownianS = (tau, { sigmaV, taup, vDrift = 0 }) =>
     2 * sigmaV * sigmaV * taup * taup * (tau / taup - 1 + Math.exp(-tau / taup)) + Math.pow(vDrift * tau, 2);
+  // The same particle held in a harmonic trap of angular frequency w0, in equilibrium (Li et al. 2010, eq. 1):
+  // S = 2 (sigmaV/w0)^2 [1 - e^(-tau/2taup) (cos w1 tau + sin(w1 tau) / (2 w1 taup))], w1^2 = w0^2 - 1/(4 taup^2);
+  // cosh and sinh when overdamped. It levels off at 2 (sigmaV/w0)^2.
+  function trappedS(tau, { sigmaV, taup, w0 }) {
+    const g = 1 / (2 * taup), d = w0 * w0 - g * g, w1 = Math.sqrt(Math.abs(d)), x = w1 * tau;
+    const decay = d > 0 ? Math.exp(-g * tau) * (Math.cos(x) + g * Math.sin(x) / w1)
+      : ((1 + g / w1) * Math.exp(-(g - w1) * tau) + (1 - g / w1) * Math.exp(-(g + w1) * tau)) / 2;
+    return 2 * Math.pow(sigmaV / w0, 2) * (1 - decay);
+  }
   // Drag on a sphere of radius r: Stokes with the Cunningham slip correction (gas mean free path mfp, viscosity eta).
   function stokesCunningham({ r, eta, mfp }) {
     const Kn = mfp / r, Cc = 1 + Kn * (1.257 + 0.4 * Math.exp(-1.1 / Kn));
@@ -142,7 +153,7 @@
   }
 
   const api = {
-    C, erf, meanNorm, awLength, awLengthRelativistic, localDimension, dimensionFromS, brownianS, stokesCunningham,
+    C, erf, meanNorm, awLength, awLengthRelativistic, localDimension, dimensionFromS, brownianS, trappedS, stokesCunningham,
     epsteinDrag, gasLambda, monitored, sequential, heatingFactor, mulberry32, deBroglie, witnessMomentum, drawnPath,
   };
   if (typeof module !== 'undefined' && module.exports) module.exports = api; else root.QP = api;
