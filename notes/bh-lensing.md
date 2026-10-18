@@ -20,10 +20,10 @@ the opposite question: can a galaxy's central black hole shape its wave dark mat
   radius and the lensed images sit 27 times further out, where they cannot feel the squeeze. Only the faint
   central image can.
 - **So the test changes shape.** As of 18 October 2026 I found no study that tests lensing anomalies against the
-  lens galaxy's black hole mass or spin (section 4). No anomaly lens I found has a bound on its black hole. SDP.81
-  had one until its dark lump was found most likely spurious (Stacey et al. 2025). Masses read off the M–σ relation
-  would only restate the galaxy's velocity dispersion, which also sets the size of the wave granules. Section 6
-  gives testable versions.
+  lens galaxy's black hole mass or spin (section 4). No lens I found has both a small-scale anomaly and a bound on
+  its black hole. SDP.81 had both until its dark lump was found most likely spurious (Stacey et al. 2025). Masses
+  read off the M–σ relation would only restate the galaxy's velocity dispersion, which also sets the size of the
+  wave granules. Section 6 gives testable versions.
 
 ## 1. The gravitational atom, step by step
 
@@ -140,26 +140,31 @@ The black hole does not swallow the core either. For a core the black hole domin
 ## 4. Literature check
 
 Asked: has anyone tested lensing anomalies against the lens galaxy's black hole mass or spin? As of 18 October 2026
-I found no such study, meaning none that compares anomaly data (flux ratios, image positions or imaged lumps) with
-a measured or modelled mass or spin of the lens galaxy's own black hole, or puts that black hole into a model
-fitted to such data. The search used the arXiv API, INSPIRE full-text search, citation chasing from this note's
-sources and web searches; ADS was not queried. Microlensing and X-ray work on lensed quasars does involve black
-hole mass and spin, but the source quasar's, not the lens's: microlensing light curves give accretion disc sizes
-that scale as M_BH^(0.80±0.17) (Morgan et al. 2010), and X-ray spectra brightened by lensing give the spin of the
-quasar in RX J1131−1231, a = 0.87 (Reis et al. 2014). The closest work:
+I found no such study. A test here means a study that fits a small-scale anomaly itself (a flux-ratio or
+astrometric anomaly, or a detected dark lump) with a model that includes the lens galaxy's own black hole, or
+compares such anomalies with that black hole's mass or spin. Models that use the black hole only in the smooth
+macro-model or for a central image's flux, as Tamura et al. (2015) and Wong et al. (2015) do for SDP.81, do not
+count; the models of SDP.81's lump (Hezaveh et al. 2016; Stacey et al. 2025) do not include its black hole. The
+search used the arXiv API, INSPIRE full-text search, citation chasing from this note's sources and web searches;
+ADS was not queried. Microlensing and X-ray work on lensed quasars does involve black hole mass and spin, but the
+source quasar's, not the lens's: microlensing light curves give accretion disc sizes that scale as M_BH^(0.80±0.17)
+(Morgan et al. 2010), and X-ray spectra brightened by lensing give the spin of the quasar in RX J1131−1231, a =
+0.87 (Reis et al. 2014). The closest work:
 
 - **Oguri and Kubo (2026)**: a soliton whose centre is deepened by a black hole makes a dense, hard-to-strip lump.
   The 10⁶ M☉ dark lump in JVAS B1938+666 fits a particle of about 4×10⁻²¹ eV with a 4×10⁵ M☉ black hole. That black
-  hole sits in a small satellite halo, not at the centre of the lens. What every reading of the lump has to explain is
-  Vegetti et al.'s (2026) measured profile: an unresolved point mass, at most 10 pc in radius, inside an extended
-  mass of almost constant surface density out to 139 pc, an edge they flag as possibly an artefact of their model.
-  Oguri and Kubo take the point mass to be the black hole. Other readings need no wave dark matter. Vegetti et al.
-  note that, if the lump is dark matter, its structure is incompatible with cold dark matter but may fit a
-  self-interacting halo whose centre has collapsed into a black hole. Zhang and Yu (2026) get the profile from a
-  self-interacting halo deep in collapse, or from the tidally stripped remnant of a cold dark matter halo that
-  hosts an intermediate-mass black hole of about 2×10⁵ M☉, the halo having lost about 5 orders of magnitude of its
-  mass. In Zeng et al. (2026, a preprint) a black hole seeded by the collapse grows to 5 to 12% of the halo's mass
-  within 2 Gyr and depletes the inner halo, which matches the lump qualitatively.
+  hole sits in a small satellite halo, not at the centre of the lens. What every reading of the lump has to explain
+  is Vegetti et al.'s (2026) measured profile: an unresolved point mass, at most 10 pc in radius, inside an
+  extended mass of almost constant surface density out to 139 pc, an edge they flag as possibly an artefact of
+  their model. Oguri and Kubo take the point mass to be the black hole. Other readings need no wave dark matter.
+  Vegetti et al. note that, if the lump is dark matter, its structure is incompatible with cold dark matter but may
+  fit a self-interacting halo whose centre has collapsed into a black hole. Zhang and Yu (2026) match instead
+  Vegetti et al.'s pseudo-Jaffe plus point mass model, which fits less well (Δln E = −30 against the best fit) and
+  has a 1.9×10⁵ M☉ point mass: with a self-interacting halo deep in collapse, or with the tidally stripped remnant
+  of a cold dark matter halo hosting a black hole of that mass, the halo having lost about 5 orders of magnitude of
+  its mass. The two black hole masses, 4×10⁵ and 2×10⁵ M☉, come from different fits to the same data. In Zeng et
+  al. (2026, a preprint) a black hole seeded by the collapse grows to 5 to 12% of the halo's mass within 2 Gyr and
+  depletes the inner halo, which matches the lump qualitatively.
 - **Davies and Mocz (2020)** and **Bar et al. (2019)**: how a black hole squeezes, and may swallow, the core. Bar et
   al. use Sgr A* and M87* to bound the core's mass.
 - **Central images** weigh lens-galaxy black holes directly: below 2×10⁸ M☉ in PMN J1632−0033 (Winn, Rusin and
@@ -172,21 +177,20 @@ quasar in RX J1131−1231, a = 0.87 (Reis et al. 2014). The closest work:
   inner critical curve and leave their results effectively unchanged, but call its effect on the core less clear
   and defer it.
 - **Is 10⁻²² eV right at all?** Amruth et al. (2023) and Hou et al. (2026) favour wave dark matter near 10⁻²² eV
-  from anomalies (Hou et al.: 17 cusp quads, a benchmark of 0.8×10⁻²² eV, and a Bayes factor above 100 against
-  cold and self-interacting dark matter). For HS 0810+2554, simulated wave halos at 10⁻²² eV match each radio
-  quad to about 3 mas (a 3σ miss) in the best of 1000 realizations, each optimised over orientation and source
-  position, against 12 mas for the best-fit smooth NFW model; matching all eight images at once would combine
-  different realizations (Zhou et al. 2026). Cold dark matter with multipoles of 0.4 to 0.9% also fits the
-  positions: at χ = 1.6 if the images arrive in an order the authors call unlikely, and at χ = 3.0, which they still
-  call adequate, in the usual order (Miller and Williams 2025). So do cold dark matter subhalos, in the best of 1000
-  realizations at the best-fitting host mass (Gong et al. 2026, a preprint). None of these models includes a black
-  hole.
-  Laroche et al. (2022), with 11 quads, prefer cold dark matter 8 to 1 over 10^−22.5 to 10^−22.25 eV. Powell et al.
-  (2023) rule out masses up to 4.4×10⁻²¹ eV at 20 to 1 odds from one extended arc. Outside lensing, the Lyman-α
-  forest gives above 2×10⁻²⁰ eV at 95% (Rogers and Peiris 2021) and ultra-faint dwarf galaxies above 3×10⁻¹⁹ eV at
-  99% (Dalal and Kravtsov 2022). If the particle is that heavy, superradiance does work around these black holes
-  (from 6×10⁻²¹ eV for 10⁹ M☉, 5×10⁻²⁰ eV for 10⁸ M☉), but section 2 shows the clouds are then under 0.1 pc, far
-  too small for lensing.
+  from anomalies (Hou et al.: 17 cusp quads, a benchmark of 0.8×10⁻²² eV, and a Bayes factor above 100 against cold
+  and self-interacting dark matter). For HS 0810+2554, simulated wave halos at 10⁻²² eV match each radio quad to
+  about 3 mas (a 3σ miss) in the best of 1000 realizations, each optimised over orientation and source position,
+  against 12 mas for the best-fit smooth NFW model; matching all eight images at once would combine different
+  realizations (Zhou et al. 2026). Cold dark matter with multipoles of 0.4 to 0.9% also fits the positions: at χ =
+  1.6 if the images arrive in an order the authors call unlikely, and at χ = 3.0, which they still call adequate,
+  in the usual order but with two images assigned to the other source (Miller and Williams 2025). So do cold dark
+  matter subhalos, in the best of 1000 realizations at the best-fitting host mass (Gong et al. 2026, a preprint).
+  None of these models includes a black hole. Laroche et al. (2022), with 11 quads, prefer cold dark matter 8 to 1
+  over 10^−22.5 to 10^−22.25 eV. Powell et al. (2023) rule out masses up to 4.4×10⁻²¹ eV at 20 to 1 odds from one
+  extended arc. Outside lensing, the Lyman-α forest gives above 2×10⁻²⁰ eV at 95% (Rogers and Peiris 2021) and
+  ultra-faint dwarf galaxies above 3×10⁻¹⁹ eV at 99% (Dalal and Kravtsov 2022). If the particle is that heavy,
+  superradiance does work around these black holes (from 6×10⁻²¹ eV for 10⁹ M☉, 5×10⁻²⁰ eV for 10⁸ M☉), but section
+  2 shows the clouds are then under 0.1 pc, far too small for lensing.
 
 ## 5. Lens systems: anomalies and black hole masses
 
@@ -195,7 +199,7 @@ quasar in RX J1131−1231, a = 0.87 (Reis et al. 2014). The closest work:
 | HS 0810+2554 | Radio jets with VLBI (Hartley et al. 2019); narrow-line fluxes (Nierenberg et al. 2020) | Amruth et al. 2023 and Zhou et al. 2026: reproduced at ~10⁻²² eV; cold dark matter also fits (section 4) | Not measured. M–σ estimate ~6×10⁸ M☉ (section 3) |
 | SDP.81 | A 10^(8.96±0.12) M☉ dark lump at 6.9σ (Hezaveh et al. 2016), most likely spurious: poorly fitted multipoles (Stacey et al. 2025) | None found | Above 3×10⁸ M☉ from the missing central image (Tamura et al. 2015; Wong et al. 2015) |
 | PMN J1632−0033 | None found | None found | Below 2×10⁸ M☉ from the central image (Winn, Rusin and Kochanek 2004) |
-| JVAS B1938+666 | A 10⁶ M☉ dark lump at 26σ (Powell et al. 2025, as cited by Oguri and Kubo) | Oguri and Kubo 2026: soliton plus a 4×10⁵ M☉ black hole inside the lump; self-interacting and cold dark matter readings too (section 4) | Not measured |
+| JVAS B1938+666 | A 10⁶ M☉ dark lump at 26σ (Powell et al. 2025) | Oguri and Kubo 2026: soliton plus a 4×10⁵ M☉ black hole inside the lump; self-interacting and cold dark matter readings too (section 4) | Not measured |
 | MG J0751+2716 | Extended arc at milliarcsecond resolution | Powell et al. 2023: up to 4.4×10⁻²¹ eV ruled out | Not measured |
 | B1422+231, HE0435−1223, WGD J0405−3308, RX J0911+0551, PS J1606−2333, WFI 2026−4536, WFI 2033−4723, WGD 2038−4008 | Narrow-line fluxes, as compiled by Gilman et al. 2020 | Laroche et al. 2022 bound the particle mass with an 11-quad sample of this kind | Not measured |
 | 17 cusp quads, e.g. J1042+1641 | Microlensing-free fluxes, many from JWST | Hou et al. 2026: FDM preferred | Not measured |
@@ -204,12 +208,12 @@ No system I found has both a small-scale anomaly and a bound on its black hole. 
 was found most likely spurious (Stacey et al. 2025). "Not measured" means I found no direct measurement, and none
 is expected from stars alone: at these redshifts a black hole's sphere of influence (18 to 63 pc) spans 2 to 14
 milliarcseconds, well inside the 36 milliarcsecond core of the Hubble image blur that a stellar-dynamical mass must
-resolve (Kormendy and Ho 2013). Lensing can do the weighing, through a central image or lensed images near the
-centre. These have weighed black holes of (3.3 ± 2.1)×10¹⁰ M☉ (3σ range) in Abell 1201 at z = 0.17 (Nightingale et
-al. 2023; one model without a black hole fits comparably, which the authors argue is unphysical) and 3.6×10¹⁰ M☉
-in the Cosmic Horseshoe at z = 0.44, with stellar kinematics (Melo-Carneiro et al. 2025): so far only black holes
-of about 10¹⁰ M☉, ten times or more heavier than those in section 1. Neither is among the anomaly lenses above. I found no spin
-measurement for any lens galaxy's black hole.
+resolve (Kormendy and Ho 2013). Lensing does better. Central images have so far given bounds (the table above);
+lensed images near the centre have measured two black holes, of (3.3 ± 2.1)×10¹⁰ M☉ (3σ range) in Abell 1201 at z =
+0.17 (Nightingale et al. 2023; one model without a black hole fits comparably, which the authors argue is
+unphysical) and 3.6×10¹⁰ M☉ in the Cosmic Horseshoe at z = 0.44, with stellar kinematics (Melo-Carneiro et al.
+2025): both about 10¹⁰ M☉, ten times or more heavier than those in section 1. Neither is among the anomaly lenses
+above. I found no spin measurement for any lens galaxy's black hole.
 
 ## 6. How the question changes shape
 
@@ -219,10 +223,10 @@ measurement for any lens galaxy's black hole.
    nothing. With black hole masses taken from M–σ, testing "anomaly against black hole" is testing "anomaly against
    σ". A fair test needs masses measured independently of σ, compared at fixed σ. No anomaly lens has one today.
 3. **Testable versions.**
-   - **Central images.** A core squeezed by a black hole of given mass predicts a definite central image. SDP.81 and
-     PMN J1632−0033 show deep radio and submillimetre imaging can find or bound it, but neither now has a
-     confirmed small-scale anomaly (section 5). Doing this in quads with anomaly data would weigh the black hole and the core
-     in the same lens.
+   - **Central images.** A core squeezed by a black hole of given mass predicts a definite central image. SDP.81
+     and PMN J1632−0033 show deep radio and submillimetre imaging can find or bound it, but SDP.81's small-scale
+     anomaly is now disputed and none has been reported for PMN J1632−0033 (section 5). Doing this in quads with
+     anomaly data would weigh the black hole and the core in the same lens.
    - **Lumps with their own black hole.** Oguri and Kubo's reading of JVAS B1938+666 predicts a point mass inside
      some dark lumps. Gravitational imaging can test that lump by lump. A point mass alone does not single out
      wave dark matter: the best model of the B1938+666 lump has one (Vegetti et al. 2026), and the self-interacting
@@ -284,7 +288,7 @@ at 10⁻²² eV.
 - P. Pani, V. Cardoso, L. Gualtieri, E. Berti and A. Ishibashi, *Perturbations of slowly rotating black holes: massive vector fields in the Kerr metric*, Phys. Rev. D 86, 104017 (2012). https://doi.org/10.1103/PhysRevD.86.104017 (https://arxiv.org/abs/1209.0773)
 - Planck Collaboration, *Planck 2018 results. VI. Cosmological parameters*, A&A 641, A6 (2020). https://doi.org/10.1051/0004-6361/201833910 (https://arxiv.org/abs/1807.06209)
 - D. M. Powell et al., *A lensed radio jet at milli-arcsecond resolution II: constraints on fuzzy dark matter from an extended gravitational arc*, MNRAS Letters 524, L84 (2023). https://doi.org/10.1093/mnrasl/slad074 (https://arxiv.org/abs/2302.10941)
-- D. M. Powell et al., *A million-solar-mass object detected at a cosmological distance using gravitational imaging*, Nature Astronomy 9, 1714 (2025), as cited by Oguri and Kubo. https://doi.org/10.1038/s41550-025-02651-2 (https://arxiv.org/abs/2510.07382)
+- D. M. Powell et al., *A million-solar-mass object detected at a cosmological distance using gravitational imaging*, Nature Astronomy 9, 1714 (2025). https://doi.org/10.1038/s41550-025-02651-2 (https://arxiv.org/abs/2510.07382)
 - R. C. Reis, M. T. Reynolds, J. M. Miller and D. J. Walton, *Reflection from the strong gravity regime in a lensed quasar at redshift z = 0.658*, Nature 507, 207 (2014). https://doi.org/10.1038/nature13031 (https://arxiv.org/abs/1403.4973)
 - K. K. Rogers and H. V. Peiris, *Strong bound on canonical ultralight axion dark matter from the Lyman-alpha forest*, Phys. Rev. Lett. 126, 071302 (2021). https://doi.org/10.1103/PhysRevLett.126.071302 (https://arxiv.org/abs/2007.12705)
 - H.-Y. Schive et al., *Understanding the core-halo relation of quantum wave dark matter from 3D simulations*, Phys. Rev. Lett. 113, 261302 (2014). https://doi.org/10.1103/PhysRevLett.113.261302 (https://arxiv.org/abs/1407.7762)

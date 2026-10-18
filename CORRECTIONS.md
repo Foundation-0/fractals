@@ -107,7 +107,7 @@ Claims made during the exploration that did not survive it, kept so the record s
 
 ## 18 October 2026: the black hole lensing note revisited (issue #28)
 
-16. **SDP.81 as the anomaly lens with a weighed black hole.** Claimed (notes/bh-lensing.md, issue #1): "Only one
+16. **SDP.81 as the anomaly lens with a bound on its black hole.** Claimed (notes/bh-lensing.md, issue #1): "Only one
     anomaly lens, SDP.81, has even a bound on its black hole". The note paired a 10^(8.96±0.12) M☉ dark lump at
     6.9σ (Hezaveh et al. 2016) with a black hole above 3×10⁸ M☉ from the missing central image. That no longer
     holds. Stacey et al. (A&A, 2025) re-analysed the same ALMA data. They find the lump most likely spurious,
