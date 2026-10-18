@@ -42,6 +42,9 @@ for (let p = 0; p < T.PMAX; p++) {
 }
 console.log('Measured in a wind tunnel at R_lambda 2000-6000: zeta_2 = 0.693 +- 0.003 (Kuchler, Bewley & Bodenschatz 2023).');
 console.log(`Velocity across a size l grows as l^(zeta_2/2): ${f3(a.zeta.essF[1] / 2)} here, 1/3 in K41, ${f3(T.sheLeveque(2) / 2)} for She-Leveque, 1/2 for shocks.`);
+const fl = a.av.S[3].map((s4, n) => s4 / (a.av.S[1][n] * a.av.S[1][n])), hStar = (a.zeta.essF[3] - a.zeta.essF[1]) / 2;
+console.log(`Flatness <|u|^4>/<|u|^2>^2 grows toward small scales as k^(2 zeta_2 - zeta_4) = k^${f3(2 * a.zeta.essF[1] - a.zeta.essF[3])}: ` +
+  `${[2, 4, 6, 8, 10].map(n => `${fl[n].toFixed(2)} at shell ${n}`).join(', ')}.`);
 
 if (!quick) {
   console.log('\nWhere the cascade stops, against Reynolds number (each run 8 blocks; the nu = 1e-7 row is the long run)\n');
@@ -59,19 +62,26 @@ if (!quick) {
   console.log('Width in decades (forcing shell to the cut) against log10 Re, slope by where the cut is put (where the flux or the');
   console.log('spectrum, relative to its power law, has fallen to the given fraction):');
   console.log('  ' + Object.entries(cuts).map(([name, ys]) => `${name} ${f3(T.linfit(xs, ys).slope)}`).join(', '));
-  console.log(`K41: 3/4. Dissipation at the cut, nu k_d^2 S_2(k_d) = eps with S_2 ~ k^-zeta_2, gives 1/(2 - zeta_2) = ${f3(1 / (2 - a.zeta.essF[1]))}.`);
+  console.log(`K41: 3/4. Viscous loss at the cut, nu k_d^2 S_2(k_d) = eps with S_2 ~ k^-zeta_2: 1/(2 - zeta_2) = ${f3(1 / (2 - a.zeta.essF[1]))}.`);
+  console.log(`Multifractal cut-off Re^(1/(1 + h*)), h* = dzeta_p/dp at p = 3 ~ (zeta_4 - zeta_2)/2: ${f3(1 / (1 + hStar))}. A local Reynolds number`);
+  console.log(`of 1 on the rms velocity, k_d S_2(k_d)^(1/2) = 1/nu, would give 2/(2 + zeta_2) = ${f3(2 / (2 + a.zeta.essF[1]))}, below 3/4.`);
 }
 
-const W = T.SLOW_WIND, di = T.inertialLength(W.n), col = T.protonCollisions(W);
-console.log(`\nSolar wind at 1 AU (n = ${W.n / 1e6} cm^-3, V = ${W.V / 1e3} km/s, B = ${W.B * 1e9} nT, T = ${e2(W.T)} K, beta_p = ${T.betaP(W).toFixed(2)})\n`);
+const W = T.WIND, di = T.inertialLength(W.n), col = T.protonCollisions(W), cool = T.protonCollisions({ ...W, T: 4e4 }), psi = T.parkerAngle(W.V);
+console.log(`\nSolar wind at 1 AU (n = ${W.n / 1e6} cm^-3, V = ${W.V / 1e3} km/s, B = ${W.B * 1e9} nT, T = ${e2(W.T)} K, beta_p = ${T.betaP(W).toFixed(2)};` +
+  ` Parker-spiral angle ${(psi * 180 / Math.PI).toFixed(0)} deg)\n`);
+console.log('length'.padEnd(40) + 'km'.padStart(6) + '   swept past at V: no angle, V sin(theta_BV)');
 for (const [name, ell] of [['proton inertial length c/omega_pi', di], ['proton gyroradius, v_th = sqrt(2kT/m)', T.gyroradius(W.T, W.B, 2)],
   ['proton gyroradius, v_th = sqrt(kT/m)', T.gyroradius(W.T, W.B, 1)]]) {
-  console.log(`${name.padEnd(40)} ${(ell / 1e3).toFixed(0).padStart(5)} km   swept past at V: ${T.taylorFrequency(W.V, ell).toFixed(2)} Hz`);
+  console.log(`${name.padEnd(40)} ${(ell / 1e3).toFixed(0).padStart(5)}   ${T.taylorFrequency(W.V, ell).toFixed(2).padStart(10)} Hz ${T.taylorFrequency(W.V, ell, psi).toFixed(2).padStart(10)} Hz`);
 }
-console.log(`proton collision time ${(col.tau / 86400).toFixed(0)} days, mean free path ${(col.mfp / T.C.AU).toFixed(2)} AU = ${e2(col.mfp / di)} inertial lengths (ln Lambda = 25)`);
+console.log(`proton collision time ${(col.tau / 86400).toFixed(0)} days, mean free path ${(col.mfp / T.C.AU).toFixed(2)} AU = ${e2(col.mfp / di)} inertial lengths;` +
+  ` at 4e4 K ${(cool.tau / 86400).toFixed(0)} days, ${(cool.mfp / T.C.AU).toFixed(2)} AU (ln Lambda = 25)`);
 console.log('Observed: the ion break at 0.4-0.5 Hz; 0.1-1 Hz across conditions.');
 
-console.log(`\nMolecular clouds at 10 K: sound speed ${(T.soundSpeed(10) / 1e3).toFixed(3)} km/s (mu = 2.33). Where the turbulent 1D dispersion falls to it:\n`);
-console.log(`Larson (1981), sigma_3D = 1.10 L^0.38:          L = ${T.sonicScale(T.LARSON81).toFixed(3)} pc (maximum projected size)`);
+console.log(`\nMolecular clouds at 10 K: sound speed ${(T.soundSpeed(10) / 1e3).toFixed(3)} km/s (mu = 2.33). Where the 1D non-thermal dispersion falls to it:\n`);
+console.log(`Larson (1981), sigma_3D = 1.10 L^0.38, CO thermal width removed:  L = ${T.sonicScale(T.LARSON81).toFixed(3)} pc (maximum projected size);` +
+  ` non-thermal Mach ${[0.1, 1, 10, 100].map(l => T.machAt(T.LARSON81, l).toFixed(1)).join(', ')} at 0.1, 1, 10, 100 pc`);
 console.log(`Solomon et al. (1987), sigma_1D = 0.72 R^0.5:   R = ${T.sonicScale(T.SOLOMON87).toFixed(3)} pc (effective radius), diameter ${(2 * T.sonicScale(T.SOLOMON87)).toFixed(3)} pc`);
-console.log('Both fits stop near 0.1 pc. Observed: filaments 0.10 +- 0.03 pc wide (FWHM); coherent cores of about 0.1 pc.');
+console.log('Larson\'s data reach about 0.1 pc; Solomon et al.\'s giant clouds are pc-sized and larger. Observed: filaments 0.10 +- 0.03 pc wide');
+console.log('(FWHM); coherent cores of about 0.1 pc.');

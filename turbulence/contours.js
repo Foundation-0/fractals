@@ -279,16 +279,16 @@
       }
     }
     const reg = new Map();
-    const get = r => { let g = reg.get(r); if (!g) { g = { P: 0, A: 0, nPos: 0, wrap: false, hullA: 0, hullRg: 0, nLoops: 0 }; reg.set(r, g); } return g; };
+    const get = r => { let g = reg.get(r); if (!g) { g = { P: 0, A: 0, nPos: 0, wrap: false }; reg.set(r, g); } return g; };
     for (let k = 0; k < loops.P.length; k++) {
-      const g = get(find(loops.lab[k])); g.P += loops.P[k]; g.A += loops.A[k]; g.nLoops++;
-      if (loops.A[k] > 0) { g.nPos++; g.hullA = loops.A[k]; g.hullRg = loops.Rg[k]; }
+      const g = get(find(loops.lab[k])); g.P += loops.P[k]; g.A += loops.A[k];
+      if (loops.A[k] > 0) g.nPos++;
     }
     for (const lab of loops.wrapLab) get(find(lab)).wrap = true;
-    const res = { P: [], A: [], hullA: [], hullRg: [], nHoles: [], dropped: 0 };
+    const res = { P: [], A: [], dropped: 0 };
     for (const g of reg.values()) {
       if (g.wrap || g.nPos !== 1) { res.dropped++; continue; }
-      res.P.push(g.P); res.A.push(g.A); res.hullA.push(g.hullA); res.hullRg.push(g.hullRg); res.nHoles.push(g.nLoops - 1);
+      res.P.push(g.P); res.A.push(g.A);
     }
     return res;
   }
@@ -370,21 +370,23 @@
 
   // ---------- one field, and the estimates over many ----------
   // What a perimeter-area study needs from one field: loops at the mean level (P against R_g and against sqrt A, and
-  // sqrt A against R_g), loops at the median level, clouds with their holes, the total contour length on every s-th
-  // vertex (the level set's yardstick), and the structure function.
+  // sqrt A against R_g), the outlines of above-level regions only (loops with the region inside, A > 0), loops at the
+  // median level, clouds with their holes, the total contour length on every s-th vertex (the level set's yardstick),
+  // and the structure function.
   function fieldRecord(f, L, { yardMax = 32 } = {}) {
-    const r = contours(f, L, 0, { clouds: true }), R = newBins(), A = newBins(), RA = newBins();
+    const r = contours(f, L, 0, { clouds: true }), R = newBins(), A = newBins(), RA = newBins(), Ro = newBins();
     for (let k = 0; k < r.P.length; k++) {
       const P = r.P[k], a = Math.abs(r.A[k]), g = r.Rg[k];
       if (!(g > 0) || !(a > 0)) continue;
       binAdd(R, g, P); binAdd(A, Math.sqrt(a), P); binAdd(RA, g, Math.sqrt(a));
+      if (r.A[k] > 0) binAdd(Ro, g, P);
     }
     const CL = newBins(); for (let k = 0; k < r.clouds.P.length; k++) binAdd(CL, Math.sqrt(r.clouds.A[k]), r.clouds.P[k]);
     const m = median(f), q = contours(f, L, m), Rm = newBins();
     for (let k = 0; k < q.P.length; k++) if (q.Rg[k] > 0) binAdd(Rm, q.Rg[k], q.P[k]);
     const len = [r.totalLength];
     for (let s = 2; s <= yardMax; s *= 2) len.push(s * contours(subsample(f, L, s), L / s, 0, { lengthOnly: true }).totalLength);
-    return { R, A, RA, CL, Rm, len, sf: structure(f, L), nLoops: r.P.length, nWrap: r.nWrap, wrapShare: r.wrapLength / r.totalLength };
+    return { R, A, RA, Ro, CL, Rm, len, sf: structure(f, L), nLoops: r.P.length, nWrap: r.nWrap, wrapShare: r.wrapLength / r.totalLength };
   }
   // Fit windows. Loops: R_g in [r0, L/16] (primary; r0 = 8 from L = 1024, else 4), and Rmin in {r0/2, r0, 2 r0}, Rmax in
   // {L/32, L/16, L/8}, at least two octaves wide, for the spread. Yardstick: s in [y0, ymax] and neighbours.
@@ -396,7 +398,8 @@
   function yardWindows(L, ymax) { const y0 = L >= 1024 ? 4 : 2; return [[y0, ymax], [y0 / 2, ymax], [2 * y0, ymax], [y0 / 2, ymax / 2], [y0, ymax / 2]].filter(w => w[1] / w[0] >= 2); }
   // Each estimate: value in the primary window, jackknife error over fields, and half the spread over windows.
   //   loops: D from P ~ R_g^D;  area: D from P ~ A^(D/2) (sqrt A window = c x the R_g window, c = <sqrt A / R_g>);
-  //   median: loops at the median level;  clouds: perimeter including holes against net area;
+  //   outer: outlines of above-level regions only;  median: loops at the median level;
+  //   clouds: perimeter including holes against net area;
   //   yard: level set, total length l(s) ~ s^(1 - D);  Heff: half the log slope of the structure function, over the
   //   loop window (HeffLoop) and the yardstick window (HeffYard).
   function estimate(recs, L, yardMax = 32) {
@@ -412,6 +415,7 @@
     const est = {
       loops: (w, ex) => binFit(pool('R', ex), w[0], w[1], 2).slope,
       area: (w, ex) => { const c = ratio(ex, w[0], w[1]); return binFit(pool('A', ex), c * w[0], c * w[1], 2).slope; },
+      outer: (w, ex) => binFit(pool('Ro', ex), w[0], w[1], 2).slope,
       median: (w, ex) => binFit(pool('Rm', ex), w[0], w[1], 2).slope,
       clouds: (w, ex) => { const c = ratio(ex, w[0], w[1]); return binFit(pool('CL', ex), c * w[0], c * w[1], 2).slope; },
       yard: (w, ex) => 1 - slopeIn(meanLog('len', ex), w[0], w[1]),
@@ -422,7 +426,7 @@
     const withWindows = (fn, ws) => { const all = ws.map(w => fn(w)).filter(Number.isFinite); return { ...jack(fn, ws[0]), win: (Math.max(...all) - Math.min(...all)) / 2 }; };
     const W = loopWindows(L), YW = yardWindows(L, yardMax);
     return {
-      loops: withWindows(est.loops, W), area: withWindows(est.area, W), median: withWindows(est.median, W), clouds: withWindows(est.clouds, W),
+      loops: withWindows(est.loops, W), area: withWindows(est.area, W), outer: withWindows(est.outer, W), median: withWindows(est.median, W), clouds: withWindows(est.clouds, W),
       yard: withWindows(est.yard, YW), HeffLoop: jack(est.Heff, W[0]), HeffYard: jack(est.Heff, YW[0]), c: ratio(null, W[0][0], W[0][1]), W, YW,
       nLoops: recs.reduce((a, r) => a + r.nLoops, 0) / n, nWrap: recs.reduce((a, r) => a + r.nWrap, 0) / n, wrapShare: recs.reduce((a, r) => a + r.wrapShare, 0) / n,
     };

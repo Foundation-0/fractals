@@ -19,9 +19,10 @@ Kolmogorov's 1941 picture (K41): energy fed in at a large scale L passes to smal
 
 so the range of repeating scales is L/η ~ Re^(3/4), with Re the Reynolds number. In between, the velocity
 difference across a distance r depends only on ε and r. Its p-th moment then grows as r^(p/3). One result is
-exact: the third moment is −(4/5) ε r (Kolmogorov's 4/5 law). The energy spectrum is C ε^(2/3) k^(−5/3); the
-constant is about 1.5 for the 3D spectrum and 0.53 ± 0.055 for the 1D longitudinal one (Sreenivasan 1995), which
-isotropy turns into 1.62 in 3D, so "about 1.5" needs its spectrum named.
+exact: the third moment of the longitudinal velocity difference is −(4/5) ε r in the inertial range (Kolmogorov's
+4/5 law). The energy spectrum is C ε^(2/3) k^(−5/3). The constant is about 1.5 for the 3D spectrum. For the 1D
+longitudinal spectrum, Sreenivasan's (1995) compilation of experiments gives 0.53 with a scatter of 0.055, which
+isotropy turns into 1.62 ± 0.17 in 3D, so "about 1.5" is fair once its spectrum is named.
 
 ## A cascade to run: the Sabra shell model
 
@@ -60,13 +61,17 @@ would fall as k_n^(−p/3). It does not:
 The model's exponents come from the flux-based moments ⟨|Π_n/k_n|^(p/3)⟩, scaled against the third
 (extended self-similarity), over shells 3 to 11. Statistical errors are 0.0002 for p = 2 and 0.004 for p = 6; the
 fit range moves them by up to 0.002 and 0.006. The plain moments ⟨|u_n|^p⟩ ripple from shell to shell. Their
-fitted exponents shift by several hundredths, up to about 0.1 for p = 6, with the fit range and the forcing, so
-they are printed but not used.
+fitted exponents shift by several hundredths, up to about 0.1 for p = 6, with the fit range, so they are printed
+but not used.
 
-Big bursts are rarer at small scales than a scaled copy would make them, and the excess grows with p. That is
-intermittency, and it is the main way real turbulence breaks exact self-similarity. The shell model overdoes it.
-Its ζ₂ − 2/3 is 0.053; a wind tunnel at Taylor-scale Reynolds numbers of 2,000 to 6,000 gives
-ζ₂ = 0.693 ± 0.003, an excess of 0.026 (Küchler, Bewley and Bodenschatz 2023), close to She and Leveque's 0.029.
+At small scales the velocity is more often near zero, and more often very large, than a scaled copy would make
+it. The tails of its distribution fatten: the flatness ⟨|u|⁴⟩/⟨|u|²⟩² grows toward small scales as
+k^(2ζ₂ − ζ₄) = k^0.18 here, from 1.8 at shell 2 to 5.7 at shell 10. That is intermittency, and it is the main way
+real turbulence breaks exact self-similarity. The shell model overdoes it. Its ζ₂ − 2/3 is 0.052. A wind tunnel
+at Taylor-scale Reynolds numbers of 2,000 to 6,000 gives ζ₂ = 0.693 ± 0.003 after correcting for the decay of the
+turbulence, an excess of 0.026 (Küchler, Bodenschatz and Bewley 2020), close to She and Leveque's 0.029. The same
+group later read their high-Reynolds-number statistics as a universal form rather than a pure power law
+(Küchler, Bewley and Bodenschatz 2023).
 
 **Where it stops.** The flux falls to half about one shell before k_η = (ε/ν³)^(1/4), and the spectrum falls to
 half its power law within half a shell of k_η. Over four viscosities the cascade widens with the Reynolds number:
@@ -80,9 +85,11 @@ half its power law within half a shell of k_η. Over four viscosities the cascad
 
 The width grows by 0.79 decades per decade of Re (0.786 to 0.794 for cuts where the flux, or the spectrum against
 its power law, has fallen to a quarter, a half or three quarters). K41 gives 3/4: the flux half-point drifts toward
-k_η by about half a shell over three decades. Intermittency accounts for most of the difference. If the cut is
-where viscous loss ν k² S₂(k) uses up ε, and S₂ falls as k^(−ζ₂), the cut moves as Re^(1/(2 − ζ₂)): Re^(3/4) for
-K41's ζ₂ = 2/3 and Re^0.78 for the model's 0.719. This is a rough balance argument, not a fit.
+k_η by about half a shell over three decades. Intermittency accounts for the difference. In the multifractal
+picture the cut-off goes as Re^(1/(1 + h*)), with h* = dζ_p/dp at p = 3, the scaling of the velocity that carries
+the flux (Paladin and Vulpiani 1987; Frisch 1995). With the model's exponents h* ≈ (ζ₄ − ζ₂)/2 = 0.27, which gives
+Re^0.79. Simpler balances bracket it: viscous loss ν k² S₂(k) equal to ε gives Re^(1/(2 − ζ₂)) = Re^0.78, while a
+local Reynolds number of 1 on the rms velocity gives Re^(2/(2 + ζ₂)) = Re^0.74, below K41.
 
 ## Real cascades, and what stops them
 
@@ -90,8 +97,8 @@ K41's ζ₂ = 2/3 and Re^0.78 for the model's 0.719. This is a rough balance arg
 |---|---|---|---|
 | Wind tunnel, R_λ ≈ 6,000 | η | about 5 | viscosity |
 | Atmospheric surface layer, R_λ ≈ 10⁴ | η = 0.3 to 0.5 mm in wind | about 5.4 | viscosity |
-| Upper ocean | η = 2 to 3 mm | | viscosity |
-| Solar wind | the ion scales, about 100 km | | the ions' own motion, not collisions |
+| Upper ocean | η = 1 to 3 mm, more in quiet water | | viscosity |
+| Solar wind | the ion scales, about 100 km (the MHD range) | | the ions' own motion, not collisions |
 | Interstellar electron density | at least 2×10⁶ m | 6.7 measured | not seen |
 | Molecular clouds | the sonic scale, about 0.1 pc | | the motions become subsonic |
 
@@ -111,7 +118,8 @@ The Kolmogorov scale is often quoted as about a millimetre. It moves with ε as 
 | Seawater | 10⁻⁸ | 3.3 mm | upper mixed layer, quieter |
 
 The ε values are from Balsley, Tjernström and Svensson (2008) for air and Yang et al. (2022), one 25-hour station,
-for the ocean. A millimetre needs ε ≈ 3×10⁻³ W/kg in air and 10⁻⁶ in the sea. Typical upper-ocean η is 2 to 3 mm.
+for the ocean. A millimetre needs ε ≈ 3×10⁻³ W/kg in air and 10⁻⁶ in the sea, which an actively stirred mixed layer
+reaches. So "about a millimetre" is the right order in both, with a spread of a factor of 10 either way.
 
 ### Atmosphere: two power laws
 
@@ -124,27 +132,29 @@ two ranges the other way round, k^(−3) on the small-scale side (Kraichnan 1967
 
 ### Solar wind: cut by the ions, not by viscosity
 
-The solar wind is too dilute for viscosity to end its cascade. A proton at 1 AU travels about an astronomical
-unit between Coulomb collisions (Braginskii's collision time, 49 days for typical slow wind). That is more than a
-million times the proton inertial length c/ω_pi. The cascade instead ends where the protons' own motion
-decouples them from the field:
+The solar wind is too dilute for viscosity to end its cascade. A proton at 1 AU travels 0.2 to 1 AU between
+Coulomb collisions (Braginskii's collision time: 49 days at 10⁵ K, 12 days at the 4×10⁴ K of cooler, slow wind).
+That is 10⁵ to 10⁶ times the proton inertial length c/ω_pi. The MHD cascade instead ends where the protons' own
+motion decouples them from the field, and a steeper, kinetic cascade carries on to the electron scales, about a
+kilometre:
 
-| Typical slow wind: n = 5 cm⁻³, V = 400 km/s, B = 5 nT, T = 10⁵ K (β_p = 0.69) | Length | Swept past at V |
-|---|---|---|
-| Proton inertial length c/ω_pi | 102 km | 0.63 Hz |
-| Proton gyroradius, v_th = √(2kT/m) | 85 km | 0.75 Hz |
-| Proton gyroradius, v_th = √(kT/m) | 60 km | 1.06 Hz |
+| Typical wind: n = 5 cm⁻³, V = 400 km/s, B = 5 nT, T = 10⁵ K (β_p = 0.69) | Length | Swept past: no angle | at the Parker angle, 47° |
+|---|---|---|---|
+| Proton inertial length c/ω_pi | 102 km | 0.63 Hz | 0.46 Hz |
+| Proton gyroradius, v_th = √(2kT/m) | 85 km | 0.75 Hz | 0.55 Hz |
+| Proton gyroradius, v_th = √(kT/m) | 60 km | 1.06 Hz | 0.78 Hz |
 
-A spacecraft sees a structure of size ℓ carried past at the wind speed as a frequency V/(2πℓ) (Taylor's
-hypothesis). Observed breaks sit at 0.4 to 0.5 Hz (Leamon et al. 1998; Sahraoui et al. 2009), and between 0.1 and
-1 Hz across conditions, at the larger of the two ion lengths (Chen et al. 2014). The estimate here runs high by
-about 40%. For fluctuations elongated along the field, the frequency depends on the angle between the field and
-the flow. At β near 1 the two lengths are nearly equal, so the break cannot tell them apart.
+A spacecraft sees structures carried past at the wind speed (Taylor's hypothesis). The fluctuations are elongated
+along the field, so a size ℓ across the field shows up at V sin θ_BV/(2πℓ), with θ_BV the angle between the field
+and the flow; at 1 AU the Parker spiral puts it near 47° for a 400 km/s wind. Observed breaks sit at 0.4 to 0.5 Hz
+(Sahraoui et al. 2009; Leamon et al. 1998), between 0.1 and 1 Hz across conditions, at the larger of the two ion
+lengths (Chen et al. 2014). The inertial length at the Parker angle gives 0.46 Hz. At β near 1 the two ion
+lengths are nearly equal, so the break cannot tell them apart.
 
 Above the break the magnetic spectrum falls as k^(−5/3) and the velocity spectrum as k^(−3/2) (Podesta, Roberts
-and Goldstein 2007). Below it a second power law continues to the electron scales, with a slope that is not
-universal: −2.8 (Alexandrova et al. 2009), −2.3 (Sahraoui et al. 2009), and −1.9 to −4.4 across 33 intervals
-(Leamon et al. 1998).
+and Goldstein 2007). Below it the kinetic range's slope is not universal: −2.8 (Alexandrova et al. 2009), −2.3
+(Sahraoui et al. 2009), and about −3 on average over Leamon et al.'s (1998) 33 intervals, with a spread of about
+−2 to −4 in later surveys.
 
 ### The interstellar medium
 
@@ -160,10 +170,13 @@ sound speed, 0.19 km/s at 10 K, the supersonic cascade ends. Two classic fits gi
 
 | Fit | Dispersion | Size | Sonic size |
 |---|---|---|---|
-| Larson (1981): σ = 1.10 L^0.38 km/s | 3D, thermal plus non-thermal | maximum projected size L | 0.041 pc |
-| Solomon et al. (1987): σ = 0.72 R^0.5 km/s | 1D | effective radius R = 1.91 S | 0.068 pc radius, 0.137 pc across |
+| Larson (1981): σ = 1.10 L^0.38 km/s | 3D, from line widths | maximum projected size L | 0.045 pc |
+| Solomon et al. (1987): σ = 0.72 R^0.5 km/s | 1D, from ¹²CO line widths | effective radius R = 1.91 S | 0.068 pc radius, 0.137 pc across |
 
-Both fits stop near 0.1 pc, so both sonic sizes are extrapolations. Together they bracket the 0.10 ± 0.03 pc
+Line widths include the tracer molecule's own thermal width, 0.055 km/s for CO at 10 K, small next to the sound
+speed of the gas; the Larson row removes it, which moves the sonic size from 0.041 to 0.045 pc. Larson's data
+reach about 0.1 pc, so his sonic size is a short extrapolation. Solomon et al.'s clouds are giant molecular clouds,
+a parsec and larger, so theirs is an extrapolation of more than a decade. Together they bracket the 0.10 ± 0.03 pc
 width of interstellar filaments (Arzoumanian et al. 2011, 2019) and the size of coherent cores, inside which the
 line width stops growing with size (Goodman et al. 1998). Pineda et al. (2010) see the dispersion rise by a factor
 of 2 within 0.04 pc at a core's edge. In simulations the transition is smooth over a factor of about 3 in scale
@@ -173,7 +186,8 @@ The fits differ in slope: Larson's 0.38 against Solomon et al.'s 0.5, with Heyer
 0.49 ± 0.15 cloud by cloud. In a cascade the dispersion grows as ℓ^(ζ₂/2). That gives 1/3 for K41, 0.36 for the
 shell model and 0.35 for She–Leveque, all incompressible, and 1/2 for a field of shocks. Federrath et al.'s
 simulations give 0.49 ± 0.01 in the supersonic range and 0.39 ± 0.02 in the subsonic one. Larson's 0.38 is close
-to the subsonic value, but his clouds are supersonic throughout (Mach 1.4 to 19). The difference is better put
+to the subsonic value, but his clouds are supersonic throughout (non-thermal Mach 1.4 at 0.1 pc to 19 at
+100 pc). The difference is better put
 down to his sample and size definition, and the supersonic data favour about 0.5.
 
 ### Superfluid helium
@@ -189,8 +203,10 @@ Below that spacing the energy travels along single lines as Kelvin waves (Bareng
 Cloud edges in projected CO maps follow a perimeter-area relation P ∝ A^(D/2) with D = 1.36 ± 0.02, the same
 from about 100 pc down to 0.1 pc (Falgarone, Phillips and Walker 1991). The error is a formal fit error: other
 data for the same part of Taurus gave 1.51 (Stutzki 1993, as quoted by Sánchez et al. 2005). Rain and cloud areas
-in the atmosphere give 1.35 ± 0.05 (Lovejoy 1982). Planar sections through laboratory turbulent interfaces give 1.3
-to 1.4, from surfaces of dimension 2.3 to 2.4 (Sreenivasan and colleagues). The match is often cited.
+in the atmosphere give 1.35 ± 0.05 (Lovejoy 1982). Laser-sheet sections through the turbulent/non-turbulent
+interfaces of laboratory jets and wakes give box-counting dimensions of 1.3 to 1.4, sections of surfaces of
+dimension 2.3 to 2.4 (Sreenivasan and Meneveau 1986), which Sreenivasan, Ramshankar and Meneveau (1989) explain
+as 7/3. The match between clouds and laboratory is often cited.
 
 A fractional-Brownian estimate depends on which dimension the relation measures. For a Gaussian random surface
 with power spectrum k^(−β), so H = (β − 2)/2:
@@ -199,7 +215,8 @@ with power spectrum k^(−β), so H = (β − 2)/2:
 - a single contour loop has dimension (3 − H)/2 (Kondev and Henley 1995).
 
 A perimeter-area relation over separate clouds measures single loops. `contours.js` checks this by making the
-surfaces and measuring both. The table below uses 32 surfaces of 2048 × 2048 points per spectrum:
+surfaces and measuring both. The table below uses 32 surfaces of 2048 × 2048 points per spectrum
+(`node turbulence/edges.mjs`):
 
 | β | H | (3 − H)/2 | 2 − H | Loops, P ∝ R_g^D | Loops, P ∝ A^(D/2) | All contours together |
 |---|---|---|---|---|---|---|
@@ -214,35 +231,49 @@ R_g is a loop's radius of gyration, fitted over 8 to 128 grid spacings. The erro
 surfaces with the spread over fit windows. The last column comes from the total contour length measured on
 coarser and coarser grids.
 
-- **Loops follow Kondev and Henley.** A periodic box makes the surfaces a little smoother than their spectrum
-  says. Measured over the same range of sizes, the effective roughness H_eff runs from 0.24 to 0.76. The loop
-  dimension falls with it at a slope of −0.53 ± 0.05: single loops predict −1/2, and the whole level set −1, which
-  is 10 standard errors away.
-- **An offset.** Loops sit about 0.04 above (3 − H_eff)/2 at every spectrum. In an independent check the offset did
-  not shrink from 1,024 to 4,096 points per side, and its origin is open.
+- **Loops follow Kondev and Henley.** On a finite periodic grid the roughness the loops see differs from
+  (β − 2)/2: higher for flat spectra (0.24 against 0.20 at β = 2.4), lower for steep ones (0.76 against 0.83 at
+  11/3). Measured over the same range of sizes, the loop dimension falls with this effective roughness H_eff at a
+  slope of −0.53 ± 0.05 (−0.532 ± 0.024 at 4096 points per side). Single loops predict −1/2; the whole level set
+  −1, which is 10 standard errors away (19 at 4096).
+- **An offset.** Loops sit above (3 − H_eff)/2 at every spectrum: by 0.039, 0.038 and 0.035 on average at 1,024,
+  2,048 and 4,096 points per side (`node turbulence/edges.mjs 1024`, `4096`). It barely shrinks, and its origin
+  is open.
 - **The whole level set follows Mandelbrot:** its dimension tracks 2 − H_eff to within 0.02.
 - **What does not change the answer:**
   - the level: the median gives the same loops;
   - fitting perimeter against size or against area;
-  - counting only the outer boundaries of clouds (the independent check found these agree with all loops to 0.01).
-- **Counting holes does.** Adding a cloud's holes to its perimeter gives a larger number that depends on
-  resolution, 1.65 at β = 2.4, so a measured value depends on whether holes were counted. Which convention
-  Falgarone et al. used was not seen here.
+  - fitting only the outlines of clouds (loops with the cloud inside), which agree with all loops to within 0.02.
+- **Counting holes does.** Adding a cloud's holes to its perimeter gives a larger number, 1.65 at β = 2.4, so a
+  measured value depends on whether holes were counted. Which convention Falgarone et al. used was not seen here.
 
 So, on Gaussian surfaces:
 
-- **Projected Kolmogorov density** (β = 11/3) gives 1.15, not 1.36. Single loops predict 13/12; 7/6 is the formula
-  for all contours together.
-- **A planar slice through a Kolmogorov field** (β = 8/3, H = 1/3) gives 1.36, near (3 − 1/3)/2 = 4/3. This is
-  the laboratory's kind of measurement.
-- **CO maps**, whose projected spectra are near β = 2.8 (Stutzki et al. 1998), give 1.34. Falgarone et al.'s
-  1.36 ± 0.02 corresponds to β = 2.58 to 2.77.
+- **Projected Kolmogorov density** (β = 11/3) gives 1.15, not 1.36. Single loops predict 13/12; the 7/6 sometimes
+  quoted is the formula for all contours together.
+- **CO maps** have projected spectra near β = 2.8 (Stutzki et al. 1998); single loops there give 1.34 to 1.35.
+  Falgarone et al. fitted perimeter against area, and on that column their 1.36 ± 0.02 corresponds to β = 2.70, or
+  2.57 to 2.86 with this computation's own error added. The formula alone, without the loops' offset, puts it at
+  2.56. The agreement with CO-map spectra therefore leans on the offset.
+- **Measured values on real maps run from 1.36 to about 1.6.** Stutzki (1993) found 1.51 for Taurus. Stutzki et
+  al. (1998) report that the area-perimeter dimension measured for the Polaris Flare is consistent with β = 2.8
+  through the fractional-Brownian relation. If that is the level-set relation, it implies 2 − H = 1.6 (search text
+  gives d = 1.6, not seen in the paper). The spread fits what the computation shows: counting holes, or whole
+  contour sets, raises the number.
 
-The agreement between clouds and laboratory is a coincidence of two different fields. One is a slice through
-incompressible turbulence. The other is a projection of supersonic gas, whose spectrum is shallower than
-Kolmogorov's. Both happen to have H between 1/3 and 0.4. Real column densities are not Gaussian (they are close to
-log-normal and intermittent), and Sánchez et al. (2005) find that the projected perimeter dimension also depends
-on the resolution and on the cloud's 3D dimension, so this settles the formula, not the clouds.
+The laboratory value is a different measurement: a box count over the trace of one interface between turbulent
+and quiet fluid, explained by 7/3 for the surface (Sreenivasan, Ramshankar and Meneveau 1989). An interface bounds
+one region, so a single loop on a slice through a Kolmogorov field (β = 8/3, H = 1/3) is a natural Gaussian
+analogue. That gives 1.36 here, and (3 − 1/3)/2 = 4/3 equals the 7/3 surface's section. But 7/3 = 2 + 1/3 and
+(3 − H)/2 coincide only at H = 1/3, and the interface is not a level set of a Gaussian field. Iso-scalar surfaces
+inside the turbulence measure about 8/3, whose section 5/3 = 2 − H is the whole-level-set value (Constantin,
+Procaccia and Sreenivasan 1991). Cloud maps are projections of supersonic gas whose spectrum is shallower than
+Kolmogorov's. The laboratory value comes from a section through incompressible turbulence. Both numbers sit near
+4/3 for different reasons, so their agreement does not show shared physics.
+
+Real column densities are not Gaussian: they are close to log-normal and intermittent. Sánchez et al. (2005) also
+find that the projected perimeter dimension depends on the resolution and on the cloud's 3D dimension. So this
+settles which formula a perimeter-area fit over single loops measures, not what the clouds are.
 
 ## Run it
 
@@ -250,7 +281,8 @@ on the resolution and on the cloud's 3D dimension, so this settles the formula, 
 node turbulence/table.mjs          # everything above, with the long run and the viscosity scan (about a minute)
 node turbulence/table.mjs quick    # the same with the test's short run, no scan (a few seconds)
 node turbulence/edges.mjs          # the cloud-edge table, 2048 points per side (about 45 s on 4 cores)
-node turbulence/edges.mjs quick    # the same at 256 points per side (about a second)
+node turbulence/edges.mjs 4096     # any power of 2; 4096 takes about 4 minutes on 4 cores
+node turbulence/edges.mjs quick    # a smoke test of the same code at 256 points per side (about a second)
 npm test                           # includes tests/turbulence.mjs and tests/turbulence-edges.mjs (about 5 s)
 ```
 
@@ -270,26 +302,26 @@ Node (`require`) and in a browser (`window.TURB`, `window.CONTOURS`).
 | Shell-model 4/5 law, shells 1 to 5 (derived in `model.js`) | 1 − (−1/2)^n ± 0.005 | within 0.0004 |
 | Anomalous scaling: ζ₂ − 2/3 and 2 − ζ₆ | over 5 standard errors | over 80 and 50 |
 | ζ₂, ζ₄, ζ₆ in the test's run against the long run | 0.719, 1.255, 1.716 | 0.720, 1.254, 1.717 |
-| Model's ζ₂ excess against the measured one (Küchler et al. 2023) | over 1.5 times | 0.053 against 0.026 |
+| Model's ζ₂ − 2/3 against the measured one (Küchler et al. 2020) | larger by over 5 errors (0.015) | 0.053 against 0.026 ± 0.003 |
 | Cascade end against k_η (flux and spectrum half-points) | within 1.5 shells | −1.03 and −0.07 |
 | Upper-ocean η for ε = 10⁻⁸ to 10⁻⁷ W/kg (arithmetic) | 1.8 to 3.3 mm | 1.84, 3.28 mm |
 | Air η for ε = 0.4 to 10⁻⁷ (arithmetic) | 0.3 mm to 1.4 cm | 0.30, 13.6 mm |
 | Proton inertial length at 5 cm⁻³ (NRL formulary) | 228/√5 km | 101.8 km |
-| Solar-wind proton mean free path, in inertial lengths | over 10⁵ | 1.7×10⁶ |
-| V/(2π d_i) against the observed ion break (Leamon et al.) | 0.44 Hz, within ×1.5 | 0.63 Hz |
-| Sonic sizes from Larson and Solomon et al. against filament widths | bracket 0.10 pc | 0.041 and 0.137 pc |
+| Solar-wind proton mean free path at 10⁵ K and 4×10⁴ K, in inertial lengths | over 10⁵ | 1.7×10⁶ and 2.7×10⁵ |
+| V sin θ_BV/(2π d_i) at the Parker angle against the observed ion break | 0.4 to 0.5 Hz | 0.457 Hz |
+| Sonic sizes from Larson and Solomon et al. against filament widths | bracket 0.10 pc | 0.045 and 0.137 pc |
 
 `tests/turbulence-edges.mjs`:
 
 | Check | Expected | Model |
 |---|---|---|
 | FFT against the direct DFT; 2D Parseval and round trip | equal | within 4×10⁻¹³ |
-| Random streams: consecutive blocks, overlap refused | | yes |
+| Random streams: consecutive blocks, overlap refused, two uniforms per two normals | | yes |
 | Surfaces against a naive synthesis; fitted spectral slopes | equal; β ± 0.06 | 2×10⁻¹⁴; within 0.012 |
 | Circle: P, A, R_g; the same circle across the torus seams | 2πr₀, πr₀², r₀; identical | within 0.05% |
 | Contours around the torus found and dropped | 2 and 2 | 2 and 2 |
 | Saddle cells joined or split by the cell average | 1, 2, 1, 2 loops | 1, 2, 1, 2 |
-| Random surfaces: walks close, areas add up (Green's theorem) | exact | 2×10⁻¹⁵ |
+| Green's theorem: loop areas add up to the area above the level (10 of 12 surfaces) | exact | 2×10⁻¹⁵ |
 | Loops under a shift, a quarter turn, upside down | unchanged | within 7×10⁻¹³ |
 | β = 2.4 and 3: loops nearer (3 − H)/2, level set nearer 2 − H | yes | yes |
 | Fall of the loop dimension from β = 2.4 to 3 against the rise in H_eff | half of it (0.118), not all (0.236) | 0.092 ± 0.026 |
@@ -303,8 +335,12 @@ Node (`require`) and in a browser (`window.TURB`, `window.CONTOURS`).
   1.71 for p = 2, 4 and 6) are recalled, not checked, so the tests compare the model only with its own long run.
 - The flux relation's form in the literature was not seen; the one here is derived from the equation.
 - Kolmogorov scales use published dissipation rates; the η values are arithmetic, not measurements.
-- The solar-wind numbers are for one typical slow wind. The Taylor shift ignores the field-flow angle.
-- Larson's and Solomon et al.'s fits are extrapolated below their data to reach the sonic scale.
+- The solar-wind numbers are for one typical wind; the Parker angle stands in for the field-flow angle of each
+  interval.
+- Larson's fit is extrapolated a little below its data to reach the sonic scale, Solomon et al.'s by more than a
+  decade. Larson's line widths are assumed to come from CO-like tracers.
+- The multifractal cut-off and Kraichnan's ordering are standard results quoted from memory (Paladin and Vulpiani;
+  Frisch; Kraichnan), not checked against the sources.
 - The cloud-edge computation uses Gaussian surfaces. Real column densities are close to log-normal and
   intermittent, and observed maps add noise, beams and optical depth. The loops' 0.04 offset above
   (3 − H_eff)/2 is not explained.
@@ -317,7 +353,10 @@ Node (`require`) and in a browser (`window.TURB`, `window.CONTOURS`).
 - V. S. L'vov, E. Podivilov, A. Pomyalov, I. Procaccia and D. Vandembroucq, *Improved shell model of turbulence*, Phys. Rev. E 58, 1811 (1998). https://arxiv.org/abs/chao-dyn/9803025
 - L. Biferale, *Shell models of energy cascade in turbulence*, Annu. Rev. Fluid Mech. 35, 441 (2003).
 - Z.-S. She and E. Leveque, *Universal scaling laws in fully developed turbulence*, Phys. Rev. Lett. 72, 336 (1994).
-- C. Küchler, G. P. Bewley and E. Bodenschatz, Phys. Rev. Lett. 131, 024001 (2023). https://arxiv.org/abs/2006.10993
+- C. Küchler, E. Bodenschatz and G. P. Bewley, *Scaling in decaying turbulence at high Reynolds numbers*, preprint (2020). https://arxiv.org/abs/2006.10993
+- C. Küchler, G. P. Bewley and E. Bodenschatz, *Universal velocity statistics in decaying turbulence*, Phys. Rev. Lett. 131, 024001 (2023). https://arxiv.org/abs/2106.01795
+- G. Paladin and A. Vulpiani, *Degrees of freedom of turbulence*, Phys. Rev. A 35, 1971 (1987).
+- U. Frisch, *Turbulence: The Legacy of A. N. Kolmogorov* (Cambridge University Press, 1995).
 - R. Benzi et al., *Extended self-similarity in turbulent flows*, Phys. Rev. E 48, R29 (1993).
 - K. R. Sreenivasan, *On the universality of the Kolmogorov constant*, Phys. Fluids 7, 2778 (1995).
 - S. B. Pope, *Turbulent Flows* (Cambridge University Press, 2000).
@@ -346,6 +385,8 @@ Node (`require`) and in a browser (`window.TURB`, `window.CONTOURS`).
 - E. Falgarone, T. G. Phillips and C. K. Walker, *The edges of molecular clouds: fractal boundaries and density structure*, ApJ 378, 186 (1991).
 - S. Lovejoy, *Area-perimeter relation for rain and cloud areas*, Science 216, 185 (1982).
 - K. R. Sreenivasan and C. Meneveau, *The fractal facets of turbulence*, J. Fluid Mech. 173, 357 (1986).
+- K. R. Sreenivasan, R. Ramshankar and C. Meneveau, *Mixing, entrainment and fractal dimensions of surfaces in turbulent flows*, Proc. R. Soc. Lond. A 421, 79 (1989).
+- P. Constantin, I. Procaccia and K. R. Sreenivasan, *Fractal geometry of isoscalar surfaces in turbulence: theory and experiments*, Phys. Rev. Lett. 67, 1739 (1991).
 - J. Kondev and C. L. Henley, *Geometrical exponents of contour loops on random Gaussian surfaces*, Phys. Rev. Lett. 74, 4580 (1995); J. Kondev, C. L. Henley and D. G. Salinas, Phys. Rev. E 61, 104 (2000), https://arxiv.org/abs/cond-mat/9907229
 - J. Stutzki et al., *On the fractal structure of molecular clouds*, A&A 336, 697 (1998).
 - N. Sánchez, E. J. Alfaro and E. Pérez, *The fractal dimension of projected clouds*, ApJ 625, 849 (2005). https://arxiv.org/abs/astro-ph/0501573

@@ -63,7 +63,7 @@
 
   const SABRA = { a: 1, b: -0.5, c: -0.5, lambda: 2, k0: 1 };
   const FORCE = [{ n: 0, re: 0.005, im: 0.005 }]; // constant force on shell 0
-  // Runs. CI: about 2.5 s, about 900 large-eddy times (L/U = 5.6). TABLE: about 45 s. SCAN: the viscosity scan.
+  // Runs. CI: about 2.5 s, about 860 large-eddy times sampled (L/U = 5.6). TABLE: about 45 s. SCAN: the viscosity scan.
   const RUNS = {
     CI: { N: 18, nu: 1e-6, dt: 2e-3, transient: 200, blockTime: 300, nBlocks: 16, every: 10, seed: 1, fit: [3, 8] },
     TABLE: { N: 21, nu: 1e-7, dt: 5e-4, transient: 500, blockTime: 1000, nBlocks: 20, every: 10, seed: 1, fit: [3, 11] },
@@ -275,13 +275,18 @@
   }
 
   // ---------- 3. Plasma scales (solar wind) ----------
-  // Typical slow solar wind at 1 AU: density, speed, field, proton temperature.
-  const SLOW_WIND = { n: 5e6, V: 4e5, B: 5e-9, T: 1e5 };
+  // A typical solar wind at 1 AU: density, speed, field, proton temperature (slow-wind protons are cooler, a few 1e4 K).
+  const WIND = { n: 5e6, V: 4e5, B: 5e-9, T: 1e5 };
+  const OMEGA_SUN = 2 * Math.PI / (25.38 * 86400); // sidereal rotation of the solar equator, rad/s
   const inertialLength = n => C.c / Math.sqrt(n * C.e * C.e / (C.eps0 * C.mp)); // c / omega_pi, m
   // Proton gyroradius v_th / Omega_p; thermal speed sqrt(kT/m) (convention 1) or sqrt(2kT/m) (convention 2).
   const gyroradius = (T, B, conv = 1) => Math.sqrt(conv * C.kB * T / C.mp) / (C.e * B / C.mp);
   const betaP = ({ n, T, B }) => 2 * C.mu0 * n * C.kB * T / (B * B);
-  const taylorFrequency = (V, ell) => V / (2 * Math.PI * ell); // a structure of size ell swept past at speed V
+  // A structure of size ell swept past a spacecraft at speed V. Fluctuations elongated along the field (k_perp >> k_par)
+  // are seen at V sin(theta_BV) / (2 pi ell), theta_BV the angle between the field and the flow.
+  const taylorFrequency = (V, ell, theta = Math.PI / 2) => V * Math.sin(theta) / (2 * Math.PI * ell);
+  // The Parker spiral: the field winds up at tan(psi) = Omega_sun r / V.
+  const parkerAngle = (V, r = C.AU) => Math.atan(OMEGA_SUN * r / V);
   // Proton collision time (Braginskii, Rev. Plasma Phys. 1, 205 (1965), in SI) and mean free path sqrt(2kT/m) tau.
   function protonCollisions({ n, T }, lnLambda = 25) {
     const tau = 3 * Math.sqrt(C.mp) * Math.pow(C.kB * T, 1.5) * Math.pow(4 * Math.PI * C.eps0, 2) / (4 * Math.sqrt(Math.PI) * n * Math.pow(C.e, 4) * lnLambda);
@@ -290,20 +295,30 @@
 
   // ---------- 4. Molecular clouds ----------
   const soundSpeed = (T, mu = 2.33) => Math.sqrt(C.kB * T / (mu * C.mH)); // isothermal, m/s
-  // Linewidth-size relations, sigma = coef (size/pc)^exp km/s. Larson: sigma is the 3D dispersion (thermal plus
-  // non-thermal) and L the maximum projected size. Solomon et al.: sigma is the 1D dispersion and R = 1.91 S the
-  // effective radius (the fit in the size parameter S is 1.0 S^0.5).
-  const LARSON81 = { coef: 1.10, exp: 0.38, dims: 3, size: 'maximum projected size' };
+  // Linewidth-size relations, sigma = coef (size/pc)^exp km/s. Larson: sigma is the 3D dispersion from observed line
+  // widths, so it includes the tracer molecule's own thermal width (taken as CO's, mass 28), and L is the maximum
+  // projected size. Solomon et al.: sigma is the 1D dispersion of 12CO lines and R = 1.91 S the effective radius
+  // (the fit in the size parameter S is 1.0 S^0.5); CO's thermal width is left in, as it is small.
+  const LARSON81 = { coef: 1.10, exp: 0.38, dims: 3, tracerMu: 28, size: 'maximum projected size' };
   const SOLOMON87 = { coef: 0.72, exp: 0.5, dims: 1, size: 'effective radius' };
-  // The size (pc, in the relation's own convention) where the 1D turbulent dispersion equals the sound speed.
-  const sonicScale = (rel, T = 10) => Math.pow(Math.sqrt(rel.dims) * soundSpeed(T) / 1e3 / rel.coef, 1 / rel.exp);
+  // The size (pc, in the relation's own convention) where the 1D non-thermal dispersion equals the sound speed: the
+  // observed 1D dispersion is then sqrt(c_s^2 + kT/m_tracer) when the tracer's thermal width is included.
+  const sonicScale = (rel, T = 10) => {
+    const th = rel.tracerMu ? C.kB * T / (rel.tracerMu * C.mH) : 0, s1 = Math.sqrt(soundSpeed(T) ** 2 + th) / 1e3;
+    return Math.pow(Math.sqrt(rel.dims) * s1 / rel.coef, 1 / rel.exp);
+  };
+  // The non-thermal Mach number of a relation at a given size (pc): the 1D non-thermal dispersion over c_s.
+  const machAt = (rel, size, T = 10) => {
+    const th = rel.tracerMu ? C.kB * T / (rel.tracerMu * C.mH) : 0, s1 = rel.coef * Math.pow(size, rel.exp) * 1e3 / Math.sqrt(rel.dims);
+    return Math.sqrt(s1 * s1 - th) / soundSpeed(T);
+  };
 
   const api = {
     C, NU, kolmogorov, outerOverEta,
     SABRA, FORCE, RUNS, PMAX, KEYS, k41, sheLeveque, mulberry32, unitPhase, expDet, create, init, setDt, rhs, advance, imT, invariants,
     newStats, sample, simulate, linfit, mean, sd, averages, fluxCut, spectralCut, exponents, analyse, conservation,
-    SLOW_WIND, inertialLength, gyroradius, betaP, taylorFrequency, protonCollisions,
-    soundSpeed, LARSON81, SOLOMON87, sonicScale,
+    WIND, inertialLength, gyroradius, betaP, taylorFrequency, parkerAngle, protonCollisions,
+    soundSpeed, LARSON81, SOLOMON87, sonicScale, machAt,
   };
   if (typeof module !== 'undefined' && module.exports) module.exports = api; else root.TURB = api;
 })(typeof window !== 'undefined' ? window : globalThis);

@@ -56,11 +56,11 @@ check('Anomalous scaling: zeta_2 above 2/3 and zeta_6 below 2, each by more than
   'K41: Kolmogorov, Dokl. Akad. Nauk SSSR 30 (1941)');
 const LONG = { 2: [0.719, 0.01], 4: [1.255, 0.015], 6: [1.716, 0.03] };
 for (const p of [2, 4, 6]) close(`zeta_${p}, CI run against the long run`, z(p), LONG[p][0], LONG[p][1], 'this model, node turbulence/table.mjs (20,000 time units)');
-const KUCHLER = 0.693;
-check('The shell model is more intermittent than measured turbulence: its zeta_2 - 2/3 is over 1.5 times the measured one',
-  z(2) - 2 / 3 > 1.5 * (KUCHLER - 2 / 3),
-  `model ${(z(2) - 2 / 3).toFixed(3)}, measured ${(KUCHLER - 2 / 3).toFixed(3)} +- 0.003 (zeta_2 = 0.693 at R_lambda 2000-6000); She-Leveque ${(T.sheLeveque(2) - 2 / 3).toFixed(3)}`,
-  'Kuchler, Bewley & Bodenschatz, Phys. Rev. Lett. 131, 024001 (2023), as seen in search text; She & Leveque, PRL 72, 336 (1994)');
+const KUCHLER = [0.693, 0.003];
+check('The shell model is more intermittent than measured turbulence: its zeta_2 - 2/3 exceeds the measured one by over 5 errors',
+  z(2) - KUCHLER[0] > 5 * KUCHLER[1],
+  `model ${(z(2) - 2 / 3).toFixed(3)}, measured ${(KUCHLER[0] - 2 / 3).toFixed(3)} +- ${KUCHLER[1]} (zeta_2 = 0.693 at R_lambda 2000-6000, after a decay correction); She-Leveque ${(T.sheLeveque(2) - 2 / 3).toFixed(3)}`,
+  'Kuchler, Bodenschatz & Bewley, arXiv:2006.10993 (2020), as seen in search text; She & Leveque, PRL 72, 336 (1994)');
 
 // 4. Where the cascade stops: K41 puts the end at k_eta = (eps/nu^3)^(1/4) up to an O(1) factor it does not predict.
 check('The flux falls to half, and <|u_n|^2> to half its power law, within 1.5 shells (a factor 2.8) of k_eta',
@@ -70,30 +70,34 @@ check('The flux falls to half, and <|u_n|^2> to half its power law, within 1.5 s
 // 5. Real flows: the Kolmogorov scale eta = (nu^3/eps)^(1/4) for published dissipation rates.
 const etaMm = (nu, e) => T.kolmogorov(nu, e).eta * 1e3;
 const ocean = [1e-8, 1e-7].map(e => etaMm(T.NU.seawater, e)), air = [0.4, 0.05, 1e-7].map(e => etaMm(T.NU.air, e));
-check('Upper-ocean mixed layer: eps 1e-8 to 1e-7 W/kg puts eta at 1.8 to 3.3 mm, not 1 mm (that needs 1e-6)',
+check('Upper-ocean mixed layer: eps 1e-8 to 1e-7 W/kg, as at one station, puts eta at 1.8 to 3.3 mm; 1 mm needs 1e-6',
   ocean[0] > 3 && ocean[0] < 3.5 && ocean[1] > 1.7 && ocean[1] < 2, `eta = ${ocean.map(x => x.toFixed(2)).join(' and ')} mm; 1e-6 W/kg gives ${etaMm(T.NU.seawater, 1e-6).toFixed(2)} mm`,
   'arithmetic; eps from Yang et al., Sensors 22, 1167 (2022), one 25-hour station, as seen in search text');
 check('Air: eta from 0.3 mm (eps 0.4 m^2/s^3, a cold front) to 1.4 cm (1e-7, a quiet night)',
   air[0] > 0.28 && air[0] < 0.32 && air[2] > 13 && air[2] < 14.5, `eta = ${air.map(x => x.toFixed(2)).join(', ')} mm for eps = 0.4, 0.05, 1e-7`,
   'arithmetic; eps from Balsley, Tjernstrom & Svensson, AMS 18th Symp. Boundary Layers and Turbulence (2008), as seen in search text');
 
-// 6. The solar wind is too dilute for viscosity: protons cross about an astronomical unit between collisions, so the
-//    cascade is cut at the ion scales instead. Typical slow wind at 1 AU: n = 5 cm^-3, V = 400 km/s, B = 5 nT, T = 1e5 K.
-const W = T.SLOW_WIND, di = T.inertialLength(W.n), rho = T.gyroradius(W.T, W.B, 2), col = T.protonCollisions(W);
+// 6. The solar wind is too dilute for viscosity: protons cross 0.2 to 1 AU between collisions, so the MHD cascade ends at
+//    the ion scales instead, and a steeper kinetic one continues to the electrons. Typical wind at 1 AU: n = 5 cm^-3,
+//    V = 400 km/s, B = 5 nT, T = 1e5 K (slow-wind protons are cooler, a few 1e4 K).
+const W = T.WIND, di = T.inertialLength(W.n), rho = T.gyroradius(W.T, W.B, 2), col = T.protonCollisions(W), cool = T.protonCollisions({ ...W, T: 4e4 });
 within('Proton inertial length c/omega_pi at n = 5 cm^-3 (km)', di / 1e3, 228 / Math.sqrt(5), 1.002, 'NRL Plasma Formulary, 228 km / sqrt(n per cm^3), as seen in search text');
-check('Collisionless: the proton mean free path is over 10^5 inertial lengths', col.mfp / di > 1e5,
-  `mean free path ${(col.mfp / T.C.AU).toFixed(2)} AU (collision time ${(col.tau / 86400).toFixed(0)} days, ln Lambda = 25), ${fmt(col.mfp / di)} d_i`,
+check('Collisionless: the proton mean free path is over 10^5 inertial lengths, at 1e5 K and at 4e4 K', col.mfp / di > 1e5 && cool.mfp / di > 1e5,
+  `mean free path ${(col.mfp / T.C.AU).toFixed(2)} AU at 1e5 K (collision time ${(col.tau / 86400).toFixed(0)} days), ${(cool.mfp / T.C.AU).toFixed(2)} AU at 4e4 K; ${fmt(cool.mfp / di)} d_i at least (ln Lambda = 25)`,
   'Braginskii, Rev. Plasma Phys. 1, 205 (1965), ion collision time');
-const fdi = T.taylorFrequency(W.V, di), frho = T.taylorFrequency(W.V, rho);
-within('The ion scale swept past at the wind speed, V/(2 pi d_i), against the observed break (Hz)', fdi, 0.44, 1.5,
-  `Leamon et al. (1998-99), break at 0.44 Hz, as seen in search text; Sahraoui et al. 2009: 0.4 Hz; V/(2 pi rho_i) = ${frho.toFixed(2)} Hz`);
+const psi = T.parkerAngle(W.V), fdi = T.taylorFrequency(W.V, di, psi), frho = T.taylorFrequency(W.V, rho, psi);
+check('The ion inertial length swept past at V sin(theta_BV), with the Parker-spiral angle, lands in the observed 0.4-0.5 Hz',
+  fdi >= 0.4 && fdi <= 0.5,
+  `V sin(${(psi * 180 / Math.PI).toFixed(0)} deg)/(2 pi d_i) = ${fdi.toFixed(3)} Hz (${T.taylorFrequency(W.V, di).toFixed(2)} Hz with no angle); gyroradius ${frho.toFixed(2)} Hz`,
+  'Sahraoui et al., PRL 102, 231102 (2009): 0.4 Hz; Leamon et al., JGR 103, 4775 (1998): about 0.5 Hz on average; both as seen in search text');
 
 // 7. Molecular clouds: the cascade is supersonic at large scales and stops being so at the sonic scale, where the
-//    turbulent velocity falls to the sound speed (0.19 km/s at 10 K). Larson's and Solomon et al.'s fits stop near
-//    0.1 pc, so both sonic scales are extrapolations, and they differ by a factor of 3 through the size conventions.
+//    non-thermal velocity falls to the sound speed (0.19 km/s at 10 K). Larson's data reach about 0.1 pc; Solomon et
+//    al.'s giant clouds are pc-sized and larger, so their sonic size is an extrapolation of over a decade. The two
+//    differ by a factor of 3 through their size conventions.
 const sL = T.sonicScale(T.LARSON81), sS = 2 * T.sonicScale(T.SOLOMON87);
-check('Sonic scales from Larson (maximum size) and Solomon et al. (diameter) bracket the 0.10 pc filament width',
-  sL < 0.1 && sS > 0.1, `Larson ${sL.toFixed(3)} pc, Solomon et al. ${sS.toFixed(3)} pc, filaments 0.10 +- 0.03 pc (FWHM)`,
+check('Sonic sizes from Larson (maximum size, CO thermal width removed) and Solomon et al. (diameter) bracket the 0.10 pc filament width',
+  sL < 0.1 && sS > 0.1, `Larson ${sL.toFixed(3)} pc, Solomon et al. ${sS.toFixed(3)} pc, filaments 0.10 +- 0.03 pc (FWHM); Larson's non-thermal Mach number ${T.machAt(T.LARSON81, 0.1).toFixed(1)} at 0.1 pc`,
   'Larson, MNRAS 194, 809 (1981); Solomon et al., ApJ 319, 730 (1987); Arzoumanian et al., A&A 529, L6 (2011); all as seen in search text');
 
 console.log(fails ? `\n${fails} check(s) failed` : '\nall checks pass');

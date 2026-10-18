@@ -27,12 +27,13 @@ with Claude (Anthropic), for [Foundation0](https://github.com/Foundation-0/f0).
   scales, but beyond about 80 to 300 million parsecs (h⁻¹ Mpc, 80 to 300) they are spread almost evenly
   (Scrimgeour et al., 2012). The nesting stops, the way a coastline's roughness stops at the size of molecules.
 - **Turbulence repeats, but not exactly.** Between the size where a flow is stirred and the size where viscosity
-  takes over, the same energy flux passes through every scale; in a cascade model the flux, and a third-order law
-  that follows from it, hold to 0.1%. The bursts do not scale exactly, so the statistics drift from scale to scale
-  (intermittency). Where the cascade ends depends on the medium: a few tenths of a millimetre to a centimetre in
-  air, 2 to 3 mm in the upper ocean, the ion scales (about 100 km) in the solar wind, where collisions are too rare
-  for viscosity, and the sonic scale (about 0.1 pc) in molecular clouds. The fractal edges of those clouds
-  (dimension 1.36) match laboratory turbulence only by coincidence ([turbulence](turbulence/)).
+  takes over, the same energy flux passes through every scale. In a cascade model the flux holds to 0.2% and a
+  third-order law that follows from it to 0.1%. The bursts do not scale exactly: the distribution's tails fatten
+  from scale to scale (intermittency). Where the cascade ends depends on the medium: about a millimetre in air and
+  water, give or take a factor of 10; the ion scales (about 100 km) in the solar wind, where collisions are too
+  rare for viscosity and a steeper kinetic cascade takes over; and the sonic scale (about 0.1 pc) in molecular
+  clouds. The fractal edges of those clouds (dimension 1.36) agree with laboratory turbulent interfaces in number,
+  but the two measure different things ([turbulence](turbulence/)).
 
 ## First study: the Witness Map
 

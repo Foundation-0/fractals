@@ -31,10 +31,13 @@ check('FFT equals the direct DFT sum (N = 64); 2D FFT keeps Parseval and inverts
   `DFT ${e1(dft)}, Parseval ${e1(Math.abs(ex - eX / N2) / ex)}, round trip ${e1(trip)} (each under 1e-12)`, 'definition of the DFT');
 
 // The random numbers: each pair of fields takes its own consecutive block of the generator's cycle.
+// That holds only if the normals use exactly two uniforms per pair, which is checked too.
 const s0 = C.stream(7, 0, 4), s1 = C.stream(7, 1, 4), b0 = [...Array(5)].map(() => s0()), b1 = s1();
 let threw = false; try { C.stream(7, 2, 2 ** 31); } catch (e) { threw = true; }
-check('Random streams: block 1 starts where block 0 ends, and blocks that would overlap are refused', b0[4] === b1 && threw,
-  `5th draw of block 0 = 1st draw of block 1: ${b0[4] === b1}; overlapping request refused: ${threw}`, 'mulberry32 advances its state by a fixed odd step');
+let draws = 0; const counted = C.stream(7, 0, 64), g10 = C.gaussian(() => (draws++, counted())); for (let i = 0; i < 10; i++) g10();
+check('Random streams: block 1 starts where block 0 ends, overlapping blocks are refused, and 10 normals use 10 uniforms',
+  b0[4] === b1 && threw && draws === 10, `5th draw of block 0 = 1st draw of block 1: ${b0[4] === b1}; overlapping request refused: ${threw}; uniforms for 10 normals: ${draws}`,
+  'mulberry32 advances its state by a fixed odd step');
 
 // The surfaces, against a naive synthesis: the same normals, the filter |k|^(-beta/2), an O(N^2) inverse DFT.
 function naive(L, beta, pair) {
@@ -74,16 +77,17 @@ const sd = [sad(3, -1, false), sad(1, -3, false), sad(3, -1, true), sad(1, -3, t
 check('Saddle cells: two diagonal highs are joined when the cell average is above the level, split when below; areas agree cell by cell',
   sd[0].n === 1 && sd[1].n === 2 && sd[2].n === 1 && sd[3].n === 2 && sd.every(s => s.ok), `loops ${sd.map(s => s.n).join(', ')} (expected 1, 2, 1, 2)`, 'construction');
 
-// Random surfaces: every walk closes and uses each crossed edge once; loop areas add up to the area above the level;
-// the loops do not change under a periodic shift, a quarter turn, or turning the surface upside down.
+// Random surfaces: loop areas add up to the area above the level (contours() itself throws if a walk fails to close or
+// reuses an edge); the loops do not change under a periodic shift, a quarter turn, or turning the surface upside down.
 const rows = [];
 for (const beta of [2.4, 3.4]) for (let p = 0; p < 3; p++) for (const f of C.gaussianFields(256, beta, SEED, p)) {
-  const c = C.contours(f, 256, 0), d = (C.aboveArea(f, 256, 0) - c.A.reduce((a, x) => a + x, 0)) / 65536;
-  rows.push({ c, dev: c.nWrap ? 0 : Math.abs(d - Math.round(d)) });
+  const c = C.contours(f, 256, 0);
+  if (c.nWrap) continue; // a contour around the torus has no inside, so its area is not defined
+  const d = (C.aboveArea(f, 256, 0) - c.A.reduce((a, x) => a + x, 0)) / 65536;
+  rows.push(Math.abs(d - Math.round(d)));
 }
-check('Random surfaces (12 at L = 256): walks close, each crossed edge used once, loop areas add up to the area above the level',
-  rows.every(r => r.c.segments === r.c.crossedEdges && r.c.maxClosure < 1e-9 && r.dev < 1e-9),
-  `largest closure ${e1(Math.max(...rows.map(r => r.c.maxClosure)))} cells, largest area mismatch ${e1(Math.max(...rows.map(r => r.dev)))} of L^2 (each under 1e-9)`, "Green's theorem");
+check("Green's theorem: on random surfaces without contours around the torus, loop areas add up to the area above the level",
+  rows.length >= 6 && rows.every(d => d < 1e-9), `${rows.length} of 12 surfaces at L = 256 compared; largest mismatch ${e1(Math.max(...rows))} of L^2, modulo L^2 (under 1e-9)`, "Green's theorem");
 const g = C.gaussianFields(256, 2.4, SEED, 9)[0], key = c => c.P.map((p, i) => [p, Math.abs(c.A[i])]).sort((a, b) => a[0] - b[0]);
 const turn = new Float64Array(g.length), shift = new Float64Array(g.length);
 for (let y = 0; y < 256; y++) for (let x = 0; x < 256; x++) { turn[x * 256 + (255 - y)] = g[y * 256 + x]; shift[((y + 77) & 255) * 256 + ((x + 31) & 255)] = g[y * 256 + x]; }
@@ -92,8 +96,8 @@ const diff = Math.max(...others.map(o => o.length === base.length ? Math.max(...
 check('Loops unchanged by a periodic shift, a quarter turn and turning the surface upside down', diff < 1e-8, `${base.length} loops; largest change in P or A ${e1(diff)} (under 1e-8)`, 'symmetry');
 
 // 2. Which dimension. Single loops have dimension (3 - H)/2 (Kondev & Henley); all the contours together, 2 - H
-//    (Mandelbrot). L = 512, 16 surfaces for each of beta = 2.4 and 3. The box makes the surfaces smoother than beta
-//    says, so H_eff, measured over the same range of sizes, is used for the comparison.
+//    (Mandelbrot). L = 512, 16 surfaces for each of beta = 2.4 and 3. On a finite grid the roughness differs from
+//    (beta - 2)/2, so H_eff, measured over the same range of sizes, is used for the comparison.
 const est = beta => { const recs = []; for (let p = 0; p < 8; p++) for (const f of C.gaussianFields(512, beta, SEED, p)) recs.push(C.fieldRecord(f, 512, { yardMax: 16 })); return { th: C.theory(beta), e: C.estimate(recs, 512, 16) }; };
 const lo = est(2.4), hi = est(3);
 check('Loops sit nearer (3 - H)/2 and the whole level set nearer 2 - H, at beta = 2.4 and 3',
