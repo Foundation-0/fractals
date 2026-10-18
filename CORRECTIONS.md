@@ -55,7 +55,7 @@ Claims made during the exploration that did not survive it, kept so the record s
    Not fixed: giving molecules a gap and measured spectra would change the buckyball and giant-molecule rows, so
    it needs a decision.
 9. **Joos and Zeh's air entry is 10³⁶, not 10³⁷.** The old check quoted 10³⁷ cm⁻² s⁻¹ (10⁴¹ m⁻² s⁻¹) as Joos and
-   Zeh's. All four copies of their table checked here (Kiefer and Joos 1998; Joos 1999; Kiefer 1999; Joos 2005)
+   Zeh's. All four copies of their table checked here (Kiefer and Joos 1999; Joos 2000; Kiefer 2000; Joos 2005)
    give 10³⁶. The 10³⁷ is Schlosshauer's (his 10⁻³¹ s at Δx = 10⁻³ cm), and it matches the closed-form formula
    (8.6×10³⁶). The two tables differ by ten; the model follows the formula.
 10. **Three disagreements inside the published tables.** Not model errors; recorded so nobody tunes the model to
@@ -104,3 +104,14 @@ Claims made during the exploration that did not survive it, kept so the record s
     to grow, and at its radius the galaxy, not the black hole, holds the particles. Any cloud these black holes can
     grow within the age of the universe, at any particle mass, peaks within about 0.1 pc. See
     [notes/bh-lensing.md](notes/bh-lensing.md).
+
+## 18 October 2026: the black hole lensing note revisited (issue #28)
+
+16. **SDP.81 as the anomaly lens with a bound on its black hole.** Claimed (notes/bh-lensing.md, issue #1): "Only one
+    anomaly lens, SDP.81, has even a bound on its black hole". The note paired a 10^(8.96±0.12) M☉ dark lump at
+    6.9σ (Hezaveh et al. 2016) with a black hole above 3×10⁸ M☉ from the missing central image. That no longer
+    holds. Stacey et al. (A&A, 2025) re-analysed the same ALMA data. They find the lump most likely spurious,
+    produced by poorly fitting multipoles, and no evidence for either previously reported lump, only for extra
+    angular structure in the lens. Their mock data show they would have found a real 10⁹ M☉ lump (log Bayes factor
+    29). The black hole bound stands, so no lens in the note now has both a small-scale anomaly and a bound on its
+    black hole. Fixed in [notes/bh-lensing.md](notes/bh-lensing.md) (issue #28).
