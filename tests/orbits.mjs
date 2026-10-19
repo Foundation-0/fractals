@@ -72,6 +72,8 @@ near('S2: speed at pericentre [km/s]', s2M.periSpeed, 7700, 50, `${G20}, introdu
 const g = O.galaxy(), g0 = O.galaxy(O.MWP14, { bh: 0 });
 near('MWPotential2014 normalisation identity: v_c(8 kpc) without Sgr A* [km/s] (G and the shapes cancel)', g0.v(8), 220, 1e-9,
   'model-internal (parameters as in galpy\'s source)');
+near('MWPotential2014: halo mass inside 245 kpc [1e12 M_sun]', g0.parts(245).halo * 245 / C.G / 1e12, 0.8, 0.05,
+  'Bovy 2015, Table 1: virial mass 0.8e12 M_sun with r_vir about 245 kpc, as secondary papers quote it (search text); tolerance the rounding of 0.8');
 {
   const Rs = [5, 8.122, 15, 25], ve = R => 229.0 - 1.7 * (R - 8.122);
   const rel = Rs.map(R => (g.v(R) / g.v(8.122)) / (ve(R) / ve(8.122)) - 1);
@@ -97,10 +99,11 @@ near('Saturn\'s inclination to the invariable plane [deg]', O.tiltToInvariable(O
     `${ST}: "about 0.5 r_H"; tolerance covers their different criterion and integration time`);
   const esc = (h, a, n) => O.hillFates(h, a, [n], { nPhase: 8 }).escapes, ret = [esc(K, 0.6, [0, 0, -1]), esc(K, 0.9, [0, 0, -1])];
   check('Point-mass host: retrograde orbits kept at 0.6 r_H, lost by 0.9 (published limit about 0.7)', ret[0] === 0 && ret[1] >= 0.5,
-    `fraction escaped ${ret[0].toFixed(2)} at 0.6 r_H, ${ret[1].toFixed(2)} at 0.9 r_H`, `${ST}: "about 0.7 r_H"`);
+    `fraction escaped ${ret[0].toFixed(2)} at 0.6 r_H (kept: must be 0), ${ret[1].toFixed(2)} at 0.9 r_H (lost: must be >= 0.5)`, `${ST}: "about 0.7 r_H"`);
   const r875 = [esc(K, 0.875, [0, 0, -1]), esc(sun, 0.875, [0, 0, -1])];
   check('Retrograde in the plane at 0.875 r_J: lost around a point mass, kept by the Sun (its flatter curve, Gam = 2.25, not its vertical tide)',
-    r875[0] >= 0.75 && r875[1] <= 0.25, `fraction escaped ${r875[0].toFixed(2)} (point mass), ${r875[1].toFixed(2)} (the Sun)`, 'model');
+    r875[0] >= 0.75 && r875[1] <= 0.25,
+    `fraction escaped ${r875[0].toFixed(2)} (point mass; lost: must be >= 0.75), ${r875[1].toFixed(2)} (the Sun; kept: must be <= 0.25)`, 'model');
   {
     const s0 = O.hillStart(sun, 0.3, [0.6, 0, 0.8], 0.7), end = O.hillOrbit(sun, s0, { orbits: 20 });
     const EJ = ([x, y, z, vx, vy, vz]) => (vx * vx + vy * vy + vz * vz) / 2 - sun.Gam * x * x / 2 + sun.nu2 * z * z / 2 - sun.Gam / Math.hypot(x, y, z);

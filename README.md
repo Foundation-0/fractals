@@ -18,7 +18,7 @@ with Claude (Anthropic), for [Foundation0](https://github.com/Foundation-0/f0).
   with gravity in place of electric attraction (the "gravitational atom"). It is still a wave cloud, not
   planets on orbits. The same equation, a wave held by a pull that weakens with distance, gives the same
   solution at any scale. The nesting lives in the equations, not the objects.
-- **Solar systems are not little galaxies, except at a galaxy's centre.** Around one dominant mass, orbits follow
+- **Solar systems are not little galaxies, except at the Milky Way's centre.** Around one dominant mass, orbits follow
   Kepler's law at every radius. The planets match it to 0.13%, about what they weigh together against the Sun. Across
   the Milky Way's disk the speed instead stays between 200 and 235 km/s, because the mass is spread out. A Kepler
   region ends where its host's tide wins, at a density ratio rather than a size: 1.4 pc for the Sun in the Galaxy,

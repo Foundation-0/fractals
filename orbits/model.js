@@ -65,8 +65,9 @@
   const planetMassFraction = () => PLANETS.reduce((s, p) => s + 1 / p.sunOver, 0);
 
   // Kepler's third law for one planet: the GM its orbit implies, n^2 a^3, against GM_sun, with n the mean-longitude
-  // rate Ldot: the orbit's angular rate, which obeys n^2 a^3 = G M(<a) for a near-circular orbit in an averaged pull.
-  // (The mean-anomaly rate Ldot - wdot is the radial frequency and does not.) A 250-year fit to a perturbed orbit, so
+  // rate Ldot: the orbit's angular rate, for which n^2 a is the mean inward pull at a on a near-circular orbit
+  // (G M(<a) / a^2 only for a spherical mass inside; see ringExcess). The mean-anomaly rate Ldot - wdot is the radial
+  // frequency instead. A 250-year fit to a perturbed orbit, so
   // the excess carries the other planets' pull as well as the planet's own mass.
   function kepler(p) {
     const n = p.Ldot * Math.PI / 180 / (36525 * C.day), a = p.a * C.au;
@@ -74,9 +75,9 @@
     return { name: p.name, n, P: 2 * Math.PI / n / C.yr, GM, excess: GM / C.GMsun - 1, own: 1 / p.sunOver };
   }
 
-  // What the other planets' pull adds to n^2 a^3 / GM_sun - 1, averaged over their orbits: each other planet is
-  // smeared into a coplanar ring at its semi-major axis, and the ring's in-plane pull at the planet's a is added to the
-  // Sun's (heliocentric two-body term m/M_sun for the planet itself). The ring potential is -(2 G m / pi) K(k) / (r + b),
+  // The planet's own mass plus what the other planets' pull adds to n^2 a^3 / GM_sun - 1, averaged over their orbits:
+  // the heliocentric two-body term m/M_sun, plus each other planet smeared into a coplanar ring at its semi-major axis,
+  // whose in-plane pull at the planet's a is added to the Sun's (others only: { own: false }). The ring potential is -(2 G m / pi) K(k) / (r + b),
   // k = 2 sqrt(r b) / (r + b), with K the complete elliptic integral (by the arithmetic-geometric mean). A secular
   // estimate: it leaves out the long-period terms a 250-year fit also carries.
   function ellipticK(k) {
@@ -85,8 +86,8 @@
     return Math.PI / (2 * a);
   }
   const ringPotential = (r, b) => -(2 / Math.PI) * ellipticK(2 * Math.sqrt(r * b) / (r + b)) / (r + b); // per unit G m
-  function ringExcess(p) {
-    let ex = 1 / p.sunOver;
+  function ringExcess(p, { own = true } = {}) {
+    let ex = own ? 1 / p.sunOver : 0;
     for (const q of PLANETS) {
       if (q === p) continue;
       const h = 1e-6 * p.a, pull = (ringPotential(p.a + h, q.a) - ringPotential(p.a - h, q.a)) / (2 * h); // inward > 0

@@ -9,7 +9,7 @@ const quick = process.argv[2] === 'quick', long = process.argv[2] === 'long';
 
 console.log('1. Kepler in the Solar System (JPL approximate elements, Table 1, 1800-2050; GM_sun IAU 2015; masses DE430)\n');
 console.log('   n = the mean-longitude rate Ldot (the angular rate); excess = n^2 a^3/GM_sun - 1');
-console.log('   planet     a [au]       P [yr]       excess      own mass/Sun   own + inner planets   other planets as rings');
+console.log('   planet     a [au]       P [yr]       excess      own mass/Sun   own + inner planets   own + other planets as rings');
 let inner = 0;
 for (const p of O.PLANETS) {
   const k = O.kepler(p);
@@ -24,6 +24,8 @@ const mu = O.planetMassFraction();
 console.log(`   all eight planets together: ${e3(mu)} of the Sun's mass; largest |excess| ${e3(Math.max(...O.PLANETS.map(p => Math.abs(O.kepler(p).excess))))}`);
 console.log(`   fitted exponent of P against a: ${f(O.keplerExponent(), 6)} over all eight (0.39 to 30 au), ${f(O.keplerExponent(O.PLANETS.slice(0, 4)), 6)} over the inner four; Kepler 1.5`);
 console.log(`   mass inside Neptune's orbit over mass inside Mercury's: 1 + ${e3(mu - 1 / O.PLANETS[7].sunOver)}`);
+console.log(`   the other planets' rings alone: ${O.PLANETS.map(p => `${p.name} ${e3(O.ringExcess(p, { own: false }))}`).join(', ')}`);
+console.log(`   Saturn's ring estimate minus its fit: ${e3(O.ringExcess(O.PLANETS[5]) - O.kepler(O.PLANETS[5]).excess)}`);
 
 console.log('\n2. Where a Kepler domain ends: the tidal (Jacobi) radius, r_J^3 = G m / (4 A (A - B))\n');
 const OORT = { A: 15.3, B: -11.9, dA: 0.4, dB: 0.4 }; // Bovy 2017
@@ -93,6 +95,7 @@ console.log('\n4b. What does repeat: thin disks\n');
 console.log(`   inclinations to the invariable plane (JPL Table 1 elements; plane from Souami & Souchay 2012): ` +
   O.PLANETS.map(p => `${p.name} ${f(O.tiltToInvariable(p), 3)}`).join(', ') + ' deg');
 const tilts = O.PLANETS.map(p => O.tiltToInvariable(p) * Math.PI / 180);
+console.log(`   mean inclination over the eight: ${f(O.PLANETS.reduce((a, p) => a + O.tiltToInvariable(p), 0) / 8, 2)} deg`);
 console.log(`   rms sin(i) over the eight: ${f(Math.sqrt(tilts.reduce((a, t) => a + Math.sin(t) ** 2, 0) / 8), 3)}; without Mercury: ${f(Math.sqrt(tilts.slice(1).reduce((a, t) => a + Math.sin(t) ** 2, 0) / 7), 3)}`);
 console.log(`   the Galaxy's thin disk: scale height 300 +- 50 pc over scale length 2.6 +- 0.5 kpc = ${f(0.3 / 2.6, 3)}, the axis ratio of its density` +
   ` contours (Bland-Hawthorn & Gerhard 2016)`);
@@ -104,6 +107,7 @@ if (!quick) {
   console.log(`   point-mass host: Gam = 4A/Omega = ${O.HOST_KEPLER.Gam}, (nu/Omega)^2 = ${O.HOST_KEPLER.nu2}`);
   console.log(`   the Sun in the Galaxy (A, B as above, rho0 = ${RHO0} M_sun/pc^3): Gam = ${f(sun.Gam, 3)}, (nu/Omega)^2 = ${f(sun.nu2, 2)}`);
   console.log(`   20 turns of the host: ${f(20 * 2 * Math.PI / ((OORT.A - OORT.B) * C.kmskpc) / C.yr / 1e9, 2)} Gyr for the Sun; ${f(20 * O.kepler(O.PLANETS[4]).P, 0)} yr for Jupiter`);
+  console.log(`   an orbit counts as plunged inside 1e-3 r_J: ${f(1e-3 * rJ / C.au, 0)} au for the Sun, ${f(1e-3 * O.hill(O.PLANETS[4].a, 1 / O.PLANETS[4].sunOver) * C.au / 7.1492e7, 2)} Jupiter radii (71,492 km)`);
   console.log(`   the Sun's vertical oscillation through the disk with this nu: ${f(2 * Math.PI / (Math.sqrt(sun.nu2) * (OORT.A - OORT.B) * C.kmskpc) / C.yr / 1e6, 0)} Myr`);
   const planes = { 'prograde, in the plane': [[0, 0, 1]], 'retrograde, in the plane': [[0, 0, -1]], 'polar, plane holds the host': [[0, 1, 0]], 'polar, plane across it': [[1, 0, 0]] };
   const as = []; for (let a = 0.3; a <= 1.2001; a += 0.025) as.push(a);
@@ -131,7 +135,7 @@ if (!quick) {
   const oort = [1e5, 2e5].map(x => x * C.au / rJ);
   console.log(`   the Oort cloud's outer edge, near 1e5 au and as far as 2e5 au: ${f(oort[0], 2)} to ${f(oort[1], 2)} r_J`);
   if (long) {
-    console.log('\n   the same, followed for 100 turns of the host:');
+    console.log(`\n   the same, followed for 100 turns of the host (${f(100 * 2 * Math.PI / ((OORT.A - OORT.B) * C.kmskpc) / C.yr / 1e9, 1)} Gyr for the Sun):`);
     for (const [name, h] of [['point-mass host', O.HOST_KEPLER], ['the Sun in the Galaxy', sun]]) {
       const r = O.hillScan(h, dirs, asIso, { nPhase: 4, orbits: 100 });
       console.log(`   ${name}: half have escaped by ${f(r.edge, 3)} r_J; plunged by then, at a = 0.2 to 0.4 r_J: ${r.rows.slice(0, 3).map(x => f(x.plunges, 2)).join(', ')}`);
