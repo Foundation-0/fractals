@@ -13,7 +13,7 @@ fit between the floor and a Milky Way, and says where the halos stop looking ali
 
 | Dark matter | Smallest halos (M☉) | Decades below a 10¹² M☉ Milky Way | Levels, at the Aquarius ratio |
 |---|---|---|---|
-| 100 GeV WIMP (bino), kinetic decoupling at 40 to 10 MeV | 1.6×10⁻⁶ to 1.0×10⁻⁴ | 17.8 to 16.0 | 11 to 9 |
+| 100 GeV WIMP (bino), kinetic decoupling at 40 to 10 MeV | 1.4×10⁻⁶ to 1.0×10⁻⁴ | 17.9 to 16.0 | 11 to 9 |
 | WIMPs in general (Bringmann 2009) | 10⁻¹¹ to 10⁻³ | 23 to 15 | 14 to 9 |
 | Wave, 10⁻²² eV (the lensing notes' benchmark, excluded) | 1.6 to 5.4×10¹⁰ | 1.8 to 1.3 | 1 to 0 |
 | Wave, 2 to 2.9×10⁻²¹ eV (Lyman-α; Milky Way satellites) | 1.8 to 9.9×10⁸ | 3.7 to 3.0 | 2 to 1 |
@@ -21,14 +21,14 @@ fit between the floor and a Milky Way, and says where the halos stop looking ali
 | Wave, 3×10⁻¹⁹ eV (dwarf galaxies, Dalal and Kravtsov 2022) | 3.7×10⁵ to 1.2×10⁶ | 6.4 to 5.9 | 4 to 3 |
 | Wave, 8×10⁻¹⁸ eV (if Ursa Major III is a galaxy, 2025) | 4.6×10³ to 1.6×10⁴ | 8.3 to 7.8 | 5 to 4 |
 
-Each wave mass is the lower bound of the probe named; each assumes the wave is all of the dark matter. The ranges
-come from the definition of "smallest" (below) and, for the bino, from the decoupling temperature. A level is a
-factor μ = 0.025 in mass: where the subhalo law fitted to the Aquarius simulation expects the largest subhalo of a
-host, N(>μM_host) = 1. At 10× per level the bino has 15 to 17 levels; at 100×, 7 or 8.
+Each wave mass is the lower bound of the probe named (as seen in search text); each assumes the wave is all of
+the dark matter. The ranges come from the definition of "smallest" (below) and, for the bino, from the decoupling
+temperature. A level is a factor μ = 0.025 in mass: where the subhalo law fitted to the Aquarius simulation expects
+the largest subhalo of a host, N(>μM_host) = 1. At 10× per level the bino has 15 to 17 levels; at 100×, 7 or 8.
 
-So the two kinds of dark matter differ by ten decades or more in where the nesting stops. Wave dark matter at the
-benchmark mass hardly nests at all: a Milky Way's largest expected subhalo (2.5×10¹⁰ M☉) is already near the
-floor. Even at the strongest bound proposed, 8×10⁻¹⁸ eV, its floor sits eight to ten decades above a bino's.
+So the two kinds of dark matter stop nesting eleven decades or more apart at the Lyman-α bounds, and eight to ten
+apart at the strongest bound proposed, 8×10⁻¹⁸ eV. Wave dark matter at the benchmark mass hardly nests at all: a
+Milky Way's largest expected subhalo (2.5×10¹⁰ M☉) is already near the floor.
 
 ## The WIMP floor
 
@@ -36,21 +36,24 @@ Two effects erase the smallest scales of a WIMP's spectrum (Green, Hofmann and S
 Zaldarriaga 2005; Bertschinger 2006):
 
 - **Acoustic damping.** Until kinetic decoupling, at T_kd, the WIMPs scatter off the radiation and move with its
-  sound waves, which damp out everything inside the horizon. The mass inside the comoving horizon at T_kd,
-  with the expansion rate of photons, e± and three neutrinos (g = 10.75), is M_ao = 1.04×10⁻⁴ M☉ at 10 MeV,
-  falling as T_kd⁻³. Loeb and Zaldarriaga give 10⁻⁴ (T_d/10 MeV)⁻³ M☉.
+  sound waves, which damp out everything inside the horizon. The matter inside the comoving horizon at T_kd is
+  M_ao = 1.03×10⁻⁴ M☉ at 10 MeV, falling roughly as T_kd⁻³. Loeb and Zaldarriaga give 10⁻⁴ (T_d/10 MeV)⁻³ M☉.
+  The expansion rate comes from the radiation then: photons, neutrinos and e± (g = 10.75), joined above about
+  10 MeV by muons and pions (g = 12.6 at 30 MeV).
 - **Free streaming.** After decoupling the WIMPs coast. A 100 GeV WIMP decoupling at 30 MeV has a speed spread
-  √(T_kd/m) and coasts s = 0.86 pc (comoving), so modes shorter than k_fs = √2/s = 1.64×10⁶ Mpc⁻¹ are smeared
-  out. Green, Hofmann and Schwarz give 1.70×10⁶ Mpc⁻¹, 4% higher, with the same scaling in mass and temperature.
+  √(T_kd/m) and coasts s = 0.84 pc (comoving, through e± annihilation and on to today), so modes shorter than
+  k_fs = √2/s = 1.67×10⁶ Mpc⁻¹ are smeared out. Green, Hofmann and Schwarz give 1.70×10⁶ Mpc⁻¹, 2% higher; from
+  10 to 40 MeV the two differ by up to 5%, as the radiation's g changes.
 
 The floor is the larger of the two (Bringmann 2009). For a bino decoupling at 10 to 40 MeV the acoustic mass is
-the larger, or comparable to the half-mode mass at 30 to 40 MeV. Across WIMP models Bringmann finds floors from
-about 10⁻¹¹ to nearly 10⁻³ M☉.
+larger than the free-streaming mass M(π/k_fs) throughout, and comparable to the half-mode mass at 30 to 40 MeV.
+Across WIMP models Bringmann finds floors from about 10⁻¹¹ to nearly 10⁻³ M☉.
 
-**"About 10⁻⁶ M☉" is a convention.** The same cut-off gives 1.05×10⁻⁶ M☉ for a sphere of radius π/k_fs, the
-reading under which Green, Hofmann and Schwarz's "about 10⁻⁶ M☉" and "comoving radius of about 1 pc" agree. The
-half-mode mass, where the transfer function falls to 1/2, is 4.3×10⁻⁶; the half-power mass, where it falls to
-1/√2, is 1.2×10⁻⁵. That is a factor of 11, one decade of the answer.
+**"About 10⁻⁶ M☉" is a convention.** The same cut-off gives 1.05×10⁻⁶ M☉ for a sphere of radius
+π/k_fs = 1.85 pc, the reading that matches Green, Hofmann and Schwarz's "about 10⁻⁶ M☉". Their "comoving radius of
+about 1 pc" agrees with it only to a factor 2 (a sphere of radius 1 pc holds 1.7×10⁻⁷ M☉). The half-mode mass,
+where the transfer function falls to 1/2, is 4.3×10⁻⁶; the half-power mass, where it falls to 1/√2, is 1.2×10⁻⁵.
+That is a factor of 11, one decade of the answer.
 
 ## The wave floor
 
@@ -65,7 +68,7 @@ power at k_½ = 4.58 m₂₂^(4/9) Mpc⁻¹ (they quote 4.5), with m₂₂ = m/1
 | Half power, T² = 1/2 | 5.4×10¹⁰ |
 | Half mode, T = 1/2 | 3.9×10¹⁰ |
 | Schive et al. (2016): the halo mass function turns down at M₀ = 1.6×10¹⁰ m₂₂^(−4/3) | 1.6×10¹⁰ |
-| Jeans mass today, a sphere of diameter λ_J (Hui et al. 2017's 1.5×10⁷) | 1.5×10⁷ |
+| Jeans mass today, a sphere of diameter λ_J (Hui et al. 2017's 1.5×10⁷, as quoted in search text) | 1.5×10⁷ |
 | Jeans mass at matter-radiation equality, same sphere | 6.9×10⁹ |
 | Jeans mass today, other spheres: radius λ_J, radius 1/k_J | 1.2×10⁸, 5.0×10⁵ |
 
@@ -76,7 +79,7 @@ the population floor as m^(−4/3). At 2×10⁻²⁰ eV the population floor is 
 calibrated near 10⁻²² eV, so the rows at 3×10⁻¹⁹ eV and above are extrapolations.
 
 **The wave clock and the Jeans scale.** In the Witness Map's terms, the wave clock m·Δx²/ħ at Δx = 1/k_J equals
-1/(4√(πGρ)), gravity's own clock: the Jeans condition restated, checked here with the Witness Map's constants. At
+1/(4√(πGρ)), gravity's own clock: the Jeans condition restated, an identity for any constants. At
 Δx = λ_J/2 = π/k_J the clock is π² longer, so the factor is a convention. The often-quoted
 k_J = 66.5 a^¼ m₂₂^½ Mpc⁻¹ uses the dark matter density alone (0.12 ρ_crit/h²); all matter gives 69.5.
 
@@ -91,14 +94,15 @@ combination. The soliton is that atom with its own mass for a nucleus, spread th
 ## How many levels
 
 Springel et al.'s Aquarius halo (2008) follows dN/dM = a₀ (M/m₀)^−1.9 above about 10⁵ M☉. Extended down to each
-floor, the law gives the counts in [`table.mjs`](table.mjs): 5.7×10¹⁴ to 1.05×10¹⁵ subhalos above 10⁻⁶ M☉ in a
-Milky Way, against Diemand, Moore and Stadel's "over 10¹⁵" (2005). The levels are a separate count. Each level's
-largest subhalo, where the law expects one, is μ = 0.025 of its host (1.6 decades per level). Aquarius itself
-resolves "up to four generations" of subhalos within subhalos, and four levels at this ratio reach 9×10⁵ M☉,
-within its resolved range.
+floor, the law gives the counts in [`table.mjs`](table.mjs). Above 10⁻⁶ M☉ it gives 1.05×10¹⁵ subhalos in Aq-A
+(1.84×10¹² M☉) and 5.7×10¹⁴ in a 10¹² M☉ host ([`tests/halos.mjs`](../tests/halos.mjs)), against Diemand, Moore and
+Stadel's "over 10¹⁵" (2005): the lighter host falls short by a factor 1.75. The levels are a separate count. Each
+level's largest subhalo, where the law expects one, is μ = 0.025 of its host (1.6 decades per level). Aquarius
+itself resolves "up to four generations" of subhalos within subhalos, and four levels at Aq-A's own ratio (0.027)
+reach 9×10⁵ M☉, within its resolved range.
 
-Two cautions. The extrapolation runs 11 to 21 decades below where the law was fitted, and assumes that what forms
-survives. Whether microhalos survive in the Galaxy is disputed. Zhao et al. (2007) argue that encounters with
+Two cautions. The extrapolation runs 9 to 11 decades below where the law was fitted for the bino (8 to 16 across
+Bringmann's WIMP range, at most 1.3 for the allowed wave masses), and assumes that what forms survives. Whether microhalos survive in the Galaxy is disputed. Zhao et al. (2007) argue that encounters with
 stars turn the ones near the Sun into streams; Moore et al. (2005) and Goerdt et al. (2007) find that their dense
 centres survive; van den Bosch et al. (2018) argue that much of the disruption seen in simulations is numerical.
 The second caution is that μ sets the levels, not the decades: at 10× per level the bino has 17, at μ it has 10.
@@ -110,11 +114,11 @@ there only logarithmically: n_eff = −2.15 at 10¹² M☉, −2.84 at 10⁻⁶ 
 only elevenfold over those eighteen decades (2.2 to 24), and without a cut-off halos from 10⁻¹² to 10⁻³ M☉, nine
 decades, all collapse within 157 million years (z = 24 to 14).
 
-For the bino the first halos (1σ, half-mode mass) collapse at z ≈ 16, or 10 to 12 once the dark matter is let lag
-the gas, which never falls into wells this small. Green, Hofmann and Schwarz give z = 60 ± 20. Most of the gap is
-inputs and definition: with WMAP-era round numbers (n_s = 1, σ₈ = 0.9) the same model gives z = 22.5 at 1σ and 46
-at 2σ, and with Planck 2018 a 3.5σ peak reaches z = 60. Their inputs were not seen, so this is a comparison, not
-a check.
+For the bino the first halos (1σ, half-mode mass) collapse at z ≈ 16, or 11 to 13 once the dark matter grows
+alone: the gas never falls into wells this small, which the growth factor assumes it does after the drag epoch.
+Green, Hofmann and Schwarz give z = 60 ± 20. Inputs and definition can account for most of the gap: with WMAP-era
+round numbers (n_s = 1, σ₈ = 0.9) the same model gives z = 22.5 at 1σ and 46 at 2σ, and with Planck 2018 a 3.5σ
+peak reaches z = 60. Their inputs and definition were not seen, so this is a comparison, not a check.
 
 The shapes stop being alike before the floor. Halos near the cut-off form with steeper ρ ∝ r^−1.5 "prompt cusps",
 not the r^−1 centres of larger halos (Ishiyama 2014; Angulo et al. 2017; Delos and White 2023). The inner slope is
@@ -124,7 +128,8 @@ clusters. Those halos were isolated, each in a region of its own size, not a cha
 
 ## The spectrum twenty decades down
 
-The floors sit on Eisenstein and Hu's (1998) fit, extrapolated twenty decades in mass below where it was made. As a
+σ(M) and the collapse redshifts sit on Eisenstein and Hu's (1998) fit, extrapolated twenty decades in mass below
+where it was made. As a
 check, `model.js` integrates the radiation-era perturbations itself (Ma and Bertschinger 1995). A mode entering the
 horizon kicks the dark matter logarithmically, δ_c → −A ln(B kτ), and Mészáros growth then gives the transfer
 function's tail. With the neutrinos streaming freely, as in the Boltzmann code Eisenstein and Hu fitted, their
@@ -146,18 +151,19 @@ soliton.
 
 ## Checks
 
-`tests/halos.mjs` compares the model with published values and with exact results:
+`tests/halos.mjs` compares the model with published values, exact results and its own numerics:
 
 - the free-streaming wavenumber and the cut-off and collisional damping masses of Green, Hofmann and Schwarz;
 - the acoustic mass against Loeb and Zaldarriaga (within ×1.5) and Cornell, Profumo and Shepherd (within ×2);
 - Hu, Barkana and Gruzinov's Jeans wavenumber at equality and half-power wavenumber, the 66.5 Mpc⁻¹ form with
   the density it needs, and Hui et al.'s Jeans mass;
 - the soliton's M r_c against Schive, Chiueh and Broadhurst;
-- the Aquarius law against Diemand, Moore and Stadel's count;
-- the radiation-era kick against its closed form, and Eisenstein and Hu's tail against the derived one.
+- the Aquarius law against Diemand, Moore and Stadel's lower bound;
+- the radiation-era kick against its closed form, and Eisenstein and Hu's tail against the derived one;
+- σ(M) against a direct quadrature, and its convergence in the grid.
 
-Two comparisons are notes, not checks: Aquarius's four generations, and the first halos' redshift. Values marked
-"as seen in search text" in the checks were read in search results or abstracts, not in the papers.
+Three comparisons are notes, not checks: the fluid-neutrino tail, Aquarius's four generations and the first
+halos' redshift.
 
 ## What the model leaves out
 
@@ -167,15 +173,25 @@ Two comparisons are notes, not checks: Aquarius's four generations, and the firs
 - The WIMP transfer function's polynomial prefactor, (1 − (2/3)(k/k_fs)²), is recalled; the papers' text seen
   describes it only as a polynomial times an exponential. A plain Gaussian with the same k_fs moves the half-mode
   mass from 4.3 to 1.8×10⁻⁶ M☉.
-- The acoustic mass is the dark matter inside the horizon, an order-of-magnitude scale; Bringmann (2009) finds
-  the true cut-off typically about ten times above such estimates. g = 10.75 holds between about 1 and 100 MeV.
-- The spectrum has no running of the spectral index: ±0.01 moves the bino's σ by −24% / +38% and z_c to 12 to 23.
+- The acoustic mass is the matter (dark matter and baryons, the convention for every mass here) inside the
+  horizon, an order-of-magnitude scale; the dark matter alone is 16% less. Bringmann (2009) finds that working
+  out T_kd properly puts a given model's cut-off typically about ten times above earlier order-of-magnitude
+  estimates (as seen in search text); here T_kd is an input, so that uncertainty enters through it.
+- The thermal history is ideal gases in equilibrium, with the neutrinos decoupling at once at 1 MeV. It fails
+  near the QCD transition, about 150 MeV, and the particle masses in it are recalled.
+- The spectrum has no running of the spectral index: ±0.01 moves the bino's σ by −29% / +49% and z_c to 11 to 25.
   Massive neutrinos and the QCD transition's imprint on modes above about 10⁶ Mpc⁻¹ are ignored.
-- The subhalo law is extrapolated over 11 to 21 decades with no tidal losses, and the levels assume a fixed μ.
+- Whether the matter's or the dark matter's contrast must reach 1.686 when the gas stays smooth is left open,
+  hence 11 to 13 for the bino's first halos.
+- The subhalo law is extrapolated over up to 16 decades (9 to 11 for the bino) with no tidal losses, and the
+  levels assume a fixed μ.
 - The wave fits are of N-body simulations with wave initial conditions (Schive et al. 2016) or of the linear
   spectrum; full wave simulations shift M₀ (May and Springel 2023).
 
 ## Sources
+
+Published values were read in abstracts and search results ("as seen in search text" in the checks and code), not
+in the papers' full texts, except where marked recalled.
 
 - A. M. Green, S. Hofmann and D. J. Schwarz, *The power spectrum of SUSY-CDM on sub-galactic scales*, MNRAS 353, L23 (2004). https://arxiv.org/abs/astro-ph/0309621
 - A. M. Green, S. Hofmann and D. J. Schwarz, *The first WIMPy halos*, JCAP 0508, 003 (2005). https://arxiv.org/abs/astro-ph/0503387
@@ -196,6 +212,7 @@ Two comparisons are notes, not checks: Aquarius's four generations, and the firs
 - B. Moore, J. Diemand, J. Stadel and T. Quinn (2005). https://arxiv.org/abs/astro-ph/0502213
 - A. Goerdt, O. Y. Gnedin, B. Moore, J. Diemand and J. Stadel, MNRAS 375, 191 (2007). https://arxiv.org/abs/astro-ph/0608495
 - F. C. van den Bosch, G. Ogiya, O. Hahn and A. Burkert, *Disruption of dark matter substructure: fact or fiction?*, MNRAS 474, 3043 (2018). https://arxiv.org/abs/1711.05276
+- A. Schneider, R. E. Smith, A. V. Macciò and B. Moore, *Non-linear evolution of cosmological structures in warm dark matter models*, MNRAS 424, 684 (2012), for the half-mode mass. https://arxiv.org/abs/1112.0330
 - A. Schneider, R. E. Smith and D. Reed, *Halo mass function and the free streaming scale*, MNRAS 433, 1573 (2013). https://arxiv.org/abs/1303.0839
 - W. Hu, R. Barkana and A. Gruzinov, *Cold and fuzzy dark matter*, Phys. Rev. Lett. 85, 1158 (2000). https://arxiv.org/abs/astro-ph/0003365
 - L. Hui, J. P. Ostriker, S. Tremaine and E. Witten, *Ultralight scalars as cosmological dark matter*, Phys. Rev. D 95, 043541 (2017). https://arxiv.org/abs/1610.08297

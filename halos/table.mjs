@@ -1,6 +1,6 @@
 // Prints how deep the nesting of dark matter halos goes and what stops it: the small-scale spectrum, the floors a WIMP
 // and wave dark matter set, sigma(M) and when each mass collapses, the levels of nesting below a Milky Way, and the
-// Jeans scale and soliton in the Witness Map's terms. Usage: node halos/table.mjs (a few seconds)
+// Jeans scale and soliton in the Witness Map's terms. Usage: node halos/table.mjs (under a second)
 import { createRequire } from 'node:module';
 const require = createRequire(import.meta.url);
 const H = require('./model.js');
@@ -26,8 +26,9 @@ for (const k of [1e-3, 1e-2, 1e-1, 1, 1e1, 1e2, 1e3, 1e4, 1e5, 1e6, 1e7, 1e8, 1e
 console.log(`   Derived tails T -> coef (k_eq/k)^2 ln(c k/k_eq): free-streaming neutrinos ${tailFree.coef.toFixed(2)}, c = ${tailFree.c.toFixed(4)};` +
   ` neutrinos a fluid ${tailFluid.coef.toFixed(2)}, c = ${tailFluid.c.toFixed(4)}`);
 const kNu = 1 / H.decoupling(bg, 1).tau;                  // horizon wavenumber when the neutrinos decouple, at about 1 MeV
-console.log(`   Modes above k = ${e2(kNu)} Mpc^-1, the horizon when the neutrinos decouple (about 1 MeV), entered while the neutrinos were still`);
-console.log('   coupled, so the fluid tail applies to them: Eisenstein & Hu overstate the bino-scale transfer function by about 10%.');
+console.log(`   The neutrinos decouple at about 1 MeV, when the horizon is k = ${e2(kNu)} Mpc^-1. Modes entering well before that see them`);
+console.log(`   as a fluid: from about ${e2(10 * kNu)} Mpc^-1 up the fluid tail applies, and Eisenstein & Hu overstate the transfer function`);
+console.log('   there, at the bino cut-off included, by about 10%.');
 
 // ---- 2. The floors
 const bino = H.wimpGHS({ m: 100, Tkd: 30 }), Mb = hm(bino).M;
@@ -36,7 +37,10 @@ console.log('\n2. Floors. Masses of spheres: radius pi/k (half a wavelength) for
 console.log(`   WIMP 100 GeV, T_kd 30 MeV: k_fs = ${e2(bino.kfs)} Mpc^-1 (derived from the coasting distance ${(derived.s * 1e6).toFixed(3)} pc: k_fs = sqrt2/s = ${e2(derived.kfs)}), k_d = ${e2(bino.kd)}`);
 console.log(`     M(pi/k_fs) = ${e2(H.massOfK(bg, bino.kfs))}, M_hm = ${e2(Mb)}, M_1/2 = ${e2(hm(bino).M2)}, M(pi/k_d) = ${e2(H.massOfK(bg, bino.kd))};` +
   ` Gaussian form, same k_fs: M_hm = ${e2(hm(H.gaussianOf(bino)).M)}`);
-console.log(`     horizon at decoupling ${(H.decoupling(bg, 30).tau * 1e6).toFixed(2)} pc comoving: acoustic mass M_ao = ${e2(H.acousticMass(bg, 30))}`);
+console.log(`     pi/k_fs = ${(Math.PI / bino.kfs * 1e6).toFixed(2)} pc comoving (a sphere of radius 1 pc holds ${e2(4 * Math.PI / 3 * bg.rhoM * 1e-18)} Msun)`);
+const dk = H.decoupling(bg, 30);
+console.log(`     at 30 MeV the radiation has g = ${dk.g.toFixed(2)} (muons and pions add ${(dk.g - 10.75).toFixed(2)} to photons, e+- and neutrinos);` +
+  ` horizon ${(dk.tau * 1e6).toFixed(2)} pc comoving: acoustic mass M_ao = ${e2(H.acousticMass(bg, 30))}`);
 const TK = [3, 10, 20, 30, 50];
 console.log('\n   WIMP floor, max[M(pi/k_fs), M_ao] (Bringmann 2009) / the same with M_hm, by mass and kinetic decoupling temperature:');
 console.log('   ' + 'm [GeV] \\ T_kd [MeV]'.padEnd(21) + TK.map(t => pad(t, 20)).join(''));
@@ -70,7 +74,7 @@ const chain = [1e-12, 1e-9, 1e-6, 1e-3].map(M => ({ M, z: md.zc(M) }));
 console.log(`   CDM without a cut-off: ${chain.map(c => `${e2(c.M)} at z ${c.z.toFixed(1)}`).join(', ')}: nine decades within ${(tMyr(chain[3].z) - tMyr(chain[0].z)).toFixed(0)} Myr`);
 const zb = o => md.zc(Mb, bino, o).toFixed(1);
 console.log(`\n   Bino halos at M_hm = ${e2(Mb)} Msun, 1 sigma: z_c = ${zb()}; with the radiation-era growing mode ${zb({ radiation: true })};` +
-  ` with the dark matter lagging the gas (p = ${bg.p.toFixed(3)}) ${zb({ baryonLag: true })} to ${zb({ baryonLag: 'cdm' })}; 2 sigma ${zb({ nu: 2 })}, 3 sigma ${zb({ nu: 3 })};` +
+  ` with the dark matter growing alone (the gas never falls in) ${zb({ baryonLag: true })} to ${zb({ baryonLag: 'cdm' })}; 2 sigma ${zb({ nu: 2 })}, 3 sigma ${zb({ nu: 3 })};` +
   ` z = 60 takes a ${(H.DELTA_C / (md.sigma(Mb, bino) * md.growth(60))).toFixed(1)} sigma peak`);
 const runs = [-0.01, 0.01].map(a => H.model(P18, { perDecade: 160, running: a }));
 console.log(`   Running dn_s/dlnk = -0.01 / +0.01 (sigma8 fixed): sigma(M_hm) ${runs[0].sigma(Mb, bino).toFixed(1)} / ${runs[1].sigma(Mb, bino).toFixed(1)} (${md.sigma(Mb, bino).toFixed(1)} without), z_c ${runs[0].zc(Mb, bino).toFixed(1)} / ${runs[1].zc(Mb, bino).toFixed(1)}`);
@@ -119,6 +123,9 @@ console.log('   At dx = lambda_J/2 = pi/k_J the clock is pi^2 = 9.87 times longe
 const kJ0 = H.kJcomoving(bg, 1, 1), kJeq = H.kJcomoving(bg, 1, bg.aeq), kJdm = H.kJcomoving(bg, 1, 1, { rho0: 0.12 * bg.rhoCrit });
 console.log(`   Comoving k_J at 1e-22 eV: today ${kJ0.toFixed(1)} Mpc^-1 (all matter) or ${kJdm.toFixed(1)} (0.12 rho_crit/h^2, the dark matter alone: the quoted 66.5);` +
   ` at equality ${kJeq.toFixed(2)}`);
+{ const rhoDM = 0.12 * bg.rhoCrit * Math.pow(H.C.Mpc, 3) / H.C.Msun, lam = 2 * Math.PI / kJdm;
+  console.log(`   Jeans mass today in the dark matter density alone, sphere of diameter lambda_J: ${e2(4 * Math.PI / 3 * rhoDM * Math.pow(lam / 2, 3))} Msun` +
+    ' (k_J and M_J both go as rho^(1/4))'); }
 const J0 = H.jeansMasses(bg, kJ0), Jeq = H.jeansMasses(bg, kJeq);
 console.log('   Jeans mass at 1e-22 eV [Msun]             today      at equality');
 for (const [key, lab] of [['fullWave', 'sphere of radius lambda_J'], ['cube', 'cube of side lambda_J'], ['halfWave', 'sphere of diameter lambda_J (Hui et al.)'], ['inverseK', 'sphere of radius 1/k_J']])
