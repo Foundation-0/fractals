@@ -29,6 +29,12 @@ with Claude (Anthropic), for [Foundation0](https://github.com/Foundation-0/f0).
   120 million parsecs, the galaxies of the WiggleZ survey are spread evenly to within 1% (Scrimgeour et al.,
   2012). The nesting stops at a largest scale, as a coastline's roughness stops at a smallest one, and where
   depends on the galaxies and on how even counts as even ([cosmic-homogeneity](cosmic-homogeneity/)).
+- **Halos nest inside halos, down to a floor the dark matter particle sets.** Dark matter clumps from the
+  bottom up, and a Milky Way's halo holds subhalos that hold their own. For a 100 GeV WIMP the nesting spans
+  16 to 18 decades in mass, down to halos of 10⁻⁶ to 10⁻⁴ Suns, below which the particle's own motion has
+  smoothed everything out. For wave dark matter at the masses still allowed it spans only 3 to 8 decades,
+  depending on which bound holds, cut off by quantum pressure. Before the floor the halos already stop looking alike: the first ones form
+  with steeper centres ([halos](halos/)).
 
 ## First study: the Witness Map
 
