@@ -4,7 +4,8 @@
  * Walker, ApJ 378, 186 (1991)). For a Gaussian random surface with 2D power spectrum P(k) ~ |k|^-beta, so Hurst
  * exponent H = (beta - 2)/2, two dimensions are quoted:
  *   all the contours at one level together   D = 2 - H        (Mandelbrot)
- *   one contour loop                         D = (3 - H) / 2  (Kondev & Henley, Phys. Rev. Lett. 74, 4580 (1995))
+ *   one contour loop                         D = (3 - H) / 2  (Kondev & Henley, Phys. Rev. Lett. 74, 4580 (1995); a
+ *                                                              conjecture, x_l = 1/2, exact only at H = 0 and 1)
  * This module makes the surfaces and measures both, so a perimeter-area fit can be compared with each.
  *
  * Field: complex white noise drawn in k space on an L x L periodic grid, multiplied by |k|^(-beta/2) (k in units of
@@ -17,7 +18,8 @@
  * its four corners is above the level. Loops are walked with unwrapped coordinates, above side on the left, so the
  * shoelace area is positive around an above island. A loop whose walk returns displaced by a multiple of L winds
  * around the torus; it is counted and dropped from the loop statistics.
- * Per loop: length P, |area| A, and radius of gyration R_g of the polyline as a uniform wire.
+ * Per loop: length P, signed area A (positive around an above island), and radius of gyration R_g of the polyline
+ * as a uniform wire.
  */
 (function (root) {
   'use strict';
@@ -422,12 +424,15 @@
       Heff: (w, ex) => 0.5 * slopeIn(meanLog('sf', ex), w[0], w[1]),
     };
     const n = recs.length;
-    const jack = (fn, w) => { const full = fn(w), v = recs.map((_, i) => fn(w, i)), mv = v.reduce((a, x) => a + x, 0) / n; return { D: full, se: Math.sqrt((n - 1) / n * v.reduce((a, x) => a + (x - mv) * (x - mv), 0)) }; };
-    const withWindows = (fn, ws) => { const all = ws.map(w => fn(w)).filter(Number.isFinite); return { ...jack(fn, ws[0]), win: (Math.max(...all) - Math.min(...all)) / 2 }; };
+    // Jackknife over fields; loo keeps the leave-one-out values, so estimates from fields that share random numbers
+    // (the same pair index at another beta) can be differenced or fitted jointly. byWindow: the estimate in each window.
+    const jack = (fn, w) => { const full = fn(w), v = recs.map((_, i) => fn(w, i)), mv = v.reduce((a, x) => a + x, 0) / n; return { D: full, se: Math.sqrt((n - 1) / n * v.reduce((a, x) => a + (x - mv) * (x - mv), 0)), loo: v }; };
+    const withWindows = (fn, ws) => { const byWindow = ws.map(w => fn(w)), all = byWindow.filter(Number.isFinite); return { ...jack(fn, ws[0]), win: (Math.max(...all) - Math.min(...all)) / 2, byWindow }; };
     const W = loopWindows(L), YW = yardWindows(L, yardMax);
     return {
       loops: withWindows(est.loops, W), area: withWindows(est.area, W), outer: withWindows(est.outer, W), median: withWindows(est.median, W), clouds: withWindows(est.clouds, W),
-      yard: withWindows(est.yard, YW), HeffLoop: jack(est.Heff, W[0]), HeffYard: jack(est.Heff, YW[0]), c: ratio(null, W[0][0], W[0][1]), W, YW,
+      yard: withWindows(est.yard, YW), HeffLoop: withWindows(est.Heff, W), HeffYard: jack(est.Heff, YW[0]), c: ratio(null, W[0][0], W[0][1]), W, YW,
+      heffAt: k => 0.5 * slopeIn(meanLog('sf'), k * W[0][0], k * W[0][1]),   // H_eff over separations k times the loop window
       nLoops: recs.reduce((a, r) => a + r.nLoops, 0) / n, nWrap: recs.reduce((a, r) => a + r.nWrap, 0) / n, wrapShare: recs.reduce((a, r) => a + r.wrapShare, 0) / n,
     };
   }

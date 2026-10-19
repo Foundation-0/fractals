@@ -1,6 +1,6 @@
 // Cloud edges: which dimension a perimeter-area relation measures, on Gaussian random surfaces.
 // Usage: node turbulence/edges.mjs          (L = 2048, 32 fields per spectrum, up to 4 worker threads; about 45 s on 4 cores)
-//        node turbulence/edges.mjs 1024     (any power of 2 from 512; 4096 takes about 4 minutes on 4 cores)
+//        node turbulence/edges.mjs 1024     (any power of 2 from 256; 4096 takes about 4 minutes on 4 cores)
 //        node turbulence/edges.mjs quick    (L = 256, 12 fields per spectrum, one thread: a smoke test, about a second)
 import { createRequire } from 'node:module';
 import { Worker, isMainThread, parentPort } from 'node:worker_threads';
@@ -46,24 +46,42 @@ if (!isMainThread) {
     const h = e.HeffLoop.D, z = x => ((e.loops.D - x) / sig(e.loops)).toFixed(1);
     console.log(`  ${name(beta).padEnd(5)}  ${f3(h)}  ${f3((3 - h) / 2).padStart(11)}  ${f3(2 - h).padStart(8)}  ${z(th.loop).padStart(13)}  ${z(th.set).padStart(9)}  ${z((3 - h) / 2).padStart(17)}  ${z(2 - h).padStart(13)}`);
   }
-  const fit = C.wlsq(rows.map(r => r.e.HeffLoop.D), rows.map(r => r.e.loops.D), rows.map(r => sig(r.e.loops)));
+  const wts = rows.map(r => sig(r.e.loops)), slopeOf = (H, D) => C.wlsq(H, D, wts).slope;
+  const fit = C.wlsq(rows.map(r => r.e.HeffLoop.D), rows.map(r => r.e.loops.D), wts);
+  // The six spectra share their random numbers, so their errors are correlated: a joint jackknife refits the slope
+  // with the same field left out of every spectrum, and the window spread refits it with every spectrum in one window.
+  const nF = rows[0].e.loops.loo.length, jk = Array.from({ length: nF }, (_, i) => slopeOf(rows.map(r => r.e.HeffLoop.loo[i]), rows.map(r => r.e.loops.loo[i])));
+  const jm = jk.reduce((a, x) => a + x, 0) / nF, jse = Math.sqrt((nF - 1) / nF * jk.reduce((a, x) => a + (x - jm) ** 2, 0));
+  const byW = rows[0].e.loops.byWindow.map((_, k) => slopeOf(rows.map(r => r.e.HeffLoop.byWindow[k]), rows.map(r => r.e.loops.byWindow[k]))).filter(Number.isFinite);
+  const wse = (Math.max(...byW) - Math.min(...byW)) / 2, tot = Math.hypot(jse, wse);
   const off = rows.map(r => r.e.loops.D - (3 - r.e.HeffLoop.D) / 2), w = rows.map(r => 1 / sig(r.e.loops) ** 2);
-  const meanOff = off.reduce((a, x, i) => a + x * w[i], 0) / w.reduce((a, x) => a + x, 0);
-  console.log(`\nAcross the six spectra, D against H_eff: slope ${f3(fit.slope)} +- ${f3(fit.slopeErr)} (Kondev-Henley -1/2, Mandelbrot -1; ` +
-    `${((fit.slope + 1) / fit.slopeErr).toFixed(1)} sigma from -1), chi^2 ${fit.chi2.toFixed(1)} for 4 degrees of freedom.`);
-  console.log(`Loops sit ${meanOff >= 0 ? '+' : ''}${f3(meanOff)} above (3-H_eff)/2 on average (weighted).`);
+  const wmean = v => v.reduce((a, x, i) => a + x * w[i], 0) / w.reduce((a, x) => a + x, 0), meanOff = wmean(off);
+  console.log(`\nAcross the six spectra, D against H_eff: slope ${f3(fit.slope)} +- ${f3(jse)} (joint jackknife) +- ${f3(wse)} (fit windows); ` +
+    `Kondev-Henley -1/2, Mandelbrot -1, ${((fit.slope + 1) / tot).toFixed(1)} sigma from -1. The weighted fit alone gives +- ${f3(fit.slopeErr)}, chi^2 ` +
+    `${fit.chi2.toFixed(1)} for 4 degrees of freedom, but treats the spectra as independent.`);
+  console.log(`Loops sit ${meanOff >= 0 ? '+' : ''}${f3(meanOff)} above (3-H_eff)/2 on average (weighted), with H_eff over the loops' own range of sizes;` +
+    ` measured over separations 2 and 4 times larger, the offset is ${[2, 4].map(k => f3(wmean(rows.map(r => r.e.loops.D - (3 - r.e.heffAt(k)) / 2)))).join(' and ')}.`);
 
   // Which spectrum gives Falgarone et al.'s 1.36 +- 0.02? They fitted perimeter against area, so use the P ~ A^(D/2)
   // column; it falls with beta, so interpolate linearly, and widen the band by the column's own error in quadrature.
   const col = rows.map(r => ({ beta: r.beta, D: r.e.area.D, s: sig(r.e.area) }));
   const at = D => { for (let i = 0; i + 1 < col.length; i++) { const a = col[i], b = col[i + 1]; if ((a.D - D) * (b.D - D) <= 0) { const t = (D - a.D) / (b.D - a.D); return { beta: a.beta + t * (b.beta - a.beta), s: a.s + t * (b.s - a.s) }; } } return { beta: NaN, s: NaN }; };
   const [D0, dD] = FALGARONE, mid = at(D0), band = Math.hypot(dD, mid.s), fb = x => (Number.isFinite(x) ? f3(x) : 'outside the spectra run');
-  console.log(`\nCloud edges, D = ${D0} +- ${dD} (Falgarone, Phillips & Walker 1991, perimeter against area): on these surfaces, from the P ~ A^(D/2)` +
-    ` column, beta = ${fb(mid.beta)}, and ${fb(at(D0 + band).beta)} to ${fb(at(D0 - band).beta)} with this run's own error (+- ${f3(mid.s)}) added.`);
+  console.log(`\nCloud edges, D = ${D0} +- ${dD} (Falgarone, Phillips & Walker 1991, perimeter against area; +- ${dD} is a combined-fit error): if holes are` +
+    ` not counted, the P ~ A^(D/2) column puts it at beta = ${fb(mid.beta)}, and ${fb(at(D0 + band).beta)} to ${fb(at(D0 - band).beta)} with this run's own error (+- ${f3(mid.s)}) added.`);
+  { // Their stated definition (perimeter = positions externally adjacent to the contour) counts hole borders, with net area.
+    const colH = rows.map(r => ({ beta: r.beta, D: r.e.clouds.D, s: sig(r.e.clouds) }));
+    const atH = D => { for (let i = 0; i + 1 < colH.length; i++) { const a = colH[i], b = colH[i + 1]; if ((a.D - D) * (b.D - D) <= 0) { const t = (D - a.D) / (b.D - a.D); return { beta: a.beta + t * (b.beta - a.beta), s: a.s + t * (b.s - a.s) }; } } return { beta: NaN, s: NaN }; };
+    const mH = atH(D0), bH = Math.hypot(dD, mH.s), c28 = rows.find(r => Math.abs(r.beta - 2.8) < 1e-9).e.clouds;
+    console.log(`If holes are counted, as their definition reads, the clouds-with-holes column puts it at beta = ${fb(mH.beta)}, ${fb(atH(D0 + bH).beta)} to ` +
+      `${fb(atH(D0 - bH).beta)}; at beta = 2.8 that column gives ${f3(c28.D)} +- ${f3(sig(c28))}.`);
+  }
   console.log(`Without the loops' offset, (3-H)/2 alone would put 1.36 at beta = ${f3(8 - 4 * D0)}, and 2-H at ${f3(6 - 2 * D0)}.`);
   const row = b => { const e = rows.find(r => Math.abs(r.beta - b) < 1e-9).e.area; return `${f3(e.D)} +- ${f3(sig(e))}`; };
   console.log(`P ~ A^(D/2): projected Kolmogorov density (beta 11/3) ${row(11 / 3)}; a planar slice of it (beta 8/3) ${row(8 / 3)}; CO maps (beta ~ 2.8) ${row(2.8)}.`);
   console.log(`Per field, loops of all sizes: ${rows.map(r => `${name(r.beta)}: ${r.e.nLoops.toFixed(0)}, ${r.e.nWrap.toFixed(2)} around the torus`).join('; ')}.`);
+  const vals = rows.flatMap(({ e }) => ['loops', 'area', 'outer', 'median', 'clouds', 'yard'].flatMap(k => [e[k].D, e[k].se, e[k].win]).concat([e.HeffLoop.D, e.HeffYard.D])).concat([fit.slope, jse, wse, meanOff]);
+  if (!vals.every(Number.isFinite)) { console.error('non-finite result'); process.exit(1); }
 }
 
 async function run(jobs, nWorkers) {

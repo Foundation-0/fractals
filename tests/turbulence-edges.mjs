@@ -104,10 +104,20 @@ check('Loops sit nearer (3 - H)/2 and the whole level set nearer 2 - H, at beta 
   [lo, hi].every(({ th, e }) => Math.abs(e.loops.D - th.loop) < Math.abs(e.loops.D - th.set) && Math.abs(e.yard.D - th.set) < Math.abs(e.yard.D - th.loop)),
   [lo, hi].map(({ th, e }) => `beta ${th.H * 2 + 2}: loops ${f3(e.loops.D)}, level set ${f3(e.yard.D)} against ${f3(th.loop)} and ${f3(th.set)}`).join('; '),
   'Kondev & Henley, Phys. Rev. Lett. 74, 4580 (1995); Mandelbrot');
-const dD = lo.e.loops.D - hi.e.loops.D, dH = hi.e.HeffLoop.D - lo.e.HeffLoop.D, se = Math.hypot(lo.e.loops.se, hi.e.loops.se);
-check('From beta 2.4 to 3 the loop dimension falls by about half the change in H_eff, as for single loops, not by all of it',
-  Math.abs(dD - dH / 2) < Math.abs(dD - dH) && dH - dD > 3 * se,
-  `fall ${f3(dD)} +- ${f3(se)} (jackknife); H_eff rises by ${f3(dH)}: single loops ${f3(dH / 2)}, level set ${f3(dH)}`, 'Kondev & Henley 1995');
+check('Each loop dimension matches (3 - H_eff)/2, with H_eff measured over the loops\' own range of sizes, within 0.05',
+  [lo, hi].every(({ e }) => Math.abs(e.loops.D - (3 - e.HeffLoop.D) / 2) < 0.05),
+  [lo, hi].map(({ th, e }) => `beta ${th.H * 2 + 2}: ${f3(e.loops.D)} against ${f3((3 - e.HeffLoop.D) / 2)}`).join('; '),
+  'Kondev & Henley 1995 (their x_l = 1/2 is a conjecture, exact only at H = 0 and 1)');
+// Both spectra use the same random numbers, field by field, so the fall and the rise are differenced field by field
+// inside a paired jackknife.
+const pj = fn => { const n = lo.e.loops.loo.length, v = Array.from({ length: n }, (_, i) => fn(i)), m = v.reduce((a, x) => a + x, 0) / n; return Math.sqrt((n - 1) / n * v.reduce((a, x) => a + (x - m) ** 2, 0)); };
+const dDi = i => lo.e.loops.loo[i] - hi.e.loops.loo[i], dHi = i => hi.e.HeffLoop.loo[i] - lo.e.HeffLoop.loo[i];
+const dD = lo.e.loops.D - hi.e.loops.D, dH = hi.e.HeffLoop.D - lo.e.HeffLoop.D;
+const seD = pj(dDi), seHalf = pj(i => dDi(i) - dHi(i) / 2), seAll = pj(i => dDi(i) - dHi(i));
+check('From beta 2.4 to 3 the loop dimension falls, by half the rise in H_eff (single loops), not by all of it (the level set)',
+  dD > 2 * seD && Math.abs(dD - dH / 2) < 2 * seHalf && Math.abs(dD - dH) > 3 * seAll,
+  `fall ${f3(dD)} +- ${f3(seD)} (paired jackknife, over 2 errors); H_eff rises by ${f3(dH)}: fall minus half of it ${f3(dD - dH / 2)} +- ${f3(seHalf)} (within 2 errors), ` +
+  `minus all of it ${f3(dD - dH)} +- ${f3(seAll)} (beyond 3)`, 'Kondev & Henley 1995');
 
 console.log(fails ? `\n${fails} check(s) failed` : '\nall checks pass');
 process.exit(fails ? 1 : 0);

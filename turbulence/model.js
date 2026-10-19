@@ -17,14 +17,14 @@
  *    With the energy flux eps and the helicity flux delta both constant, Sigma_n = <Im T_{n-1}> obeys exactly
  *      2 (a - c) k_n Sigma_n = eps - delta (c/a)^n,   i.e. 3 k_n Sigma_n = eps - delta (-1/2)^n,
  *    the shell model's 4/5 law: a third-order correlator that scales exactly as 1/k_n. Forcing on shell 0 alone puts
- *    helicity in at delta = eps. The relation is derived here from the equation above; its form in the literature
- *    was not seen.
+ *    helicity in at delta = eps. The relation is derived here from the equation above; it is L'vov et al.'s eq. (16),
+ *    S_3 = [-eps + delta (c/a)^n] / (2 k_n (a - c)) with Sigma_n = -S_3 (as read from the paper in #34's review).
  *    Integrator: integrating-factor RK4 with the viscous factor exact. The exponentials are precomputed by an own
  *    + - * / routine, so the trajectory uses only IEEE + - * / and is the same bit for bit on any conforming engine.
  *    Model units: k0 = 1.
  * 3. Where real cascades stop, in SI units: the ion inertial length and gyroradius of the solar wind (a plasma too
  *    dilute for viscosity), and the sonic scale of molecular clouds, where the turbulent velocity falls to the sound
- *    speed.
+ *    speed: the supersonic range ends there, and a shallower subsonic cascade continues below it.
  */
 (function (root) {
   'use strict';
@@ -51,7 +51,8 @@
     const t = 2 * rng() - 1, d = 1 + t * t, s = rng() < 0.5 ? -1 : 1;
     return [s * (1 - t * t) / d, s * 2 * t / d];
   }
-  // exp(x) from + - * / only (scaling and squaring of a Taylor series); good to ~1e-13 relative.
+  // exp(x) from + - * / only (scaling and squaring of a Taylor series): within 1e-13 relative for |x| < 50, which
+  // covers every factor used here, and about 2e-12 near -700.
   function expDet(x) {
     if (x > 0) return 1 / expDet(-x);
     if (x < -745) return 0;
@@ -295,22 +296,28 @@
 
   // ---------- 4. Molecular clouds ----------
   const soundSpeed = (T, mu = 2.33) => Math.sqrt(C.kB * T / (mu * C.mH)); // isothermal, m/s
-  // Linewidth-size relations, sigma = coef (size/pc)^exp km/s. Larson: sigma is the 3D dispersion from observed line
-  // widths, so it includes the tracer molecule's own thermal width (taken as CO's, mass 28), and L is the maximum
-  // projected size. Solomon et al.: sigma is the 1D dispersion of 12CO lines and R = 1.91 S the effective radius
-  // (the fit in the size parameter S is 1.0 S^0.5); CO's thermal width is left in, as it is small.
-  const LARSON81 = { coef: 1.10, exp: 0.38, dims: 3, tracerMu: 28, size: 'maximum projected size' };
-  const SOLOMON87 = { coef: 0.72, exp: 0.5, dims: 1, size: 'effective radius' };
-  // The size (pc, in the relation's own convention) where the 1D non-thermal dispersion equals the sound speed: the
-  // observed 1D dispersion is then sqrt(c_s^2 + kT/m_tracer) when the tracer's thermal width is included.
+  // Linewidth-size relations, sigma = coef (size/pc)^exp km/s, and the thermal dispersion each sigma already holds
+  // (km/s, in the relation's own dimensions). Larson (1981): sigma is the total 3D rms velocity of all internal
+  // motions, thermal ones included, with sigma_s = 0.32 km/s for 10 K molecular gas (pp. 813-814), and L the maximum
+  // projected size. Solomon et al. (1987): sigma is the 1D intensity-weighted dispersion of the 12CO line, so it holds
+  // CO's own thermal width, sqrt(kT/28 m_H); the fit is (1.0 +- 0.1) S^(0.5 +- 0.05) in the size parameter S, and the
+  // effective radius is R = 3.4 S/sqrt(pi) = 1.92 S (p. 737), so in R it is 0.722 R^0.5. All as read from the papers
+  // in #34's review.
+  const CO_THERMAL = T => Math.sqrt(C.kB * T / (28 * C.mH)) / 1e3;
+  const LARSON81 = { coef: 1.10, exp: 0.38, dims: 3, thermal: () => 0.32, size: 'maximum projected size' };
+  const RE_S = 3.4 / Math.sqrt(Math.PI);
+  const solomon = (coefS = 1.0, exp = 0.5) => ({ coef: coefS / Math.pow(RE_S, exp), exp, dims: 1, thermal: CO_THERMAL, size: 'effective radius' });
+  const SOLOMON87 = solomon();
+  // The size (pc, in the relation's own convention) where the 1D non-thermal dispersion equals the sound speed:
+  // sigma^2 = dims c_s^2 + thermal^2 there.
   const sonicScale = (rel, T = 10) => {
-    const th = rel.tracerMu ? C.kB * T / (rel.tracerMu * C.mH) : 0, s1 = Math.sqrt(soundSpeed(T) ** 2 + th) / 1e3;
-    return Math.pow(Math.sqrt(rel.dims) * s1 / rel.coef, 1 / rel.exp);
+    const cs = soundSpeed(T) / 1e3, th = rel.thermal(T);
+    return Math.pow(Math.sqrt(rel.dims * cs * cs + th * th) / rel.coef, 1 / rel.exp);
   };
   // The non-thermal Mach number of a relation at a given size (pc): the 1D non-thermal dispersion over c_s.
   const machAt = (rel, size, T = 10) => {
-    const th = rel.tracerMu ? C.kB * T / (rel.tracerMu * C.mH) : 0, s1 = rel.coef * Math.pow(size, rel.exp) * 1e3 / Math.sqrt(rel.dims);
-    return Math.sqrt(s1 * s1 - th) / soundSpeed(T);
+    const s = rel.coef * Math.pow(size, rel.exp), th = rel.thermal(T);
+    return Math.sqrt((s * s - th * th) / rel.dims) / (soundSpeed(T) / 1e3);
   };
 
   const api = {
@@ -318,7 +325,7 @@
     SABRA, FORCE, RUNS, PMAX, KEYS, k41, sheLeveque, mulberry32, unitPhase, expDet, create, init, setDt, rhs, advance, imT, invariants,
     newStats, sample, simulate, linfit, mean, sd, averages, fluxCut, spectralCut, exponents, analyse, conservation,
     WIND, inertialLength, gyroradius, betaP, taylorFrequency, parkerAngle, protonCollisions,
-    soundSpeed, LARSON81, SOLOMON87, sonicScale, machAt,
+    soundSpeed, CO_THERMAL, LARSON81, SOLOMON87, RE_S, solomon, sonicScale, machAt,
   };
   if (typeof module !== 'undefined' && module.exports) module.exports = api; else root.TURB = api;
 })(typeof window !== 'undefined' ? window : globalThis);

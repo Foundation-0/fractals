@@ -138,16 +138,22 @@ Claims made during the exploration that did not survive it, kept so the record s
 
 ## 18 October 2026: turbulence (issue #19)
 
-19. **Issue #19's numbers, written from recall.** Checked against search text (see [turbulence](turbulence/)), two
-    did not survive and four needed qualifying.
-    - Did not survive: "σ = 0.72 S^0.5 km/s". Solomon et al.'s 0.72 goes with the effective radius R = 1.91 S; in
-      S the fit is 1.0 S^0.5. The 0.07 pc sonic scale it gave is a radius, 0.14 pc across.
-    - Did not survive: Larson's σ ∝ L^0.38 against Solomon et al.'s 0.5 as "a change of cascade". Larson's clouds
-      are supersonic too (non-thermal Mach 1.4 at 0.1 pc to 19 at 100 pc), so the difference lies in his sample and
-      size definition.
+19. **Issue #19's numbers, written from recall.** Checked against search text, and in #34's review against the
+    papers (see [turbulence](turbulence/)), two did not survive and five needed qualifying.
+    - Did not survive: "σ = 0.72 S^0.5 km/s". Solomon et al.'s 0.72 goes with the effective radius R = 1.92 S; in
+      S the fit is 1.0 S^0.5. The 0.07 pc sonic scale it gave is a radius, 0.15 pc across.
+    - Did not survive: Larson's σ ∝ L^0.38 against Solomon et al.'s 0.5 as "a change of cascade". Over most of
+      Larson's range his clouds are supersonic (non-thermal Mach 1.0 at 0.1 pc, where he calls the two smallest
+      subsonic, to 19 at 100 pc), so his 0.38 is not the subsonic cascade's. That the difference lies in his sample
+      and size definition is this study's inference; Larson read it as supersonic turbulence, or subsonic
+      turbulence in warmer gas.
     - Qualified: "the spectral break near 0.6 Hz". V/(2π d_i) gives 0.63 Hz, but the fluctuations are elongated
-      along the field, so the frequency carries sin θ_BV. At the 47° Parker angle it is 0.46 Hz, within the
-      observed 0.4 to 0.5 Hz.
+      along the field, so the frequency carries sin θ_BV: 0.46 Hz at the 47° Parker angle. Observed breaks spread
+      from 0.1 to 1 Hz (Chen et al. 2014), and Leamon et al.'s intervals average near 0.38 Hz, so both values lie
+      inside the spread and the data do not choose.
+    - Qualified: "a kinetic-range slope near −2.8 (Bruno and Carbone)". −2.8 is one measurement (Alexandrova et al.
+      2009); Bruno and Carbone give about −7/3 (as read in #34's review), and measured slopes run from about −2 to
+      −4 (Leamon et al. 1998; Smith et al. 2006).
     - Qualified: "the Kolmogorov scale is about a millimetre in the atmosphere and upper ocean". Right as an order
       of magnitude, with a factor of 10 either way: 0.3 mm in strong wind to over a centimetre on a quiet night,
       and 2 to 3 mm at the one upper-ocean station checked.
@@ -155,12 +161,14 @@ Claims made during the exploration that did not survive it, kept so the record s
       0.53 (scatter 0.055) for the 1D spectrum, 1.62 ± 0.17 in 3D.
     - Qualified: Nastrom and Gage's k⁻³ range "above ~500 km". The transition is quoted between 400 and 1,000 km,
       most often near 600.
-20. **"A fractional-Brownian estimate gives 7/6" for cloud edges.** The wrong formula. 7/6 = 2 − H is the dimension
-    of all the contours at one level together. A perimeter-area relation over separate clouds measures single
-    loops, (3 − H)/2 (Kondev and Henley 1995), which is 13/12 for projected Kolmogorov density. Computed on Gaussian
-    surfaces, the loops follow (3 − H)/2: across six spectra their dimension falls with the effective roughness
-    H_eff at a slope of −0.53 ± 0.05 (−0.44 against the nominal H), not −1. They also sit about 0.04 above it, for
-    reasons not found. The issue's conclusion survives: projected Kolmogorov density gives 1.15 there, not 1.36.
-    Whether the clouds' 1.36 matches the laboratory's 1.3 to 1.4 for a shared reason is not shown. The laboratory
-    measures the section of a turbulent/non-turbulent interface (7/3 in 3D), the clouds a projection of
-    supersonic gas, and the two only meet near 4/3.
+20. **"A fractional-Brownian estimate gives 7/6" for cloud edges.** The wrong formula for single clouds. 7/6 = 2 − H
+    is the dimension of all the contours at one level together, the relation Stutzki et al. (1998) take from Voss,
+    so the issue followed the literature. A perimeter-area relation over separate clouds, if holes are not counted,
+    measures single loops, (3 − H)/2 (Kondev and Henley 1995, a conjecture exact only at H = 0 and 1), which is
+    13/12 for projected Kolmogorov density. Computed on Gaussian surfaces, the loops follow (3 − H)/2: across six
+    spectra their dimension falls with the effective roughness H_eff at a slope of −0.53 ± 0.05 (−0.44 against the
+    nominal H), not −1. They also sit 0.02 to 0.04 above it, depending on where H_eff is measured, for reasons not
+    found. The issue's conclusion survives: projected Kolmogorov density gives 1.15 there, not 1.36. Whether the
+    clouds' 1.36 matches the laboratory's 1.3 to 1.4 for a shared reason is not shown. The laboratory measures
+    sections of turbulent surfaces (7/3 in 3D for the interface), the clouds a projection of supersonic gas, and
+    the two only meet near 4/3.
