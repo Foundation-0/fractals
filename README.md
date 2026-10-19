@@ -348,7 +348,8 @@ nobody tunes: the flow's Reynolds number, or the time gravity has had to act, se
 smooth on the largest scales, as the [opening section](#where-the-intuition-holds-and-where-it-breaks) describes).
 Real fluids have the same mechanism with three-dimensional exponents: ξ grows 4.27-fold for each tenfold approach
 to T_c (ν = 0.630; Kos, Poland, Simmons-Duffin and Vichi 2016), against tenfold for the 2D lattice. `npm test`
-checks the study against the exact results (`tests/critical.mjs`).
+checks the study against the exact results and, for percolation at finite sizes, against Ziff and Newman's
+measurements (`tests/critical.mjs`).
 
 Mistakes found along the way are in [CORRECTIONS.md](CORRECTIONS.md). Open questions are the
 [issues](https://github.com/Foundation-0/fractals/issues).

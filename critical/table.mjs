@@ -110,6 +110,7 @@ console.log(`  D over L = 64-256 less D over L = 32-256: ${pm(pool.rise, 3)}, po
 // with z = (mean - theirs) / standard error of the mean; their own errors are in the last digit quoted. The crossing
 // at L is that of L/2 and L. Then how far open edges move their values from the L -> infinity ones, in the same units.
 const zn = PERC.zn, zi = L => zn.Ls.indexOf(L), z = (m, v) => (m.value - v) / m.err;
+const quoted = (k, j) => zn[k][j].toFixed(zn.places[k][j]); // as Table 1 prints it: 0.504890, not 0.50489
 const adj = L => pool.adjacent.find(x => x.L2 === L), zs = [];
 console.log('\nPercolation against Ziff & Newman\'s measurements on the same system (2002, Table 1), means of the nine seeds');
 console.log(col('L', 5) + col('R(p_c)', 18) + col('Z&N', 10) + col('z', 7) + col('p where R = 1/2', 20) + col('Z&N', 11) + col('z', 7) +
@@ -118,9 +119,9 @@ p.Ls.forEach((L, i) => {
   const R = pool.atPc[i], h = pool.half[i], c = adj(L), j = zi(L);
   zs.push(z(R, zn.atPc[j]), z(h, zn.half[j]));
   if (c) zs.push(z(c.p, zn.cross[j]));
-  console.log(col(L, 5) + col(pm(R, 4), 18) + col(zn.atPc[j], 10) + col(z(R, zn.atPc[j]).toFixed(2), 7) + col(pm(h, 5), 20) +
-    col(zn.half[j], 11) + col(z(h, zn.half[j]).toFixed(2), 7) +
-    (c ? col(pm(c.p, 5), 20) + col(zn.cross[j], 10) + col(z(c.p, zn.cross[j]).toFixed(2), 7) : col('-', 20)));
+  console.log(col(L, 5) + col(pm(R, 4), 18) + col(quoted('atPc', j), 10) + col(z(R, zn.atPc[j]).toFixed(2), 7) +
+    col(pm(h, 5), 20) + col(quoted('half', j), 11) + col(z(h, zn.half[j]).toFixed(2), 7) +
+    (c ? col(pm(c.p, 5), 20) + col(quoted('cross', j), 10) + col(z(c.p, zn.cross[j]).toFixed(2), 7) : col('-', 20)));
 });
 console.log(`  ${zs.length} comparisons, largest |z| ${Math.max(...zs.map(Math.abs)).toFixed(2)}`);
 const eff = (f, from) => p.Ls.map((L, i) => from(i) ? (f(i) / from(i).err).toFixed(1) : '-').join(', ');

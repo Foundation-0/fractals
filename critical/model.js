@@ -34,7 +34,7 @@
  *   p_c by (b0/a1)(1/L1 - 1/L2) / (L2^(3/4) - L1^(3/4)): +0.00040 for L = 32 and 128, +0.00012 for 64 and 256.
  *   Their Table 1 gives their measurements on this same system, with errors "generally in the last digit quoted".
  *   PERC.zn holds those for L = 32 to 256: R_L(p_c); p_0.5, where R_L(p) = 1/2; and the crossing of R_L/2 and R_L
- *   (their p_c-c^(2)).
+ *   (their p_c-c^(2)); PERC.zn.places, the decimals each is quoted to.
  * Random numbers: xoshiro128** seeded through splitmix32, integer arithmetic only, so a seed gives the same run on
  * every JavaScript engine.
  */
@@ -45,7 +45,8 @@
   const EXP = { beta: 1 / 8, nu: 1, eta: 1 / 4, gamma: 7 / 4 };
   const PERC = { pc: 0.59274621, D: 91 / 48, oneArm: 5 / 48, nu: 4 / 3, b0: 0.322, a1: 0.765,
     zn: { Ls: [32, 64, 128, 256], atPc: [0.509535, 0.504890, 0.502476, 0.50124], // Ziff & Newman 2002, Table 1
-      half: [0.5918352, 0.5924657, 0.5926613, 0.5927208], cross: [0.594825, 0.593413, 0.592952, 0.592808] } };
+      half: [0.5918352, 0.5924657, 0.5926613, 0.5927208], cross: [0.594825, 0.593413, 0.592952, 0.592808],
+      places: { atPc: [6, 6, 6, 5], half: [7, 7, 7, 7], cross: [6, 6, 6, 6] } } }; // decimals as Table 1 quotes them
   const TWO32 = 4294967296;
 
   // ---------- random numbers ----------

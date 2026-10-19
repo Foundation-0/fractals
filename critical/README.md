@@ -4,14 +4,16 @@ Notes for [issue #20](https://github.com/Foundation-0/fractals/issues/20). Explo
 result claimed. `node critical/table.mjs` (about 65 s) prints the Monte Carlo numbers below, the percolation ones
 for each of nine seeds and as their mean. No script prints three kinds of number: the results of a one-off repeat
 of the checks with 120 other sets of seeds, described under [What it reproduces](#what-it-reproduces); γ/ν's
-finite-size bias of +0.0012, worked out from a published formula; and the 11% and 25% uncertainties of an error
-bar. `npm test` (`tests/critical.mjs`) checks the numbers compared with an exact value: the table under "What it
-reproduces", the ξ table, the measurement-trap cumulant with a fixed count and the same numbers in the short
-answer. It checks the cumulant measured the other way only against that one, and the point where the spanning
-probability at L = 32 is one half against Ziff and Newman's measurement there. The rest are printed but not
-checked: the slopes over other ranges of L, the cluster shares, the size ratios, the point where the spanning
-probability at L = 256 is one half, the other comparisons with Ziff and Newman's measurements and each percolation
-seed's results. Exact values are quoted from the sources named beside them. Started 18 October 2026.
+finite-size bias of +0.0012 and the Binder cumulant's offset of 0.0007 at L = 16, worked out from published
+results; and the 11% and 25% uncertainties of an error bar. `npm test` (`tests/critical.mjs`) checks the numbers
+compared with an exact value: the table under "What it reproduces", the ξ table, the measurement-trap cumulant with
+a fixed count and the same numbers in the short answer. It checks the cumulant measured the other way only against
+that one, and the point where the spanning probability at L = 32 is one half against Ziff and Newman's measurement
+there. Without Monte Carlo, it also checks the open-edge shift against their measured crossings for L = 64 to 256.
+The rest are printed but not checked: the slopes over other ranges of L, the cluster shares, the size ratios, the
+point where the spanning probability at L = 256 is one half, the other comparisons with Ziff and Newman's
+measurements and each percolation seed's results. Exact values are quoted from the sources named beside them.
+Started 18 October 2026.
 
 The other studies find self-similarity over a range of scales and ask where it stops. This one asks why it appears
 at all, in the one case where the exact answers are known and both ends of the range can be moved at will.
@@ -61,9 +63,10 @@ T_c is not itself a fixed point of this zooming out, but repeated zooming out ca
 same at every scale. Away from T_c each step of zooming out carries the effective temperature further from T_c, so
 a small mistuning t = (T − T_c)/T_c is invisible on short scales and takes over at ξ ∝ |t|^(−ν). Because the
 details fade, the exponents are universal: they are the same for every model with short-range forces, the same
-symmetry and the same number of dimensions. At the sizes modelled here the details have not wholly faded: they
-shift the Binder cumulant at L = 16 and γ/ν a little, and lower the measured percolation dimension, as described
-below.
+symmetry and the same number of dimensions. At the sizes modelled here finite size still shows. The susceptibility
+has a non-universal part set at short distances, its analytic background, which does not fade: the critical part
+outgrows it, as L^(7/4). That background, more than the fading details, shifts the Binder cumulant at L = 16 and
+γ/ν a little. Corrections to scaling lower the measured percolation dimension. All three are described below.
 
 An Ising magnet has two settings to tune: the temperature, to T_c, and the magnetic field, to zero. Percolation has
 one: the fraction p of occupied sites, to p_c = 0.592746 on the square lattice (Newman and Ziff 2000). At p_c the
@@ -125,35 +128,45 @@ V₄ = 1.1679229(47) on a periodic square (Salas and Sokal 2000).
 Each tolerance is a fixed number, 3 to 5 standard deviations of the noisiest estimate it covers, plus any
 finite-size shift: worked out from published results, except for D, whose shortfall is measured, in these runs and
 in the independent 120-seed repeat below, which give the same bound. For D, for the two p_c crossings and for the
-Binder cumulant at L = 16, the two sides are bounded separately, so the shift widens one side only. Every other
-check has one tolerance for both sides. Runs at several temperatures share one tolerance, so the quieter runs are
-held to it more loosely: ⟨|m|⟩ at T = 2.0 and 2.1 to 17 and 10 standard deviations, the energy at T = 2.0, 2.1, 2.4
-and 2.5 to between 5 and 8. For the Ising runs the standard deviation is the jackknife error. Over the 120-seed
-repeat below it matches the scatter between seeds within about 10% on average, but this seed's errors from the runs
-reweighted to T_c (L = 8 to 128) come out 6% to 17% below that scatter, so the checks quote both. For percolation
-it is the standard error of the nine-seed mean. It comes out 9% above the repeat's scatter of a nine-seed mean (its
-scatter between seeds over 3) for the crossing of L = 32 and 128, 44% above for 64 and 256, 16% above for the point
-where the spanning probability at L = 32 is one half and 20% below for D, so those checks quote both too.
+Binder cumulant at L = 16, the two sides are bounded separately, so the shift widens one side only. At L = 16 the
+cumulant sits 0.0007 above its limit: Salas and Sokal (2000) measured V₄(16) = 1.16586(38), and its leading
+correction, of order L^(−7/4), comes from the analytic background of χ (their sec. 4.1). Every other check has one
+tolerance for both sides. Runs at several temperatures share one tolerance, so the quieter runs are held to it more
+loosely: ⟨|m|⟩ at T = 2.0 and 2.1 to 17 and 10 standard deviations, the energy at T = 2.0, 2.1, 2.4 and 2.5 to
+between 5 and 8. For the Ising runs the standard deviation is the jackknife error. Over the 120-seed repeat below
+it matches the scatter between seeds within about 10% on average, but this seed's errors from the runs reweighted
+to T_c (L = 8 to 128) come out 6% to 17% below that scatter, so the checks quote both. For percolation it is the
+standard error of the nine-seed mean. It comes out 9% above the repeat's scatter of a nine-seed mean (its scatter
+between seeds over 3) for the crossing of L = 32 and 128, 44% above for 64 and 256, 16% above for the point where
+the spanning probability at L = 32 is one half and 20% below for D, so those checks quote both too.
 `tests/critical.mjs` prints how far inside its tolerance each result falls.
 
-Counting standard deviations of the scatter between seeds, beyond any shift, the tightest checks are three. γ/ν
-comes to 3.0 after a finite-size bias of +0.0012: over these sizes the slope of the susceptibility on a periodic
-square exceeds 7/4 by that much (Caselle, Hasenbusch, Pelissetto and Vicari 2002, sec. 7.2, exact up to L = 17 and
-from their expansion beyond). The percolation dimension D comes to 3.1 on the low side, beyond its measured
-shortfall (below), against the repeat's scatter of a nine-seed mean, 0.0026. Its high side is not tight: it sits
-about 9 of those standard deviations above the value expected at these sizes, so it guards only against gross
-errors. The T_c crossing of L = 64 and 128 comes to 3.5. In a one-off repeat at these tolerances with 120 other
-sets of seeds (each study seed plus 10000k, k = 1 to 120; not one of the repository's scripts), 119 passed every
-Ising check and the other missed the crossing of L = 64 and 128 by 0.0003. The repeat predates the pooled
-percolation checks, but it saved each seed's percolation crossings and D. A rerun of its percolation seeds
-reproduced those exactly and also saved each seed's spanning probability at p_c, the points where it is one half
-and the crossings of sizes L/2 and L. Split into 13 sets of nine seeds, all 13 pass the pooled checks; of 200,000
-sets of nine drawn at random from the 120 seeds, 37 fail, 3 on D and 34 on the point where the spanning probability
-at L = 32 is one half. The closed forms are checked too: the energy against the derivative of the published free
-energy (Caselle et al. 2002), to 10⁻⁷; Yang's formula against the same paper's form, to rounding; the open-edge
-shift of a crossing, below, against the coefficient Ziff and Newman (2002, sec. IV) predict from the same b₀ and a₁
-for sizes L/2 and L, 1.04 (they measured 1.02). That catches a slip in the algebra, not a shift that misdescribes
-the system; the comparison with their measurements, below, tests that.
+Counting standard deviations of the scatter between seeds, beyond any shift and on the side it points to, the
+tightest checks are three. γ/ν comes to 3.0 after a finite-size bias of +0.0012: over these sizes the slope of the
+susceptibility on a periodic square exceeds 7/4 by that much (Caselle, Hasenbusch, Pelissetto and Vicari 2002,
+sec. 7.2, exact up to L = 17 and from their expansion beyond). The T_c crossing of L = 64 and 128 comes to 3.5, and
+the energy above T_c to 3.6, at T = 2.75. The percolation dimension D is not among them. Counted from the shortfall
+the 120-seed repeat below expects, 0.0142, its low side comes to 3.8 of that repeat's scatter of a nine-seed mean,
+0.00256. Its high side, like the far side of every shifted check, allows no shift: 0.008 is 3.1 of those standard
+deviations. But the value the repeat expects lies 0.0222 below that bound, 8.7 standard deviations, so the high
+side guards only against gross errors. In a one-off repeat at these tolerances with 120 other sets of seeds (each
+study seed plus 10000k, k = 1 to 120; not one of the repository's scripts), 119 passed every Ising check and the
+other missed the crossing of L = 64 and 128 by 0.0003. The repeat predates the pooled percolation checks, but it
+saved each seed's percolation crossings and D. A rerun of its percolation seeds reproduced those exactly and also
+saved each seed's spanning probability at p_c, the points where it is one half and the crossings of sizes L/2 and
+L. Split into 13 sets of nine seeds, all 13 pass the pooled checks; of 200,000 sets of nine drawn at random from
+the 120 seeds, 37 fail, 3 on D and 34 on the point where the spanning probability at L = 32 is one half. That is
+one draw, by a resampler that is not one of the repository's scripts either: 100 other draws of 200,000 give 22 to
+60 failures, about 2 in 10,000, nearly all on that point. The closed forms are checked too: the energy against the
+derivative of the published free energy (Caselle et al. 2002), to 10⁻⁷; Yang's formula against the same paper's
+form, to rounding; the open-edge shift of a crossing, below, against the coefficient Ziff and Newman (2002,
+sec. IV) predict from the same b₀ and a₁ for sizes L/2 and L, 1.04 (they measured 1.02). That catches a slip in the
+algebra. Whether the shift describes this system is checked against their measured crossings of sizes L/2 and L
+(Table 1): they sit above p_c by 0.930, 0.965 and 0.975 times the shift at L = 64, 128 and 256, and the check
+allows 10%. At L = 32, the crossing of 16 and 32, the ratio is 0.862: the terms the expansion leaves out, of
+relative order L^(−0.9) (their secs. II and IV), still matter there, so that size is left out. Neither check uses
+the Monte Carlo runs. The comparison of the runs with their measurements, below, tests something else: that the
+model is the system they measured.
 
 The two percolation results need a word each, and neither is a disagreement:
 
@@ -180,30 +193,32 @@ The two percolation results need a word each, and neither is a disagreement:
   scaling fade. The first rise, 0.014 ± 0.004, is clear; the second, 0.008 ± 0.008, is one standard error, so nine
   seeds do not resolve it. Leaving out L = 32 raises the fitted slope by 0.006 ± 0.001, in all nine seeds. The
   shortfall is measured, not predicted, so the check does not test it. Its low side accepts D down to 0.024 below
-  91/48. That is these runs' shortfall plus 4.0 standard errors, but it does not rest on these runs alone: the
-  independent 120-seed repeat, which shares no seeds with them, gives the same bound. Its shortfall is
-  0.014 ± 0.001 and its scatter of a nine-seed mean 0.0026, and 0.014 + 4 × 0.0026 = 0.024. The check passes with
-  0.0079 to spare. Beyond these runs' shortfall the low side is 3.1 times that scatter, which makes it one of the
-  three tightest checks. The high side is not tight. It accepts D up to 0.008 above 91/48, 4.0 standard errors with
-  no shift, as on the far side of every shifted check here. Finite size lowers D at these sizes, so that bound sits
-  0.022 above the value the repeat expects, about 9 standard deviations of a nine-seed mean: it guards only against
-  gross errors. A cap at 91/48 itself would be tighter. It is not used: on that side the rule above allows no
-  shift, so a cap there would allow no standard deviations at all.
+  91/48. That bound does not rest on these runs: the independent 120-seed repeat, which shares no seeds with them,
+  expects a shortfall of 0.0142 ± 0.0007, and its scatter of a nine-seed mean is 0.00256; the bound is 3.8 of those
+  standard deviations beyond that shortfall. These runs' own shortfall plus 4.0 standard errors gives the same
+  bound. The check passes with 0.0079 to spare. The high side is not tight. It accepts D up to 0.008 above 91/48
+  with no shift, as on the far side of every shifted check here: 4.0 standard errors, 3.1 of the repeat's scatter
+  of a nine-seed mean. Finite size lowers D at these sizes, so that bound sits 0.0222 above the value the repeat
+  expects, 8.7 of those standard deviations: it guards only against gross errors. A cap at 91/48 itself, 5.5 of
+  them above the expected value, would be tighter. It is not used, so that this side follows the same rule as the
+  far side of every other shifted check.
 
 Ziff and Newman (2002, Table 1) measured three of the model's finite-size quantities on this same system, an L × L
 square with open edges, crossed in one direction, with 4 × 10⁹ to 3 × 10¹⁰ samples at each size; their errors are
 generally in the last digit they quote. `critical/table.mjs` prints the nine-seed means beside their values for
 L = 32 to 256: the spanning probability R at p_c, the point where R is one half and, above L = 32, the crossing of
-sizes L/2 and L. All eleven agree within 1.04 standard errors. The 120-seed repeat's means, with errors about four
-times smaller, agree within 2 of their own standard errors (largest 1.8). Of the eleven, the point where R is one
-half at L = 32 shows the open edges most clearly: they put it 0.00091 below p_c, 4.3 standard errors of the
-nine-seed mean (R at p_c, at the same size, comes next at 4.2; the rest are under 2). The nine-seed mean,
-0.59178 ± 0.00021, sits 0.00006 below Ziff and Newman's 0.5918352. The check fails a mean more than 0.0007 from it
-(3.3 standard errors; 3.9 of the repeat's scatter of a nine-seed mean, 0.00018), and a mean at p_c would fail it by
-one standard error. So it tests the model's finite-size behaviour against published measurements, not only the
-threshold. Nine seeds test it only modestly: with the 120-seed repeat's values moved to centre on p_c, as if open
-edges had no effect at this size, about one set of nine seeds in eight would still pass. The other ten comparisons
-are printed but not checked.
+sizes L/2 and L. All eleven agree within 1.04 standard errors. They amount to about four independent comparisons,
+one per size: at each size R at p_c and the point where R is one half are read off the same curve and move together
+from seed to seed (correlation −1.00 in the 120-seed repeat), and each crossing is nearly fixed by the points where
+R is one half at its two sizes. The 120-seed repeat's means, with errors about four times smaller, agree within 2
+of their own standard errors (largest 1.8). Of the eleven, the point where R is one half at L = 32 shows the open
+edges most clearly: they put it 0.00091 below p_c, 4.3 standard errors of the nine-seed mean (the same shift shows
+in R at p_c at that size, as 4.2; the rest are under 2). The nine-seed mean, 0.59178 ± 0.00021, sits 0.00006 below
+Ziff and Newman's 0.5918352. The check fails a mean more than 0.0007 from it (3.3 standard errors; 3.9 of the
+repeat's scatter of a nine-seed mean, 0.00018), and a mean at p_c would fail it by one standard error. So it tests
+the model's finite-size behaviour against published measurements, not only the threshold. Nine seeds test it only
+modestly: with the 120-seed repeat's values moved to centre on p_c, as if open edges had no effect at this size,
+about one set of nine seeds in eight would still pass. The other ten comparisons are printed but not checked.
 
 ## Where the repetition stops
 
@@ -316,7 +331,7 @@ size of a molecule.
 - L. Onsager, *Crystal statistics. I. A two-dimensional model with an order-disorder transition*, Phys. Rev. 65, 117 (1944). Not consulted directly; T_c and the energy are checked against Caselle et al. (2002). https://doi.org/10.1103/PhysRev.65.117
 - A. Pelissetto and E. Vicari, *Critical phenomena and renormalization-group theory*, Phys. Rep. 368, 549 (2002), secs. 1.3, 1.6.2, 3.1, 3.5, 5, 7.1 and 11.3. https://doi.org/10.1016/S0370-1573(02)00219-3 (https://arxiv.org/abs/cond-mat/0012164)
 - Planck Collaboration, *Planck 2018 results. VI. Cosmological parameters*, A&A 641, A6 (2020). https://doi.org/10.1051/0004-6361/201833910 (https://arxiv.org/abs/1807.06209)
-- J. Salas and A. D. Sokal, *Universal amplitude ratios in the critical two-dimensional Ising model on a torus*, J. Stat. Phys. 98, 551 (2000). https://doi.org/10.1023/A:1018611122166 (https://arxiv.org/abs/cond-mat/9904038)
+- J. Salas and A. D. Sokal, *Universal amplitude ratios in the critical two-dimensional Ising model on a torus*, J. Stat. Phys. 98, 551 (2000), sec. 4.1 and Table 2. https://doi.org/10.1023/A:1018611122166 (https://arxiv.org/abs/cond-mat/9904038)
 - M. Scrimgeour et al., *The WiggleZ Dark Energy Survey: the transition to large-scale cosmic homogeneity*, MNRAS 425, 116–134 (2012). https://doi.org/10.1111/j.1365-2966.2012.21402.x (https://arxiv.org/abs/1205.6812)
 - S. Smirnov and W. Werner, *Critical exponents for two-dimensional percolation*, Math. Res. Lett. 8, 729 (2001). https://doi.org/10.4310/MRL.2001.v8.n6.a4 (https://arxiv.org/abs/math/0109120)
 - U. Wolff, *Collective Monte Carlo updating for spin systems*, Phys. Rev. Lett. 62, 361 (1989). Not consulted directly; the add probability is as in Fujimoto and Otsuka (2020, appendix B). https://doi.org/10.1103/PhysRevLett.62.361
