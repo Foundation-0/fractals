@@ -77,7 +77,7 @@ const etaMm = (nu, e) => T.kolmogorov(nu, e).eta * 1e3;
 const ocean = [1e-8, 1e-7].map(e => etaMm(T.NU.seawater, e)), air = [0.4, 0.05, 1e-7].map(e => etaMm(T.NU.air, e));
 check('Upper-ocean mixed layer: eps 1e-8 to 1e-7 W/kg, as at one station, puts eta at 1.8 to 3.3 mm; 1 mm needs 1e-6',
   ocean[0] > 3 && ocean[0] < 3.5 && ocean[1] > 1.7 && ocean[1] < 2, `eta = ${ocean.map(x => x.toFixed(2)).join(' and ')} mm; 1e-6 W/kg gives ${etaMm(T.NU.seawater, 1e-6).toFixed(2)} mm`,
-  'arithmetic; eps from Yang et al., Sensors 22, 1167 (2022), one 25-hour station, as seen in search text');
+  'arithmetic; eps from Yang et al., Sensors 22, 1167 (2022), one 25-hour station, as read in #34\'s review');
 check('Air: eta from 0.3 mm (eps 0.4 m^2/s^3, a cold front) to 1.4 cm (1e-7, a quiet night)',
   air[0] > 0.28 && air[0] < 0.32 && air[2] > 13 && air[2] < 14.5, `eta = ${air.map(x => x.toFixed(2)).join(', ')} mm for eps = 0.4, 0.05, 1e-7`,
   'arithmetic; eps from Balsley, Tjernstrom & Svensson, AMS 18th Symp. Boundary Layers and Turbulence (2008), as seen in search text');

@@ -114,7 +114,7 @@ measured slope.
 | Flow | Repeats down to | Decades | What ends it |
 |---|---|---|---|
 | Wind tunnel, R_λ ≈ 6,000 | η | about 5 | viscosity |
-| Atmospheric surface layer, R_λ 1,600 to 6,600 (Gulitski et al. 2007) | η = 0.3 to 0.5 mm in wind | 4.2 to 5.1 | viscosity |
+| Atmospheric surface layer, R_λ 1,600 to 6,600 (Gulitski et al. 2007, Part 1) | η = 0.3 to 0.5 mm in wind | 4.2 to 5.1 | viscosity |
 | Upper ocean | η = 1 to 3 mm, more in quiet water | | viscosity |
 | Solar wind | the ion scales, about 100 km (the MHD range) | | the ions' own motion, not collisions |
 | Interstellar electron density | at least 2×10⁶ m near the Sun | 6.7 measured | not seen locally; 50 to 200 km inferred on strongly scattered lines of sight |
@@ -209,7 +209,7 @@ sonic size between 0.08 and 0.24 pc across.
 Larson's data reach about 0.1 pc, so his sonic size is a short extrapolation, and there his relation is about
 sonic (non-thermal Mach 1.0). He calls TMC1 and TMC2 subsonic, the only two in his Table 1: TMC2 (0.1 pc) is his
 smallest plotted object, at Mach 0.44 in his convention, and TMC1 (0.2 pc) is at 0.74, while L1407/L1257 (0.12 pc)
-and L1544/L63 (0.18 pc) are supersonic, at Mach 2.5 and 1.7. Solomon et al.'s clouds are giant molecular clouds, a
+and L1544/L63 (0.18 pc) are supersonic, at Mach 2.45 and 1.74. Solomon et al.'s clouds are giant molecular clouds, a
 parsec and larger, so theirs is an extrapolation of more than a decade. Both sit near the width of interstellar
 filaments, 0.10 ± 0.03 pc in Arzoumanian et al. (2011) and a median of 0.10 pc with an interquartile range of
 0.07 pc over 599 filaments in Arzoumanian et al. (2019), and the size of coherent cores,
@@ -244,8 +244,8 @@ complex gave 1.51 (Stutzki 1993, Fig. 5, on maps compiled by Zimmermann et al.).
 atmosphere give 1.35 ± 0.05 (Lovejoy 1982). Laser-sheet sections through the turbulent/non-turbulent interfaces of
 laboratory jets and wakes give box-counting dimensions of 1.3 to 1.4, sections of surfaces of dimension 2.3 to 2.4
 (Sreenivasan and Meneveau 1986), which Sreenivasan, Ramshankar and Meneveau (1989) explain as 7/3; sections of
-iso-concentration and iso-dissipation surfaces give 1.36 ± 0.05 as well (as Falgarone et al. quote them). The
-match between clouds and laboratory is often cited.
+iso-concentration and iso-dissipation surfaces give 1.36 ± 0.05 as well (Sreenivasan and Meneveau 1986 and
+Meneveau 1989, as Falgarone et al. quote them). The match between clouds and laboratory is often cited.
 
 A fractional-Brownian estimate depends on which dimension the relation measures. For a Gaussian random surface
 with power spectrum k^(−β), so H = (β − 2)/2:
@@ -319,13 +319,15 @@ So, on Gaussian surfaces:
   as the number of pixels falls).
 - **The calibration behind 2 − H.** Vogelaar and Wakker (1994) generated fractional-Brownian maps with contour
   dimensions of 1.2 to 1.6 and recovered them to within 0.05 with a per-object perimeter-area code: 4-connected
-  pixel objects, a pixel-edge perimeter that, read literally, counts hole borders, and all levels pooled. Their
-  text gives no mapping from D to H and does not discuss holes; 2 − H is Stutzki et al.'s reading of that
-  calibration. On these surfaces at 2048, where 2 − H = 1.6 and 1.5 (β = 2.8 and 3), single loops give 1.35 and
-  1.29 without holes and 1.52 and 1.41 with them, while Vogelaar and Wakker's Fig. 5 reads about 1.62 for a
-  generated 1.58 and 1.48 for 1.50; a pixel estimator in their style gives 1.42 and 1.37 with holes on these
-  surfaces (#34's re-review). Neither convention reproduces their calibration at D = 1.4 to 1.6, and the cause (the
-  generator, the pooling of levels, the map size) is left open.
+  pixel objects, a perimeter summed from pixel sides, with the diagonal instead of two sides at corner pixels
+  (p. 559), which, read literally, counts hole borders, and all levels pooled. Their text gives no mapping from D to
+  H and does not discuss holes; 2 − H is Stutzki et al.'s reading of that calibration. On these surfaces at 2048,
+  where 2 − H = 1.6 and 1.5 (β = 2.8 and 3), single loops give 1.35 and 1.29 without holes and 1.52 and 1.41 with
+  them, while Vogelaar and Wakker's Fig. 5 reads about 1.62 for a generated 1.58 and 1.48 for 1.50. A pixel
+  estimator in their style, but counting plain pixel sides without the corner rule, gives 1.42 and 1.37 with holes
+  (L = 256, β = 2.84 and 3; #34's re-review); a diagonal at convex corners adds about 0.03 (about 1.45 and 1.39),
+  and also cutting concave corners takes off about 0.015. No reading reproduces their calibration at D = 1.4 to
+  1.6, and the cause (the generator, the pooling of levels, the map size) is left open.
 
 The laboratory values are sections of two kinds of surface: the interface between turbulent and quiet fluid,
 explained as 7/3 (Sreenivasan, Ramshankar and Meneveau 1989), and iso-scalar surfaces inside the turbulence. An
@@ -436,17 +438,18 @@ text only.
 - G. Paladin and A. Vulpiani, *Degrees of freedom of turbulence*, Phys. Rev. A 35, 1971 (1987). Abstract only; the full text was not reached. https://doi.org/10.1103/PhysRevA.35.1971
 - G. Boffetta, A. Mazzino and A. Vulpiani, *Twenty-five years of multifractals in fully developed turbulence: a tribute to Giovanni Paladin*, J. Phys. A 41, 363001 (2008). Read in #34's review. https://doi.org/10.1088/1751-8113/41/36/363001 (https://arxiv.org/abs/0809.0196)
 - U. Frisch, *Turbulence: The Legacy of A. N. Kolmogorov* (Cambridge University Press, 1995). Not reached. https://doi.org/10.1017/CBO9781139170666
-- R. Benzi, S. Ciliberto, R. Tripiccione, C. Baudet, F. Massaioli and S. Succi, *Extended self-similarity in turbulent flows*, Phys. Rev. E 48, R29 (1993). Search text only. https://doi.org/10.1103/PhysRevE.48.R29
+- R. Benzi, S. Ciliberto, R. Tripiccione, C. Baudet, F. Massaioli and S. Succi, *Extended self-similarity in turbulent flows*, Phys. Rev. E 48, R29 (1993). Abstract only (#34's re-review). https://doi.org/10.1103/PhysRevE.48.R29
 - K. R. Sreenivasan, *On the universality of the Kolmogorov constant*, Phys. Fluids 7, 2778 (1995). Search text only. https://doi.org/10.1063/1.868656
 - S. B. Pope, *Turbulent Flows* (Cambridge University Press, 2000). Search text only. https://doi.org/10.1017/CBO9780511840531
-- G. Gulitski et al., *Velocity and temperature derivatives in high-Reynolds-number turbulent flows in the atmospheric surface layer. Part 2. Accelerations and related matters*, J. Fluid Mech. 589, 83 (2007). Search text only; R_λ 1,600 to 6,600 is from Part 1 (J. Fluid Mech. 589, 57), as read in #34's re-review. https://doi.org/10.1017/S0022112007007501
+- G. Gulitski et al., *Velocity and temperature derivatives in high-Reynolds-number turbulent flows in the atmospheric surface layer. Part 1. Facilities, methods and some general results*, J. Fluid Mech. 589, 57 (2007). Abstract only (#34's re-review); the source of R_λ 1,600 to 6,600. https://doi.org/10.1017/S0022112007007495
+- G. Gulitski et al., *Velocity and temperature derivatives in high-Reynolds-number turbulent flows in the atmospheric surface layer. Part 2. Accelerations and related matters*, J. Fluid Mech. 589, 83 (2007). Abstract only (#34's re-review). https://doi.org/10.1017/S0022112007007501
 - B. B. Balsley, M. Tjernström and G. Svensson, *Turbulence in the nocturnal boundary layer: highly-structured, strongly-variable, but ubiquitous*, AMS 18th Symposium on Boundary Layers and Turbulence, 18B.1 (2008). Search text only. https://ams.confex.com/ams/18BLT/techprogram/session_22073.htm
 - W. Yang et al., *Direct measurements of turbulence in the upper western Pacific North Equatorial Current over a 25-h period*, Sensors 22, 1167 (2022). Read in #34's review. https://doi.org/10.3390/s22031167
 - G. D. Nastrom and K. S. Gage, *A climatology of atmospheric wavenumber spectra of wind and temperature observed by commercial aircraft*, J. Atmos. Sci. 42, 950 (1985). Search text only. https://doi.org/10.1175/1520-0469(1985)042<0950:ACOAWS>2.0.CO;2
 - R. H. Kraichnan, *Inertial ranges in two-dimensional turbulence*, Phys. Fluids 10, 1417 (1967). Abstract only. https://doi.org/10.1063/1.1762301
 - T. DeWitt and T. Garrett, *Global sonde datasets do not support a mesoscale transition in the turbulent energy cascade*, preprint (2025). Search text only. https://arxiv.org/abs/2510.23625
 - J. W. Armstrong, B. J. Rickett and S. R. Spangler, *Electron density power spectrum in the local interstellar medium*, ApJ 443, 209 (1995). Read in #34's review. https://doi.org/10.1086/175515
-- S. R. Spangler and C. R. Gwinn, *Evidence for an inner scale to the density turbulence in the interstellar medium*, ApJ 353, L29 (1990). Search text only. https://doi.org/10.1086/185700
+- S. R. Spangler and C. R. Gwinn, *Evidence for an inner scale to the density turbulence in the interstellar medium*, ApJ 353, L29 (1990). Abstract only (#34's re-review, from the ADS scan). https://doi.org/10.1086/185700
 - A. Chepurnov and A. Lazarian, *Extending the big power law in the sky with turbulence spectra from Wisconsin Hα Mapper data*, ApJ 710, 853 (2010). Read in #34's review. https://doi.org/10.1088/0004-637X/710/1/853 (https://arxiv.org/abs/0905.4413)
 - S. I. Braginskii, *Transport processes in a plasma*, in Reviews of Plasma Physics 1, 205 (Consultants Bureau, 1965). Search text only.
 - NRL Plasma Formulary (Naval Research Laboratory). Search text only. https://www.nrl.navy.mil/ppd/content/nrl-plasma-formulary/
@@ -474,7 +477,8 @@ text only.
 - M. G. R. Vogelaar and B. P. Wakker, *Measuring the fractal structure of interstellar clouds*, A&A 291, 557 (1994). Read in #34's re-review.
 - N. Sánchez, E. J. Alfaro and E. Pérez, *The fractal dimension of projected clouds*, ApJ 625, 849 (2005). Read in #34's review and re-review. https://doi.org/10.1086/429553 (https://arxiv.org/abs/astro-ph/0501573)
 - S. Lovejoy, *Area-perimeter relation for rain and cloud areas*, Science 216, 185 (1982). Search text only. https://doi.org/10.1126/science.216.4542.185
-- K. R. Sreenivasan and C. Meneveau, *The fractal facets of turbulence*, J. Fluid Mech. 173, 357 (1986). Search text only; its 1.36 ± 0.05 for iso-concentration and iso-dissipation sections as Falgarone et al. quote it. https://doi.org/10.1017/S0022112086001209
+- K. R. Sreenivasan and C. Meneveau, *The fractal facets of turbulence*, J. Fluid Mech. 173, 357 (1986). Abstract only (#34's review), which gives no numbers; its 1.36 ± 0.05 for iso-concentration and iso-dissipation sections is as Falgarone et al. quote it, jointly with Meneveau 1989.
+- C. Meneveau, Ph.D. thesis, Yale University (1989). Not reached; cited as Falgarone et al. 1991 quote it. https://doi.org/10.1017/S0022112086001209
 - K. R. Sreenivasan, R. Ramshankar and C. Meneveau, *Mixing, entrainment and fractal dimensions of surfaces in turbulent flows*, Proc. R. Soc. Lond. A 421, 79 (1989). Search text only. https://doi.org/10.1098/rspa.1989.0004
 - P. Constantin, I. Procaccia and K. R. Sreenivasan, *Fractal geometry of isoscalar surfaces in turbulence: theory and experiments*, Phys. Rev. Lett. 67, 1739 (1991). Abstract only; it gives no number. https://doi.org/10.1103/PhysRevLett.67.1739
 - K. P. Iyer, J. Schumacher, K. R. Sreenivasan and P. K. Yeung, *Fractal iso-level sets in high-Reynolds-number scalar turbulence*, Phys. Rev. Fluids 5, 044501 (2020). Read in #34's review and re-review. https://doi.org/10.1103/PhysRevFluids.5.044501 (https://arxiv.org/abs/1910.00607)

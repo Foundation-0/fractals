@@ -144,17 +144,19 @@ Claims made during the exploration that did not survive it, kept so the record s
       R = 1.92 S it becomes 0.72 R^0.5 (this study's conversion), so 0.72 goes with R. The 0.07 pc sonic scale it
       gave is a radius, 0.15 pc across.
     - Did not survive: Larson's σ ∝ L^0.38 against Solomon et al.'s 0.5 as "a change of cascade". Over most of
-      Larson's range his relation is supersonic (non-thermal Mach 1.0 at 0.1 pc to 19 at 100 pc), and his small
-      objects scatter from Mach 0.4 (TMC2) to 2.5 (L1407/L1257), with only TMC1 and TMC2 subsonic in his own words,
-      so his 0.38 is not the subsonic cascade's. That the difference lies in his sample and size definition is this
-      study's inference; Larson read it as supersonic turbulence, or subsonic turbulence in warmer gas.
+      Larson's range his relation is supersonic (non-thermal Mach 1.0 at 0.1 pc to 19 at 100 pc), and the four
+      objects he plots at 0.1 to 0.2 pc scatter from Mach 0.44 (TMC2) to 2.45 (L1407/L1257), with only TMC1 and TMC2
+      subsonic in his own words, so his 0.38 is not the subsonic cascade's. That the difference lies in his sample
+      and size definition is this study's inference; Larson read it as supersonic turbulence, or subsonic turbulence
+      in warmer gas.
     - Qualified: "the spectral break near 0.6 Hz". V/(2π d_i) gives 0.63 Hz, but the fluctuations are elongated
       along the field, so the frequency carries sin θ_BV: 0.46 Hz at the 47° Parker angle. Observed breaks spread
       from 0.1 to 1 Hz (Chen et al. 2014), and Leamon et al.'s intervals average near 0.38 Hz, so both values lie
       inside the spread and the data do not choose.
     - Qualified: "a kinetic-range slope near −2.8 (Bruno and Carbone)". −2.8 is one measurement (Alexandrova et al.
-      2009); Bruno and Carbone give about −7/3 as typical (as read in #34's review), and measured slopes run from
-      about −2 to −4 (as Alexandrova et al. and Bruno and Carbone summarise them; Smith et al. 2006 find −1 to −4).
+      2009); Bruno and Carbone give about −7/3 as typical (as read on p. 146 in #34's re-review), and measured
+      slopes run from about −2 to −4 (as Alexandrova et al. and Bruno and Carbone summarise them; Smith et al. 2006
+      find −1 to −4).
     - Qualified: "the Kolmogorov scale is about a millimetre in the atmosphere and upper ocean". Right as an order
       of magnitude, with a factor of 10 either way: 0.3 mm in strong wind to over a centimetre on a quiet night,
       and 2 to 3 mm at the one upper-ocean station checked.
