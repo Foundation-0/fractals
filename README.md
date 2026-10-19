@@ -18,6 +18,12 @@ with Claude (Anthropic), for [Foundation0](https://github.com/Foundation-0/f0).
   with gravity in place of electric attraction (the "gravitational atom"). It is still a wave cloud, not
   planets on orbits. The same equation, a wave held by a pull that weakens with distance, gives the same
   solution at any scale. The nesting lives in the equations, not the objects.
+- **Solar systems are not little galaxies, except at the Milky Way's centre.** Around one dominant mass, orbits follow
+  Kepler's law at every radius. The planets match it to 0.13%, about what they weigh together against the Sun. Across
+  the Milky Way's disk the speed instead stays between 200 and 235 km/s, because the mass is spread out. A Kepler
+  region ends where its host's tide wins, at a density ratio rather than a size: 1.4 pc for the Sun in the Galaxy,
+  a third of an au for Jupiter. A planet keeps moons, and the Sun comets, out to about half that radius. The Milky
+  Way has its own small solar system around its central black hole, about a parsec in radius ([orbits](orbits/)).
 - **Quantum paths are fractal, between two lengths.** A free particle's path, recorded by position
   measurements finer than ħ/p, has fractal dimension 2, against 1 for a classical trajectory (Abbott and Wise,
   1981); below ħ/mc, in a single-particle model, the speed of light makes it smooth again. Its surroundings draw
