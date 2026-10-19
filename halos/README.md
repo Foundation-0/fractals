@@ -42,8 +42,9 @@ Zaldarriaga 2005; Bertschinger 2006):
   10 MeV by muons and pions (g = 12.6 at 30 MeV).
 - **Free streaming.** After decoupling the WIMPs coast. A 100 GeV WIMP decoupling at 30 MeV has a speed spread
   √(T_kd/m) and coasts s = 0.84 pc (comoving, through e± annihilation and on to today), so modes shorter than
-  k_fs = √2/s = 1.67×10⁶ Mpc⁻¹ are smeared out. Green, Hofmann and Schwarz give 1.70×10⁶ Mpc⁻¹, 2% higher; from
-  10 to 40 MeV the two differ by up to 5%, as the radiation's g changes.
+  k_fs = √2/s = 1.68×10⁶ Mpc⁻¹ are smeared out. Green, Hofmann and Schwarz give 1.70×10⁶ Mpc⁻¹, 1.4% higher; from
+  10 to 40 MeV theirs runs from 5.4% higher to 1.1% lower, as the radiation's g changes. The floors below use
+  Green, Hofmann and Schwarz's k_fs and its T_kd scaling; the derived value is a check on it.
 
 The floor is the larger of the two (Bringmann 2009). For a bino decoupling at 10 to 40 MeV the acoustic mass is
 larger than the free-streaming mass M(π/k_fs) throughout, and comparable to the half-mode mass at 30 to 40 MeV.
@@ -102,10 +103,11 @@ itself resolves "up to four generations" of subhalos within subhalos, and four l
 reach 9×10⁵ M☉, within its resolved range.
 
 Two cautions. The extrapolation runs 9 to 11 decades below where the law was fitted for the bino (8 to 16 across
-Bringmann's WIMP range, at most 1.3 for the allowed wave masses), and assumes that what forms survives. Whether microhalos survive in the Galaxy is disputed. Zhao et al. (2007) argue that encounters with
+Bringmann's WIMP range, at most 1.3 for the wave masses at the bounds listed), and assumes that what forms survives. Whether microhalos survive in the Galaxy is disputed. Zhao et al. (2007) argue that encounters with
 stars turn the ones near the Sun into streams; Moore et al. (2005) and Goerdt et al. (2007) find that their dense
 centres survive; van den Bosch et al. (2018) argue that much of the disruption seen in simulations is numerical.
-The second caution is that μ sets the levels, not the decades: at 10× per level the bino has 17, at μ it has 10.
+The second caution is that μ sets the levels, not the decades: at 10× per level the bino has 15 to 17, at μ 9 to
+11.
 
 ## Why small halos form almost together, and where they stop looking alike
 
@@ -177,9 +179,11 @@ halos' redshift.
   horizon, an order-of-magnitude scale; the dark matter alone is 16% less. Bringmann (2009) finds that working
   out T_kd properly puts a given model's cut-off typically about ten times above earlier order-of-magnitude
   estimates (as seen in search text); here T_kd is an input, so that uncertainty enters through it.
-- The thermal history is ideal gases in equilibrium, with the neutrinos decoupling at once at 1 MeV. It fails
-  near the QCD transition, about 150 MeV, and the particle masses in it are recalled.
-- The spectrum has no running of the spectral index: ±0.01 moves the bino's σ by −29% / +49% and z_c to 11 to 25.
+- The thermal history is ideal gases in equilibrium, with the neutrinos decoupling at once at 1 MeV. It leaves out
+  kaons and heavier hadrons, which would add about 1% to g at 70 MeV and 7% at 100 MeV; it is used here only up to
+  50 MeV (0.1%). The particle masses in it are recalled.
+- The spectrum has no running of the spectral index: a running of −0.01 / +0.01 moves the bino's σ by −29% / +49%
+  and z_c to 11 / 25.
   Massive neutrinos and the QCD transition's imprint on modes above about 10⁶ Mpc⁻¹ are ignored.
 - Whether the matter's or the dark matter's contrast must reach 1.686 when the gas stays smooth is left open,
   hence 11 to 13 for the bino's first halos.

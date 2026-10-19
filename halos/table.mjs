@@ -128,7 +128,7 @@ console.log(`   Comoving k_J at 1e-22 eV: today ${kJ0.toFixed(1)} Mpc^-1 (all ma
     ' (k_J and M_J both go as rho^(1/4))'); }
 const J0 = H.jeansMasses(bg, kJ0), Jeq = H.jeansMasses(bg, kJeq);
 console.log('   Jeans mass at 1e-22 eV [Msun]             today      at equality');
-for (const [key, lab] of [['fullWave', 'sphere of radius lambda_J'], ['cube', 'cube of side lambda_J'], ['halfWave', 'sphere of diameter lambda_J (Hui et al.)'], ['inverseK', 'sphere of radius 1/k_J']])
+for (const [key, lab] of [['fullWave', 'sphere of radius lambda_J'], ['cube', 'cube of side lambda_J'], ['halfWave', 'sphere of diameter lambda_J (gives Hui et al.\'s)'], ['inverseK', 'sphere of radius 1/k_J']])
   console.log(`   ${lab.padEnd(40)} ${pad(e2(J0[key]), 9)}   ${pad(e2(Jeq[key]), 9)}`);
 console.log(`   Spread: ${e2(Jeq.fullWave / J0.inverseK)} between the largest and smallest; M_J ~ m^-3/2 while M_hm and M0 go as m^-4/3`);
 const s = H.solitonRelation(WM.SOL), u22 = H.hbar2Gm2(1e-22, WM.C) / (WM.C.Msun * WM.C.kpc);

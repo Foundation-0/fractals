@@ -25,7 +25,8 @@
  *      inside the comoving horizon tau_kd = 1/(a H) at T_kd. The floor is the larger of the two (Bringmann 2009, who
  *      gives 1e-11 to nearly 1e-3 Msun across WIMP models; as seen in search text).
  *      The expansion before and after decoupling comes from ideal gases of photons, neutrinos, e+-, mu+- and pions
- *      (see thermal()), valid from below 1 MeV to under the QCD transition (about 150 MeV).
+ *      (see thermal()), valid from below 1 MeV to about 80 MeV: kaons and heavier hadrons are left out (they would
+ *      add about 1% to g at 70 MeV and 7% at 100 MeV).
  *    Wave dark matter (Hu, Barkana & Gruzinov 2000): T = cos(x^3)/(1 + x^8), x = 1.61 m22^(1/18) k/k_Jeq,
  *      k_Jeq = 9 m22^(1/2) Mpc^-1, m22 = m/1e-22 eV. Schive et al. (2016) fit the halo mass function's turn-down at
  *      M0 = 1.6e10 m22^(-4/3) Msun (as quoted by later papers, seen in search text).
@@ -83,7 +84,8 @@
   // ---- The thermal history around kinetic decoupling: the scale factor and the expansion rate at photon temperature T
   // (MeV), from ideal gases in equilibrium: photons (2), three neutrinos (6, fermions), e+- (4), mu+- (4), pi+- (2) and
   // pi0 (1). The neutrinos decouple at T_NU = 1 MeV (taken as instantaneous); below it the photon-e+- plasma keeps its
-  // own entropy, so e+- annihilation heats the photons and not the neutrinos. Not valid above about 150 MeV.
+  // own entropy, so e+- annihilation heats the photons and not the neutrinos. Not valid above about 80 MeV, where the
+  // hadrons left out (kaons and heavier) start to matter.
   const T_NU = 1, NU = 7 / 8 * 6, ME = 0.51099895, MMU = 105.6583755, MPI = 139.57039, MPI0 = 134.9768; // MeV
   // One species of dof degrees of freedom and mass x T: g = rho/((pi^2/30) T^4) and gs = s/((2 pi^2/45) T^3), with
   // rho = dof/(2 pi^2) int E p^2 f dp and P = dof/(6 pi^2) int p^4/E f dp; Simpson's rule over u = p/T up to 50.
@@ -107,7 +109,7 @@
     const gsNu = dNu.gs + NU + dNu.gsH;
     const U = (g, T) => Math.PI * Math.PI / 30 * g * Math.pow(T * 1e6 * C.e, 4) / Math.pow(C.hbar * C.c, 3); // J m^-3
     return function state(T) {
-      if (T > 150) throw new RangeError('thermal history: ideal gases of hadrons fail above about 150 MeV');
+      if (T > 80) throw new RangeError('thermal history: kaons and heavier hadrons, left out, add over 2% to g above about 80 MeV');
       const d = dof(T); let a, u, g = null;
       if (T >= T_NU) { g = d.g + NU + d.gH; a = aNu * T_NU / T * Math.cbrt(gsNu / (d.gs + NU + d.gsH)); u = U(g, T); }
       else { a = T0 * Math.cbrt(2 / d.gs) / T; u = U(d.g, T) + U(NU, T_NU * aNu / a); }
@@ -133,7 +135,8 @@
   // Free streaming from first principles. After decoupling at a_kd the speed spread falls as sigma_v a_kd/a, so the
   // comoving distance coasted is s = sigma_v a_kd c int da/(a^3 H) = sigma_v a_kd c int dln a/(a^2 H): numerically
   // through the thermal history down to 1 keV, where e+- annihilation is over, then in closed form for radiation and
-  // matter, (1/(H0 sqrt(Or))) 2 ln[(sqrt(1+y) + 1)/sqrt(y)], y = a Om/Or (Lambda ignored). And k_fs = sqrt(2)/s.
+  // matter up to today, (F(y) - F(Om/Or))/(H0 sqrt(Or)), F(y) = 2 ln[(sqrt(1+y) + 1)/sqrt(y)], y = a Om/Or (Lambda
+  // ignored: it would lower s by 0.02%). And k_fs = sqrt(2)/s.
   function wimpFreeStream(bg, { m = 100, Tkd = 30 } = {}) {
     const sig = Math.sqrt(Tkd * 1e-3 / m), n = 400, l0 = Math.log(Tkd), l1 = Math.log(1e-3);   // sigma_v in units of c
     let prev = bg.state(Tkd), I = 0;
@@ -142,8 +145,8 @@
       const st = bg.state(Math.exp(l0 + (l1 - l0) * i / n));
       I += Math.log(st.a / prev.a) * (1 / (st.a * st.a * st.H) + 1 / (prev.a * prev.a * prev.H)) / 2; prev = st;
     }
-    const Or = prev.u / (C.c * C.c) * Math.pow(prev.a, 4) / (bg.rhoCrit * bg.par.h * bg.par.h), y = prev.a * bg.par.Om / Or;
-    const s = sig * akd * (C.c * I / C.Mpc + 2 * Math.log((Math.sqrt(1 + y) + 1) / Math.sqrt(y)) / (bg.H0 * Math.sqrt(Or)));   // Mpc
+    const Or = prev.u / (C.c * C.c) * Math.pow(prev.a, 4) / (bg.rhoCrit * bg.par.h * bg.par.h), F = y => 2 * Math.log((Math.sqrt(1 + y) + 1) / Math.sqrt(y));
+    const s = sig * akd * (C.c * I / C.Mpc + (F(prev.a * bg.par.Om / Or) - F(bg.par.Om / Or)) / (bg.H0 * Math.sqrt(Or)));   // Mpc
     const kfs = Math.SQRT2 / s, kd = 3.76e7 * Math.sqrt(m / 100 * Tkd / 30);
     return { name: `WIMP ${m} GeV, T_kd ${Tkd} MeV (free streaming derived)`, kind: 'wimp', m, Tkd, kfs, kd, s, akd, T: k => wimpT(k, kfs, kd) };
   }
@@ -271,8 +274,9 @@
         if (!lag) lag = lagTable();
         const N = -Math.log(1 + z), j = Math.min(lag.length - 2, Math.floor((N - lag[0][0]) / (lag[1][0] - lag[0][0])));
         const w = (N - lag[j][0]) / (lag[j + 1][0] - lag[j][0]);
-        D *= (lag[j][1] + w * (lag[j + 1][1] - lag[j][1])) / (baryonLag === 'cdm' ? bg.fc : 1);
+        D *= lag[j][1] + w * (lag[j + 1][1] - lag[j][1]);
       }
+      if (baryonLag === 'cdm') D /= bg.fc;                     // before drag too, the baryons are smooth
       return D;
     }
     // Redshift at which a peak of height nu sigma reaches 1.686; -1 if it has not yet.
@@ -364,7 +368,8 @@
     return a * jeans(m22 * 1e-22, rho0 / (a * a * a)).kJ * C.Mpc;
   }
   // Jeans masses (Msun, comoving mean matter) under the definitions in use; lambda_J = 2 pi/k_J. halfWave, a sphere
-  // of diameter lambda_J, is Hui, Ostriker, Tremaine & Witten's (2017).
+  // of diameter lambda_J, reproduces the 1.5e7 Msun quoted from Hui, Ostriker, Tremaine & Witten (2017); their own
+  // definition was not seen.
   function jeansMasses(bg, kJ) {
     const lam = 2 * Math.PI / kJ, V = r => 4 * Math.PI / 3 * r * r * r * bg.rhoM;
     return { halfWave: V(lam / 2), fullWave: V(lam), inverseK: V(1 / kJ), cube: bg.rhoM * lam * lam * lam };

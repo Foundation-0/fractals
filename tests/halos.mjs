@@ -64,7 +64,7 @@ note('With the neutrinos still a fluid when the mode enters, the tail is lower t
 {
   const derived = H.wimpFreeStream(bg, { m: 100, Tkd: 30 });
   near('Free-streaming wavenumber derived from the coasting distance after kinetic decoupling, through the thermal history (Mpc^-1)', derived.kfs, 1.70e6, 0.05,
-    'Green, Hofmann & Schwarz, astro-ph/0508553: k_fs = 1.70e6 Mpc^-1, as seen in search text');
+    'Green, Hofmann & Schwarz, astro-ph/0508553: k_fs = 1.70e6 Mpc^-1, as seen in search text (this checks k_fs = sqrt2/s; the thermal history moves it by 2.4%, inside the tolerance)');
 }
 within('Bino cut-off mass, a sphere of radius pi/k_fs (Msun)', H.massOfK(bg, bino.kfs), 1e-6, 2, GHS + ': "about 1e-6 Msun", as seen in the abstract');
 within('Collisional damping mass, radius pi/k_d (Msun)', H.massOfK(bg, bino.kd), 1e-10, 2, 'Green, Hofmann & Schwarz, astro-ph/0508553: about 1e-10 Msun, as seen in search text');
