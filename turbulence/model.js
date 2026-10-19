@@ -51,8 +51,8 @@
     const t = 2 * rng() - 1, d = 1 + t * t, s = rng() < 0.5 ? -1 : 1;
     return [s * (1 - t * t) / d, s * 2 * t / d];
   }
-  // exp(x) from + - * / only (scaling and squaring of a Taylor series): within 1e-13 relative for |x| < 50, which
-  // covers every factor used here, and about 2e-12 near -700.
+  // exp(x) from + - * / only (scaling and squaring of a Taylor series): within 2e-13 relative for |x| < 60, which
+  // covers every factor used here (up to |x| = 55), and about 2e-12 near -700.
   function expDet(x) {
     if (x > 0) return 1 / expDet(-x);
     if (x < -745) return 0;
@@ -298,13 +298,19 @@
   const soundSpeed = (T, mu = 2.33) => Math.sqrt(C.kB * T / (mu * C.mH)); // isothermal, m/s
   // Linewidth-size relations, sigma = coef (size/pc)^exp km/s, and the thermal dispersion each sigma already holds
   // (km/s, in the relation's own dimensions). Larson (1981): sigma is the total 3D rms velocity of all internal
-  // motions, thermal ones included, with sigma_s = 0.32 km/s for 10 K molecular gas (pp. 813-814), and L the maximum
-  // projected size. Solomon et al. (1987): sigma is the 1D intensity-weighted dispersion of the 12CO line, so it holds
+  // motions, thermal ones included, with sigma_s = 0.32 km/s for 10 K molecular gas (pp. 813-814; scaled here as
+  // sqrt(T) at other temperatures), and L the maximum projected size. Solomon et al. (1987): sigma is the 1D intensity-weighted dispersion of the 12CO line, so it holds
   // CO's own thermal width, sqrt(kT/28 m_H); the fit is (1.0 +- 0.1) S^(0.5 +- 0.05) in the size parameter S, and the
-  // effective radius is R = 3.4 S/sqrt(pi) = 1.92 S (p. 737), so in R it is 0.722 R^0.5. All as read from the papers
-  // in #34's review.
+  // effective radius is R = 3.4 S/sqrt(pi) = 1.92 S (p. 737), so in R it is 0.722 R^0.5 (this study's conversion; the
+  // paper does not print it). All as read from the papers in #34's review.
   const CO_THERMAL = T => Math.sqrt(C.kB * T / (28 * C.mH)) / 1e3;
-  const LARSON81 = { coef: 1.10, exp: 0.38, dims: 3, thermal: () => 0.32, size: 'maximum projected size' };
+  const LARSON81 = { coef: 1.10, exp: 0.38, dims: 3, thermal: T => 0.32 * Math.sqrt(T / 10), size: 'maximum projected size' };
+  // Objects in Larson's Table 1 (pp. 812-813): size (pc) and sigma_3D (km/s). On p. 820 he names TMC1 and TMC2 as the
+  // only ones whose internal motions are subsonic (as read in #34's re-review).
+  const LARSON_OBJECTS = [
+    { name: 'TMC2', size: 0.1, sigma: 0.35, subsonic: true }, { name: 'L1407/L1257', size: 0.12, sigma: 0.86, subsonic: false },
+    { name: 'L1544/L63', size: 0.18, sigma: 0.65, subsonic: false }, { name: 'TMC1', size: 0.2, sigma: 0.40, subsonic: true },
+  ];
   const RE_S = 3.4 / Math.sqrt(Math.PI);
   const solomon = (coefS = 1.0, exp = 0.5) => ({ coef: coefS / Math.pow(RE_S, exp), exp, dims: 1, thermal: CO_THERMAL, size: 'effective radius' });
   const SOLOMON87 = solomon();
@@ -314,18 +320,17 @@
     const cs = soundSpeed(T) / 1e3, th = rel.thermal(T);
     return Math.pow(Math.sqrt(rel.dims * cs * cs + th * th) / rel.coef, 1 / rel.exp);
   };
-  // The non-thermal Mach number of a relation at a given size (pc): the 1D non-thermal dispersion over c_s.
-  const machAt = (rel, size, T = 10) => {
-    const s = rel.coef * Math.pow(size, rel.exp), th = rel.thermal(T);
-    return Math.sqrt((s * s - th * th) / rel.dims) / (soundSpeed(T) / 1e3);
-  };
+  // The non-thermal Mach number of a dispersion sigma (km/s) read in a relation's convention: the 1D non-thermal
+  // dispersion over c_s. machAt: the same for the relation's own sigma at a given size (pc).
+  const machOf = (rel, sigma, T = 10) => { const th = rel.thermal(T); return Math.sqrt((sigma * sigma - th * th) / rel.dims) / (soundSpeed(T) / 1e3); };
+  const machAt = (rel, size, T = 10) => machOf(rel, rel.coef * Math.pow(size, rel.exp), T);
 
   const api = {
     C, NU, kolmogorov, outerOverEta,
     SABRA, FORCE, RUNS, PMAX, KEYS, k41, sheLeveque, mulberry32, unitPhase, expDet, create, init, setDt, rhs, advance, imT, invariants,
     newStats, sample, simulate, linfit, mean, sd, averages, fluxCut, spectralCut, exponents, analyse, conservation,
     WIND, inertialLength, gyroradius, betaP, taylorFrequency, parkerAngle, protonCollisions,
-    soundSpeed, CO_THERMAL, LARSON81, SOLOMON87, RE_S, solomon, sonicScale, machAt,
+    soundSpeed, CO_THERMAL, LARSON81, LARSON_OBJECTS, SOLOMON87, RE_S, solomon, sonicScale, machOf, machAt,
   };
   if (typeof module !== 'undefined' && module.exports) module.exports = api; else root.TURB = api;
 })(typeof window !== 'undefined' ? window : globalThis);

@@ -17,7 +17,7 @@ for (const [med, eps, where] of [['air', 0.4, 'surface layer, cold front'], ['ai
 
 console.log('\nHow many decades the repetition spans\n');
 for (const [name, ratio] of [['Wind tunnel, R_lambda = 6000: L/eta (Pope\'s conventions)', T.outerOverEta(6000)],
-  ['Atmospheric surface layer, R_lambda ~ 1e4: L/eta', T.outerOverEta(1e4)],
+  ['Atmospheric surface layer, R_lambda 1,600: L/eta', T.outerOverEta(1600)], ['the same, R_lambda 6,600', T.outerOverEta(6600)],
   ['Interstellar electron density, 2e6 to 1e13 m (measured)', 1e13 / 2e6], ['the same, extended to 1e17 m (Kolmogorov assumed)', 1e17 / 2e6]]) {
   console.log(`${name.padEnd(62)} ${Math.log10(ratio).toFixed(1)} decades`);
 }
@@ -42,8 +42,8 @@ for (let p = 0; p < T.PMAX; p++) {
 }
 console.log("L'vov et al. 1998, Table I (34 shells, forcing on shells 0-1): <|u|^q> zeta_2,4,6 = 0.720 +- 0.008, 1.256 +- 0.012, 1.706 +- 0.015;");
 console.log('  flux-based, q = 2, 4, 5, 6, 7: 0.719, 1.249, 1.477, 1.691, 1.893 (as read from the paper in #34\'s review).');
-console.log('Measured in a wind tunnel at R_lambda 2000-6000: zeta_2 = 0.693 +- 0.011 (Kuchler, Bodenschatz & Bewley 2020, arXiv:2006.10993v2;');
-console.log('  the abstract still gives +- 0.003); the same group\'s later analysis gives 0.698 +- 0.011.');
+console.log('Measured in a wind tunnel at R_lambda 2000-6000: zeta_2 = 0.693 +- 0.011 (Kuchler, Bodenschatz & Bewley 2020, arXiv:2006.10993v2,');
+console.log('  Fig. 3; the abstract still gives +- 0.003); the same group\'s later analysis gives 0.698 +- 0.011 (arXiv:2106.01795v2, Fig. 5).');
 console.log(`Velocity across a size l grows as l^(zeta_2/2): ${f3(a.zeta.essF[1] / 2)} here, 1/3 in K41, ${f3(T.sheLeveque(2) / 2)} for She-Leveque, 1/2 for shocks.`);
 const fl = a.av.S[3].map((s4, n) => s4 / (a.av.S[1][n] * a.av.S[1][n])), hStar = (a.zeta.essF[3] - a.zeta.essF[1]) / 2;
 console.log(`Flatness <|u|^4>/<|u|^2>^2 grows toward small scales as k^(2 zeta_2 - zeta_4) = k^${f3(2 * a.zeta.essF[1] - a.zeta.essF[3])}: ` +
@@ -69,7 +69,7 @@ if (!quick) {
   { // the flux half-points weighted by their batch-means errors
     const w = ndErrs.map(e => 1 / (e * e)), W = w.reduce((a, x) => a + x, 0), mx = xs.reduce((a, x, i) => a + w[i] * x, 0) / W, my = nds.reduce((a, y, i) => a + w[i] * y, 0) / W;
     const sxx = xs.reduce((a, x, i) => a + w[i] * (x - mx) ** 2, 0), b = xs.reduce((a, x, i) => a + w[i] * (x - mx) * (nds[i] - my), 0) / sxx;
-    console.log(`  flux half-point weighted by its errors: ${f3(b)} +- ${f3(1 / Math.sqrt(sxx))} (one seed; the spread over seeds is larger, see the README)`);
+    console.log(`  flux half-point weighted by its errors: ${f3(b)} +- ${f3(1 / Math.sqrt(sxx))} (seed 1; over 8 seeds this fit has an SD of about 0.002: node turbulence/seeds.mjs)`);
   }
   console.log(`K41: 3/4. Viscous loss at the cut, nu k_d^2 S_2(k_d) = eps with S_2 ~ k^-zeta_2: 1/(2 - zeta_2) = ${f3(1 / (2 - a.zeta.essF[1]))}.`);
   console.log(`Multifractal cut-off Re^(1/(1 + h*)), h* = dzeta_p/dp at p = 3 ~ (zeta_4 - zeta_2)/2: ${f3(1 / (1 + hStar))}. A local Reynolds number`);

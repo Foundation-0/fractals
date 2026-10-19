@@ -80,7 +80,8 @@ if (!isMainThread) {
   const row = b => { const e = rows.find(r => Math.abs(r.beta - b) < 1e-9).e.area; return `${f3(e.D)} +- ${f3(sig(e))}`; };
   console.log(`P ~ A^(D/2): projected Kolmogorov density (beta 11/3) ${row(11 / 3)}; a planar slice of it (beta 8/3) ${row(8 / 3)}; CO maps (beta ~ 2.8) ${row(2.8)}.`);
   console.log(`Per field, loops of all sizes: ${rows.map(r => `${name(r.beta)}: ${r.e.nLoops.toFixed(0)}, ${r.e.nWrap.toFixed(2)} around the torus`).join('; ')}.`);
-  const vals = rows.flatMap(({ e }) => ['loops', 'area', 'outer', 'median', 'clouds', 'yard'].flatMap(k => [e[k].D, e[k].se, e[k].win]).concat([e.HeffLoop.D, e.HeffYard.D])).concat([fit.slope, jse, wse, meanOff]);
+  const vals = rows.flatMap(({ e }) => ['loops', 'area', 'outer', 'median', 'clouds', 'yard'].flatMap(k => [e[k].D, e[k].se, e[k].win, ...e[k].byWindow])
+    .concat([e.HeffLoop.D, e.HeffYard.D, ...e.HeffLoop.byWindow])).concat([fit.slope, jse, wse, meanOff]);
   if (!vals.every(Number.isFinite)) { console.error('non-finite result'); process.exit(1); }
 }
 

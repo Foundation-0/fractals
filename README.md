@@ -28,13 +28,14 @@ with Claude (Anthropic), for [Foundation0](https://github.com/Foundation-0/f0).
   (Scrimgeour et al., 2012). The nesting stops, the way a coastline's roughness stops at the size of molecules.
 - **Turbulence repeats, but not exactly.** Between the size where a flow is stirred and the size where viscosity
   takes over, the same energy flux passes through every scale. In a cascade model it holds to 0.2% over the first
-  nine of 21 shells (nearly three decades), and a third-order law that follows from it to 0.1%. The bursts do not
-  scale exactly: the distribution's tails fatten from scale to scale (intermittency). Where the cascade ends
-  depends on the medium: about a millimetre in air and water, give or take a factor of 10; the ion scales (about
-  100 km) in the solar wind, where collisions are too rare for viscosity and a steeper kinetic cascade takes over.
-  In molecular clouds the supersonic range ends at the sonic scale (about 0.1 pc), and a shallower subsonic cascade
-  continues. The fractal edges of those clouds (dimension 1.36 in Taurus, about 1.2 to 1.6 across clouds) agree
-  with laboratory turbulent interfaces in number, but the two measure different things ([turbulence](turbulence/)).
+  nine of 21 shells (2.4 decades), and a third-order law that follows from it to 0.1%. The bursts do not scale
+  exactly: the distribution's tails fatten from scale to scale (intermittency). Where the cascade ends depends on
+  the medium: about a millimetre in air and water, give or take a factor of 10; the ion scales (about 100 km) in
+  the solar wind, where collisions are too rare for viscosity and a steeper kinetic cascade takes over. In
+  molecular clouds the supersonic range ends at the sonic scale (about 0.1 pc), and a shallower subsonic cascade
+  continues. The fractal edges of the Taurus clouds (dimension 1.36) agree in number with laboratory turbulent
+  surfaces, but the two measure different things, and across clouds the dimension runs from about 1.2 to 1.6
+  ([turbulence](turbulence/)).
 
 Some repetition across scales has to be tuned, and some sets its own range. At a critical point, such as water's
 liquid-vapour critical point or the Curie temperature of a magnet whose spins point only up or down, fluctuations

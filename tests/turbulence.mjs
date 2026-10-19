@@ -65,7 +65,7 @@ const KUCHLER = [[0.693, 0.011], [0.698, 0.011]];
 check('The shell model is more intermittent than measured turbulence: its zeta_2 sits over 1.5 errors above both published values',
   KUCHLER.every(([v, e]) => z(2) - v > 1.5 * e),
   `model ${z(2).toFixed(3)}; measured ${KUCHLER.map(([v, e]) => `${v} +- ${e} (${((z(2) - v) / e).toFixed(1)} errors)`).join(' and ')} at R_lambda 2000-6000; She-Leveque ${T.sheLeveque(2).toFixed(3)}`,
-  'Kuchler, Bodenschatz & Bewley, arXiv:2006.10993v2 (2020), Fig. 4 (the abstract still says +- 0.003), and arXiv:2106.01795v2, Fig. 6, as read in #34\'s review; She & Leveque, PRL 72, 336 (1994)');
+  'Kuchler, Bodenschatz & Bewley, arXiv:2006.10993v2 (2020), Fig. 3 (the abstract still says +- 0.003), and arXiv:2106.01795v2, Fig. 5, as read in #34\'s review; She & Leveque, PRL 72, 336 (1994)');
 
 // 4. Where the cascade stops: K41 puts the end at k_eta = (eps/nu^3)^(1/4) up to an O(1) factor it does not predict.
 check('The flux falls to half, and <|u_n|^2> to half its power law, within 1.5 shells (a factor 2.8) of k_eta',
@@ -105,10 +105,15 @@ check('The ion inertial length swept past the spacecraft, with and without the P
 const sL = T.sonicScale(T.LARSON81), sS = 2 * T.sonicScale(T.SOLOMON87), mL = T.machAt(T.LARSON81, 0.1);
 check('Sonic sizes from Larson (maximum size) and Solomon et al. (diameter) within a factor of 2 of the 0.10 pc filament width',
   [sL, sS].every(x => x / 0.1 < 2 && 0.1 / x < 2), `Larson ${sL.toFixed(3)} pc, Solomon et al. ${sS.toFixed(3)} pc; filaments 0.10 +- 0.03 pc (FWHM)`,
-  'Larson, MNRAS 194, 809 (1981), pp. 813-814; Solomon et al., ApJ 319, 730 (1987), p. 737 (both as read in #34\'s review); Arzoumanian et al., A&A 529, L6 (2011), as seen in search text');
-check("At Larson's smallest scales the motions are about sonic: non-thermal Mach number 0.8 to 1.25 at 0.1 pc",
-  mL > 0.8 && mL < 1.25, `Mach ${mL.toFixed(2)} at 0.1 pc (${T.machAt(T.LARSON81, 100).toFixed(0)} at 100 pc); Larson calls TMC1 and TMC2 subsonic`,
-  'Larson (1981), p. 820, as read in #34\'s review');
+  'Larson, MNRAS 194, 809 (1981), pp. 813-814; Solomon et al., ApJ 319, 730 (1987), p. 737; Arzoumanian et al., A&A 529, L6 (2011); all as read in #34\'s review');
+check("At Larson's smallest scales his relation is about sonic: non-thermal Mach number 0.8 to 1.25 at 0.1 pc",
+  mL > 0.8 && mL < 1.25, `Mach ${mL.toFixed(2)} at 0.1 pc (${T.machAt(T.LARSON81, 100).toFixed(0)} at 100 pc)`,
+  'this study\'s tolerance on Larson (1981), eq. (1)');
+const objs = T.LARSON_OBJECTS.map(o => ({ ...o, mach: T.machOf(T.LARSON81, o.sigma) }));
+check("Larson's small objects: TMC1 and TMC2 subsonic, as he says, and the others supersonic, in his convention",
+  objs.every(o => (o.mach < 1) === o.subsonic),
+  objs.map(o => `${o.name} (${o.size} pc, ${o.sigma} km/s) Mach ${o.mach.toFixed(2)}`).join('; '),
+  'Larson (1981), Table 1 (pp. 812-813) and p. 820, as read in #34\'s re-review');
 
 console.log(fails ? `\n${fails} check(s) failed` : '\nall checks pass');
 process.exit(fails ? 1 : 0);
