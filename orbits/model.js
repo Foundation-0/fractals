@@ -13,7 +13,9 @@
  * with A and B the host's Oort constants at the orbit. For a point-mass host A = 3 Omega / 4 and B = -Omega / 4, and
  * r_J is Hill's radius a (m / 3M)^(1/3). For a flat rotation curve A = -B = Omega / 2. Either way the mean density of
  * m inside r_J, 3m / (4 pi r_J^3), equals 4A/Omega times the host's mean density inside the orbit, 3 Omega^2 / (4 pi G)
- * (spherical host): 3 times for a point mass, 2 for a flat curve. So the edge is set by a density ratio, not a size.
+ * (spherical host): 3 times for a point mass, 2 for a flat curve, and in general 2(1 - dln v/dln R). So the edge is set
+ * by a ratio of mean densities, not a size. The host's density here is its mean inside the orbit, not its local
+ * density.
  *
  * Flat curves. Where the enclosed mass grows as M(<r) ~ r (mean density ~ r^-2), v stays constant: the Milky Way
  * between about 5 and 25 kpc (Eilers et al. 2019). The model's Galaxy is Bovy's MWPotential2014 (Bovy 2015,
@@ -63,12 +65,34 @@
   const planetMassFraction = () => PLANETS.reduce((s, p) => s + 1 / p.sunOver, 0);
 
   // Kepler's third law for one planet: the GM its orbit implies, n^2 a^3, against GM_sun, with n the mean-longitude
-  // rate. A 250-year fit to a perturbed orbit, so the excess carries the other planets' pull as well as the planet's
-  // own mass.
+  // rate Ldot: the orbit's angular rate, which obeys n^2 a^3 = G M(<a) for a near-circular orbit in an averaged pull.
+  // (The mean-anomaly rate Ldot - wdot is the radial frequency and does not.) A 250-year fit to a perturbed orbit, so
+  // the excess carries the other planets' pull as well as the planet's own mass.
   function kepler(p) {
     const n = p.Ldot * Math.PI / 180 / (36525 * C.day), a = p.a * C.au;
     const GM = n * n * a * a * a;
     return { name: p.name, n, P: 2 * Math.PI / n / C.yr, GM, excess: GM / C.GMsun - 1, own: 1 / p.sunOver };
+  }
+
+  // What the other planets' pull adds to n^2 a^3 / GM_sun - 1, averaged over their orbits: each other planet is
+  // smeared into a coplanar ring at its semi-major axis, and the ring's in-plane pull at the planet's a is added to the
+  // Sun's (heliocentric two-body term m/M_sun for the planet itself). The ring potential is -(2 G m / pi) K(k) / (r + b),
+  // k = 2 sqrt(r b) / (r + b), with K the complete elliptic integral (by the arithmetic-geometric mean). A secular
+  // estimate: it leaves out the long-period terms a 250-year fit also carries.
+  function ellipticK(k) {
+    let a = 1, b = Math.sqrt(1 - k * k);
+    for (let i = 0; i < 40 && Math.abs(a - b) > 1e-16 * a; i++) { const an = (a + b) / 2; b = Math.sqrt(a * b); a = an; }
+    return Math.PI / (2 * a);
+  }
+  const ringPotential = (r, b) => -(2 / Math.PI) * ellipticK(2 * Math.sqrt(r * b) / (r + b)) / (r + b); // per unit G m
+  function ringExcess(p) {
+    let ex = 1 / p.sunOver;
+    for (const q of PLANETS) {
+      if (q === p) continue;
+      const h = 1e-6 * p.a, pull = (ringPotential(p.a + h, q.a) - ringPotential(p.a - h, q.a)) / (2 * h); // inward > 0
+      ex += p.a * p.a * pull / q.sunOver;
+    }
+    return ex;
   }
 
   // Least-squares slope of log P against log a: 3/2 for Kepler.
@@ -88,7 +112,8 @@
   // Oort constants of a point-mass host and of a flat rotation curve, at angular speed Omega.
   const oortKepler = Omega => ({ A: 0.75 * Omega, B: -0.25 * Omega });
   const oortFlat = Omega => ({ A: 0.5 * Omega, B: -0.5 * Omega });
-  // The body's mean density inside r_J over the host's mean density inside the orbit (spherical host): 4A/Omega.
+  // The body's mean density inside r_J over the host's mean density inside the orbit (spherical host): 4A/Omega,
+  // which is 2(1 - dln v/dln R) for a rotation curve v(R).
   const densityRatio = (A, B) => 4 * A / (A - B);
   // Where a mass's own pull falls to an acceleration g: r = sqrt(GM/g) [m].
   const radiusAtAcceleration = (GM, g) => Math.sqrt(GM / g);
@@ -113,7 +138,9 @@
   // Eckart 2009). Radii in pc.
   const CUSP = { M1: 1.0e6, M1lo: 0.5e6, M1hi: 1.5e6, gamma: 1.13, rBreak: 3 };
   const cuspMass = (r, M1 = CUSP.M1, gamma = CUSP.gamma) => M1 * Math.pow(r, 3 - gamma);
-  // The radius where the stars inside weigh k times Sgr A* (k = 1, or k = 2 for the usual influence radius).
+  // The radius where the stars inside weigh k times Sgr A* (k = 1, the equal-mass radius; k = 2, the usual influence
+  // radius). Radii beyond rBreak extrapolate the power law past the break, where the density falls faster, so they are
+  // lower limits.
   const cuspRadius = (k, Mbh, M1 = CUSP.M1, gamma = CUSP.gamma) => Math.pow(k * Mbh / M1, 1 / (3 - gamma));
   // dln v / dln r for Sgr A* plus the cusp: (dln M / dln r - 1) / 2.
   const cuspSlope = (r, Mbh, M1 = CUSP.M1, gamma = CUSP.gamma) => { const m = cuspMass(r, M1, gamma); return ((3 - gamma) * m / (Mbh + m) - 1) / 2; };
@@ -188,11 +215,11 @@
     };
     return {
       par, M, parts, v, slope, bulgeMass, cross,
-      // where the stars inside r first weigh as much as Sgr A* (the influence radius), and where v's log slope is -1/4
-      influence: () => cross(r => bulgeMass(r) - M.bh, 1e-6, 1),
-      keplerEdge: () => cross(r => slope(r) + 0.25, 1e-6, 1),
-      // the longest run of radii (kpc, on a grid 0.5% apart) where |dln v / dln R| < tol
-      flatRange: (tol = 0.15, rMin = 1e-3, rMax = 300) => {
+      // where the bulge's stars inside r first weigh k times Sgr A* (k = 1, equal mass; k = 2, the influence radius)
+      influence: (k = 1) => cross(r => bulgeMass(r) - k * M.bh, 1e-6, 1),
+      // the longest run of radii (kpc, on a grid 0.5% apart) where |dln v / dln R| < tol; by default outside the bulge
+      // (R > 1 kpc), since the r^-1.8 bulge is also flat to +-0.15 from about 7 to 180 pc
+      flatRange: (tol = 0.15, rMin = 1, rMax = 300) => {
         let best = [NaN, NaN], start = NaN, last = NaN;
         for (let r = rMin; r <= rMax * 1.0001; r *= 1.005) {
           if (Math.abs(slope(r)) < tol) { if (Number.isNaN(start)) start = r; last = r; }
@@ -234,7 +261,8 @@
     e: [71 / 57600, 0, -71 / 16695, 71 / 1920, -17253 / 339200, 22 / 525, -1 / 40],
   };
   // Follows one orbit for `orbits` turns of the host (time 2 pi orbits). Fate: 'escapes' once r > rEsc, 'plunges'
-  // once r < rIn (into the inner system: the planet itself, or the Sun's planets), otherwise 'stays'.
+  // once r < rIn (1e-3 r_J is about a giant planet's own radius; for the Sun it is 280 au, outside the planets),
+  // otherwise 'stays'. Returns the final state s too.
   function hillOrbit(host, s0, { orbits = 20, rEsc = 3, rIn = 1e-3, tol = 1e-10 } = {}) {
     const T = 2 * Math.PI * orbits, k = Array.from({ length: 7 }, () => new Float64Array(6));
     const y = new Float64Array(6), s = Float64Array.from(s0);
@@ -255,12 +283,12 @@
         t += h; steps++;
         for (let i = 0; i < 6; i++) { s[i] = y[i]; k[0][i] = k[6][i]; }
         const r = Math.hypot(s[0], s[1], s[2]);
-        if (r > rEsc) return { fate: 'escapes', t, steps };
-        if (r < rIn) return { fate: 'plunges', t, steps };
+        if (r > rEsc) return { fate: 'escapes', t, steps, s: Array.from(s) };
+        if (r < rIn) return { fate: 'plunges', t, steps, s: Array.from(s) };
       }
       h *= Math.min(5, Math.max(0.2, 0.9 * Math.pow(err, -0.2)));
     }
-    return { fate: 'stays', t, steps };
+    return { fate: 'stays', t, steps, s: Array.from(s) };
   }
   // A circular orbit of radius a (in r_J) about the body, at the two-body speed, in the plane with unit normal n
   // (rotating-frame axes; n = +z is prograde, -z retrograde), starting at angle phi.
@@ -302,13 +330,12 @@
     return { rows, edge };
   }
 
-  // McGaugh, Lelli & Schombert 2016: the radial acceleration relation, g_obs = g_bar / (1 - exp(-sqrt(g_bar / g+))).
+  // McGaugh, Lelli & Schombert 2016: the acceleration where the radial acceleration relation bends.
   const GDAGGER = 1.20e-10; // m s^-2
-  const rar = (gbar, gd = GDAGGER) => gbar / (1 - Math.exp(-Math.sqrt(gbar / gd)));
 
   const api = {
-    C, PLANETS, INVARIABLE, tiltToInvariable, planetMassFraction, kepler, keplerExponent, jacobi, hill, oortKepler, oortFlat, densityRatio,
-    radiusAtAcceleration, S2, orbitOf, CUSP, cuspMass, cuspRadius, cuspSlope, lgamma, gammaP, MWP14, SGRA, galaxy, GDAGGER, rar,
+    C, PLANETS, INVARIABLE, tiltToInvariable, planetMassFraction, kepler, ellipticK, ringExcess, keplerExponent, jacobi, hill, oortKepler, oortFlat, densityRatio,
+    radiusAtAcceleration, S2, orbitOf, CUSP, cuspMass, cuspRadius, cuspSlope, lgamma, gammaP, MWP14, SGRA, galaxy, GDAGGER,
     HOST_KEPLER, hostDisk, hillOrbit, hillStart, sphere, hillFates, hillScan,
   };
   if (typeof module !== 'undefined' && module.exports) module.exports = api; else root.ORB = api;
