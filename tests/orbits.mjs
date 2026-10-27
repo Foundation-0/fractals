@@ -93,6 +93,14 @@ for (const x of [0.25, 1, 4]) {
 const g = O.galaxy(), g0 = O.galaxy(O.MWP14, { bh: 0 });
 near('MWPotential2014 normalisation identity: v_c(8 kpc) without Sgr A* [km/s] (G and the shapes cancel)', g0.v(8), 220, 1e-9,
   'model-internal (parameters as in galpy\'s source)');
+{
+  const T1 = 'Bovy 2015, Table 1 (arXiv source, mwpotential2014.txt), as #37\'s re-review read it; tolerance the rounding of the printed value';
+  near('MWPotential2014: bulge mass [1e10 M_sun]', g0.M.bulge / 1e10, 0.5, 0.05, T1);
+  near('MWPotential2014: disk mass [1e10 M_sun]', g0.M.disk / 1e10, 6.8, 0.05, T1);
+  near('MWPotential2014: mass inside 60 kpc, as v^2 R/G [1e11 M_sun]', g0.v(60) ** 2 * 60 / C.G / 1e11, 4.1, 0.05, `${T1} (the true sphere mass is 4.05)`);
+  near('MWPotential2014: dln v_c/dln R at R0 = 8 kpc', g0.slope(8), -0.10, 0.005, T1);
+  near('MWPotential2014: dark-matter density at R0 [M_sun/pc^3]', g0.haloDensity(8), 0.008, 0.0005, T1);
+}
 near('MWPotential2014: halo mass inside 245 kpc [1e12 M_sun]', g0.parts(245).halo * 245 / C.G / 1e12, 0.8, 0.05,
   'Bovy 2015, Table 1: M_vir = 0.8e12 M_sun with r_vir = 245 kpc (#37\'s review); tolerance the rounding of 0.8');
 near('The disk\'s mass inside a sphere of 1e4 kpc / its total (Gauss\'s theorem by quadrature)', g.diskSphereMass(1e4) / g.M.disk, 1, 1e-3,
@@ -127,7 +135,7 @@ near('Saturn\'s inclination to the invariable plane [deg]', O.tiltToInvariable(O
   const esc = (h, a, n) => O.hillFates(h, a, [n], { nPhase: 8 }).escapes, pro = [esc(K, 0.4, [0, 0, 1]), esc(K, 0.6, [0, 0, 1])];
   check('Point-mass host: prograde circular orbits mostly kept at 0.4 r_H, mostly lost by 0.6', pro[0] < 0.5 && pro[1] >= 0.5,
     `fraction escaped ${pro[0].toFixed(2)} at 0.4 r_H (must be < 0.5), ${pro[1].toFixed(2)} at 0.6 r_H (must be >= 0.5)`, 'model');
-  const edgePro = O.hillScan(K, [[0, 0, 1]], [0.3, 0.35, 0.4, 0.45, 0.5, 0.55, 0.6, 0.65, 0.7], { nPhase: 8 }).edge;
+  const edgePro = O.hillScan(K, [[0, 0, 1]], [0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55, 0.6, 0.65, 0.7], { nPhase: 8 }).edge;
   near('Point-mass host: radius where half the prograde circular orbits in the plane have escaped [r_H]', edgePro, 0.4, 0.1,
     `${NV}; tolerance covers their different criterion and integration time`);
   const gRet = []; for (let a = 0.6; a <= 1.0001; a += 0.025) gRet.push(+a.toFixed(3));
@@ -154,7 +162,8 @@ near('Saturn\'s inclination to the invariable plane [deg]', O.tiltToInvariable(O
       'model (Lidov 1962, Kozai 1962: the eccentricity reaches 1 at 90 deg)');
     const L = O.hillScan(K, [[1, 0, 0]], [0.1, 0.2], { nPhase: 8 });
     check('Point-mass host: polar orbits (plane across the host) are lost by plunging between 0.1 and 0.2 r_H, before any escapes',
-      Number.isNaN(L.edge) && L.edgeLost > 0.1 && L.edgeLost < 0.2, `half lost by ${fmt(L.edgeLost)} r_H (must be 0.1 to 0.2); half escaped: ${L.edge} (must be none)`,
+      L.rows.every(r => r.escapes === 0) && L.edgeLost > 0.1 && L.edgeLost < 0.2,
+      `half lost by ${fmt(L.edgeLost)} r_H (must be 0.1 to 0.2); escaped fractions ${L.rows.map(r => r.escapes.toFixed(2)).join(', ')} (must all be 0)`,
       'model (the edgeLost path)');
   }
   const Om = 27.2 * C.kmskpc, want = (4 * Math.PI * C.GMsun * 0.10 / C.pc ** 3 + 2 * (15.3 ** 2 - 11.9 ** 2) * C.kmskpc ** 2) / Om ** 2;
@@ -167,7 +176,8 @@ near('Saturn\'s inclination to the invariable plane [deg]', O.tiltToInvariable(O
   const rJ = O.jacobi(C.GMsun, 15.3, -11.9), edge = O.hillScan(sun, dirs, [0.2, 0.3, 0.4, 0.5, 0.6], { nPhase: 2 }).edge * rJ / C.au;
   check('The Sun\'s all-directions escape edge lies within the Oort cloud\'s quoted outer limits, 6.5e4 to 2e5 au', edge >= 6.5e4 && edge <= 2e5,
     `half have escaped by ${fmt(edge)} au (12 directions x 2 angles, grid 0.1 r_J from 0.2 r_J = 5.7e4 au; the tide alone, no passing stars)`,
-    'Correa-Otto & Calandra 2019 sect. 4.3: a_crit ~ 6.5e4 au, set by passing stars (#37\'s review); Dones et al. 2004: as far as 2e5 au, as cited in search text');
+    'Correa-Otto & Calandra 2019 sect. 4.3: a_crit ~ 6.5e4 au, set by the frequency of stellar passages acting with the tide (#37\'s review); ' +
+    'Dones et al. 2004: as far as 2e5 au, as cited in search text; a wide window, which the edge passes for Gam from 0.6 to 1.5 times its value');
 }
 
 console.log(fails ? `\n${fails} check(s) failed` : '\nall orbits checks pass');

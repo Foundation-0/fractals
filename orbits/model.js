@@ -221,6 +221,8 @@
     };
     // The total mass inside a sphere of radius r [M_sun].
     const sphereMass = r => M.bh + bulgeMass(r) + diskSphereMass(r) + M.halo * shape.halo(r);
+    // The halo's (NFW) density at radius r [M_sun/pc^3].
+    const haloDensity = r => M.halo / (4 * Math.PI * par.rs ** 3) / ((r / par.rs) * (1 + r / par.rs) ** 2) / 1e9;
     // the smallest radius above r0 where f crosses zero, by a log grid then bisection
     const cross = (f, r0, r1) => {
       let lo = r0, flo = f(lo);
@@ -236,7 +238,7 @@
       return NaN;
     };
     return {
-      par, M, parts, v, slope, bulgeMass, diskSphereMass, sphereMass, cross,
+      par, M, parts, v, slope, bulgeMass, diskSphereMass, sphereMass, haloDensity, cross,
       // where the bulge's stars inside r first weigh k times Sgr A* (k = 1, equal mass; k = 2, the influence radius)
       influence: (k = 1) => cross(r => bulgeMass(r) - k * M.bh, 1e-6, 1),
       // the longest run of radii (kpc, on a grid 0.5% apart) where |dln v / dln R| < tol; by default outside the bulge
@@ -284,8 +286,10 @@
   };
   // Follows one orbit for `orbits` turns of the host (time 2 pi orbits). Fate: 'escapes' once r > rEsc, 'plunges'
   // once r < rIn (1e-3 r_J is 0.74 of Jupiter's radius; for the Sun it is 283 au, outside the planets), otherwise
-  // 'stays'. Returns the final state s too. Throws on a non-finite step or after maxSteps, rather than looping.
-  function hillOrbit(host, s0, { orbits = 20, rEsc = 3, rIn = 1e-3, tol = 1e-10, maxSteps = 5e6 } = {}) {
+  // 'stays'. Returns the final state s too. Throws on non-finite settings, on a non-finite step, or after maxSteps
+  // (by default 2.5e5 per turn of the host; the hardest orbit in the tables needs about 1.5e4), rather than looping.
+  function hillOrbit(host, s0, { orbits = 20, rEsc = 3, rIn = 1e-3, tol = 1e-10, maxSteps = 2.5e5 * orbits } = {}) {
+    if (![orbits, rEsc, rIn, tol, maxSteps, host.Gam, host.nu2, ...s0].every(Number.isFinite)) throw new Error('hillOrbit: non-finite input');
     const T = 2 * Math.PI * orbits, k = Array.from({ length: 7 }, () => new Float64Array(6));
     const y = new Float64Array(6), s = Float64Array.from(s0);
     let t = 0, h = 1e-3, steps = 0;
@@ -334,11 +338,15 @@
     return out;
   }
   // Fractions of orbits that stay, escape and plunge, over the given orbit normals and nPhase starting angles each.
-  // Hill's equations are symmetric under r -> -r, v -> -v, and a start at phi + pi is the inverted start at phi, so the
-  // starting angles are spread over [0, pi) only: each one is a different orbit.
-  function hillFates(host, a, normals, { nPhase = 4, ...opt } = {}) {
+  // Hill's equations are symmetric under r -> -r, v -> -v: a start at phi + pi is the inverted start at phi, with the
+  // same fate. They are also symmetric under time reversal with y -> -y. For a normal in the x-z or y-z plane, as in
+  // every single-plane scan here, that makes a start at pi - phi the mirror of the start at phi run backward, whose
+  // fate nearly always matches. So the starting angles are spread over the quarter turn [0, pi/2) (quarter = 0), where
+  // no two are related by either symmetry; quarter = 1 takes [pi/2, pi) instead. For other normals the mirror is
+  // another normal, and [0, pi/2) samples half of each normal's distinct starts.
+  function hillFates(host, a, normals, { nPhase = 4, quarter = 0, ...opt } = {}) {
     const n = { stays: 0, escapes: 0, plunges: 0 };
-    for (const nv of normals) for (let p = 0; p < nPhase; p++) n[hillOrbit(host, hillStart(host, a, nv, Math.PI * (p + 0.5) / nPhase), opt).fate]++;
+    for (const nv of normals) for (let p = 0; p < nPhase; p++) n[hillOrbit(host, hillStart(host, a, nv, Math.PI / 2 * (quarter + (p + 0.5) / nPhase)), opt).fate]++;
     const tot = normals.length * nPhase;
     return { stays: n.stays / tot, escapes: n.escapes / tot, plunges: n.plunges / tot };
   }

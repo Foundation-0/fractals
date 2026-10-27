@@ -216,7 +216,7 @@ node orbits/table.mjs quick              # the orbits study's numbers, without i
 below). The third study's checks, `tests/critical.mjs`, add about 65 s of seeded Monte Carlo runs, most of it
 percolation with nine seeds. CI runs every line above except the `critical/table.mjs` line: it repeats the tests'
 seeded runs and prints the results without checking them. The orbits study's full table (`node orbits/table.mjs`,
-a few minutes) is not run by CI either.
+about 7 minutes) is not run by CI either.
 
 ## Checks
 
