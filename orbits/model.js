@@ -17,8 +17,8 @@
  * by a ratio of mean densities, not a size. The host's density here is its mean inside the orbit, not its local
  * density.
  *
- * Flat curves. Where the enclosed mass grows as M(<r) ~ r (mean density ~ r^-2), v stays constant: the Milky Way
- * between about 5 and 25 kpc (Eilers et al. 2019). The model's Galaxy is Bovy's MWPotential2014 (Bovy 2015,
+ * Flat curves. Where the enclosed mass grows as M(<r) ~ r (mean density ~ r^-2), v stays constant. The Milky Way
+ * between about 5 and 25 kpc comes close: Eilers et al. (2019) find its curve gently declining. The model's Galaxy is Bovy's MWPotential2014 (Bovy 2015,
  * sec. 3.5): a power-law bulge rho ~ r^-1.8 exp(-(r/1.9 kpc)^2), a Miyamoto-Nagai disk (a = 3 kpc, b = 0.28 kpc) and an
  * NFW halo (scale radius 16 kpc), normalised so that v_c(8 kpc) = 220 km/s, with the bulge, disk and halo supplying
  * 5%, 60% and 35% of the radial force there. Sgr A* is added as a point mass. Speeds are in the disk's mid-plane; the
@@ -77,7 +77,8 @@
 
   // The planet's own mass plus what the other planets' pull adds to n^2 a^3 / GM_sun - 1, averaged over their orbits:
   // the heliocentric two-body term m/M_sun, plus each other planet smeared into a coplanar ring at its semi-major axis,
-  // whose in-plane pull at the planet's a is added to the Sun's (others only: { own: false }). The ring potential is -(2 G m / pi) K(k) / (r + b),
+  // whose in-plane pull at the planet's a is added to the Sun's. { own: false } leaves out the planet's own mass, and
+  // `which` picks the other planets counted (all by default). The ring potential is -(2 G m / pi) K(k) / (r + b),
   // k = 2 sqrt(r b) / (r + b), with K the complete elliptic integral (by the arithmetic-geometric mean). A secular
   // estimate: it leaves out the long-period terms a 250-year fit also carries.
   function ellipticK(k) {
@@ -86,10 +87,10 @@
     return Math.PI / (2 * a);
   }
   const ringPotential = (r, b) => -(2 / Math.PI) * ellipticK(2 * Math.sqrt(r * b) / (r + b)) / (r + b); // per unit G m
-  function ringExcess(p, { own = true } = {}) {
+  function ringExcess(p, { own = true, which = () => true } = {}) {
     let ex = own ? 1 / p.sunOver : 0;
     for (const q of PLANETS) {
-      if (q === p) continue;
+      if (q === p || !which(q)) continue;
       const h = 1e-6 * p.a, pull = (ringPotential(p.a + h, q.a) - ringPotential(p.a - h, q.a)) / (2 * h); // inward > 0
       ex += p.a * p.a * pull / q.sunOver;
     }
@@ -135,7 +136,8 @@
   }
 
   // The stars around Sgr A*: inside the break near 3 pc the density falls as r^-gamma, gamma = 1.13 (Schodel et al.
-  // 2018), so their mass grows as r^(3 - gamma); 0.5 to 1.5 million solar masses lie inside 1 pc (Schodel, Merritt &
+  // 2018: the light-density slope of the innermost 1-2 pc, which mass follows at constant M/L; their robust range is
+  // 1.1-1.4), so their mass grows as r^(3 - gamma); 0.5 to 1.5 million solar masses lie inside 1 pc (Schodel, Merritt &
   // Eckart 2009). Radii in pc.
   const CUSP = { M1: 1.0e6, M1lo: 0.5e6, M1hi: 1.5e6, gamma: 1.13, rBreak: 3 };
   const cuspMass = (r, M1 = CUSP.M1, gamma = CUSP.gamma) => M1 * Math.pow(r, 3 - gamma);
@@ -145,6 +147,10 @@
   const cuspRadius = (k, Mbh, M1 = CUSP.M1, gamma = CUSP.gamma) => Math.pow(k * Mbh / M1, 1 / (3 - gamma));
   // dln v / dln r for Sgr A* plus the cusp: (dln M / dln r - 1) / 2.
   const cuspSlope = (r, Mbh, M1 = CUSP.M1, gamma = CUSP.gamma) => { const m = cuspMass(r, M1, gamma); return ((3 - gamma) * m / (Mbh + m) - 1) / 2; };
+  // Where that slope equals s (between -1/2 and (2 - gamma)/2), in closed form: the stars' mass is then
+  // Mbh (2s + 1) / ((3 - gamma) - (2s + 1)).
+  const cuspSlopeRadius = (s, Mbh, M1 = CUSP.M1, gamma = CUSP.gamma) =>
+    Math.pow(Mbh * (2 * s + 1) / ((3 - gamma) - (2 * s + 1)) / M1, 1 / (3 - gamma));
 
   // ---------- the Milky Way ----------
   function lgamma(z) { // Lanczos, g = 7; |error| < 1e-14 for z > 0
@@ -200,6 +206,21 @@
     const v = R => Math.sqrt(v2(R));
     const slope = R => { const h = 1e-4; return Math.log(v(R * (1 + h)) / v(R * (1 - h))) / Math.log((1 + h) / (1 - h)); };
     const bulgeMass = r => M.bulge * shape.bulge(r);
+    // The disk's mass inside a sphere of radius r, by Gauss's theorem: (r^2 / G) times the mean over the sphere of the
+    // outward radial pull, here r^2/2 times the integral over mu = z/r of dPhi/dr for the Miyamoto-Nagai potential
+    // -G M / sqrt(R^2 + (a + sqrt(z^2 + b^2))^2) (Simpson's rule in mu on [0, 1], doubled by symmetry).
+    const diskSphereMass = r => {
+      const n = 4000, a = par.a, b = par.b;
+      const f = mu => {
+        const z = r * mu, R = r * Math.sqrt(Math.max(0, 1 - mu * mu)), zeta = Math.sqrt(z * z + b * b), D = Math.hypot(R, a + zeta);
+        return (R * R + (a + zeta) * z * z / zeta) / (r * D * D * D);
+      };
+      let sum = f(0) + f(1);
+      for (let i = 1; i < n; i++) sum += (i % 2 ? 4 : 2) * f(i / n);
+      return M.disk * r * r * sum / (3 * n);
+    };
+    // The total mass inside a sphere of radius r [M_sun].
+    const sphereMass = r => M.bh + bulgeMass(r) + diskSphereMass(r) + M.halo * shape.halo(r);
     // the smallest radius above r0 where f crosses zero, by a log grid then bisection
     const cross = (f, r0, r1) => {
       let lo = r0, flo = f(lo);
@@ -215,7 +236,7 @@
       return NaN;
     };
     return {
-      par, M, parts, v, slope, bulgeMass, cross,
+      par, M, parts, v, slope, bulgeMass, diskSphereMass, sphereMass, cross,
       // where the bulge's stars inside r first weigh k times Sgr A* (k = 1, equal mass; k = 2, the influence radius)
       influence: (k = 1) => cross(r => bulgeMass(r) - k * M.bh, 1e-6, 1),
       // the longest run of radii (kpc, on a grid 0.5% apart) where |dln v / dln R| < tol; by default outside the bulge
@@ -262,9 +283,9 @@
     e: [71 / 57600, 0, -71 / 16695, 71 / 1920, -17253 / 339200, 22 / 525, -1 / 40],
   };
   // Follows one orbit for `orbits` turns of the host (time 2 pi orbits). Fate: 'escapes' once r > rEsc, 'plunges'
-  // once r < rIn (1e-3 r_J is about a giant planet's own radius; for the Sun it is 280 au, outside the planets),
-  // otherwise 'stays'. Returns the final state s too.
-  function hillOrbit(host, s0, { orbits = 20, rEsc = 3, rIn = 1e-3, tol = 1e-10 } = {}) {
+  // once r < rIn (1e-3 r_J is 0.74 of Jupiter's radius; for the Sun it is 283 au, outside the planets), otherwise
+  // 'stays'. Returns the final state s too. Throws on a non-finite step or after maxSteps, rather than looping.
+  function hillOrbit(host, s0, { orbits = 20, rEsc = 3, rIn = 1e-3, tol = 1e-10, maxSteps = 5e6 } = {}) {
     const T = 2 * Math.PI * orbits, k = Array.from({ length: 7 }, () => new Float64Array(6));
     const y = new Float64Array(6), s = Float64Array.from(s0);
     let t = 0, h = 1e-3, steps = 0;
@@ -280,6 +301,8 @@
         let ei = 0; for (let m = 0; m < 7; m++) ei += DP.e[m] * k[m][i];
         err = Math.max(err, Math.abs(h * ei) / (tol * (1 + Math.abs(s[i]))));
       }
+      if (!Number.isFinite(err) || !(h > 0)) throw new Error(`hillOrbit: non-finite step at t = ${t}`);
+      if (steps > maxSteps) throw new Error(`hillOrbit: more than ${maxSteps} steps`);
       if (err <= 1) {
         t += h; steps++;
         for (let i = 0; i < 6; i++) { s[i] = y[i]; k[0][i] = k[6][i]; }
@@ -311,24 +334,31 @@
     return out;
   }
   // Fractions of orbits that stay, escape and plunge, over the given orbit normals and nPhase starting angles each.
+  // Hill's equations are symmetric under r -> -r, v -> -v, and a start at phi + pi is the inverted start at phi, so the
+  // starting angles are spread over [0, pi) only: each one is a different orbit.
   function hillFates(host, a, normals, { nPhase = 4, ...opt } = {}) {
     const n = { stays: 0, escapes: 0, plunges: 0 };
-    for (const nv of normals) for (let p = 0; p < nPhase; p++) n[hillOrbit(host, hillStart(host, a, nv, 2 * Math.PI * (p + 0.5) / nPhase), opt).fate]++;
+    for (const nv of normals) for (let p = 0; p < nPhase; p++) n[hillOrbit(host, hillStart(host, a, nv, Math.PI * (p + 0.5) / nPhase), opt).fate]++;
     const tot = normals.length * nPhase;
     return { stays: n.stays / tot, escapes: n.escapes / tot, plunges: n.plunges / tot };
   }
-  // Fates on a grid of radii (in r_J), and the radius where the fraction that escapes first reaches one half (linear
-  // interpolation between grid points; NaN if it never does).
-  function hillScan(host, normals, as, opt = {}) {
-    const rows = as.map(a => ({ a, ...hillFates(host, a, normals, opt) }));
-    let edge = NaN;
+  // Fates on a grid of radii (in r_J), and the radius where a fraction first reaches one half (linear interpolation
+  // between grid points; NaN if it never does): edge for the orbits that escaped, edgeLost for those escaped or plunged.
+  // A half reached already at the first grid point returns that point, so start the grid inside the edge.
+  function halfPoint(rows, frac) {
     for (let i = 0; i < rows.length; i++) {
-      if (rows[i].escapes >= 0.5) {
-        edge = i === 0 ? rows[0].a : rows[i - 1].a + (rows[i].a - rows[i - 1].a) * (0.5 - rows[i - 1].escapes) / (rows[i].escapes - rows[i - 1].escapes);
-        break;
+      const f = frac(rows[i]);
+      if (f >= 0.5) {
+        if (i === 0) return rows[0].a;
+        const g = frac(rows[i - 1]);
+        return rows[i - 1].a + (rows[i].a - rows[i - 1].a) * (0.5 - g) / (f - g);
       }
     }
-    return { rows, edge };
+    return NaN;
+  }
+  function hillScan(host, normals, as, opt = {}) {
+    const rows = as.map(a => ({ a, ...hillFates(host, a, normals, opt) }));
+    return { rows, edge: halfPoint(rows, r => r.escapes), edgeLost: halfPoint(rows, r => r.escapes + r.plunges) };
   }
 
   // McGaugh, Lelli & Schombert 2016: the acceleration where the radial acceleration relation bends.
@@ -336,7 +366,7 @@
 
   const api = {
     C, PLANETS, INVARIABLE, tiltToInvariable, planetMassFraction, kepler, ellipticK, ringExcess, keplerExponent, jacobi, hill, oortKepler, oortFlat, densityRatio,
-    radiusAtAcceleration, S2, orbitOf, CUSP, cuspMass, cuspRadius, cuspSlope, lgamma, gammaP, MWP14, SGRA, galaxy, GDAGGER,
+    radiusAtAcceleration, S2, orbitOf, CUSP, cuspMass, cuspRadius, cuspSlope, cuspSlopeRadius, lgamma, gammaP, MWP14, SGRA, galaxy, GDAGGER,
     HOST_KEPLER, hostDisk, hillOrbit, hillStart, sphere, hillFates, hillScan,
   };
   if (typeof module !== 'undefined' && module.exports) module.exports = api; else root.ORB = api;
