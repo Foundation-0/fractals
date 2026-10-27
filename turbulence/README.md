@@ -477,8 +477,8 @@ text only.
 - M. G. R. Vogelaar and B. P. Wakker, *Measuring the fractal structure of interstellar clouds*, A&A 291, 557 (1994). Read in #34's re-review.
 - N. Sánchez, E. J. Alfaro and E. Pérez, *The fractal dimension of projected clouds*, ApJ 625, 849 (2005). Read in #34's review and re-review. https://doi.org/10.1086/429553 (https://arxiv.org/abs/astro-ph/0501573)
 - S. Lovejoy, *Area-perimeter relation for rain and cloud areas*, Science 216, 185 (1982). Search text only. https://doi.org/10.1126/science.216.4542.185
-- K. R. Sreenivasan and C. Meneveau, *The fractal facets of turbulence*, J. Fluid Mech. 173, 357 (1986). Abstract only (#34's review), which gives no numbers; its 1.36 ± 0.05 for iso-concentration and iso-dissipation sections is as Falgarone et al. quote it, jointly with Meneveau 1989.
-- C. Meneveau, Ph.D. thesis, Yale University (1989). Not reached; cited as Falgarone et al. 1991 quote it. https://doi.org/10.1017/S0022112086001209
+- K. R. Sreenivasan and C. Meneveau, *The fractal facets of turbulence*, J. Fluid Mech. 173, 357 (1986). Abstract only (#34's review), which gives no numbers; its 1.36 ± 0.05 for iso-concentration and iso-dissipation sections is as Falgarone et al. quote it, jointly with Meneveau 1989. https://doi.org/10.1017/S0022112086001209
+- C. Meneveau, Ph.D. thesis, Yale University (1989). Not reached; cited as Falgarone et al. 1991 quote it.
 - K. R. Sreenivasan, R. Ramshankar and C. Meneveau, *Mixing, entrainment and fractal dimensions of surfaces in turbulent flows*, Proc. R. Soc. Lond. A 421, 79 (1989). Search text only. https://doi.org/10.1098/rspa.1989.0004
 - P. Constantin, I. Procaccia and K. R. Sreenivasan, *Fractal geometry of isoscalar surfaces in turbulence: theory and experiments*, Phys. Rev. Lett. 67, 1739 (1991). Abstract only; it gives no number. https://doi.org/10.1103/PhysRevLett.67.1739
 - K. P. Iyer, J. Schumacher, K. R. Sreenivasan and P. K. Yeung, *Fractal iso-level sets in high-Reynolds-number scalar turbulence*, Phys. Rev. Fluids 5, 044501 (2020). Read in #34's review and re-review. https://doi.org/10.1103/PhysRevFluids.5.044501 (https://arxiv.org/abs/1910.00607)
