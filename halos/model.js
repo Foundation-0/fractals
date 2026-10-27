@@ -11,25 +11,32 @@
  *      Effective slope: sigma ~ M^-alpha, n_eff = 6 alpha - 3. Near n_eff = -3 all masses collapse at nearly once.
  *      Half mode: Tcut(k_hm) = 1/2 in amplitude, M_hm = (4 pi/3) rho_m (pi/k_hm)^3, a sphere whose radius is half the
  *        wavelength 2 pi/k_hm (Schneider et al. 2012). Half power, Tcut^2 = 1/2 (Hu, Barkana & Gruzinov 2000): {power: true}.
- *      Collapse: sigma(M) D(z_c) = 1.686, D = 1 today. Optional factors: the radiation-era growing mode 1 + 2 a_eq/(3a)
- *        (Meszaros), and the dark matter growing alone on scales the gas never falls into (integrated; see growth()).
+ *      Collapse: sigma(M) D(z_c) = 1.686, D = 1 today (or another threshold: Green, Hofmann & Schwarz's z_nl is where
+ *        sigma = 1). Optional factors: the radiation-era growing mode 1 + 2 a_eq/(3a) (Meszaros), and the dark matter
+ *        growing alone on scales the gas never falls into (integrated; see growth()).
  * 2. Cut-offs set by the particle.
- *    WIMP, free streaming (Green, Hofmann & Schwarz 2005): T = [1 - (2/3)(k/k_fs)^2] exp[-(k/k_fs)^2 - (k/k_d)^2]
- *      (the prefactor recalled; the text seen says only "a polynomial pre-factor" times the exponential), with
+ *    WIMP, free streaming (Green, Hofmann & Schwarz 2005): T = [1 - (2/3)(k/k_fs)^2] exp[-(k/k_fs)^2 - (k/k_d)^2],
+ *      their JCAP eqs. dfs and dk, stated as valid for k < k_fs (the half mode is at 0.625 k_fs), with
  *      k_fs = 1.70e6 Mpc^-1 (m/100 GeV)^1/2 (T_kd/30 MeV)^1/2 / [1 + ln(T_kd/30 MeV)/19.2],
- *      k_d  = 3.76e7 Mpc^-1 (m/100 GeV)^1/2 (T_kd/30 MeV)^1/2  (both as seen in search text).
+ *      k_d  = 3.76e7 Mpc^-1 (m/100 GeV)^1/2 (T_kd/30 MeV)^1/2.
+ *      The scalings were first read in search text and the prefactor recalled; #35's review read all three in the
+ *      papers' arXiv source.
  *      Also derived here: after kinetic decoupling a WIMP of one-dimensional speed spread sigma_v = sqrt(T_kd/m) coasts
  *      a comoving distance s; a Maxwellian smears a mode as exp(-k^2 s^2/2), so k_fs = sqrt(2)/s.
  *    WIMP, acoustic damping (Loeb & Zaldarriaga 2005; Bertschinger 2006): until kinetic decoupling the WIMPs move with
  *      the radiation, whose sound waves erase everything inside the horizon. M_ao = (4 pi/3) rho_m tau_kd^3, the mass
- *      inside the comoving horizon tau_kd = 1/(a H) at T_kd. The floor is the larger of the two (Bringmann 2009, who
- *      gives 1e-11 to nearly 1e-3 Msun across WIMP models; as seen in search text).
+ *      inside the comoving horizon tau_kd = 1/(a H) at T_kd. The floor is the larger of the two (Bringmann 2009,
+ *      Sec. 4, who gives 1e-11 to nearly 1e-3 Msun across WIMP models; as seen in search text, checked in review).
+ *      Bringmann, and Cornell et al. for M_ao, count the dark matter alone, rho_chi = f_c rho_m (as #35's review read
+ *      them): their floors are f_c (0.84 for Planck 2018) times the ones here.
  *      The expansion before and after decoupling comes from ideal gases of photons, neutrinos, e+-, mu+- and pions
  *      (see thermal()), valid from below 1 MeV to about 80 MeV: kaons and heavier hadrons are left out (they would
  *      add about 1% to g at 70 MeV and 7% at 100 MeV).
  *    Wave dark matter (Hu, Barkana & Gruzinov 2000): T = cos(x^3)/(1 + x^8), x = 1.61 m22^(1/18) k/k_Jeq,
  *      k_Jeq = 9 m22^(1/2) Mpc^-1, m22 = m/1e-22 eV. Schive et al. (2016) fit the halo mass function's turn-down at
- *      M0 = 1.6e10 m22^(-4/3) Msun (as quoted by later papers, seen in search text).
+ *      M0 = 1.6e10 m22^(-4/3) Msun (their eq. MFFit, fitted to runs at m22 = 0.8, 1.6 and 3.2, so every bound mass is
+ *      an extrapolation). Both first seen as quoted by later papers in search text; #35's review read them in the
+ *      papers' arXiv source.
  * 3. The small-scale tail of the transfer function, as a check on extrapolating Eisenstein & Hu twenty decades in
  *    mass: a mode that enters the horizon in the radiation era leaves the dark matter with a logarithmic kick,
  *    delta_c -> -A ln(B k tau), after which it grows as in Meszaros's solution. Radiation-era perturbations in the
@@ -42,7 +49,8 @@
  *    k_J = (16 pi G rho)^(1/4) (m/hbar)^(1/2), and the Witness Map's wave clock across 1/k_J,
  *    m (1/k_J)^2/hbar = 1/(4 sqrt(pi G rho)), is gravity's own clock.
  * 5. Nesting: the decades of mass from a floor up to a host, and the subhalo counts of Springel et al. (2008),
- *    dN/dM = a0 (M/m0)^-1.9, extrapolated down to the floor.
+ *    dN/dM = a0 (M/m0)^-1.9, extrapolated down to the floor. The levels apply the host's ratio at every level, the
+ *    self-similar case Springel et al. call an upper limit; they find sub-subhalos 2 or 3 times fewer.
  */
 (function (root) {
   'use strict';
@@ -153,6 +161,7 @@
   // Acoustic damping: the matter inside the horizon at kinetic decoupling (the dark matter alone is f_c of it).
   const acousticMass = (bg, Tkd) => 4 * Math.PI / 3 * bg.rhoM * Math.pow(decoupling(bg, Tkd).tau, 3);
   // The WIMP floor under two conventions: Bringmann's max[M(pi/k_fs), M_ao], and the half-mode mass with the same rule.
+  // Both in all the matter, as every mass here; Bringmann writes his with the dark matter density, f_c times these.
   function wimpFloor(bg, { m = 100, Tkd = 30 } = {}) {
     const w = wimpGHS({ m, Tkd }), Mfs = massOfK(bg, w.kfs), Mhm = massOfK(bg, halfMode(w)), Mao = acousticMass(bg, Tkd);
     return { cut: w, Mfs, Mhm, Mao, bringmann: Math.max(Mfs, Mao), halfMode: Math.max(Mhm, Mao) };
@@ -166,7 +175,7 @@
   }
   const schiveM0 = m22 => 1.6e10 * Math.pow(m22, -4 / 3);  // Schive et al. 2016 (ApJ 818, 89), Msun
   // Lower bounds on the mass (eV), each assuming the wave is all of the dark matter; values and confidence levels
-  // as seen in search text (abstracts and search summaries).
+  // as seen in search text (abstracts and search summaries), and as #35's review read them in the papers.
   const BOUNDS = [
     { m: 2.0e-21, cl: '2 sigma', src: 'Irsic et al. 2017, Lyman-alpha (conservative thermal history)' },
     { m: 2.9e-21, cl: '95%', src: 'Armengaud et al. 2017, Lyman-alpha; Nadler et al. 2021, Milky Way satellites' },
@@ -279,11 +288,11 @@
       if (baryonLag === 'cdm') D /= bg.fc;                     // before drag too, the baryons are smooth
       return D;
     }
-    // Redshift at which a peak of height nu sigma reaches 1.686; -1 if it has not yet.
+    // Redshift at which a peak of height nu sigma reaches 1.686 (or o.delta); -1 if it has not yet.
     function zc(M, cut = CDM, o = {}) {
-      const s = (o.nu || 1) * sigma(M, cut, o); if (s * growth(0, o) < DELTA_C) return -1;
+      const s = (o.nu || 1) * sigma(M, cut, o), dc = o.delta || DELTA_C; if (s * growth(0, o) < dc) return -1;
       let lo = 0, hi = lz1;
-      for (let i = 0; i < 60; i++) { const mid = (lo + hi) / 2; if (s * growth(Math.exp(mid) - 1, o) > DELTA_C) lo = mid; else hi = mid; }
+      for (let i = 0; i < 60; i++) { const mid = (lo + hi) / 2; if (s * growth(Math.exp(mid) - 1, o) > dc) lo = mid; else hi = mid; }
       return Math.exp(lo) - 1;
     }
     const fac = k => (opts.factor ? Math.pow(opts.factor(k * par.h), 2) : 1);
@@ -367,12 +376,13 @@
   function kJcomoving(bg, m22, a, { rho0 = bg.rhoMsi } = {}) {
     return a * jeans(m22 * 1e-22, rho0 / (a * a * a)).kJ * C.Mpc;
   }
-  // Jeans masses (Msun, comoving mean matter) under the definitions in use; lambda_J = 2 pi/k_J. halfWave, a sphere
-  // of diameter lambda_J, reproduces the 1.5e7 Msun quoted from Hui, Ostriker, Tremaine & Witten (2017); their own
-  // definition was not seen.
-  function jeansMasses(bg, kJ) {
-    const lam = 2 * Math.PI / kJ, V = r => 4 * Math.PI / 3 * r * r * r * bg.rhoM;
-    return { halfWave: V(lam / 2), fullWave: V(lam), inverseK: V(1 / kJ), cube: bg.rhoM * lam * lam * lam };
+  // Jeans masses (Msun) under the definitions in use, in the comoving density rhoM (Msun Mpc^-3; mean matter by
+  // default); lambda_J = 2 pi/k_J. halfWave, a sphere of diameter lambda_J, is Hui, Ostriker, Tremaine & Witten's
+  // (2017) definition, M_J = (4/3) pi rho (lambda_J/2)^3 in the wave's own density (their eq. jeans, as #35's review
+  // read it in the arXiv source; first seen quoted in search text).
+  function jeansMasses(bg, kJ, rhoM = bg.rhoM) {
+    const lam = 2 * Math.PI / kJ, V = r => 4 * Math.PI / 3 * r * r * r * rhoM;
+    return { halfWave: V(lam / 2), fullWave: V(lam), inverseK: V(1 / kJ), cube: rhoM * lam * lam * lam };
   }
   // The soliton (a halo's core) from the Schroedinger-Poisson ground state in the Witness Map's units (its SOL: half-
   // density radius xc, mass Ic inside it and I in all, in units hbar = m = 4 pi G rho_c = 1). Masses times the
@@ -384,19 +394,25 @@
 
   // ---- Subhalos. Springel et al. 2008 (Aquarius, MNRAS 391, 1685) fit dN/dM = a0 (M/m0)^-n for Aq-A-1 within
   // r50 = 433 kpc (host M200 = 1.84e12 Msun): a0 = 3.26e-5 Msun^-1, m0 = 2.52e7 Msun, n = 1.9; and the same law scaled
-  // to a 1e12 Msun host within 353 kpc, a0 = 1.77e-5 (both as quoted by Erkal et al. 2016, arXiv:1606.04946).
-  const AQUARIUS = { a0: 3.26e-5, m0: 2.52e7, n: 1.9, host: 1.84e12, r: 433 };
-  const AQUARIUS_MW = { a0: 1.77e-5, m0: 2.52e7, n: 1.9, host: 1e12, r: 353 };
+  // to a 1e12 Msun host within 353 kpc, a0 = 1.77e-5 (both as quoted by Erkal et al. 2016, arXiv:1606.04946; #35's
+  // review found Aq-A's in Springel et al. directly). m50, the mass inside r50: Aq-A's 2.52e12 Msun (their Table 1,
+  // recalled; it gives the mu of 0.0195 against M50 that #35's review found), scaled with the host.
+  const AQUARIUS = { a0: 3.26e-5, m0: 2.52e7, n: 1.9, host: 1.84e12, r: 433, m50: 2.52e12 };
+  const AQUARIUS_MW = { a0: 1.77e-5, m0: 2.52e7, n: 1.9, host: 1e12, r: 353, m50: 2.52e12 / 1.84 };
   const subhaloCount = (Mmin, Mmax = Infinity, s = AQUARIUS_MW) =>
     s.a0 * s.m0 / (s.n - 1) * (Math.pow(Mmin / s.m0, 1 - s.n) - (isFinite(Mmax) ? Math.pow(Mmax / s.m0, 1 - s.n) : 0));
   const subhaloMass = (Mmin, Mmax, s = AQUARIUS_MW) =>
     s.a0 * s.m0 * s.m0 / (2 - s.n) * (Math.pow(Mmax / s.m0, 2 - s.n) - Math.pow(Mmin / s.m0, 2 - s.n));
-  // The largest subhalo to expect, N(>M) = 1, as a fraction mu of its host.
-  const muAquarius = (s = AQUARIUS_MW) => s.m0 * Math.pow(s.a0 * s.m0 / (s.n - 1), 1 / (s.n - 1)) / s.host;
-  // Decades of mass between a floor and a host, and levels of nesting if each level is a factor mu below its host.
+  // The largest subhalo to expect, N(>M) = 1, as a fraction mu of its host's M200 (of its M50 with {m50: true}).
+  const muAquarius = (s = AQUARIUS_MW, { m50 = false } = {}) => s.m0 * Math.pow(s.a0 * s.m0 / (s.n - 1), 1 / (s.n - 1)) / (m50 ? s.m50 : s.host);
+  // Decades of mass between a floor and a host, and levels of nesting if each level is a factor mu below its host:
+  // levels (whole), exact (the fraction dec/log10(1/mu), for each mu). suppressed: the levels at mu = muAquarius() if,
+  // below the first, each level's subhalos are a factor f = 2 or 3 fewer than the self-similar count (Springel et al.'s
+  // sub-subhalos). N(>M) ~ M^-(n-1), so each of those levels is mu f^(-1/(n-1)) of its host.
   const nesting = (floor, host = MW, mus = [0.1, 0.01, muAquarius()]) => {
-    const dec = Math.log10(host / floor);
-    return { decades: dec, levels: mus.map(mu => Math.max(0, Math.floor(dec / -Math.log10(mu)))) };
+    const dec = Math.log10(host / floor), d1 = -Math.log10(muAquarius());
+    const suppressed = [2, 3].map(f => (dec < d1 ? 0 : 1 + Math.floor((dec - d1) / (d1 + Math.log10(f) / (AQUARIUS_MW.n - 1)))));
+    return { decades: dec, levels: mus.map(mu => Math.max(0, Math.floor(dec / -Math.log10(mu)))), exact: mus.map(mu => dec / -Math.log10(mu)), suppressed };
   };
 
   const api = { C, PLANCK18, WMAP_ERA, DELTA_C, MW, R_NU, HOM, background, massOfK, radiusOfMass,
