@@ -1,4 +1,4 @@
-// Prints every computed number in orbits/README.md, except the values the README credits to #37's review. Run: node orbits/table.mjs (a few minutes; the stability scans of
+// Prints every computed number in orbits/README.md, except the values the README credits to #37's review. Run: node orbits/table.mjs (about 10 minutes; the stability scans of
 // section 5 take nearly all of it), node orbits/table.mjs quick (well under a second; section 5 left out), or
 // node orbits/table.mjs long (adds the all-directions scans followed for 100 turns of the host).
 // Exits with code 1 if any printed line holds NaN or Infinity.
@@ -124,7 +124,9 @@ const tilts = O.PLANETS.map(p => O.tiltToInvariable(p) * Math.PI / 180);
 console.log(`   mean inclination over the eight: ${f(O.PLANETS.reduce((a, p) => a + O.tiltToInvariable(p), 0) / 8, 2)} deg`);
 console.log(`   rms sin(i) over the eight: ${f(Math.sqrt(tilts.reduce((a, t) => a + Math.sin(t) ** 2, 0) / 8), 3)}; without Mercury: ${f(Math.sqrt(tilts.slice(1).reduce((a, t) => a + Math.sin(t) ** 2, 0) / 7), 3)}`);
 console.log(`   the Galaxy's thin disk: scale height 300 +- 50 pc over scale length 2.6 +- 0.5 kpc = ${f(0.3 / 2.6, 3)}, the axis ratio of its density` +
-  ` contours; over the Sun's radius 8.2 kpc = ${f(0.3 / 8.2, 3)}, the like-for-like ratio (Bland-Hawthorn & Gerhard 2016)`);
+  ` contours; over the Sun's radius 8.2 kpc = ${f(0.3 / 8.2, 3)} (Bland-Hawthorn & Gerhard 2016)`);
+console.log(`   as rms height over radius: the thin disk ${f(Math.SQRT2 * 0.3 / 8.2, 3)} (an exponential profile has rms z = sqrt2 h), the planets` +
+  ` ${f(Math.sqrt(tilts.reduce((a, t) => a + Math.sin(t) ** 2, 0) / 8) / Math.SQRT2, 3)} (an orbit tilted by i has rms z/r = sin i/sqrt2)`);
 
 if (!quick) {
   console.log('\n5. Which orbits a body keeps: circular orbits followed for 20 turns of the host (Hill\'s problem)\n');
@@ -139,7 +141,8 @@ if (!quick) {
   const grid = (a0, a1, da) => { const out = []; for (let a = a0; a <= a1 + 1e-9; a += da) out.push(+a.toFixed(4)); return out; };
   const big = grid(0.3, 1.2, 0.025), all = grid(0.025, 1.2, 0.025);
   const sunNu1 = { ...sun, nu2: 1, name: 'the Sun in the Galaxy with (nu/Omega)^2 = 1' };
-  console.log('   radius [r_J] where half the orbits (8 starting angles in [0, pi/2)) have escaped beyond 3 r_J / are lost (escaped, or plunged within 1e-3 r_J):');
+  console.log('   radius [r_J] where half the orbits (8 starting angles over [0, pi), a quarter step off pi p/8) have escaped beyond 3 r_J / are lost');
+  console.log('   (escaped, or plunged within 1e-3 r_J):');
   console.log('   orbit                          point-mass host    the Sun in the Galaxy    the same with (nu/Omega)^2 = 1');
   const profiles = [];
   for (const [k, n] of Object.entries(planes)) {
@@ -154,10 +157,13 @@ if (!quick) {
   console.log('   (an orbit that starts in the plane stays in it, so the vertical tide cannot act on the first two rows; with these 8 angles their');
   console.log('   plunges begin only outside the escape edge, so the two radii agree. For polar rows "lost" is the first radius where half are lost.)');
   for (const p of profiles) console.log(`   ${p}   [point mass | Sun | Sun, nu2 = 1]`);
+  console.log('   polar rows with 16 starting angles, escaped / lost [point mass | Sun | Sun, nu2 = 1]:');
+  for (const [k, n] of Object.entries(planes).filter(([k]) => k.startsWith('polar')))
+    console.log(`     ${k.padEnd(28)}${[O.HOST_KEPLER, sun, sunNu1].map(h => { const r = O.hillScan(h, n, all, { nPhase: 16 }); return `${f(r.edge, 3)} / ${f(r.edgeLost, 3)}`.padStart(13); }).join('   ')}`);
   {
-    const across = [[1, 0, 0]], bigOnly = big;
-    const at = nu2 => O.hillScan({ ...sun, nu2 }, across, bigOnly, { nPhase: 8 }).edge;
-    console.log(`   the Sun's polar-across escape edge at (nu/Omega)^2 = ${f(sun.nu2, 4)}, -1e-4, +1e-4: ${f(at(sun.nu2), 3)}, ${f(at(sun.nu2 - 1e-4), 3)}, ${f(at(sun.nu2 + 1e-4), 3)}`);
+    const at = h => O.hillScan(h, [[1, 0, 0]], big, { nPhase: 8 }).edge, atR = h => O.hillScan(h, [[0, 0, -1]], big, { nPhase: 8 }).edge;
+    console.log(`   the Sun's polar-across escape edge at (nu/Omega)^2 = ${f(sun.nu2, 4)}, -1e-4, +1e-4: ${[0, -1e-4, 1e-4].map(d => f(at({ ...sun, nu2: sun.nu2 + d }), 3)).join(', ')}`);
+    console.log(`   the Sun's retrograde in-plane escape edge at Gam = ${f(sun.Gam, 4)}, -1e-4, +1e-4: ${[0, -1e-4, 1e-4].map(d => f(atR({ ...sun, Gam: sun.Gam + d }), 3)).join(', ')}`);
   }
   {
     const s75 = Math.sin(75 * Math.PI / 180), c75 = Math.cos(75 * Math.PI / 180), as75 = grid(0.1, 0.4, 0.05);
@@ -170,19 +176,20 @@ if (!quick) {
   {
     const gamE = 2 * (1 - EILERS.dv * EILERS.R0 / ve(EILERS.R0)), sunE = { ...sun, Gam: gamE };
     console.log(`   retrograde in the plane with Gam = ${f(gamE, 2)} (Eilers et al.'s slope): escaped by ${f(O.hillScan(sunE, [[0, 0, -1]], big, { nPhase: 8 }).edge, 3)} r_J`);
-    const s64 = (h, n) => O.hillScan(h, [n], grid(0.3, 1.3, 0.025), { nPhase: 64 });
-    const re = s64(O.HOST_KEPLER, [0, 0, -1]), first = re.rows.find(r => r.plunges > 0);
-    console.log(`   in the plane with 64 starting angles: point mass prograde ${f(s64(O.HOST_KEPLER, [0, 0, 1]).edge, 3)}, retrograde ${f(re.edge, 3)}` +
-      ` (lost ${f(re.edgeLost, 3)}, first plunge at ${first ? f(first.a, 3) : 'none'});`);
-    console.log(`   the Sun retrograde ${f(s64(sun, [0, 0, -1]).edge, 3)}, and with Gam = ${f(gamE, 2)} ${f(s64(sunE, [0, 0, -1]).edge, 3)} r_J`);
+    const s64 = (h, n) => { const r = O.hillScan(h, [n], grid(0.3, 1.3, 0.025), { nPhase: 64 }), first = r.rows.find(x => x.plunges > 0);
+      return `${f(r.edge, 3)} (lost ${f(r.edgeLost, 3)}, first plunge at ${first ? f(first.a, 3) : 'none'})`; };
+    console.log('   in the plane with 64 starting angles, escaped (lost, first plunge) [r_J]:');
+    console.log(`     point mass prograde ${s64(O.HOST_KEPLER, [0, 0, 1])}, retrograde ${s64(O.HOST_KEPLER, [0, 0, -1])}`);
+    console.log(`     the Sun prograde ${s64(sun, [0, 0, 1])}, retrograde ${s64(sun, [0, 0, -1])}; retrograde with Gam = ${f(gamE, 2)} ${s64(sunE, [0, 0, -1])}`);
   }
   {
-    // how far from polar plunges reach: orbit normals tilted by delta from the host's plane (i = 90 +- delta), 4 node
-    // azimuths x 8 starting angles each, at a few radii inside the escape edge
+    // how far from polar plunges reach: orbit normals tilted by delta from polar (i = 90 +- delta), with the line of
+    // nodes along x or along y, x 16 starting angles each, at a few radii inside the escape edge (a node azimuth om + pi
+    // is the mirror image of om under z -> -z, so it would repeat the same orbits)
     const fromPolar = (h, a, deltas) => deltas.map(d => {
       const i = (90 - d) * Math.PI / 180, ns = [];
-      for (const s of [1, -1]) for (const om of [0, 0.5, 1, 1.5]) ns.push([Math.sin(i) * Math.cos(om * Math.PI), Math.sin(i) * Math.sin(om * Math.PI), s * Math.cos(i)]);
-      return O.hillFates(h, a, ns, { nPhase: 8 }).plunges;
+      for (const s of [1, -1]) for (const om of [0, 0.5]) ns.push([Math.sin(i) * Math.cos(om * Math.PI), Math.sin(i) * Math.sin(om * Math.PI), s * Math.cos(i)]);
+      return O.hillFates(h, a, ns, { nPhase: 16 }).plunges;
     });
     const dK = grid(0, 20, 2), dS = grid(0, 40, 4);
     for (const a of [0.2, 0.3, 0.4]) console.log(`   point mass, a = ${a} r_H: plunged fraction at ${dK[0]}-${dK[dK.length - 1]} deg from polar (step 2): ${fromPolar(O.HOST_KEPLER, a, dK).map(x => f(x, 2)).join(' ')}`);
@@ -197,13 +204,6 @@ if (!quick) {
     for (const r of iso[name].rows) console.log(`     a = ${f(r.a, 2)} r_J: stay ${f(r.stays, 2)}, escape ${f(r.escapes, 2)}, plunge ${f(r.plunges, 2)}`);
   }
   console.log(`   for the Sun: half escaped by ${f(iso['the Sun in the Galaxy'].edge * rJ / C.au / 1e5, 2)}e5 au`);
-  { // the mirror pairs no starts within one of these directions, so check the second quarter turn gives the same fractions
-    const q = [['point mass', O.HOST_KEPLER, 0.5, iso['point-mass host']], ['the Sun', sun, 0.45, iso['the Sun in the Galaxy']]].map(([k, h, a, s]) => {
-      const r = s.rows.find(x => Math.abs(x.a - a) < 1e-9), r2 = O.hillFates(h, a, dirs, { nPhase: 4, quarter: 1 });
-      return `${k} at ${a}: escaped ${f(r.escapes, 3)} -> ${f(r2.escapes, 3)}, lost ${f(r.escapes + r.plunges, 3)} -> ${f(r2.escapes + r2.plunges, 3)}`;
-    });
-    console.log(`   starting angles in [pi/2, pi) instead of [0, pi/2): ${q.join('; ')}`);
-  }
   const dirs24 = O.sphere(24);
   for (const rho of [0.08, 0.12]) {
     const e = O.hillScan(O.hostDisk(OORT.A, OORT.B, rho), dirs24, asIso, { nPhase: 4 }).edge;

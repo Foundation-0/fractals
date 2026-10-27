@@ -16,7 +16,7 @@ what ends it, and what, if anything, repeats from one scale to the next.
 | How exact is Kepler's law in the Solar System? | In JPL's 1800–2050 fit, n²a³ matches GM☉ to within 1.3×10⁻³ for all eight planets. That is about the planets' total mass, 1.34×10⁻³ of the Sun's. Jupiter's excess is mostly its own mass in the two-body law; Uranus's and Neptune's are mostly the other planets' pull, and Saturn's fitted 2.2×10⁻⁴ is below its own 2.9×10⁻⁴ (see below). P ∝ a^1.49986 over 0.39 to 30 au. |
 | Does the Galaxy have a Kepler region? | Yes, around Sgr A*. The star S2 orbits it as a planet orbits the Sun, plus general relativity's precession: 12.2′ per orbit from their elements (they quote 12.1′). The speed's log slope passes −1/4 about 1.3 pc out (1.0 to 1.8 pc across the cluster-mass range; 0.7 to 1.9 pc for thresholds from −0.4 to −0.1). The stars inside weigh as much as the black hole by 1.8 to 3.2 pc. |
 | What ends a Kepler region? | For a body orbiting in a host (a planet, the Sun), the host's tide. Satellites are held inside its tidal radius, r_J³ = Gm/(4A(A − B)), apart from quasi-satellite orbits beyond about 2 r_H that Shen and Tremaine (2008) find around Jupiter, Uranus and Neptune. Inside r_J, the body's mean density is 4A/Ω times the host's mean density inside the orbit (host taken as spherical): 3 for a planet around the Sun, 2.25 for the Sun in the Galaxy. For the Sun, r_J = 1.37 pc = 2.8×10⁵ au. At the Galaxy's centre, where Sgr A* sits still, the region ends instead where the surrounding stars' mass approaches the black hole's. |
-| How much of that region is used? | About half, for orbits that do not plunge, in this study's three-body runs. Of circular orbits facing every way, half have escaped by 0.52 r_J around a planet and by 0.433 r_J (1.23×10⁵ au) for the Sun. Polar orbits are lost much sooner, to Lidov–Kozai cycles: half are lost by 0.14 r_H around a planet (the lost fraction dips below half near 0.4 r_H) and by 0.06 r_J for the Sun, in 20 turns of the host. For near-circular moons near the ecliptic, Nesvorný et al. (2003) put the limits at about 0.4 and 0.7 r_H (prograde, retrograde), and the model gives 0.46 and 0.78. The Oort cloud's outer limit is placed between 6.5×10⁴ au (Correa-Otto and Calandra 2019, where the frequency of stellar passages, acting with the tide, sets it) and 2×10⁵ au, which is 0.23 to 0.71 r_J. |
+| How much of that region is used? | About half, for orbits that do not plunge, in this study's three-body runs. Of circular orbits facing every way, half have escaped by 0.52 r_J around a planet and by 0.436 r_J (1.23×10⁵ au) for the Sun. Polar orbits are lost much sooner, to Lidov–Kozai cycles: half are lost by 0.14 r_H around a planet (half or more out to 0.35 r_H, fewer than half at 0.45 r_H) and by 0.06 r_J for the Sun, in 20 turns of the host. For near-circular moons near the ecliptic, Nesvorný et al. (2003) put the limits at about 0.4 and 0.7 r_H (prograde, retrograde), and the model gives 0.46 and 0.78. The Oort cloud's outer limit is placed between 6.5×10⁴ au (Correa-Otto and Calandra 2019, where the frequency of stellar passages, acting with the tide, sets it) and 2×10⁵ au, which is 0.23 to 0.71 r_J. |
 | What does repeat? | Kepler regions nested inside one another: moons in a planet's, planets and comets in the Sun's. Each is bounded by its host's tide at a similar fraction of the tidal radius, though for the Oort cloud passing stars cut it shorter. Also flat disks: the planets' orbits are tilted by about 2° on average (6° for Mercury), and the Galaxy's thin disk has a scale height 0.04 of the Sun's orbital radius. |
 
 ## Kepler's law in the Solar System
@@ -91,7 +91,7 @@ for Jupiter it is 237 years.
 - **Escaped:** once it passes 3 r_J.
 - **Plunged:** once it comes within 10⁻³ r_J, which is 0.74 of Jupiter's radius or, for the Sun, 283 au, outside the planets.
 - **Lost:** either.
-- **Starting angles.** Hill's equations are symmetric under r → −r, v → −v, so a start half a turn on is the inverted orbit, with the same fate. They are also symmetric under time reversal with y → −y. For every single-plane row here, that makes the start at π − φ the mirror image of the start at φ with time running backward, and the two fates nearly always match. So the starting angles are spread over a quarter turn, where no two are related by either symmetry. In the all-directions sample the mirror is a different direction. There, starting angles in the second quarter turn give the same fractions to within about 0.03 (section 5).
+- **Starting angles.** Hill's equations are symmetric under r → −r, v → −v, so a start half a turn on is the inverted orbit, with the same fate; the starting angles therefore span a half turn. The equations are also symmetric under z → −z and under time reversal with y → −y. For every single-plane row here, these make the start at π − φ the mirror image of the start at φ with time running backward (inverted, for a plane through the host's direction). In the plane the two fates nearly always match; for polar orbits they often differ, so neither is a duplicate. The angles sit a quarter step off the grid πp/8, so that no such pair falls in one sample.
 
 The radius by which half the orbits have escaped, and by which half are lost (`node orbits/table.mjs`, section 5;
 8 starting angles; grid 0.025 r_J; all directions on 48 directions × 4 angles and a 0.05 grid):
@@ -100,45 +100,48 @@ The radius by which half the orbits have escaped, and by which half are lost (`n
 |---|---|---|---|
 | Prograde, in the plane | 0.46 | 0.49 | 0.49 |
 | Retrograde, in the plane | 0.775 | 0.925 | 0.925 |
-| Polar, plane through the host's direction: escaped / lost | 0.47 / 0.14 | 0.40 / 0.06 | 0.475 / 0.17 |
-| Polar, plane across it: escaped / lost | 0.49 / 0.14 | 0.39 / 0.06 | 0.49 / 0.16 |
-| Facing every way: escaped / lost | 0.52 / 0.52 | 0.433 / 0.42 | |
+| Polar, plane through the host's direction: escaped / lost | 0.47 / 0.14 | 0.41 / 0.06 | 0.475 / 0.16 |
+| Polar, plane across it: escaped / lost | 0.475 / 0.145 | 0.40 / 0.06 | 0.49 / 0.17 |
+| Facing every way: escaped / lost | 0.519 / 0.515 | 0.436 / 0.421 | |
 
 **The table's resolution.** With 64 starting angles instead of 8, the in-plane edges are 0.46 and 0.79 around a
-point mass and 0.95 for the Sun's retrograde orbits. So the 8-angle values carry sampling errors of up to about 0.03.
+point mass, 0.49 and 0.95 for the Sun, and 1.03 for the Sun's retrograde orbits with Γ = 2.12. So the in-plane
+8-angle values carry sampling errors of up to about 0.03. With 16 angles the polar edges move by at most 0.01.
 
-**In-plane orbits.** These plunge only rarely: with 8 angles, first at 0.55 r_J prograde and at 0.85 and 1.1 r_J
-retrograde, all outside their escape edge. With 64, the point mass's first retrograde plunge is at 0.775, just inside
-its 0.788 edge, and its lost radius is 0.783. So for in-plane orbits the escaped and lost radii agree to about 0.005.
+**In-plane orbits.** These plunge only rarely: with 8 angles, first at 0.55 to 0.575 r_J prograde and at 1.1 r_J
+retrograde for the Sun, all outside their escape edge, and not at all retrograde around a point mass (to 1.2 r_J).
+With 64 angles the escaped and lost radii agree to about 0.005 (0.788 against 0.783 retrograde around a point mass),
+except with Γ = 2.12, where the lost radius is 1.01 against 1.03 escaped; there the first plunge, at 0.975, falls
+inside the escape edge.
 
 **Polar rows.** "Lost" is the first radius where half are lost.
 
 **Polar orbits are lost by plunging.**
 - **The mechanism.** A circular orbit at 90° to the host's plane goes through Lidov–Kozai cycles (Lidov 1962, Kozai 1962), whose eccentricity reaches 1. So it dives into the body long before it can escape.
 - **When.** Within 20 turns half are lost from 0.14 r_H around a planet and from 0.06 r_J for the Sun. Further in, the cycle takes longer than 20 turns; it is not absent.
-- **Not everywhere outside.** Around a point mass the lost fraction is 75–100% at 0.15–0.2 r_H and dips below half near 0.4 r_H (0–25% at 0.4), where most polar orbits survive the run. With ν²/Ω² = 1 the Sun's lost fraction also dips below half, from 0.35 r_J in the plane across the host's direction and at 0.45 r_J in the plane through it. With the Galaxy's vertical tide the Sun loses half or more of its polar orbits at every radius printed, 0.1 to 0.45 r_J.
-- **Other directions.** For a planet, plunges reach to about 8°, 10° and 14° from polar at 0.2, 0.3 and 0.4 r_H. Tilted to 75° (15° from polar), none plunge from 0.1 to 0.4 r_H. For the Sun they reach to about 8° from polar at 0.2 r_J and 24° at 0.3 r_J. At 75°, none plunge inside 0.3 r_J, and up to 63% do at 0.3–0.4 r_J.
-- **All directions.** Facing every way, up to a fifth of the Sun's orbits plunge within 20 turns, and 8–12% of a planet's between 0.2 and 0.4 r_H.
-- **What the averaged tide explains.** For comets, the tide driving them inward (Heisler and Tremaine 1986) accounts for the near-polar core. The Sun's wider cone near its escape edge, and its plunges at 75°, are not secular: #37's re-review found that the averaged tide gives a cone only 3.6 to 5.1° wide at 0.2 to 0.4 r_J, and no plunges at 75°. These plunges depend steeply on the plunge radius: counted inside 10⁻² r_J, the largest plunged fraction over all directions rises from 0.24 to 0.41 (24 directions).
+- **Not everywhere outside.** Around a point mass the lost fraction is 63–100% at 0.15–0.2 r_H, half or more out to 0.35 r_H, and below half at 0.45 r_H (13–38%), where most polar orbits survive the run. With ν²/Ω² = 1 the Sun's lost fraction falls to half or less from 0.35 r_J. With the Galaxy's vertical tide the Sun loses half or more of its polar orbits at every radius printed, 0.1 to 0.45 r_J.
+- **Other directions.** For a planet, plunges reach to about 8°, 10° and 14° from polar at 0.2, 0.3 and 0.4 r_H. Tilted to 75° (15° from polar), none plunge from 0.1 to 0.4 r_H. For the Sun they reach to about 8° from polar at 0.2 r_J and 24° at 0.3 r_J. At 75°, none plunge out to 0.3 r_J, and up to 63% do at 0.35–0.4 r_J.
+- **All directions.** Facing every way, up to 23% of the Sun's orbits plunge within 20 turns, and 9–11% of a planet's between 0.2 and 0.4 r_H.
+- **What the averaged tide explains.** For comets, the tide driving them inward (Heisler and Tremaine 1986) accounts for the near-polar core: at 0.2 r_J all the Sun's orbits within 4° of polar plunge. The rest of its cone (to 8° at 0.2 r_J and 24° at 0.3 r_J) and its plunges at 75° are not secular: #37's re-review found that the averaged tide limits plunges to within 5.1° of polar at 0.2 r_J and 3.6° at 0.4 r_J, and gives none at 75°. These plunges depend steeply on the plunge radius: counted inside 10⁻² r_J, the largest plunged fraction over all directions rises from 0.27 to 0.43 (24 directions).
 
 **For a planet.**
 - **Against the published limits.** The model's in-plane edges are 0.46 (prograde) and 0.775 to 0.79 (retrograde), against Nesvorný et al.'s (2003) semi-major axes of about 0.4 and 0.7 r_H for nearly circular orbits near the ecliptic, as Shen and Tremaine (2008) quote them.
 - **Over all inclinations.** Shen and Tremaine find that many prograde and retrograde satellites survive to about 0.5 and 0.7 r_H, and some coplanar retrograde ones to about r_H; their extents are instantaneous distances, not semi-major axes. The observed irregular moons lie at about 0.05 to 0.6 r_H, the retrograde ones further out (about 0.6 against 0.4 r_H).
 - **Run length.** The runs are short: 20 turns is 237 years for Jupiter.
-  - Followed for 100 turns, the all-directions value moves from 0.52 to 0.51 (24 directions, `node orbits/table.mjs long`).
+  - Followed for 100 turns, the all-directions value moves from 0.52 to 0.50 (24 directions, `node orbits/table.mjs long`).
   - In a 48-orbit sample run to 3000 turns, #37's review found the point-mass edge drifting from 0.50 to 0.475.
 
 **For the Sun.**
-- **The edge.** Half of the orbits facing every way have escaped by 0.433 r_J, or 1.23×10⁵ au.
-  - For ρ₀ from 0.08 to 0.12 it moves from 0.446 to 0.431 (on 24 directions, which give 0.441 at 0.10).
-  - Counting plunges inside 10⁻² r_J instead of 10⁻³ moves the 24-direction escaped edge out, from 0.441 to 0.458, but the lost edge in, from 0.410 to 0.395.
-  - Followed for 100 turns (23 billion years, a convergence test only) it is 0.42, and 0.38 counting plunges, against 0.44 and 0.41 over 20 turns (24 directions).
+- **The edge.** Half of the orbits facing every way have escaped by 0.436 r_J, or 1.23×10⁵ au.
+  - For ρ₀ from 0.08 to 0.12 it moves from 0.446 to 0.427 (on 24 directions, which give 0.437 at 0.10).
+  - Counting plunges inside 10⁻² r_J instead of 10⁻³ moves the 24-direction escaped edge out, from 0.437 to 0.460, but the lost edge in, from 0.411 to 0.394.
+  - Followed for 100 turns (23 billion years, a convergence test only) it is 0.41, and 0.38 counting plunges, against 0.44 and 0.41 over 20 turns (24 directions).
 - **The Oort cloud.** Correa-Otto and Calandra (2019, sect. 4.3) follow comets by their initial semi-major axis. They find fewer than 5% still bound beyond 6.5×10⁴ au and none at 10⁵ au.
   - They define a_crit ≈ 6.5×10⁴ au as the cloud's outer limit. Half are bound at about 2×10⁴ au, a mean over three samples.
   - They describe a joint ("synergy") effect of the Galactic potential and stellar passages, and name the frequency of stellar passages as the main modulator of that limit.
   - Dones et al. (2004, as cited) place the edge as far as 2×10⁵ au. So the quoted outer limits run from 0.23 to 0.71 r_J.
-  - The model's 0.433 r_J lies past Correa-Otto and Calandra's: the tide alone would keep comets further out than the tide and passing stars together allow.
-- **The vertical tide.** It loses polar orbits sooner: by escape at 0.40 and 0.39 r_J, against 0.475 and 0.49 with ν²/Ω² = 1 at the same Γ, and by plunging at 0.06 against 0.16 to 0.17. It never acts on an orbit that starts in the plane, because such an orbit stays there.
+  - The model's 0.436 r_J lies past Correa-Otto and Calandra's: the tide alone would keep comets further out than the tide and passing stars together allow.
+- **The vertical tide.** It loses polar orbits sooner: by escape at 0.41 and 0.40 r_J, against 0.475 and 0.49 with ν²/Ω² = 1 at the same Γ, and by plunging at 0.06 against 0.16 to 0.17. It never acts on an orbit that starts in the plane, because such an orbit stays there.
 - **In-plane retrograde orbits.** These last to 0.925 r_J (0.95 with 64 angles) rather than 0.775 because Γ is 2.25 rather than 3: the flatter rotation curve weakens the in-plane tide. With Γ = 2.12 from Eilers et al.'s slope instead (see Across the disk), the edge is about 1.0 r_J: 1.00 with 8 angles and 1.03 with 64.
 
 ## A Kepler region at the Galaxy's centre
@@ -162,7 +165,7 @@ those values are lower limits. With γ = 1.4 the middle "twice" radius is 3.8 pc
 
 The literature puts the "twice" radius, the usual influence radius, at 3 to 4 pc:
 - Schödel et al. 2018, sect. 4.5: 7.8×10⁶ M☉ within 3 pc, "roughly twice the mass of Sgr A*".
-- Alexander 2005: r_h ∼ 3 pc, estimated from the stars' mass reaching m by ≲2 pc and 2m by ≲4 pc (he calls Gm/σ² customary but not well defined).
+- Alexander 2005: r_h ∼ 3 pc, estimated from the stars' mass reaching the black hole's by ≲2 pc and twice it by ≲4 pc (he calls Gm/σ² customary but not well defined).
 - Feldmeier-Krause et al. 2017: about 4 pc (4.0 +2.2/−1.1), with a black-hole mass of 4×10⁶ M☉ and Merritt's (2004) definition.
 - GRAVITY Collaboration 2024: 3.9 pc in their cusp simulation, with Merritt's (2013) definition.
 
@@ -227,7 +230,9 @@ The rms of sin i is 0.045, or 0.023 without Mercury.
 The Galaxy's thin disk has an exponential scale height of 300 ± 50 pc over a scale length of 2.6 ± 0.5 kpc
 (Bland-Hawthorn and Gerhard 2016). Their ratio, 0.12, is the axis ratio of its density contours. Height over
 orbital radius is 300 pc over the Sun's 8.2 kpc, 0.037, against the planets' rms sin i of 0.045: both a few percent.
-The two measures differ in convention, an exponential scale height against an rms, by about √2.
+The two measures differ by a factor of about 2 in convention. An exponential scale height h has rms z = √2 h, and an
+orbit tilted by i has rms z/r = sin i/√2. Compared as rms height over radius, the thin disk is 0.052 and the planets
+0.032.
 
 Both are flat for the same reason: gas that radiates its energy but keeps its angular momentum settles into a disk.
 The Galaxy's present thickness is also set by the stars' later heating. What the disks orbit differs: one dominant
@@ -236,10 +241,10 @@ mass, or mass spread through the disk and halo.
 ## Run it
 
 ```
-node orbits/table.mjs          # every computed number above except the 100-turn runs and the values credited to #37's review (about 7 minutes)
+node orbits/table.mjs          # every computed number above except the 100-turn runs and the values credited to #37's review (about 10 minutes)
 node orbits/table.mjs quick    # sections 1-4 only, well under a second (run by CI)
-node orbits/table.mjs long     # adds the 100-turn runs, about 10 minutes in all
-node tests/orbits.mjs          # the checks, about 3 s (also run by npm test)
+node orbits/table.mjs long     # adds the 100-turn runs, about 13 minutes in all
+node tests/orbits.mjs          # the checks, about 6 s (also run by npm test)
 ```
 
 The table exits with an error if any printed value is not a finite number.
@@ -247,7 +252,8 @@ The table exits with an error if any printed value is not a finite number.
 ## Checks
 
 `tests/orbits.mjs` has 43 checks. Each prints its source, the published or expected value, the model's value and
-the tolerance. "#37's review" marks values a reviewer read in the paper's arXiv source.
+the tolerance. "#37's review" marks values a reviewer read in the paper's arXiv source; "#37's re-review" marks
+what the second review checked, in an arXiv source or against Crossref, as each label says.
 
 | What | Against | Kind |
 |---|---|---|
@@ -278,16 +284,17 @@ the tolerance. "#37's review" marks values a reviewer read in the paper's arXiv 
   - for moons, the planet's oblateness and its other moons, which damp Lidov–Kozai cycles close in.
 - **Circular starting orbits only.** Real moons and comets start on eccentric orbits.
   - **The edges' definition.** They are set at half the orbits escaping, or lost, within 20 turns of the host, on a grid of 0.025 r_J (single planes) or 0.05 r_J (all directions).
-  - **Plunge radius.** It is 10⁻³ r_J. Raising it to 10⁻² moves the Sun's all-directions escaped edge out, from 0.441 to 0.458, and its lost edge in, from 0.410 to 0.395 (24 directions).
-  - **Chaos and sampling.** The polar edges are chaotic: changing ν²/Ω² by 10⁻⁴ moves the Sun's polar-across escape edge from 0.388 to 0.392. The in-plane edges are not, but with 8 starting angles they carry sampling errors of up to about 0.03 (see the 64-angle values above).
+  - **Plunge radius.** It is 10⁻³ r_J. Raising it to 10⁻² moves the Sun's all-directions escaped edge out, from 0.437 to 0.460, and its lost edge in, from 0.411 to 0.394 (24 directions).
+  - **Chaos and sampling.** Single orbits near an edge are chaotic: changing Γ by 10⁻⁴ either way moves the Sun's in-plane retrograde edge from 0.925 to 0.95, as one orbit of eight changes its fate. (Changing ν²/Ω² by 10⁻⁴ leaves the Sun's polar-across edge at 0.40 in this sample.) With 8 starting angles the in-plane edges carry sampling errors of up to about 0.03 and the polar edges up to about 0.01 (see the 64- and 16-angle values above).
   - **Longer runs** move the edges inward a little (see the 100-turn values above).
-- **MWPotential2014 is one model among many.** Its halo sets the flat range, and it has no nuclear star cluster. The checks pin its halo, its Plummer limit pins the disk's b, and Table 1's derived values (bulge and disk masses, the mass inside 60 kpc, the slope at R₀ and the local dark-matter density) are checked at Table 1's rounding. The other shape parameters are taken from galpy's source and tested only through those totals. The Galactic-centre numbers use the separate power-law cusp above, which is valid only inside its 3 pc break.
+- **MWPotential2014 is one model among many.** Its halo sets the flat range, and it has no nuclear star cluster. The checks pin its halo, its Kuzmin and Plummer limits pin the disk's a and b to galpy's values, and Table 1's derived values (bulge and disk masses, the mass inside 60 kpc, the slope at R₀ and the local dark-matter density) are checked at Table 1's rounding. The bulge's slope and cut-off are taken from galpy's source and not tested: its mass follows from its 5% share of the force at R₀. The Galactic-centre numbers use the separate power-law cusp above, which is valid only inside its 3 pc break.
 - **Spherical mass estimates.** v²R/G and 3Ω²/4πG treat a flattened galaxy as spherical. In MWPotential2014 this overstates the mass inside 8 kpc by 12%. It shifts the 3.7-fold growth to 4.0 and the Sun's 2.25 to 2.53, but not the contrast with Kepler's fixed mass.
 
 ## Sources
 
 Each entry says how it was read. "#37's review" means a reviewer checked the values used here in the arXiv source,
-or in the primary file, during #37's review.
+or in the primary file, during #37's review. "#37's re-review" marks what the second review checked: values in an
+arXiv source, or a reference matched against Crossref where the entry says so.
 
 - W. M. Folkner et al., *The Planetary and Lunar Ephemerides DE430 and DE431*, IPN Progress Report 42-196 (2014), Table 8. #37's review.
 - E. M. Standish and J. G. Williams, *Approximate Positions of the Planets*, JPL Solar System Dynamics (credited there to Standish and Williams 1992), Table 1 (1800–2050). Checked against the SSD page in #37's review.
@@ -306,7 +313,7 @@ or in the primary file, during #37's review.
 - L. Dones, P. R. Weissman, H. F. Levison and M. J. Duncan, *Oort cloud formation and dynamics*, in *Comets II*, 153–174 (2004). The reference matches Crossref (#37's re-review); the text was not read. The edge "as far as 2 × 10^5 AU" is as cited in search text.
 - GRAVITY Collaboration, *Detection of the Schwarzschild precession in the orbit of the star S2 near the Galactic centre massive black hole*, A&A 636, L5 (2020). https://doi.org/10.1051/0004-6361/202037813. #37's review (sect. 1.2, appendix B, Table E.1).
 - GRAVITY Collaboration, *Mass distribution in the Galactic Center based on interferometric astrometry of multiple stellar orbits*, A&A 657, L12 (2022). https://doi.org/10.1051/0004-6361/202142465. #37's review.
-- GRAVITY Collaboration, *Improving constraints on the extended mass distribution in the Galactic Center with stellar orbits*, A&A 692, A242 (2024). https://doi.org/10.1051/0004-6361/202452274. #37's review (sect. 4.3).
+- GRAVITY Collaboration, *Improving constraints on the extended mass distribution in the Galactic center with stellar orbits*, A&A 692, A242 (2024). https://doi.org/10.1051/0004-6361/202452274. #37's review (sect. 4.3).
 - R. Schödel, D. Merritt and A. Eckart, A&A 502, 91 (2009). https://doi.org/10.1051/0004-6361/200810922. #37's review.
 - R. Schödel et al., A&A 609, A27 (2018). https://doi.org/10.1051/0004-6361/201730452. #37's review (sect. 4.5).
 - T. Alexander, *Stellar processes near the massive black hole in the Galactic center*, Phys. Rep. 419, 65 (2005). https://doi.org/10.1016/j.physrep.2005.08.002. #37's review (sect. 3.1.2).

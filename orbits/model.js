@@ -287,7 +287,8 @@
   // Follows one orbit for `orbits` turns of the host (time 2 pi orbits). Fate: 'escapes' once r > rEsc, 'plunges'
   // once r < rIn (1e-3 r_J is 0.74 of Jupiter's radius; for the Sun it is 283 au, outside the planets), otherwise
   // 'stays'. Returns the final state s too. Throws on non-finite settings, on a non-finite step, or after maxSteps
-  // (by default 2.5e5 per turn of the host; the hardest orbit in the tables needs about 1.5e4), rather than looping.
+  // (by default 2.5e5 per turn of the host; the hardest orbit in the tables, a polar orbit at 0.025 r_J that stays,
+  // needs about 7e4 per turn), rather than looping.
   function hillOrbit(host, s0, { orbits = 20, rEsc = 3, rIn = 1e-3, tol = 1e-10, maxSteps = 2.5e5 * orbits } = {}) {
     if (![orbits, rEsc, rIn, tol, maxSteps, host.Gam, host.nu2, ...s0].every(Number.isFinite)) throw new Error('hillOrbit: non-finite input');
     const T = 2 * Math.PI * orbits, k = Array.from({ length: 7 }, () => new Float64Array(6));
@@ -339,14 +340,15 @@
   }
   // Fractions of orbits that stay, escape and plunge, over the given orbit normals and nPhase starting angles each.
   // Hill's equations are symmetric under r -> -r, v -> -v: a start at phi + pi is the inverted start at phi, with the
-  // same fate. They are also symmetric under time reversal with y -> -y. For a normal in the x-z or y-z plane, as in
-  // every single-plane scan here, that makes a start at pi - phi the mirror of the start at phi run backward, whose
-  // fate nearly always matches. So the starting angles are spread over the quarter turn [0, pi/2) (quarter = 0), where
-  // no two are related by either symmetry; quarter = 1 takes [pi/2, pi) instead. For other normals the mirror is
-  // another normal, and [0, pi/2) samples half of each normal's distinct starts.
-  function hillFates(host, a, normals, { nPhase = 4, quarter = 0, ...opt } = {}) {
+  // same fate. So the starting angles span the half turn [0, pi). The equations are also symmetric under z -> -z, and
+  // under time reversal with y -> -y. For a normal in the x-z plane (or, with z -> -z as well and an inversion, the
+  // y-z plane), as in every single-plane scan here, the start at pi - phi is then the mirror of the start at phi run
+  // backward. Its fate matches nearly always in the plane but often not for polar orbits, so it is no duplicate there;
+  // still, the angles phi = pi (p + offset)/nPhase are offset by a quarter step so that no such pair falls in one
+  // sample. offset = 0.75 takes the mirrored set pi - phi instead.
+  function hillFates(host, a, normals, { nPhase = 4, offset = 0.25, ...opt } = {}) {
     const n = { stays: 0, escapes: 0, plunges: 0 };
-    for (const nv of normals) for (let p = 0; p < nPhase; p++) n[hillOrbit(host, hillStart(host, a, nv, Math.PI / 2 * (quarter + (p + 0.5) / nPhase)), opt).fate]++;
+    for (const nv of normals) for (let p = 0; p < nPhase; p++) n[hillOrbit(host, hillStart(host, a, nv, Math.PI * (p + offset) / nPhase), opt).fate]++;
     const tot = normals.length * nPhase;
     return { stays: n.stays / tot, escapes: n.escapes / tot, plunges: n.plunges / tot };
   }
