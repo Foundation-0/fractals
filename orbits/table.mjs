@@ -1,4 +1,4 @@
-// Prints every computed number in orbits/README.md, except the values the README credits to #37's review. Run: node orbits/table.mjs (about 10 minutes; the stability scans of
+// Prints every computed number in orbits/README.md, except the values the README credits to #37's review or re-review. Run: node orbits/table.mjs (about 10 minutes; the stability scans of
 // section 5 take nearly all of it), node orbits/table.mjs quick (well under a second; section 5 left out), or
 // node orbits/table.mjs long (adds the all-directions scans followed for 100 turns of the host).
 // Exits with code 1 if any printed line holds NaN or Infinity.
@@ -151,19 +151,38 @@ if (!quick) {
     console.log(`   ${k.padEnd(28)}  ${e.map(r => `${f(r.edge, 3)} / ${f(r.edgeLost, 3)}`.padStart(13)).join('            ')}`);
     const firstPlunge = e.map(r => r.rows.find(x => x.plunges > 0)); // undefined if none plunge, so a NaN radius still prints as NaN
     if (!polar) profiles.push(`${k}: first plunge at ${firstPlunge.map(row => (row ? f(row.a, 3) : 'none')).join(', ')} r_J`);
-    else profiles.push(`${k}: lost fraction at a = 0.1, 0.15, 0.2, 0.3, 0.35, 0.4, 0.45: ` +
-      e.map(r => [0.1, 0.15, 0.2, 0.3, 0.35, 0.4, 0.45].map(a => { const x = r.rows.find(y => Math.abs(y.a - a) < 1e-9); return f(x.escapes + x.plunges, 2); }).join(' ')).join(' | '));
   }
   console.log('   (an orbit that starts in the plane stays in it, so the vertical tide cannot act on the first two rows; with these 8 angles their');
   console.log('   plunges begin only outside the escape edge, so the two radii agree. For polar rows "lost" is the first radius where half are lost.)');
   for (const p of profiles) console.log(`   ${p}   [point mass | Sun | Sun, nu2 = 1]`);
-  console.log('   polar rows with 16 starting angles, escaped / lost [point mass | Sun | Sun, nu2 = 1]:');
-  for (const [k, n] of Object.entries(planes).filter(([k]) => k.startsWith('polar')))
-    console.log(`     ${k.padEnd(28)}${[O.HOST_KEPLER, sun, sunNu1].map(h => { const r = O.hillScan(h, n, all, { nPhase: 16 }); return `${f(r.edge, 3)} / ${f(r.edgeLost, 3)}`.padStart(13); }).join('   ')}`);
   {
-    const at = h => O.hillScan(h, [[1, 0, 0]], big, { nPhase: 8 }).edge, atR = h => O.hillScan(h, [[0, 0, -1]], big, { nPhase: 8 }).edge;
+    const polars = Object.entries(planes).filter(([k]) => k.startsWith('polar')), hosts = [['point mass', O.HOST_KEPLER], ['the Sun', sun], ['the Sun, nu2 = 1', sunNu1]];
+    console.log('   polar rows with the mirrored set of 8 angles (pi - phi, a quarter step the other way), escaped / lost [point mass | Sun | Sun, nu2 = 1]:');
+    for (const [k, n] of polars)
+      console.log(`     ${k.padEnd(28)}${hosts.map(([, h]) => { const r = O.hillScan(h, n, all, { nPhase: 8, offset: 0.75 }); return `${f(r.edge, 3)} / ${f(r.edgeLost, 3)}`.padStart(13); }).join('   ')}`);
+    const as32 = grid(0.1, 0.5, 0.025);
+    console.log(`   polar rows with 32 angles: the fraction lost (escaped or plunged) at a = ${as32[0]} to ${as32[as32.length - 1]} r_J in steps of 0.025, and the edges:`);
+    for (const [k, n] of polars) for (const [name, h] of hosts) {
+      const r = O.hillScan(h, n, as32, { nPhase: 32 }), lost = r.edgeLost === as32[0] ? `below ${as32[0]}` : f(r.edgeLost, 3);
+      console.log(`     ${k}, ${name}: ${r.rows.map(x => f(x.escapes + x.plunges, 2)).join(' ')}; escaped by ${f(r.edge, 3)}, lost by ${lost}`);
+    }
+  }
+  {
+    const at = h => O.hillScan(h, [[1, 0, 0]], big, { nPhase: 8 }).edge, atR = h => O.hillScan(h, [[0, 0, -1]], big, { nPhase: 8 });
     console.log(`   the Sun's polar-across escape edge at (nu/Omega)^2 = ${f(sun.nu2, 4)}, -1e-4, +1e-4: ${[0, -1e-4, 1e-4].map(d => f(at({ ...sun, nu2: sun.nu2 + d }), 3)).join(', ')}`);
-    console.log(`   the Sun's retrograde in-plane escape edge at Gam = ${f(sun.Gam, 4)}, -1e-4, +1e-4: ${[0, -1e-4, 1e-4].map(d => f(atR({ ...sun, Gam: sun.Gam + d }), 3)).join(', ')}`);
+    const rG = [0, -1e-4, 1e-4].map(d => atR({ ...sun, Gam: sun.Gam + d })), at925 = r => r.rows.find(x => Math.abs(x.a - 0.925) < 1e-9).escapes * 8;
+    console.log(`   the Sun's retrograde in-plane escape edge at Gam = ${f(sun.Gam, 4)}, -1e-4, +1e-4: ${rG.map(r => f(r.edge, 3)).join(', ')}` +
+      ` (orbits of 8 escaped at 0.925 r_J: ${rG.map(at925).join(', ')})`);
+  }
+  { // a start and its time-reversed mirror (pi - phi): how often their fates differ, around a point mass
+    const as = grid(0.15, 0.5, 0.05), diff = n => { let d = 0, t = 0;
+      for (const a of as) for (let p = 0; p < 8; p++) {
+        const A = O.hillOrbit(O.HOST_KEPLER, O.hillStart(O.HOST_KEPLER, a, n, Math.PI * (p + 0.25) / 8)).fate;
+        const B = O.hillOrbit(O.HOST_KEPLER, O.hillStart(O.HOST_KEPLER, a, n, Math.PI - Math.PI * (p + 0.25) / 8)).fate;
+        t++; if (A !== B) d++;
+      }
+      return `${d} of ${t}`; };
+    console.log(`   point mass, a = 0.15 to 0.5 r_H: mirrored pairs whose fates differ: retrograde in the plane ${diff([0, 0, -1])}, polar through the host ${diff([0, 1, 0])}, polar across ${diff([1, 0, 0])}`);
   }
   {
     const s75 = Math.sin(75 * Math.PI / 180), c75 = Math.cos(75 * Math.PI / 180), as75 = grid(0.1, 0.4, 0.05);
@@ -185,7 +204,7 @@ if (!quick) {
   {
     // how far from polar plunges reach: orbit normals tilted by delta from polar (i = 90 +- delta), with the line of
     // nodes along x or along y, x 16 starting angles each, at a few radii inside the escape edge (a node azimuth om + pi
-    // is the mirror image of om under z -> -z, so it would repeat the same orbits)
+    // is the mirror image of om under z -> -z, so it would repeat the same orbits; at 0 deg the two senses coincide)
     const fromPolar = (h, a, deltas) => deltas.map(d => {
       const i = (90 - d) * Math.PI / 180, ns = [];
       for (const s of [1, -1]) for (const om of [0, 0.5]) ns.push([Math.sin(i) * Math.cos(om * Math.PI), Math.sin(i) * Math.sin(om * Math.PI), s * Math.cos(i)]);

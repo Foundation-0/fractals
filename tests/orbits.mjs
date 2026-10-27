@@ -177,7 +177,7 @@ near('Saturn\'s inclination to the invariable plane [deg]', O.tiltToInvariable(O
   check('The Sun\'s all-directions escape edge lies within the Oort cloud\'s quoted outer limits, 6.5e4 to 2e5 au', edge >= 6.5e4 && edge <= 2e5,
     `half have escaped by ${fmt(edge)} au (12 directions x 2 angles, grid 0.1 r_J from 0.2 r_J = 5.7e4 au; the tide alone, no passing stars)`,
     'Correa-Otto & Calandra 2019 sect. 4.3: a_crit ~ 6.5e4 au, set by the frequency of stellar passages acting with the tide (#37\'s review); ' +
-    'Dones et al. 2004: as far as 2e5 au, as cited in search text; a wide window: at fixed r_J the edge stays within 1.24-1.29e5 au for Gam from 0.5 to 2 times its value, so this checks the scale, not the tide\'s details');
+    'Dones et al. 2004: as far as 2e5 au, as cited in search text; a wide window: at fixed r_J the edge stays between about 1.20 and 1.33e5 au for Gam from 0.5 to 2 times its value (in steps of 0.025), so this checks the scale, not the tide\'s details');
 }
 
 console.log(fails ? `\n${fails} check(s) failed` : '\nall orbits checks pass');
