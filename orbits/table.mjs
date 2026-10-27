@@ -1,4 +1,4 @@
-// Prints every computed number in orbits/README.md, except the values the README credits to #37's review or re-review. Run: node orbits/table.mjs (about 10 minutes; the stability scans of
+// Prints every computed number in orbits/README.md, except the values the README credits to #37's review or re-review. Run: node orbits/table.mjs (about 11 minutes; the stability scans of
 // section 5 take nearly all of it), node orbits/table.mjs quick (well under a second; section 5 left out), or
 // node orbits/table.mjs long (adds the all-directions scans followed for 100 turns of the host).
 // Exits with code 1 if any printed line holds NaN or Infinity.
@@ -187,8 +187,8 @@ if (!quick) {
   {
     const s75 = Math.sin(75 * Math.PI / 180), c75 = Math.cos(75 * Math.PI / 180), as75 = grid(0.1, 0.4, 0.05);
     for (const [name, h] of [['point mass', O.HOST_KEPLER], ['the Sun', sun]]) {
-      const row = [[s75, 0, c75], [0, s75, c75]].map(n => as75.map(a => f(O.hillFates(h, a, [n], { nPhase: 8 }).plunges, 2)).join(' '));
-      console.log(`   tilted 75 deg, ${name}: plunged fraction at a = ${as75.join(', ')}: node along y: ${row[0]}; node along x: ${row[1]}`);
+      const row = [[s75, 0, c75], [0, s75, c75]].map(n => as75.map(a => f(O.hillFates(h, a, [n], { nPhase: 32 }).plunges, 2)).join(' '));
+      console.log(`   tilted 75 deg (prograde side), 32 angles, ${name}: plunged fraction at a = ${as75.join(', ')}: node along y: ${row[0]}; node along x: ${row[1]}`);
     }
   }
   console.log('   (polar orbits are lost to Lidov-Kozai cycles, whose eccentricity reaches 1 at 90 deg; below the "lost" radius the cycle takes longer than 20 turns)');
