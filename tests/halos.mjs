@@ -91,7 +91,7 @@ near('Comoving Jeans wavenumber at matter-radiation equality, 1e-22 eV, mean mat
 {
   const rhoDM = 0.12 * bg.rhoCrit, k0 = H.kJcomoving(bg, 1, 1, { rho0: rhoDM }), kM = H.kJcomoving(bg, 1, 1);
   near('Jeans wavenumber today, 1e-22 eV, in a density of 0.12 rho_crit/h^2 (the dark matter alone) (Mpc^-1)', k0, 66.5, 0.005,
-    `Marsh, Phys. Rep. 643, 1 (2016), eq. axion_jeans: k_J = 66.5 a^(1/4) (Omega_a h^2/0.12)^(1/4) m22^(1/2), as quoted by Kulkarni & Ostriker (arXiv:2011.02116), ` +
+    `Marsh, Phys. Rep. 643, 1 (2016), the equation labelled axion_jeans in its arXiv source: k_J = 66.5 a^(1/4) (Omega_a h^2/0.12)^(1/4) m22^(1/2), as quoted by Kulkarni & Ostriker (arXiv:2011.02116), ` +
     `seen in search text; checked in review, Omega_a the axion density; all matter gives ${kM.toFixed(1)}`);
 }
 near("Hu, Barkana & Gruzinov's half-power wavenumber, T^2 = 1/2, at 1e-22 eV (Mpc^-1)", H.halfMode(H.fdmHBG(1), { power: true }), 4.5, 0.03,
@@ -100,8 +100,9 @@ near("Hu, Barkana & Gruzinov's half-power wavenumber, T^2 = 1/2, at 1e-22 eV (Mp
   const toM = rho => rho * Math.pow(H.C.Mpc, 3) / H.C.Msun, MJ = rho => H.jeansMasses(bg, H.kJcomoving(bg, 1, 1, { rho0: rho }), toM(rho)).halfWave;
   const Oc = P18.Om - P18.Ob, hui = 1.5e7 * Math.pow(Oc / 0.27, 0.25) * Math.sqrt(h / 0.7);
   near('Jeans mass today, 1e-22 eV, a sphere of diameter lambda_J in Omega_FDM = 0.27, h = 0.7 (Msun): a lower bound on any halo, not the floor of the halo population',
-    MJ(0.27 * 0.7 * 0.7 * bg.rhoCrit), 1.5e7, 0.01, 'Hui, Ostriker, Tremaine & Witten, PRD 95, 043541 (2017), eq. jeans: M_J = (4/3) pi rho (lambda_J/2)^3 = ' +
-    '1.5e7 (Omega_FDM/0.27)^(1/4) (H0/70)^(1/2) m22^(-3/2) Msun, as quoted in arXiv:2106.02526, seen in search text; checked in review. ' +
+    MJ(0.27 * 0.7 * 0.7 * bg.rhoCrit), 1.5e7, 0.01, 'Hui, Ostriker, Tremaine & Witten, PRD 95, 043541 (2017), the equation labelled jeans in its arXiv source: M_J = (4/3) pi rho (lambda_J/2)^3 = ' +
+    '1.5e7 (Omega_FDM/0.27)^(1/4) (H0/70)^(1/2) m22^(-3/2) Msun, as quoted in arXiv:2106.02526, seen in search text; checked in review. The 1% is tighter ' +
+    'than the quoted rounding (about 3%), to separate the wave\'s own density from all the matter. ' +
     `At this model's cosmology: dark matter alone ${fmt(MJ(Oc * h * h * bg.rhoCrit))}, their formula ${fmt(hui)}; all matter ${fmt(MJ(bg.rhoMsi))}`);
 }
 { // The Witness Map's wave clock m dx^2/hbar across dx = 1/k_J is gravity's clock, with the Witness Map's constants.
@@ -132,12 +133,12 @@ near('Aquarius normalisation scaled from the 1.84e12 Msun Aq-A to a 1e12 Msun ho
     DMS + ': "over 10^15" survive in the Galactic halo, as seen in the arXiv abstract; checked in review');
   note('Earth-mass halos, like for like: the Aquarius law against Diemand, Moore & Stadel\'s own m^-1.9 law, both without tides',
     `above 1e-6 Msun: Aq-A ${fmt(nAq)}, ${(5e15 / nAq).toFixed(1)} times fewer than 5e15; a 1e12 Msun host (within 353 kpc) ${fmt(nMW)}, ${(5e15 / nMW).toFixed(1)} times fewer ` +
-    '(their host mass is not given)', DMS + ', body text after Fig. 3: N(>1e-6 Msun) ~ 5e15, as #35\'s review read it in the arXiv source');
+    `(their host mass is not given); that host is also ${(1e15 / nMW).toFixed(2)} times short of the 1e15 that survive`, DMS + ', body text after Fig. 3: N(>1e-6 Msun) ~ 5e15, as #35\'s review read it in the arXiv source');
 }
 { // Where the levels come from: each level's largest subhalo, where the Aquarius law expects one, N(>M) = 1.
   const mu = H.muAquarius(), muAq = H.muAquarius(H.AQUARIUS);
   note('Levels Aquarius itself resolves', `the largest expected subhalo is mu = ${mu.toFixed(4)} of a 1e12 Msun host's M200 (${(-Math.log10(mu)).toFixed(2)} decades per level), ` +
-    `${muAq.toFixed(4)} of Aq-A's; four levels at that ratio below Aq-A's 1.84e12 Msun reach ${fmt(H.AQUARIUS.host * Math.pow(muAq, 4))} Msun; published: "up to four generations" of subhalos within subhalos, ` +
+    `${muAq.toFixed(4)} of Aq-A's; four levels at that ratio below Aq-A's 1.84e12 Msun reach ${fmt(H.AQUARIUS.host * Math.pow(muAq, 4))} Msun, or ${[3, 2].map(f => fmt(H.AQUARIUS.host * muAq * Math.pow(muAq * Math.pow(f, -1 / (H.AQUARIUS.n - 1)), 3))).join(' to ')} with sub-subhalos 3 or 2 times fewer; published: "up to four generations" of subhalos within subhalos, ` +
     'and sub-subhalos "a factor of 2 or 3 below" the self-similar count, which "provides an upper limit"',
     'Springel et al. (2008), abstract, as seen in search text; Sec. 4, as #35\'s review read it');
 }

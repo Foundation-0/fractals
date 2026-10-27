@@ -33,10 +33,12 @@ console.log('   there, at the bino cut-off included, by about 10%.');
 // ---- 2. The floors
 const bino = H.wimpGHS({ m: 100, Tkd: 30 }), Mb = hm(bino).M;
 const derived = H.wimpFreeStream(bg, { m: 100, Tkd: 30 });
+const ghsOver = Tkd => H.wimpGHS({ m: 100, Tkd }).kfs / H.wimpFreeStream(bg, { m: 100, Tkd }).kfs - 1;
 console.log('\n2. Floors. Masses of spheres: radius pi/k (half a wavelength) for a wavenumber k; M_hm where T = 1/2, M_1/2 where T^2 = 1/2 [Msun]');
 console.log(`   WIMP 100 GeV, T_kd 30 MeV: k_fs = ${e2(bino.kfs)} Mpc^-1 (derived from the coasting distance ${(derived.s * 1e6).toFixed(3)} pc: k_fs = sqrt2/s = ${e2(derived.kfs)}), k_d = ${e2(bino.kd)}`);
 console.log(`     M(pi/k_fs) = ${e2(H.massOfK(bg, bino.kfs))}, M_hm = ${e2(Mb)}, M_1/2 = ${e2(hm(bino).M2)}, M(pi/k_d) = ${e2(H.massOfK(bg, bino.kd))};` +
   ` Gaussian form, same k_fs: M_hm = ${e2(hm(H.gaussianOf(bino)).M)}`);
+console.log(`     Green, Hofmann & Schwarz's k_fs against the derived one: ${[10, 30, 40].map(T => `${(100 * ghsOver(T)).toFixed(1)}% at ${T} MeV`).join(', ')}`);
 console.log(`     pi/k_fs = ${(Math.PI / bino.kfs * 1e6).toFixed(2)} pc comoving (a sphere of radius 1 pc holds ${e2(4 * Math.PI / 3 * bg.rhoM * 1e-18)} Msun)`);
 const dk = H.decoupling(bg, 30);
 console.log(`     at 30 MeV the radiation has g = ${dk.g.toFixed(2)} (muons and pions add ${(dk.g - 10.75).toFixed(2)} to photons, e+- and neutrinos);` +
@@ -81,7 +83,7 @@ const zb = o => md.zc(Mb, bino, o).toFixed(1), nu60 = (dc, o) => (dc / (md.sigma
 console.log(`\n   Bino halos at M_hm = ${e2(Mb)} Msun, 1 sigma: z_c = ${zb()}; with the radiation-era growing mode ${zb({ radiation: true })};` +
   ` with the dark matter growing alone (the gas never falls in) ${zb({ baryonLag: true })} to ${zb({ baryonLag: 'cdm' })}; 2 sigma ${zb({ nu: 2 })}, 3 sigma ${zb({ nu: 3 })}.`);
 console.log(`   To collapse (1.686) at z = 60 takes a ${nu60(H.DELTA_C)} sigma peak, ${nu60(H.DELTA_C, { baryonLag: 'cdm' })} to ${nu60(H.DELTA_C, { baryonLag: true })} with the dark matter growing alone;` +
-  ` to reach sigma = 1 there, ${nu60(1)} sigma.`);
+  ` to reach delta = 1 there (Green, Hofmann & Schwarz's threshold), ${nu60(1)} sigma.`);
 const runs = [-0.01, 0.01].map(a => H.model(P18, { perDecade: 160, running: a }));
 console.log(`   Running dn_s/dlnk = -0.01 / +0.01 (sigma8 fixed): sigma(M_hm) ${runs[0].sigma(Mb, bino).toFixed(1)} / ${runs[1].sigma(Mb, bino).toFixed(1)} (${md.sigma(Mb, bino).toFixed(1)} without), z_c ${runs[0].zc(Mb, bino).toFixed(1)} / ${runs[1].zc(Mb, bino).toFixed(1)}`);
 // Neutrinos still coupled at horizon entry: scale T by the fluid/free tail ratio, ramped in ln k over a decade above k_nu.
@@ -109,10 +111,10 @@ console.log('   m0 = 2.52e7 Msun: a0 = 1.77e-5/Msun for a 1e12 Msun host within 
 console.log('   f_sub: the mass in subhalos from the floor to 1e10 Msun over 1e12 Msun. All extrapolated below about 1e5 Msun, tides ignored.');
 console.log('   Levels at mu (exact fraction in brackets) are self-similar, an upper bound (Springel et al.); 2x/3x: sub-subhalos 2 or 3 times fewer.\n');
 const floors = [
-  ['WIMP range, lightest (Bringmann)', 1e-11],
+  ['WIMP range, lightest (Bringmann; all matter)', 1e-11 / bg.fc],
   ...[[40, 'bringmann'], [30, 'bringmann'], [30, 'halfMode'], [10, 'bringmann']].map(([Tkd, key]) =>
     [`Bino, T_kd ${Tkd} MeV, ${key === 'bringmann' ? 'max(M(pi/k_fs), M_ao)' : 'max(M_hm, M_ao)'}`, H.wimpFloor(bg, { m: 100, Tkd })[key]]),
-  ['WIMP range, heaviest (Bringmann)', 1e-3],
+  ['WIMP range, heaviest (Bringmann; all matter)', 1e-3 / bg.fc],
   ...wave.flatMap(w => [[`wave ${w.m.toExponential(1)} eV, M_hm`, w.Mhm], [`wave ${w.m.toExponential(1)} eV, Schive M0`, w.M0]]),
 ];
 console.log('   floor                                          M_floor   decades   levels 10x  100x   mu (exact)    2x/3x   N(>floor), 1e12   Aq-A      f_sub');
@@ -121,10 +123,10 @@ for (const [name, M] of floors) {
   console.log(`   ${name.padEnd(45)} ${pad(e2(M), 9)}  ${pad(n.decades.toFixed(1), 6)}  ${pad(n.levels[0], 10)}  ${pad(n.levels[1], 4)}  ${pad(`${n.levels[2]} (${n.exact[2].toFixed(2)})`, 11)}` +
     `  ${pad(n.suppressed.join('/'), 7)}  ${pad(e2(H.subhaloCount(M)), 15)}  ${pad(e2(H.subhaloCount(M, Infinity, H.AQUARIUS)), 9)}  ${pad(M < 1e10 ? e2(H.subhaloMass(M, 1e10) / 1e12) : '-', 7)}`);
 }
-const mu50 = H.muAquarius(H.AQUARIUS_MW, { m50: true }), lev50 = M => H.nesting(M, H.MW, [mu50]).levels[0], f10 = H.wimpFloor(bg, { m: 100, Tkd: 10 }).bringmann;
+const mu50 = H.muAquarius(H.AQUARIUS_MW, { m50: true }), lev50 = M => H.nesting(M, H.AQUARIUS_MW.m50, [mu50]).levels[0], f10 = H.wimpFloor(bg, { m: 100, Tkd: 10 }).bringmann;
 console.log(`\n   mu is against the host's M200. Against M50, the mass inside r50 where the law was fitted, it is ${mu50.toFixed(4)} (Aq-A: ` +
-  `${H.muAquarius(H.AQUARIUS, { m50: true }).toFixed(4)}),\n   and the levels at mu are ${lev50(1e-11)} to ${lev50(1e-3)} for Bringmann's range and ` +
-  `${lev50(floors[1][1])} to ${lev50(f10)} for the bino, against ${H.nesting(1e-11).levels[2]} to ${H.nesting(1e-3).levels[2]} and ${H.nesting(floors[1][1]).levels[2]} to ${H.nesting(f10).levels[2]}.`);
+  `${H.muAquarius(H.AQUARIUS, { m50: true }).toFixed(4)}),\n   and the levels at mu, counted down from M50, are ${lev50(floors[0][1])} to ${lev50(floors[5][1])} for Bringmann's range and ` +
+  `${lev50(floors[1][1])} to ${lev50(f10)} for the bino, against ${H.nesting(floors[0][1]).levels[2]} to ${H.nesting(floors[5][1]).levels[2]} and ${H.nesting(floors[1][1]).levels[2]} to ${H.nesting(f10).levels[2]}.`);
 console.log(`   In the dark matter density alone (Bringmann's convention) the bino at T_kd 10 MeV has ${H.nesting(bg.fc * f10).exact[2].toFixed(2)} levels at mu,` +
   ` not ${H.nesting(f10).exact[2].toFixed(2)}: a knife edge between 9 and 10.`);
 console.log('\n   Wave dark matter, decades from the population floor (M_1/2, M_hm, M0) and, for comparison, from the Jeans mass today:');
@@ -150,9 +152,9 @@ console.log(`   Comoving k_J at 1e-22 eV: today ${kJ0.toFixed(1)} Mpc^-1 (all ma
     ' (k_J and M_J both go as rho^(1/4));');
   console.log(`   at Hui et al.'s normalisation, Omega_FDM = 0.27 and h = 0.7: ${(MJ(0.27 * 0.7 * 0.7 * bg.rhoCrit) / 1e7).toFixed(3)}e7 Msun (their 1.5e7)`); }
 const J0 = H.jeansMasses(bg, kJ0), Jeq = H.jeansMasses(bg, kJeq);
-console.log('   Jeans mass at 1e-22 eV [Msun]             today      at equality');
-for (const [key, lab] of [['fullWave', 'sphere of radius lambda_J'], ['cube', 'cube of side lambda_J'], ['halfWave', 'sphere of diameter lambda_J (Hui et al.\'s)'], ['inverseK', 'sphere of radius 1/k_J']])
-  console.log(`   ${lab.padEnd(40)} ${pad(e2(J0[key]), 9)}   ${pad(e2(Jeq[key]), 9)}`);
+console.log(`   ${'Jeans mass at 1e-22 eV in all the matter [Msun]'.padEnd(50)} ${'today'.padStart(9)}   at equality`);
+for (const [key, lab] of [['fullWave', 'sphere of radius lambda_J'], ['cube', 'cube of side lambda_J'], ['halfWave', 'sphere of diameter lambda_J (Hui et al.\'s sphere)'], ['inverseK', 'sphere of radius 1/k_J']])
+  console.log(`   ${lab.padEnd(50)} ${pad(e2(J0[key]), 9)}   ${pad(e2(Jeq[key]), 9)}`);
 console.log(`   Spread: ${e2(Jeq.fullWave / J0.inverseK)} between the largest and smallest; M_J ~ m^-3/2 while M_hm and M0 go as m^-4/3`);
 const s = H.solitonRelation(WM.SOL), u22 = H.hbar2Gm2(1e-22, WM.C) / (WM.C.Msun * WM.C.kpc);
 console.log(`\n   Soliton (the Schroedinger-Poisson ground state, solved in witness-map/model.js), r_c its half-density radius:`);

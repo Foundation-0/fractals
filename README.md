@@ -34,8 +34,8 @@ with Claude (Anthropic), for [Foundation0](https://github.com/Foundation-0/f0).
   16 to 18 decades in mass, down to halos of 10⁻⁶ to 10⁻⁴ Suns; below that, the particle's coupling to the
   radiation, and then its own motion, have smoothed everything out. For wave dark matter at the lightest masses
   still allowed it spans only 3 to 8 decades, depending on which bound holds, cut off by quantum pressure.
-  Whether the halos stop looking alike before the floor is contested: several simulations find that the first
-  ones form with steeper centres, and others do not ([halos](halos/)).
+  The first halos form with steeper centres; whether those survive inside the halos built from them is still
+  argued ([halos](halos/)).
 
 ## First study: the Witness Map
 

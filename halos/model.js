@@ -16,7 +16,8 @@
  *        growing alone on scales the gas never falls into (integrated; see growth()).
  * 2. Cut-offs set by the particle.
  *    WIMP, free streaming (Green, Hofmann & Schwarz 2005): T = [1 - (2/3)(k/k_fs)^2] exp[-(k/k_fs)^2 - (k/k_d)^2],
- *      their JCAP eqs. dfs and dk, stated as valid for k < k_fs (the half mode is at 0.625 k_fs), with
+ *      in their JCAP paper (the equations labelled dfs and dk in its arXiv source), stated as valid for k < k_fs (the
+ *      half mode is at 0.625 k_fs), with
  *      k_fs = 1.70e6 Mpc^-1 (m/100 GeV)^1/2 (T_kd/30 MeV)^1/2 / [1 + ln(T_kd/30 MeV)/19.2],
  *      k_d  = 3.76e7 Mpc^-1 (m/100 GeV)^1/2 (T_kd/30 MeV)^1/2.
  *      The scalings were first read in search text and the prefactor recalled; #35's review read all three in the
@@ -31,10 +32,10 @@
  *      them): their floors are f_c (0.84 for Planck 2018) times the ones here.
  *      The expansion before and after decoupling comes from ideal gases of photons, neutrinos, e+-, mu+- and pions
  *      (see thermal()), valid from below 1 MeV to about 80 MeV: kaons and heavier hadrons are left out (they would
- *      add about 1% to g at 70 MeV and 7% at 100 MeV).
+ *      add about 1% to g at 70 MeV and 7% at 100 MeV, as #35's review's own calculation agreed).
  *    Wave dark matter (Hu, Barkana & Gruzinov 2000): T = cos(x^3)/(1 + x^8), x = 1.61 m22^(1/18) k/k_Jeq,
  *      k_Jeq = 9 m22^(1/2) Mpc^-1, m22 = m/1e-22 eV. Schive et al. (2016) fit the halo mass function's turn-down at
- *      M0 = 1.6e10 m22^(-4/3) Msun (their eq. MFFit, fitted to runs at m22 = 0.8, 1.6 and 3.2, so every bound mass is
+ *      M0 = 1.6e10 m22^(-4/3) Msun (the equation labelled MFFit in their arXiv source, fitted to runs at m22 = 0.8, 1.6 and 3.2, so every bound mass is
  *      an extrapolation). Both first seen as quoted by later papers in search text; #35's review read them in the
  *      papers' arXiv source.
  * 3. The small-scale tail of the transfer function, as a check on extrapolating Eisenstein & Hu twenty decades in
@@ -62,7 +63,8 @@
   C.eV = C.e / (C.c * C.c);                                  // kilograms per eV/c^2
   C.pc = C.Mpc / 1e6; C.kpc = C.Mpc / 1e3;
   const PLANCK18 = HOM.PLANCK18;
-  // Round numbers of the WMAP era, for comparing with papers of 2004-2005. Assumed: not any paper's stated inputs.
+  // Round numbers of the WMAP era, for comparing with papers of 2004-2005. sigma8 = 0.9 and n_s = 1 are Green, Hofmann &
+  // Schwarz's stated inputs (as #35's review read them); h, Omega_m and Omega_b are assumed.
   const WMAP_ERA = { h: 0.7, Om: 0.3, Ob: 0.045, ns: 1, sigma8: 0.9, Tcmb: 2.725 };
   const DELTA_C = 1.686;                                     // spherical collapse threshold (Einstein-de Sitter)
   const MW = 1e12;                                           // Milky Way halo mass, Msun
@@ -290,7 +292,7 @@
     }
     // Redshift at which a peak of height nu sigma reaches 1.686 (or o.delta); -1 if it has not yet.
     function zc(M, cut = CDM, o = {}) {
-      const s = (o.nu || 1) * sigma(M, cut, o), dc = o.delta || DELTA_C; if (s * growth(0, o) < dc) return -1;
+      const s = (o.nu ?? 1) * sigma(M, cut, o), dc = o.delta ?? DELTA_C; if (s * growth(0, o) < dc) return -1;
       let lo = 0, hi = lz1;
       for (let i = 0; i < 60; i++) { const mid = (lo + hi) / 2; if (s * growth(Math.exp(mid) - 1, o) > dc) lo = mid; else hi = mid; }
       return Math.exp(lo) - 1;
@@ -378,7 +380,7 @@
   }
   // Jeans masses (Msun) under the definitions in use, in the comoving density rhoM (Msun Mpc^-3; mean matter by
   // default); lambda_J = 2 pi/k_J. halfWave, a sphere of diameter lambda_J, is Hui, Ostriker, Tremaine & Witten's
-  // (2017) definition, M_J = (4/3) pi rho (lambda_J/2)^3 in the wave's own density (their eq. jeans, as #35's review
+  // (2017) definition, M_J = (4/3) pi rho (lambda_J/2)^3 in the wave's own density (the equation labelled jeans in their arXiv source, as #35's review
   // read it in the arXiv source; first seen quoted in search text).
   function jeansMasses(bg, kJ, rhoM = bg.rhoM) {
     const lam = 2 * Math.PI / kJ, V = r => 4 * Math.PI / 3 * r * r * r * rhoM;
