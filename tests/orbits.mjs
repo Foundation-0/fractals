@@ -30,7 +30,7 @@ check('In this 1800-2050 fit, n^2 a^3 matches GM_sun for every planet to within 
 {
   const inner = Math.max(...ex.slice(0, 4).map(Math.abs));
   near('The inner four planets: largest |n^2 a^3 / GM_sun - 1|', inner, 0, 5e-5,
-    `${JPL}; a regression bound, which an error above 5e-5 in GM_sun or in the length of the century would break`);
+    `${JPL}; a regression bound, which a GM_sun error beyond -1.3e-5 or +5.5e-5, or a century-length error beyond -0.6e-5 or +2.7e-5, would break`);
 }
 {
   const xs = O.PLANETS.map(p => Math.log(p.a)), mx = xs.reduce((s, x) => s + x, 0) / xs.length;
@@ -97,6 +97,10 @@ near('MWPotential2014: halo mass inside 245 kpc [1e12 M_sun]', g0.parts(245).hal
   'Bovy 2015, Table 1: M_vir = 0.8e12 M_sun with r_vir = 245 kpc (#37\'s review); tolerance the rounding of 0.8');
 near('The disk\'s mass inside a sphere of 1e4 kpc / its total (Gauss\'s theorem by quadrature)', g.diskSphereMass(1e4) / g.M.disk, 1, 1e-3,
   'model-internal (the Miyamoto-Nagai mass outside 1e4 kpc is about 3e-4 of the total)');
+near('Disk sphere mass, Kuzmin limit (b -> 0): fraction inside 8 kpc = 1 - a / sqrt(r^2 + a^2)', ((G) => G.diskSphereMass(8) / G.M.disk)(O.galaxy({ ...O.MWP14, b: 1e-9 })),
+  1 - 3 / Math.hypot(8, 3), 1e-8, 'arithmetic (closed form)');
+near('Disk sphere mass, Plummer limit (a = 0): fraction inside 0.3 kpc = r^3 / (r^2 + b^2)^(3/2)', ((G) => G.diskSphereMass(0.3) / G.M.disk)(O.galaxy({ ...O.MWP14, a: 0 })),
+  0.3 ** 3 / (0.09 + 0.28 ** 2) ** 1.5, 1e-8, 'arithmetic (closed form)');
 {
   const Rs = [5, 8.122, 15, 25], ve = R => 229.0 - 1.7 * (R - 8.122);
   const rel = Rs.map(R => (g.v(R) / g.v(8.122)) / (ve(R) / ve(8.122)) - 1);
@@ -148,6 +152,10 @@ near('Saturn\'s inclination to the invariable plane [deg]', O.tiltToInvariable(O
     check('The Sun: polar circular orbits at 0.3 r_J are lost within 20 turns, by plunging (Lidov-Kozai), not by escaping',
       pol.plunges >= 0.5 && pol.escapes === 0, `plunge ${pol.plunges.toFixed(2)} (must be >= 0.5), escape ${pol.escapes.toFixed(2)} (must be 0)`,
       'model (Lidov 1962, Kozai 1962: the eccentricity reaches 1 at 90 deg)');
+    const L = O.hillScan(K, [[1, 0, 0]], [0.1, 0.2], { nPhase: 8 });
+    check('Point-mass host: polar orbits (plane across the host) are lost by plunging between 0.1 and 0.2 r_H, before any escapes',
+      Number.isNaN(L.edge) && L.edgeLost > 0.1 && L.edgeLost < 0.2, `half lost by ${fmt(L.edgeLost)} r_H (must be 0.1 to 0.2); half escaped: ${L.edge} (must be none)`,
+      'model (the edgeLost path)');
   }
   const Om = 27.2 * C.kmskpc, want = (4 * Math.PI * C.GMsun * 0.10 / C.pc ** 3 + 2 * (15.3 ** 2 - 11.9 ** 2) * C.kmskpc ** 2) / Om ** 2;
   near('The Sun in the Galaxy: (vertical tidal frequency / Omega)^2', sun.nu2, want, 1e-12 * want, 'arithmetic in SI (Poisson\'s equation), independent of C.G');
@@ -156,9 +164,9 @@ near('Saturn\'s inclination to the invariable plane [deg]', O.tiltToInvariable(O
     fz[0].escapes === 0 && fz[1].escapes >= 0.5,
     fz.map((r, i) => `at ${[0.3, 0.6][i]} r_J: stay ${r.stays.toFixed(2)}, escape ${r.escapes.toFixed(2)}, plunge ${r.plunges.toFixed(2)}`).join('; ') +
     ' (12 directions x 2 angles)', 'model');
-  const rJ = O.jacobi(C.GMsun, 15.3, -11.9), edge = O.hillScan(sun, dirs, [0.3, 0.4, 0.5, 0.6], { nPhase: 2 }).edge * rJ / C.au;
+  const rJ = O.jacobi(C.GMsun, 15.3, -11.9), edge = O.hillScan(sun, dirs, [0.2, 0.3, 0.4, 0.5, 0.6], { nPhase: 2 }).edge * rJ / C.au;
   check('The Sun\'s all-directions escape edge lies within the Oort cloud\'s quoted outer limits, 6.5e4 to 2e5 au', edge >= 6.5e4 && edge <= 2e5,
-    `half have escaped by ${fmt(edge)} au (12 directions x 2 angles, grid 0.1 r_J; the tide alone, no passing stars)`,
+    `half have escaped by ${fmt(edge)} au (12 directions x 2 angles, grid 0.1 r_J from 0.2 r_J = 5.7e4 au; the tide alone, no passing stars)`,
     'Correa-Otto & Calandra 2019 sect. 4.3: a_crit ~ 6.5e4 au, set by passing stars (#37\'s review); Dones et al. 2004: as far as 2e5 au, as cited in search text');
 }
 

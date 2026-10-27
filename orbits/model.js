@@ -8,7 +8,7 @@
  *
  * Where it stops. A body of mass m on a circular orbit of angular speed Omega in a host keeps its own satellites
  * inside the tidal (Jacobi) radius, where its pull matches the host's tidal stretch less the centrifugal term
- * (Binney & Tremaine 2008, sec. 8.3):
+ * (Binney & Tremaine 2008, as Jiang & Tremaine 2010 give it; section not confirmed):
  *   r_J^3 = G m / (4 Omega^2 - kappa^2) = G m / (4 A (A - B)),  Omega = A - B,  kappa^2 = -4 B (A - B),
  * with A and B the host's Oort constants at the orbit. For a point-mass host A = 3 Omega / 4 and B = -Omega / 4, and
  * r_J is Hill's radius a (m / 3M)^(1/3). For a flat rotation curve A = -B = Omega / 2. Either way the mean density of
@@ -39,7 +39,7 @@
   C.kmskpc = 1e3 / C.kpc;        // 1 km/s/kpc in s^-1
 
   // ---------- the Solar System ----------
-  // JPL "Keplerian Elements for Approximate Positions of the Major Planets" (Standish), Table 1 (1800 AD - 2050 AD),
+  // JPL "Keplerian Elements for Approximate Positions of the Major Planets" (Standish & Williams), Table 1 (1800 AD - 2050 AD),
   // heliocentric, mean ecliptic and equinox of J2000: a [au], inclination i and node Om [deg], mean-longitude rate
   // Ldot [deg/century]. Sun/planet mass ratios from the DE430 GM values (Folkner et al. 2014); "EM Bary" is the
   // Earth-Moon barycentre.
@@ -259,7 +259,7 @@
   // ---------- Hill's problem: which orbits a body keeps inside its tidal radius ----------
   // A satellite of a body on a circular orbit in a host, in the frame rotating with the body (x away from the host's
   // centre, y along the motion, z out of the plane), lengths in r_J and times in 1/Omega (Binney & Tremaine 2008,
-  // sec. 8.3; Heisler & Tremaine 1986 for the vertical tide):
+  // as Jiang & Tremaine 2010 give it; Heisler & Tremaine 1986 for the vertical tide):
   //   x'' = 2y' + Gam x - Gam x/r^3,   y'' = -2x' - Gam y/r^3,   z'' = -nu2 z - Gam z/r^3,
   // with Gam = 4A/Omega (3 for a point-mass host, so these are Hill's equations) and nu2 = (vertical tidal frequency /
   // Omega)^2: 1 for a point-mass host; for a disk, (4 pi G rho0 + 2(A^2 - B^2)) / Omega^2 by Poisson's equation, with
