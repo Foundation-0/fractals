@@ -41,8 +41,8 @@ at all, in the one case where the exact answers are known and both ends of the r
   laws within their statistical errors, 0.9% to 1.6%.
 - **Tuned against self-organised.** Heat the lattice 6% above T_c and the nesting ends at ten lattice spacings;
   below T_c it ends sooner, at nine lattice spacings only 3% below. Turbulence and cosmic structure are scale-free
-  over a range that nobody tunes: the flow or the universe sets it, through the Reynolds number in an ordinary
-  fluid or the time gravity has had to act.
+  over a range that nobody tunes: the flow or the universe sets it, through the Reynolds number (in an ordinary
+  fluid) or the time gravity has had to act.
 
 ## Why a critical point has no scale
 
@@ -267,12 +267,13 @@ the lattice 6% above T_c and the range ends at ten lattice spacings, 76% above a
 nine lattice spacings only 3% below. Two other scale-free ranges in this repository's subject need no tuning.
 
 - *Turbulent cascades.* A stirred fluid passes energy from the scale at which it is stirred down to a scale set by
-  the medium. In air and water that is the scale at which viscosity removes it; in between, only the rate of energy
-  flow matters, the velocity spectrum falls as k^(−5/3) (Kolmogorov 1941), and the flow sets the range itself: its
-  width grows as the Reynolds number to the power 3/4 (as reviewed by Alexakis and Biferale 2018). The
-  [turbulence study](../turbulence/README.md) follows the range in a cascade model and lists what ends real
-  cascades: viscosity in air and water; in the solar wind the ions' own motion, below which a steeper kinetic
-  cascade carries on; in molecular clouds the sonic scale, which ends only the supersonic range.
+  the medium. In air and water that is the scale at which viscosity removes it. Between the stirring and viscous
+  scales only the rate of energy flow matters, and the velocity spectrum falls as k^(−5/3) (Kolmogorov 1941). The
+  flow sets that range itself: its width grows as the Reynolds number to the power 3/4 (as reviewed by Alexakis and
+  Biferale 2018). The [turbulence study](../turbulence/README.md) follows the range in a cascade model and lists
+  what ends real cascades: viscosity in air and water; in the solar wind the ions' own motion, at the ion scales
+  (about 100 km), below which a steeper kinetic cascade carries on; in molecular clouds the sonic scale, which ends
+  only the supersonic range.
 - *Gravitational clustering.* The density ripples of the early universe were close to scale-invariant: their
   spectrum is a power law in scale, k^(n_s − 1), with n_s = 0.965 ± 0.004, where n_s = 1 would give ripples of
   equal amplitude on every scale (Planck Collaboration 2020). Gravity has grown them into clustering that is

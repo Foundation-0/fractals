@@ -11,7 +11,7 @@
 // Ziff's p_c and Salas & Sokal's V4 are high-precision values whose errors are negligible here (the percolation means
 // print p_c as the reference value), the 3D Ising exponents are conformal-bootstrap estimates (Kos, Poland,
 // Simmons-Duffin & Vichi 2016), b0 and a1 are the coefficients Ziff & Newman use, the open-edge shifts built from them
-// keep only the leading term, and their Table 1 values are measurements.
+// keep only the leading term, and Ziff & Newman's Table 1 values are measurements.
 import { createRequire } from 'node:module';
 const CR = createRequire(import.meta.url)('./model.js');
 const { TC, KC, EXP, PERC } = CR;
