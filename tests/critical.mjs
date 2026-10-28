@@ -1,10 +1,11 @@
-// Checks the critical-point study (critical/model.js, issue #20) against exact results: Onsager's T_c and energy,
-// Yang's magnetisation, the exact correlation length, the 2D Ising exponents, the Binder cumulant at T_c, the
-// measurement trap in cluster runs, Newman and Ziff's percolation threshold and the 91/48 dimension; and against Ziff
-// and Newman's measurements of the same percolation system at finite sizes: their crossings of two sizes test the
-// open-edge shift, and one point tests the runs. Run: npm test (or node tests/critical.mjs).
-// Each check states the source, the value it is compared with (an exact value, or in those two checks Ziff and
-// Newman's measurements), the model's value and the tolerance. The Monte Carlo runs use fixed seeds and integer-only
+// Checks the critical-point study (critical/model.js, issue #20) against exact or high-precision results: Onsager's
+// T_c and energy, Yang's magnetisation, the exact correlation length, the 2D Ising exponents, the Binder cumulant at
+// T_c, the measurement trap in cluster runs, Newman and Ziff's measured percolation threshold, 0.59274621(13), whose
+// error is negligible here, and the 91/48 dimension; and against Ziff and Newman's measurements of the same
+// percolation system at finite sizes: their crossings of two sizes test the open-edge shift, and one point tests the
+// runs. Run: npm test (or node tests/critical.mjs).
+// Each check states the source, the value compared with (exact, Newman and Ziff's threshold, or in two checks Ziff and
+// Newman's measurements), the model's value and the tolerance. Monte Carlo runs use fixed seeds and integer-only
 // random numbers, so every run, on every Node version, prints the same numbers. Ising error bars are jackknife
 // estimates over 40 blocks. The percolation checks use the mean over nine seeds, the study seed and eight others, with
 // the standard error of that mean as error bar: the scatter between the nine seeds over 3. Each tolerance is a fixed
@@ -47,9 +48,10 @@ function check(name, ok, detail, src) {
   console.log(`${ok ? 'PASS' : 'FAIL'}  ${name}\n      ${detail}  ${src}`);
   if (!ok) fails++;
 }
-// A Monte Carlo estimate {value, err} against an exact value: passes if exact - lo <= model <= exact + hi, where tol is
+// A Monte Carlo estimate {value, err} against a reference value: passes if ref - lo <= model <= ref + hi, where tol is
 // one number (lo = hi = tol) or [lo, hi], and the error bar is finite (a jackknife replicate can fail and give NaN).
-// `label` names the value compared with when it is a published measurement rather than an exact value.
+// `label` names the value compared with when it is a published measurement rather than an exact value: 'reference' for
+// Newman and Ziff's threshold, whose error (1.3e-7) is negligible here, 'measured' for a finite-size measurement.
 function near(name, est, want, tol, src, why, d, label = 'exact') {
   const [lo, hi] = Array.isArray(tol) ? tol : [tol, tol], dev = est.value - want;
   const finite = Number.isFinite(est.err), ok = finite && dev >= -lo && dev <= hi;
@@ -68,7 +70,8 @@ function nearRel(name, est, want, rel, src, why) {
   if (!ok) fails++;
 }
 
-// 1. The closed forms themselves (no Monte Carlo): these test the code against the published formulas.
+// 1. No Monte Carlo: the closed forms against the published formulas, the open-edge shift also against Ziff & Newman's
+//    measured crossings (Table 1), and the random-number generator.
 const ONS = 'Onsager 1944', YANG = 'Yang 1952', CHPV = 'Caselle, Hasenbusch, Pelissetto & Vicari 2002 (arXiv:cond-mat/0106372)';
 check('Critical temperature: sinh(2/T_c) = 1, T_c = 2/ln(1 + sqrt 2)', Math.abs(Math.sinh(2 / TC) - 1) < 1e-14 && Math.abs(KC - 0.4406868) < 1e-7,
   `T_c = ${TC.toFixed(6)}, 1/T_c = ${KC.toFixed(7)} (published 0.4406868...)`, `${ONS}; ${CHPV} sec. 2.1`);
@@ -205,7 +208,7 @@ for (const c of pool.wide) near(`p_c from the crossing of the spanning probabili
       'nine seeds scatter more than the repeat\'s 120. About half of that excess is the study seed\'s: it sits 0.0013 ' +
       'high, about 2.4 standard deviations of a single seed beyond the shift (single seeds scatter by about 0.0005 in ' +
       'the repeat; 0.0006 for the eight other seeds). A mean more than 0.0010 above p_c or 0.0009 below fails, so an ' +
-      'offset of 0.0012 fails. The mean sits 0.2 sigma above the shift', 5);
+      'offset of 0.0012 fails. The mean sits 0.2 sigma above the shift', 5, 'reference');
 near(`Fractal dimension of the spanning cluster at p_c: mass ~ L^D, least squares over L = ${pool.Ls.slice(1).join(', ')}, mean of ${n} seeds`,
   pool.D, PERC.D, [0.024, 0.008], 'D = 2 - 5/48 = 91/48: Lawler, Schramm & Werner 2002 (one-arm exponent 5/48)',
   'tolerance: the slope between successive sizes rises with L (1.861, 1.876 and 1.884 from L = 32 to 256, means of the ' +

@@ -335,9 +335,9 @@ and the hole's loss of mass; interactions between the particles; anything else n
 Why does anything repeat across scales at all? At a critical point, such as water at 647 K and 22 MPa or a magnet
 at its Curie temperature, fluctuations of every size appear, from the size of a molecule up to a correlation length
 ξ that grows without limit as the temperature approaches T_c. A 2D Ising lattice and site percolation, run with
-seeded random numbers in `critical/model.js`, come out at or close to the exact answers: the Ising results within
-1.5 standard deviations, the percolation threshold within one standard error once open edges are allowed for, and
-the spanning cluster's dimension 0.8% low (details in
+seeded random numbers in `critical/model.js`, come out at or close to the exact or high-precision answers: the
+Ising results within 1.5 standard deviations, the percolation threshold within one standard error once open edges
+are allowed for, and the spanning cluster's dimension 0.8% low (details in
 [critical/README.md](critical/README.md#what-it-reproduces), issue #20):
 
 - T_c from where the Binder cumulants of two lattice sizes cross: 2.2704 ± 0.0017 J/k_B, against Onsager's
@@ -358,8 +358,8 @@ nobody tunes: the flow's Reynolds number, or the time gravity has had to act, se
 smooth on the largest scales, as the [opening section](#where-the-intuition-holds-and-where-it-breaks) describes).
 Real fluids have the same mechanism with three-dimensional exponents: ξ grows 4.27-fold for each tenfold approach
 to T_c (ν = 0.630; Kos, Poland, Simmons-Duffin and Vichi 2016), against tenfold for the 2D lattice. `npm test`
-checks the study against the exact results and, for percolation at finite sizes, against Ziff and Newman's
-measurements (`tests/critical.mjs`).
+checks the study against the exact or high-precision results and, for percolation at finite sizes, against Ziff and
+Newman's measurements (`tests/critical.mjs`).
 
 Mistakes found along the way are in [CORRECTIONS.md](CORRECTIONS.md). Open questions are the
 [issues](https://github.com/Foundation-0/fractals/issues).

@@ -6,14 +6,14 @@ for each of nine seeds and as their mean. No script prints three kinds of number
 of the checks with 120 other sets of seeds, described under [What it reproduces](#what-it-reproduces); γ/ν's
 finite-size bias of +0.0012 and the Binder cumulant's offset of 0.0007 at L = 16, worked out from published
 results; and the 11% and 25% uncertainties of an error bar. `npm test` (`tests/critical.mjs`) checks the numbers
-compared with an exact value: the table under "What it reproduces", the ξ table, the measurement-trap cumulant with
-a fixed count and the same numbers in the short answer. It checks the cumulant measured the other way only against
-that one, and the point where the spanning probability at L = 32 is one half against Ziff and Newman's measurement
-there. Without Monte Carlo, it also checks the open-edge shift against their measured crossings for L = 64 to 256.
-The rest are printed but not checked: the slopes over other ranges of L, the cluster shares, the size ratios, the
-point where the spanning probability at L = 256 is one half, the other comparisons with Ziff and Newman's
-measurements and each percolation seed's results. Exact values are quoted from the sources named beside them.
-Started 18 October 2026.
+compared with an exact or high-precision value (Newman and Ziff's measured threshold, whose error is negligible
+here): the table under "What it reproduces", the ξ table, the measurement-trap cumulant with a fixed count and the
+same numbers in the short answer. It checks the cumulant measured the other way only against that one, and the
+point where the spanning probability at L = 32 is one half against Ziff and Newman's measurement there. Without
+Monte Carlo, it also checks the open-edge shift against their measured crossings for L = 64 to 256. The rest are
+printed but not checked: the slopes over other ranges of L, the cluster shares, the size ratios, the point where
+the spanning probability at L = 256 is one half, the other comparisons with Ziff and Newman's measurements and each
+percolation seed's results. Exact values are quoted from the sources named beside them. Started 18 October 2026.
 
 The other studies find self-similarity over a range of scales and ask where it stops. This one asks why it appears
 at all, in the one case where the exact answers are known and both ends of the range can be moved at will.
@@ -331,7 +331,7 @@ size of a molecule.
 - L. Onsager, *Crystal statistics. I. A two-dimensional model with an order-disorder transition*, Phys. Rev. 65, 117 (1944). Not consulted directly; T_c and the energy are checked against Caselle et al. (2002). https://doi.org/10.1103/PhysRev.65.117
 - A. Pelissetto and E. Vicari, *Critical phenomena and renormalization-group theory*, Phys. Rep. 368, 549 (2002), secs. 1.3, 1.6.2, 3.1, 3.5, 5, 7.1 and 11.3. https://doi.org/10.1016/S0370-1573(02)00219-3 (https://arxiv.org/abs/cond-mat/0012164)
 - Planck Collaboration, *Planck 2018 results. VI. Cosmological parameters*, A&A 641, A6 (2020). https://doi.org/10.1051/0004-6361/201833910 (https://arxiv.org/abs/1807.06209)
-- J. Salas and A. D. Sokal, *Universal amplitude ratios in the critical two-dimensional Ising model on a torus*, J. Stat. Phys. 98, 551 (2000), sec. 4.1 and Table 2. https://doi.org/10.1023/A:1018611122166 (https://arxiv.org/abs/cond-mat/9904038)
+- J. Salas and A. D. Sokal, *Universal amplitude ratios in the critical two-dimensional Ising model on a torus*, J. Stat. Phys. 98, 551 (2000), secs. 1, 4.1 and 4.3 and Tables 2 and 5. https://doi.org/10.1023/A:1018611122166 (https://arxiv.org/abs/cond-mat/9904038)
 - M. Scrimgeour et al., *The WiggleZ Dark Energy Survey: the transition to large-scale cosmic homogeneity*, MNRAS 425, 116–134 (2012). https://doi.org/10.1111/j.1365-2966.2012.21402.x (https://arxiv.org/abs/1205.6812)
 - S. Smirnov and W. Werner, *Critical exponents for two-dimensional percolation*, Math. Res. Lett. 8, 729 (2001). https://doi.org/10.4310/MRL.2001.v8.n6.a4 (https://arxiv.org/abs/math/0109120)
 - U. Wolff, *Collective Monte Carlo updating for spin systems*, Phys. Rev. Lett. 62, 361 (1989). Not consulted directly; the add probability is as in Fujimoto and Otsuka (2020, appendix B). https://doi.org/10.1103/PhysRevLett.62.361
