@@ -288,7 +288,8 @@
   // once r < rIn (1e-3 r_J is 0.74 of Jupiter's radius; for the Sun it is 283 au, outside the planets), otherwise
   // 'stays'. Returns the final state s too. Throws on non-finite settings, on a non-finite step, or after maxSteps
   // (by default 2.5e5 per turn of the host; the hardest orbit in the tables, a polar orbit at 0.025 r_J that stays,
-  // needs about 7e4 per turn), rather than looping.
+  // needs about 7e4 per turn; steps per turn grow as a^-1.5, so the cap would fire only below about 0.012 r_J, under
+  // the smallest radius scanned here), rather than looping.
   function hillOrbit(host, s0, { orbits = 20, rEsc = 3, rIn = 1e-3, tol = 1e-10, maxSteps = 2.5e5 * orbits } = {}) {
     if (![orbits, rEsc, rIn, tol, maxSteps, host.Gam, host.nu2, ...s0].every(Number.isFinite)) throw new Error('hillOrbit: non-finite input');
     const T = 2 * Math.PI * orbits, k = Array.from({ length: 7 }, () => new Float64Array(6));
