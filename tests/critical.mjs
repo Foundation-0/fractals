@@ -50,9 +50,9 @@ function check(name, ok, detail, src) {
 }
 // A Monte Carlo estimate {value, err} against a reference value: passes if ref - lo <= model <= ref + hi, where tol is
 // one number (lo = hi = tol) or [lo, hi], and the error bar is finite (a jackknife replicate can fail and give NaN).
-// `label` names the value compared with when it is a published measurement rather than an exact value: 'reference' for
-// Newman and Ziff's threshold and Salas and Sokal's V4, whose errors (1.3e-7, and 1.6e-6 in U) are negligible here,
-// 'measured' for a finite-size measurement.
+// `label` names the value compared with when it is not an exact value: 'reference' for Newman and Ziff's measured
+// threshold and Salas and Sokal's V4 (exact CFT correlators integrated numerically), whose errors (1.3e-7, and 1.6e-6
+// in U) are negligible here, 'measured' for a finite-size measurement.
 function near(name, est, want, tol, src, why, d, label = 'exact') {
   const [lo, hi] = Array.isArray(tol) ? tol : [tol, tol], dev = est.value - want;
   const finite = Number.isFinite(est.err), ok = finite && dev >= -lo && dev <= hi;

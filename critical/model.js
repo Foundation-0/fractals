@@ -20,7 +20,7 @@
  *     appendix A; near T_c the amplitude ratio 2 is in Pelissetto & Vicari 2002, sec. 3.5).
  *   Exponents beta = 1/8, nu = 1, eta = 1/4, gamma = 7/4 (Pelissetto & Vicari 2002, sec. 3.5). On a periodic L x L
  *     lattice at T_c the Binder cumulant 1 - <m^4>/(3<m^2>^2) tends to 1 - V4/3 = 0.61069, V4 = 1.1679229(47)
- *     (Salas & Sokal 2000).
+ *     (Salas & Sokal 2000), a high-precision value: exact CFT correlators integrated numerically, not a closed form.
  * Site percolation: an L x L square lattice with open edges, each site occupied with probability p. Newman & Ziff's
  * (2000) algorithm: occupy sites one at a time in random order, join each to its occupied neighbours with weighted
  * union-find, and note when a cluster first touches both the top and the bottom row (spans). Averages at a given p

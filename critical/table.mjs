@@ -7,8 +7,11 @@
 // (node critical/table.mjs scatter, which used to print eight of those seeds on their own, now prints the same.)
 // No script prints the numbers critical/README.md takes from the one-off repeat with 120 other sets of seeds, or the
 // finite-size shifts it works out from published formulas other than the open-edge shifts printed below; the README
-// names them. The known values are exact except Newman & Ziff's p_c and Salas & Sokal's V4, which are high-precision
-// values whose errors are negligible here; the percolation means print p_c as the reference value.
+// names them. Not every known value printed is exact, and each that is not is marked where it is printed: Newman &
+// Ziff's p_c and Salas & Sokal's V4 are high-precision values whose errors are negligible here (the percolation means
+// print p_c as the reference value), the 3D Ising exponents are conformal-bootstrap estimates (Kos, Poland,
+// Simmons-Duffin & Vichi 2016), b0 and a1 are the coefficients Ziff & Newman use, and their Table 1 values are
+// measurements.
 import { createRequire } from 'node:module';
 const CR = createRequire(import.meta.url)('./model.js');
 const { TC, KC, EXP, PERC } = CR;
@@ -17,7 +20,7 @@ const pm = (j, d) => `${j.value.toFixed(d)} ± ${j.err.toFixed(d)}`;
 const col = (s, w) => String(s).padStart(w);
 
 console.log('Critical point study (issue #20). J = k_B = 1: temperatures in J/k_B, lengths in lattice spacings.\n');
-console.log('Exact and high-precision values (infinite lattice)');
+console.log('Known values: exact unless marked, for the infinite lattice unless a size is given');
 console.log(`  T_c = 2/ln(1 + sqrt 2) = ${TC.toFixed(6)}, K_c = 1/T_c = ${KC.toFixed(7)}; energy per spin at T_c ${CR.energyExact(TC).toFixed(6)} (-sqrt 2)`);
 console.log(`  Ising exponents: beta = ${EXP.beta}, nu = ${EXP.nu}, eta = ${EXP.eta}, gamma = ${EXP.gamma}; ` +
   `beta/nu = ${EXP.beta / EXP.nu}, gamma/nu = ${EXP.gamma / EXP.nu}`);
@@ -27,11 +30,11 @@ console.log(`  Binder cumulant at T_c on a periodic square, L -> infinity: 1 - 1
   "(Salas & Sokal's high-precision V4)");
 console.log(`  percolation: p_c = ${PERC.pc} (Newman & Ziff's measurement), D = 91/48 = ${PERC.D.toFixed(4)} (2 - 5/48); ` +
   `open edges put the crossing of R_L1(p) and R_L2(p) above p_c by (b0/a1)(1/L1 - 1/L2)/(L2^(3/4) - L1^(3/4)), ` +
-  `b0 = ${PERC.b0}, a1 = ${PERC.a1}: ` +
+  `b0 = ${PERC.b0}, a1 = ${PERC.a1} (the coefficients Ziff & Newman use): ` +
   `+${CR.edgeShift(32, 128).toFixed(5)} for L = 32/128, +${CR.edgeShift(64, 256).toFixed(5)} for 64/256`);
 const nu3 = 0.629971;
-console.log(`  3D Ising (liquid-vapour critical points): nu = ${nu3}, eta = 0.0362978; a tenfold approach to T_c multiplies xi by ` +
-  `10^nu = ${Math.pow(10, nu3).toFixed(2)} in 3D, ${Math.pow(10, EXP.nu).toFixed(0)} in 2D`);
+console.log(`  3D Ising (liquid-vapour critical points): nu = ${nu3}, eta = 0.0362978 (conformal-bootstrap estimates, Kos et al. 2016); ` +
+  `a tenfold approach to T_c multiplies xi by 10^nu = ${Math.pow(10, nu3).toFixed(2)} in 3D, ${Math.pow(10, EXP.nu).toFixed(0)} in 2D`);
 
 console.log('\nBelow T_c (Wolff clusters, L = 64, 3000 measurements each)');
 console.log(col('T', 6) + col('<|m|>', 22) + col('Yang', 10) + col('energy', 22) + col('Onsager', 11) + col('xi (exact)', 12));

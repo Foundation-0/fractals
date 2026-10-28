@@ -266,10 +266,13 @@ and the field at zero, or p at p_c. The range then runs from the lattice spacing
 the lattice 6% above T_c and the range ends at ten lattice spacings, 76% above at one; below T_c it ends sooner, at
 nine lattice spacings only 3% below. Two other scale-free ranges in this repository's subject need no tuning.
 
-- *Turbulent cascades.* A stirred fluid passes energy from the scale at which it is stirred down to the scale at
-  which viscosity removes it. In between, only the rate of energy flow matters, and the velocity spectrum falls as
-  k^(−5/3) (Kolmogorov 1941). The flow sets the range itself: its width grows as the Reynolds number to the power
-  3/4 (as reviewed by Alexakis and Biferale 2018). This repository does not yet discuss turbulence elsewhere.
+- *Turbulent cascades.* A stirred fluid passes energy from the scale at which it is stirred down to a scale set by
+  the medium: in air and water, the scale at which viscosity removes it. In between, only the rate of energy flow
+  matters, and the velocity spectrum falls as k^(−5/3) (Kolmogorov 1941). The flow sets the range itself: in an
+  ordinary fluid its width grows as the Reynolds number to the power 3/4 (as reviewed by Alexakis and Biferale
+  2018). The [turbulence study](../turbulence/README.md) follows the range in a cascade model and lists what ends
+  real cascades: viscosity in air and water, the ions' own motion in the solar wind, the sonic scale in molecular
+  clouds.
 - *Gravitational clustering.* The density ripples of the early universe were close to scale-invariant: their
   spectrum is a power law in scale, k^(n_s − 1), with n_s = 0.965 ± 0.004, where n_s = 1 would give ripples of
   equal amplitude on every scale (Planck Collaboration 2020). Gravity has grown them into clustering that is
