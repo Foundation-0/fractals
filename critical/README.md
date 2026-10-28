@@ -6,14 +6,15 @@ for each of nine seeds and as their mean. No script prints three kinds of number
 of the checks with 120 other sets of seeds, described under [What it reproduces](#what-it-reproduces); γ/ν's
 finite-size bias of +0.0012 and the Binder cumulant's offset of 0.0007 at L = 16, worked out from published
 results; and the 11% and 25% uncertainties of an error bar. `npm test` (`tests/critical.mjs`) checks the numbers
-compared with an exact or high-precision value (Newman and Ziff's measured threshold, whose error is negligible
-here): the table under "What it reproduces", the ξ table, the measurement-trap cumulant with a fixed count and the
-same numbers in the short answer. It checks the cumulant measured the other way only against that one, and the
-point where the spanning probability at L = 32 is one half against Ziff and Newman's measurement there. Without
-Monte Carlo, it also checks the open-edge shift against their measured crossings for L = 64 to 256. The rest are
-printed but not checked: the slopes over other ranges of L, the cluster shares, the size ratios, the point where
-the spanning probability at L = 256 is one half, the other comparisons with Ziff and Newman's measurements and each
-percolation seed's results. Exact values are quoted from the sources named beside them. Started 18 October 2026.
+compared with an exact or high-precision value (Newman and Ziff's measured threshold and Salas and Sokal's V4,
+whose errors are negligible here): the table under "What it reproduces", the ξ table, the measurement-trap cumulant
+with a fixed count and the same numbers in the short answer. It checks the cumulant measured the other way only
+against that one, and the point where the spanning probability at L = 32 is one half against Ziff and Newman's
+measurement there. Without Monte Carlo, it also checks the open-edge shift against their measured crossings for
+L = 64 to 256. The rest are printed but not checked: the slopes over other ranges of L, the cluster shares, the
+size ratios, the point where the spanning probability at L = 256 is one half, the other comparisons with Ziff and
+Newman's measurements and each percolation seed's results. Exact and high-precision values are quoted from the
+sources named beside them. Started 18 October 2026.
 
 The other studies find self-similarity over a range of scales and ask where it stops. This one asks why it appears
 at all, in the one case where the exact answers are known and both ends of the range can be moved at will.
@@ -25,7 +26,7 @@ at all, in the one case where the exact answers are known and both ends of the r
   zero field. There, patches of aligned spins come in every size from the lattice spacing to the size of the
   sample, nested inside one another. Away from T_c the nesting stops at the correlation length ξ, which in the
   two-dimensional model grows as 1/|T − T_c| (exponent ν = 1).
-- **A small model lands on or near the exact numbers.** A 2D Ising lattice with seeded random numbers places T_c at
+- **A small model lands on or near the known numbers.** A 2D Ising lattice with seeded random numbers places T_c at
   2.2704 ± 0.0017 J/k_B, where the Binder cumulants of two sizes cross, against Onsager's 2/ln(1 + √2) = 2.2692. It
   reproduces Yang's spontaneous magnetisation within 0.21%, and gives β/ν = 0.1245 ± 0.0026, γ/ν = 1.751 ± 0.004
   and η = 0.250 ± 0.005, against 1/8, 7/4 and 1/4. Site percolation on a square lattice, averaged over nine
@@ -40,8 +41,8 @@ at all, in the one case where the exact answers are known and both ends of the r
   laws within their statistical errors, 0.9% to 1.6%.
 - **Tuned against self-organised.** Heat the lattice 6% above T_c and the nesting ends at ten lattice spacings;
   below T_c it ends sooner, at nine lattice spacings only 3% below. Turbulence and cosmic structure are scale-free
-  over a range that nobody tunes: the flow or the universe sets it, through the Reynolds number or the time gravity
-  has had to act.
+  over a range that nobody tunes: the flow or the universe sets it, through the Reynolds number (in an ordinary
+  fluid) or the time gravity has had to act.
 
 ## Why a critical point has no scale
 
@@ -106,7 +107,7 @@ Werner 2001). The square lattice is expected to share it, by universality.
 
 ## What it reproduces
 
-| Check | Exact | Model |
+| Check | Exact or high-precision | Model |
 |---|---|---|
 | Spontaneous magnetisation ⟨\|m\|⟩ at T = 2.0, 2.1, 2.2, L = 64 (Yang 1952) | 0.91132, 0.86875, 0.78476 | 0.91129 ± 0.00035, 0.86913 ± 0.00060, 0.78314 ± 0.00163 |
 | Energy per spin, same runs (Onsager 1944) | −1.74556, −1.66208, −1.54649 | −1.74536 ± 0.00066, −1.66253 ± 0.00096, −1.54527 ± 0.00129 |
@@ -265,10 +266,14 @@ and the field at zero, or p at p_c. The range then runs from the lattice spacing
 the lattice 6% above T_c and the range ends at ten lattice spacings, 76% above at one; below T_c it ends sooner, at
 nine lattice spacings only 3% below. Two other scale-free ranges in this repository's subject need no tuning.
 
-- *Turbulent cascades.* A stirred fluid passes energy from the scale at which it is stirred down to the scale at
-  which viscosity removes it. In between, only the rate of energy flow matters, and the velocity spectrum falls as
-  k^(−5/3) (Kolmogorov 1941). The flow sets the range itself: its width grows as the Reynolds number to the power
-  3/4 (as reviewed by Alexakis and Biferale 2018). This repository does not yet discuss turbulence elsewhere.
+- *Turbulent cascades.* A stirred fluid passes energy from the scale at which it is stirred down to a scale set by
+  the medium. In air and water that is the scale at which viscosity removes it. Between the stirring and viscous
+  scales only the rate of energy flow matters, and the velocity spectrum falls as k^(−5/3) (Kolmogorov 1941). The
+  flow sets that range itself: its width grows as the Reynolds number to the power 3/4 (as reviewed by Alexakis and
+  Biferale 2018). The [turbulence study](../turbulence/README.md) follows the range in a cascade model and lists
+  what ends real cascades: viscosity in air and water; in the solar wind the ions' own motion, at the ion scales
+  (about 100 km), below which a steeper kinetic cascade carries on; in molecular clouds the sonic scale, which ends
+  only the supersonic range.
 - *Gravitational clustering.* The density ripples of the early universe were close to scale-invariant: their
   spectrum is a power law in scale, k^(n_s − 1), with n_s = 0.965 ± 0.004, where n_s = 1 would give ripples of
   equal amplitude on every scale (Planck Collaboration 2020). Gravity has grown them into clustering that is

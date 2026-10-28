@@ -1,4 +1,4 @@
-// Prints the Monte Carlo numbers quoted in critical/README.md (issue #20) and the exact values beside them. Usage: node
+// Prints the Monte Carlo numbers quoted in critical/README.md (issue #20) and the known values beside them. Usage: node
 // critical/table.mjs (about 65 s). The runs are the same fixed-seed runs that tests/critical.mjs makes, so the numbers
 // match; not every number printed here is checked (critical/README.md says which are). Percolation runs with nine
 // seeds, and its checks use their mean: printed here with each seed's values, the standard error of the mean, the
@@ -7,7 +7,11 @@
 // (node critical/table.mjs scatter, which used to print eight of those seeds on their own, now prints the same.)
 // No script prints the numbers critical/README.md takes from the one-off repeat with 120 other sets of seeds, or the
 // finite-size shifts it works out from published formulas other than the open-edge shifts printed below; the README
-// names them.
+// names them. Not every known value printed is exact, and each that is not is marked where it is printed: Newman &
+// Ziff's p_c and Salas & Sokal's V4 are high-precision values whose errors are negligible here (the percolation means
+// print p_c as the reference value), the 3D Ising exponents are conformal-bootstrap estimates (Kos, Poland,
+// Simmons-Duffin & Vichi 2016), b0 and a1 are the coefficients Ziff & Newman use, the open-edge shifts built from them
+// keep only the leading term, and Ziff & Newman's Table 1 values are measurements.
 import { createRequire } from 'node:module';
 const CR = createRequire(import.meta.url)('./model.js');
 const { TC, KC, EXP, PERC } = CR;
@@ -16,19 +20,21 @@ const pm = (j, d) => `${j.value.toFixed(d)} ± ${j.err.toFixed(d)}`;
 const col = (s, w) => String(s).padStart(w);
 
 console.log('Critical point study (issue #20). J = k_B = 1: temperatures in J/k_B, lengths in lattice spacings.\n');
-console.log('Exact values (infinite lattice)');
+console.log('Known values: exact unless marked, for the infinite lattice unless a size is given');
 console.log(`  T_c = 2/ln(1 + sqrt 2) = ${TC.toFixed(6)}, K_c = 1/T_c = ${KC.toFixed(7)}; energy per spin at T_c ${CR.energyExact(TC).toFixed(6)} (-sqrt 2)`);
 console.log(`  Ising exponents: beta = ${EXP.beta}, nu = ${EXP.nu}, eta = ${EXP.eta}, gamma = ${EXP.gamma}; ` +
   `beta/nu = ${EXP.beta / EXP.nu}, gamma/nu = ${EXP.gamma / EXP.nu}`);
 console.log(`  correlation length above T_c 1/(ln coth K - 2K); near T_c 1/(4(K_c - K)) = ${(1 / (4 * KC)).toFixed(4)}/t, t = (K_c - K)/K_c; ` +
   `below T_c 1/(4(K - K*)), K* the dual coupling`);
-console.log(`  Binder cumulant at T_c on a periodic square, L -> infinity: 1 - 1.1679229/3 = ${(1 - 1.1679229 / 3).toFixed(5)}`);
-console.log(`  percolation: p_c = ${PERC.pc}, D = 91/48 = ${PERC.D.toFixed(4)} (2 - 5/48); open edges put the crossing of ` +
-  `R_L1(p) and R_L2(p) above p_c by (b0/a1)(1/L1 - 1/L2)/(L2^(3/4) - L1^(3/4)), b0 = ${PERC.b0}, a1 = ${PERC.a1}: ` +
+console.log(`  Binder cumulant at T_c on a periodic square, L -> infinity: 1 - 1.1679229/3 = ${(1 - 1.1679229 / 3).toFixed(5)} ` +
+  "(Salas & Sokal's high-precision V4)");
+console.log(`  percolation: p_c = ${PERC.pc} (Newman & Ziff's measurement), D = 91/48 = ${PERC.D.toFixed(4)} (2 - 5/48); ` +
+  `to leading order, open edges put the crossing of R_L1(p) and R_L2(p) above p_c by (b0/a1)(1/L1 - 1/L2)/(L2^(3/4) - L1^(3/4)), ` +
+  `b0 = ${PERC.b0}, a1 = ${PERC.a1} (the coefficients Ziff & Newman use): ` +
   `+${CR.edgeShift(32, 128).toFixed(5)} for L = 32/128, +${CR.edgeShift(64, 256).toFixed(5)} for 64/256`);
 const nu3 = 0.629971;
-console.log(`  3D Ising (liquid-vapour critical points): nu = ${nu3}, eta = 0.0362978; a tenfold approach to T_c multiplies xi by ` +
-  `10^nu = ${Math.pow(10, nu3).toFixed(2)} in 3D, ${Math.pow(10, EXP.nu).toFixed(0)} in 2D`);
+console.log(`  3D Ising (liquid-vapour critical points): nu = ${nu3}, eta = 0.0362978 (conformal-bootstrap estimates, Kos et al. 2016); ` +
+  `a tenfold approach to T_c multiplies xi by 10^nu = ${Math.pow(10, nu3).toFixed(2)} in 3D, ${Math.pow(10, EXP.nu).toFixed(0)} in 2D`);
 
 console.log('\nBelow T_c (Wolff clusters, L = 64, 3000 measurements each)');
 console.log(col('T', 6) + col('<|m|>', 22) + col('Yang', 10) + col('energy', 22) + col('Onsager', 11) + col('xi (exact)', 12));
@@ -93,10 +99,11 @@ const cols = [['p_c, L = 32/128', r => r.wide[0].p, pool.wide[0].p, PERC.pc, 5, 
 console.log(col('seed', 6) + cols.map(c => col(c[0], 22)).join(''));
 pool.each.forEach((r, i) => console.log(col(seeds[i], 6) + cols.map(c => col(pm(c[1](r), c[4]), 22)).join('')));
 console.log(col('mean', 6) + cols.map(c => col(pm(c[2], c[4]), 22)).join('') + '\n');
-for (const [name, f, m, exact, d, shift] of cols) {
+for (const [name, f, m, ref, d, shift] of cols) {
+  const label = ref === PERC.pc ? 'reference' : 'exact';
   const jk = pool.each.reduce((a, r) => a + f(r).err, 0) / pool.each.length;
-  console.log(`  ${name}: mean ${pm(m, d)}, exact ${exact.toFixed(d)}, mean - exact ${(m.value - exact).toFixed(d)}` +
-    (shift ? ` (open-edge shift +${shift.toFixed(d)})` : '') + `; scatter between seeds ${m.sd.toFixed(d)}, mean jackknife error ${jk.toFixed(d)}`);
+  console.log(`  ${name}: mean ${pm(m, d)}, ${label} ${ref.toFixed(d)}, mean - ${label} ${(m.value - ref).toFixed(d)}` +
+    (shift ? ` (leading-order open-edge shift +${shift.toFixed(d)})` : '') + `; scatter between seeds ${m.sd.toFixed(d)}, mean jackknife error ${jk.toFixed(d)}`);
 }
 // How the slope of ln(mass) against ln L changes with L: slopes between successive sizes, and how much leaving out
 // L = 32 raises the fitted slope, seed by seed (mean ± standard error over the nine seeds).
