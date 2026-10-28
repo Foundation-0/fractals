@@ -1,12 +1,12 @@
 // Checks the critical-point study (critical/model.js, issue #20) against exact or high-precision results: Onsager's
-// T_c and energy, Yang's magnetisation, the exact correlation length, the 2D Ising exponents, the Binder cumulant at
-// T_c, the measurement trap in cluster runs, Newman and Ziff's measured percolation threshold, 0.59274621(13), whose
-// error is negligible here, and the 91/48 dimension; and against Ziff and Newman's measurements of the same
-// percolation system at finite sizes: their crossings of two sizes test the open-edge shift, and one point tests the
-// runs. Run: npm test (or node tests/critical.mjs).
-// Each check states the source, the value compared with (exact, Newman and Ziff's threshold, or in two checks Ziff and
-// Newman's measurements), the model's value and the tolerance. Monte Carlo runs use fixed seeds and integer-only
-// random numbers, so every run, on every Node version, prints the same numbers. Ising error bars are jackknife
+// T_c and energy, Yang's magnetisation, the exact correlation length, the 2D Ising exponents, Salas and Sokal's
+// high-precision Binder cumulant at T_c, the measurement trap in cluster runs, Newman and Ziff's measured percolation
+// threshold, 0.59274621(13), whose error is negligible here, and the 91/48 dimension; and against Ziff and Newman's
+// measurements of the same percolation system at finite sizes: their crossings of two sizes test the open-edge shift,
+// and one point tests the runs. Run: npm test (or node tests/critical.mjs).
+// Each check states the source, the value compared with (exact or high-precision, or in two checks Ziff and Newman's
+// measurements), the model's value and the tolerance. Monte Carlo runs use fixed seeds and integer-only random
+// numbers, so every run, on every Node version, prints the same numbers. Ising error bars are jackknife
 // estimates over 40 blocks. The percolation checks use the mean over nine seeds, the study seed and eight others, with
 // the standard error of that mean as error bar: the scatter between the nine seeds over 3. Each tolerance is a fixed
 // number, 3 to 5 standard deviations of the noisiest estimate it covers, plus any finite-size shift: worked out from
@@ -51,7 +51,8 @@ function check(name, ok, detail, src) {
 // A Monte Carlo estimate {value, err} against a reference value: passes if ref - lo <= model <= ref + hi, where tol is
 // one number (lo = hi = tol) or [lo, hi], and the error bar is finite (a jackknife replicate can fail and give NaN).
 // `label` names the value compared with when it is a published measurement rather than an exact value: 'reference' for
-// Newman and Ziff's threshold, whose error (1.3e-7) is negligible here, 'measured' for a finite-size measurement.
+// Newman and Ziff's threshold and Salas and Sokal's V4, whose errors (1.3e-7, and 1.6e-6 in U) are negligible here,
+// 'measured' for a finite-size measurement.
 function near(name, est, want, tol, src, why, d, label = 'exact') {
   const [lo, hi] = Array.isArray(tol) ? tol : [tol, tol], dev = est.value - want;
   const finite = Number.isFinite(est.err), ok = finite && dev >= -lo && dev <= hi;
@@ -147,7 +148,8 @@ near(`T_c from the crossing of the Binder cumulants of L = 64 and 128`, cross(64
 near('Binder cumulant at T_c, mean of L = 16 to 128', crit.binderMean, 1 - 1.1679229 / 3, 0.005,
   'Salas & Sokal 2000: 1 - V4/3, V4 = 1.1679229(47)', 'tolerance 4.5 sigma (sigma = 0.0011), 4.2 sigma of the seed-to-seed scatter ' +
   '(0.0012); 4.3 and 4.0 after the mean\'s +0.00024 finite-size shift, most of it from L = 16, which sits 0.0007 above its limit ' +
-  '(Salas & Sokal\'s V4(L); the 120 repeat seeds average +0.0002 +- 0.0001); the sizes agree with each other within their errors');
+  '(Salas & Sokal\'s V4(L); the 120 repeat seeds average +0.0002 +- 0.0001); the sizes agree with each other within their errors',
+  4, 'reference');
 const Ls = crit.Ls.join(', ');
 near(`beta/nu from <|m|> ~ L^(-beta/nu) at T_c, least squares over L = ${Ls}`, crit.betaNu, EXP.beta / EXP.nu, 0.012,
   'Pelissetto & Vicari 2002, sec. 3.5: beta = 1/8, nu = 1', 'tolerance 4.6 sigma (sigma = 0.0026), 3.9 sigma of the seed-to-seed scatter (0.0031)');
@@ -170,7 +172,7 @@ const trap = CR.studyTrap();
 near(`Binder cumulant at T_c, L = ${trap.L}, measured after a fixed number of cluster flips (${trap.n} measurements)`, trap.fixed,
   1 - 1.1679229 / 3, [0.0035, 0.004], 'Salas & Sokal 2000: 1 - V4/3', 'tolerance: at L = 16 U sits +0.0007 above its limit ' +
   '(Salas & Sokal\'s measured V4(16) = 1.16586(38)), so the high side is 4.1 sigma (sigma = 0.0008) above that shift and the low ' +
-  'side, 4.4 sigma, allows none; 4.4 and 4.7 sigma of the seed-to-seed scatter (0.00075)');
+  'side, 4.4 sigma, allows none; 4.4 and 4.7 sigma of the seed-to-seed scatter (0.00075)', 4, 'reference');
 const gap = trap.until.value - trap.fixed.value, gapErr = Math.hypot(trap.until.err, trap.fixed.err);
 check('Measuring each time the flipped clusters add up to L^2 spins over-weights ordered states: the Binder cumulant comes out higher',
   gap / gapErr > 10, `U = ${fmt(trap.until.value)} ± ${fmt(trap.until.err)} that way, against ${fmt(trap.fixed.value)} ± ` +
