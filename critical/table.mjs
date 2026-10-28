@@ -10,8 +10,8 @@
 // names them. Not every known value printed is exact, and each that is not is marked where it is printed: Newman &
 // Ziff's p_c and Salas & Sokal's V4 are high-precision values whose errors are negligible here (the percolation means
 // print p_c as the reference value), the 3D Ising exponents are conformal-bootstrap estimates (Kos, Poland,
-// Simmons-Duffin & Vichi 2016), b0 and a1 are the coefficients Ziff & Newman use, and their Table 1 values are
-// measurements.
+// Simmons-Duffin & Vichi 2016), b0 and a1 are the coefficients Ziff & Newman use, the open-edge shifts built from them
+// keep only the leading term, and their Table 1 values are measurements.
 import { createRequire } from 'node:module';
 const CR = createRequire(import.meta.url)('./model.js');
 const { TC, KC, EXP, PERC } = CR;
@@ -29,7 +29,7 @@ console.log(`  correlation length above T_c 1/(ln coth K - 2K); near T_c 1/(4(K_
 console.log(`  Binder cumulant at T_c on a periodic square, L -> infinity: 1 - 1.1679229/3 = ${(1 - 1.1679229 / 3).toFixed(5)} ` +
   "(Salas & Sokal's high-precision V4)");
 console.log(`  percolation: p_c = ${PERC.pc} (Newman & Ziff's measurement), D = 91/48 = ${PERC.D.toFixed(4)} (2 - 5/48); ` +
-  `open edges put the crossing of R_L1(p) and R_L2(p) above p_c by (b0/a1)(1/L1 - 1/L2)/(L2^(3/4) - L1^(3/4)), ` +
+  `to leading order, open edges put the crossing of R_L1(p) and R_L2(p) above p_c by (b0/a1)(1/L1 - 1/L2)/(L2^(3/4) - L1^(3/4)), ` +
   `b0 = ${PERC.b0}, a1 = ${PERC.a1} (the coefficients Ziff & Newman use): ` +
   `+${CR.edgeShift(32, 128).toFixed(5)} for L = 32/128, +${CR.edgeShift(64, 256).toFixed(5)} for 64/256`);
 const nu3 = 0.629971;
@@ -103,7 +103,7 @@ for (const [name, f, m, ref, d, shift] of cols) {
   const label = ref === PERC.pc ? 'reference' : 'exact';
   const jk = pool.each.reduce((a, r) => a + f(r).err, 0) / pool.each.length;
   console.log(`  ${name}: mean ${pm(m, d)}, ${label} ${ref.toFixed(d)}, mean - ${label} ${(m.value - ref).toFixed(d)}` +
-    (shift ? ` (open-edge shift +${shift.toFixed(d)})` : '') + `; scatter between seeds ${m.sd.toFixed(d)}, mean jackknife error ${jk.toFixed(d)}`);
+    (shift ? ` (leading-order open-edge shift +${shift.toFixed(d)})` : '') + `; scatter between seeds ${m.sd.toFixed(d)}, mean jackknife error ${jk.toFixed(d)}`);
 }
 // How the slope of ln(mass) against ln L changes with L: slopes between successive sizes, and how much leaving out
 // L = 32 raises the fitted slope, seed by seed (mean ± standard error over the nine seeds).

@@ -353,7 +353,7 @@ are allowed for, and the spanning cluster's dimension 0.8% low (details in
 
 Here the scale-free range has to be tuned: the temperature to T_c and the magnetic field to zero. Turbulent
 cascades, and gravitational clustering grown from a nearly scale-invariant start, are scale-free over a range that
-nobody tunes: the flow's Reynolds number, or the time gravity has had to act, sets it (sources in
+nobody tunes: the flow's own numbers, or the time gravity has had to act, set it (sources in
 [critical/README.md](critical/README.md#tuned-scale-invariance-against-self-organised-ranges); the clustering turns
 smooth on the largest scales, as the [opening section](#where-the-intuition-holds-and-where-it-breaks) describes).
 Real fluids have the same mechanism with three-dimensional exponents: ξ grows 4.27-fold for each tenfold approach
