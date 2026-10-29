@@ -1,0 +1,185 @@
+/* Gravitational atom page components, scoped under .ga. Page tokens map onto the f0 tokens.
+   --cloud is the figure's one hue; --proton marks hydrogen's centre; the horizon is black in both themes. */
+.ga {
+  --surface: var(--bg-2); --muted: var(--ink-2); --faint: var(--ink-3);
+  --accent: var(--dig); --accent-soft: var(--bg-3);
+  --cloud: #2a78d6; --proton: #c93b3a; --hole: #000000;
+  --warn-bg: #fdf3e1; --warn-line: #e3c58f;
+  --font-display: var(--f-serif); --font-body: var(--f-sans); --font-data: var(--f-mono);
+}
+html[data-theme="dark"] .ga { --cloud: #4d95ea; --proton: #ef6f6e; --warn-bg: #2a2416; --warn-line: #6b5a32; }
+@media (prefers-color-scheme: dark) {
+  html:not([data-theme="light"]) .ga { --cloud: #4d95ea; --proton: #ef6f6e; --warn-bg: #2a2416; --warn-line: #6b5a32; }
+}
+.ga h2, .ga h3 { font-family: var(--font-display); }
+.ga p { max-width: 68ch; }
+.ga .method > *, .ga .notes > *, .ga .controls > *, .ga .figure > * { min-width: 0; }
+.ga a { color: var(--accent); }
+
+.ga sup { font-size: 0.72em; line-height: 0; }
+
+.ga .eyebrow { font-family: var(--font-data); font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+
+.ga .lede { color: var(--muted); font-size: 1.05rem; }
+
+.ga .hint { font-size: 0.85rem; color: var(--muted); }
+
+.ga .num { font-family: var(--font-data); font-variant-numeric: tabular-nums; }
+
+.ga header { display: grid; gap: 10px; }
+
+.ga .card { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 16px; }
+
+
+
+/* Controls */
+.ga .controls { display: grid; gap: 16px; }
+
+.ga .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+
+.ga .chip { font: inherit; font-size: 0.82rem; border: 1px solid var(--line); background: var(--bg); color: var(--ink); border-radius: 999px; padding: 4px 10px; cursor: pointer; }
+
+.ga .chip:hover { border-color: var(--accent); }
+
+.ga .chip[aria-pressed="true"] { background: var(--accent-soft); border-color: var(--accent); }
+
+.ga .sliders { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+
+.ga .ctl { display: grid; gap: 6px; min-width: 0; }
+
+.ga .ctl label { font-weight: 700; font-size: 0.9rem; }
+
+.ga .ctl .read { font-family: var(--font-data); font-size: 0.95rem; color: var(--accent); }
+
+.ga input[type="range"] { width: 100%; accent-color: var(--accent); }
+
+.ga .alpha { display: grid; gap: 4px; border-top: 1px solid var(--line); padding-top: 12px; }
+
+.ga .alpha .big { font-family: var(--font-display); font-size: 1.25rem; }
+
+.ga .alpha .big b { font-family: var(--font-data); font-weight: 500; }
+
+.ga .deriv { font-family: var(--font-data); font-size: 0.8rem; color: var(--muted); overflow-wrap: anywhere; }
+
+.ga .warn { background: var(--warn-bg); border: 1px solid var(--warn-line); border-radius: 8px; padding: 8px 10px; font-size: 0.9rem; }
+
+.ga .warn[hidden] { display: none; }
+
+
+/* Figure */
+.ga .figure { display: grid; gap: 14px; }
+
+.ga .colheads, .ga .pair { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+
+.ga .colheads span { font-family: var(--font-display); font-weight: 600; font-size: 1.05rem; }
+
+.ga .rowhead { margin-top: 10px; display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; }
+
+.ga .rowhead .tag { font-family: var(--font-data); font-size: 0.78rem; color: var(--muted); }
+
+.ga .panel { margin: 0; display: grid; gap: 6px; min-width: 0; }
+
+.ga .panel .head { display: none; font-family: var(--font-display); font-weight: 600; }
+
+.ga .panel svg { width: 100%; height: auto; display: block; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; touch-action: none; }
+
+.ga .panel figcaption { font-size: 0.82rem; color: var(--muted); }
+
+.ga .readout { font-size: 0.85rem; color: var(--muted); min-height: 1.4em; }
+
+.ga .legend { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 0.85rem; color: var(--muted); }
+
+.ga .key { display: inline-flex; align-items: center; gap: 6px; }
+
+.ga .sw { width: 12px; height: 12px; border-radius: 50%; display: inline-block; }
+
+.ga .sw.cloud { background: var(--cloud); opacity: 0.6; }
+ .ga .sw.proton { background: var(--proton); }
+
+.ga .sw.hole { background: var(--hole); box-shadow: 0 0 0 1px var(--ink); }
+
+.ga .sw.ring { border: 1.5px dashed var(--faint); }
+
+.ga svg text { font-family: var(--font-body); }
+
+.ga .t-axis { fill: var(--muted); font-size: 13px; }
+
+.ga .t-small { fill: var(--muted); font-size: 12px; }
+
+.ga .t-scale { fill: var(--ink); font-size: 13px; }
+
+.ga .halo { paint-order: stroke; stroke: var(--surface); stroke-width: 4px; stroke-linejoin: round; }
+
+
+/* Ladder + scale factor */
+.ga .scale { display: grid; gap: 14px; }
+
+.ga .factors { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+
+.ga .factor { display: grid; gap: 2px; min-width: 0; }
+
+.ga .factor .k { font-size: 0.82rem; color: var(--muted); }
+
+.ga .factor .v { font-family: var(--font-display); font-size: 1.45rem; font-variant-numeric: tabular-nums; }
+
+.ga .factor .s { font-size: 0.82rem; color: var(--muted); }
+
+.ga .ladder svg { width: 100%; max-width: 560px; height: auto; display: block; }
+
+
+/* Numbers table */
+.ga .tablewrap { overflow-x: auto; }
+
+.ga table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+
+.ga th, .ga td { text-align: left; vertical-align: top; padding: 8px 10px; border-top: 1px solid var(--line); }
+
+.ga thead th { border-top: none; font-family: var(--font-display); font-size: 1rem; }
+
+.ga td.num { white-space: nowrap; }
+
+.ga tbody th { font-weight: 400; color: var(--muted); width: 34%; }
+
+.ga .grow-yes { color: var(--accent); font-weight: 700; }
+ .ga .grow-no { color: var(--muted); font-weight: 700; }
+
+
+/* Prose */
+.ga .notes { display: grid; gap: 12px; }
+
+.ga .notes ul, .ga .method ul { margin: 0; padding-left: 1.1rem; display: grid; gap: 8px; max-width: 70ch; }
+
+.ga .method { display: grid; gap: 12px; font-size: 0.95rem; }
+
+.ga .method p, .ga .method li { color: var(--muted); }
+
+.ga .formula { font-family: var(--font-data); font-size: 0.84rem; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; color: var(--ink); display: flex; flex-wrap: wrap; gap: 4px 18px; }
+
+.ga .formula span { white-space: nowrap; }
+
+
+@media (max-width: 720px) { .ga .sliders { grid-template-columns: 1fr; }
+ }
+@media (max-width: 540px) {
+  .ga .colheads { display: none; }
+
+  .ga .pair { grid-template-columns: 1fr; gap: 18px; }
+
+  .ga .panel .head { display: block; }
+
+  .ga .factors { grid-template-columns: 1fr; }
+
+  .ga #table thead { display: none; }
+
+  .ga #table tr { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: 12px; border-top: 1px solid var(--line); padding: 8px 0; }
+
+  .ga #table tbody th, .ga #table td { border-top: none; padding: 2px 0; width: auto; }
+
+  .ga #table tbody th { grid-column: 1 / -1; font-weight: 700; color: var(--ink); }
+
+  .ga #table td::before { content: attr(data-l); display: block; font-size: 0.75rem; color: var(--muted); }
+
+}
+
+/* The f0 display size is tuned for a one-word home title; this page's title is a sentence. */
+.page-hero .display { font-size: clamp(34px, 4.4vw + 10px, 66px); text-wrap: balance; }

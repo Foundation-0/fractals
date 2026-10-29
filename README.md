@@ -29,6 +29,21 @@ with Claude (Anthropic), for [Foundation0](https://github.com/Foundation-0/f0).
   120 million parsecs, the galaxies of the WiggleZ survey are spread evenly to within 1% (Scrimgeour et al.,
   2012). The nesting stops at a largest scale, as a coastline's roughness stops at a smallest one, and where
   depends on the galaxies and on how even counts as even ([cosmic-homogeneity](cosmic-homogeneity/)).
+- **Turbulence repeats, but not exactly.** Between the size where a flow is stirred and the size where viscosity
+  takes over, the same energy flux passes through every scale. In a cascade model it holds to 0.2% over the first
+  nine of 21 shells (2.4 decades), and a third-order law that follows from it to 0.1%. The bursts do not scale
+  exactly: the distribution's tails fatten from scale to scale (intermittency). Where the cascade ends depends on
+  the medium: about a millimetre in air and water, give or take a factor of 10; the ion scales (about 100 km) in
+  the solar wind, where collisions are too rare for viscosity and a steeper kinetic cascade takes over. In
+  molecular clouds the supersonic range ends at the sonic scale (about 0.1 pc), and a shallower subsonic cascade
+  continues. The fractal edges of the Taurus clouds (dimension 1.36) agree in number with laboratory turbulent
+  surfaces, but the two measure different things, and across clouds the dimension runs from about 1.2 to 1.6
+  ([turbulence](turbulence/)).
+
+Some repetition across scales has to be tuned, and some sets its own range. At a critical point, such as water's
+liquid-vapour critical point or the Curie temperature of a magnet whose spins point only up or down, fluctuations
+of every size appear, but only while the system is held at that point. Turbulent cascades and gravitational
+clustering are scale-free over a range the system sets itself ([third study](#third-study-the-critical-point)).
 
 ## First study: the Witness Map
 
@@ -198,11 +213,14 @@ npm test                                 # checks the model against published nu
 node witness-map/table.mjs               # every object at a 250 nm gap, then the crowd
 node witness-map/table.mjs 1e-6 cryo     # 1 µm gap, everything in a 4 K vacuum
 node notes/bh-lensing.mjs                # every number in the black hole note
+node critical/table.mjs                  # the critical-point study's numbers (about 65 s)
 ```
 
 `witness-map/model.js` is the whole model, including `gravAtom` for the black hole note. It loads in Node
 (`require`) and in a browser (`window.WM`). `npm test` also checks `gravitational-atom/atom.js` (second study,
-below).
+below). The third study's checks, `tests/critical.mjs`, add about 65 s of seeded Monte Carlo runs, most of it
+percolation with nine seeds. CI runs every line above except the `critical/table.mjs` line: it repeats the tests'
+seeded runs and prints the results without checking them.
 
 ## Checks
 
@@ -238,7 +256,8 @@ can go. The tolerance is ×5: half a power of ten for rounding, and a little mor
 state. The crowd rows compare formulas and fits, so they agree more closely; the core is solved here from
 first principles (the ground state of the Schrödinger–Poisson equations), not taken from the fits. Through gravity
 alone, the electron of the electric row would wait 5×10¹²⁴ years. The black hole note's checks are listed in
-[notes/bh-lensing.md](notes/bh-lensing.md), the gravitational atom's below.
+[notes/bh-lensing.md](notes/bh-lensing.md), the gravitational atom's below, and the critical point's in
+[critical/README.md](critical/README.md#what-it-reproduces).
 
 What the re-check found (issue #5, details in CORRECTIONS.md): two coefficient errors, now fixed; a molecule's
 glow that is fitted, and gets the onset of decoherence right but the light wrong; and four places where the
@@ -314,6 +333,37 @@ Huang 2015, eq. 6).
 What the gravitational-atom model leaves out: everything past leading order in α; the cloud's own gravity
 and the hole's loss of mass; interactions between the particles; anything else near the hole.
 
+## Third study: the critical point
+
+Why does anything repeat across scales at all? At a critical point, such as water at 647 K and 22 MPa or a magnet
+at its Curie temperature, fluctuations of every size appear, from the size of a molecule up to a correlation length
+ξ that grows without limit as the temperature approaches T_c. A 2D Ising lattice and site percolation, run with
+seeded random numbers in `critical/model.js`, come out at or close to the exact or high-precision answers: the
+Ising results within 1.5 standard deviations, the percolation threshold within one standard error once open edges
+are allowed for, and the spanning cluster's dimension 0.8% low (details in
+[critical/README.md](critical/README.md#what-it-reproduces), issue #20):
+
+- T_c from where the Binder cumulants of two lattice sizes cross: 2.2704 ± 0.0017 J/k_B, against Onsager's
+  2/ln(1 + √2) = 2.2692. Yang's spontaneous magnetisation within 0.21%.
+- The exponents β/ν = 0.1245 ± 0.0026, γ/ν = 1.751 ± 0.004 and η = 0.250 ± 0.005, against 1/8, 7/4 and 1/4.
+- Percolation, averaged over nine seeds: p_c = 0.59292 ± 0.00023, against 0.592746 (Newman and Ziff 2000), 0.00017
+  high, of which open edges account for 0.00012 (Ziff and Newman 2002). A spanning cluster of fractal dimension
+  1.880 ± 0.002, 0.8% below 91/48 = 1.896: a finite-size shortfall, as the effective exponent rises with L over
+  these sizes.
+- Where the nesting stops: at the lattice spacing below, and at ξ above. The measured ξ falls from 9.9 lattice
+  spacings 6% above T_c to 1.1 at 76% above, within 3% of the exact value. At T_c the size of the box is the only
+  limit.
+
+Here the scale-free range has to be tuned: the temperature to T_c and the magnetic field to zero. Turbulent
+cascades, and gravitational clustering grown from a nearly scale-invariant start, are scale-free over a range that
+nobody tunes: the flow's own numbers, or the time gravity has had to act, set it (sources in
+[critical/README.md](critical/README.md#tuned-scale-invariance-against-self-organised-ranges); the clustering turns
+smooth on the largest scales, as the [opening section](#where-the-intuition-holds-and-where-it-breaks) describes).
+Real fluids have the same mechanism with three-dimensional exponents: ξ grows 4.27-fold for each tenfold approach
+to T_c (ν = 0.630; Kos, Poland, Simmons-Duffin and Vichi 2016), against tenfold for the 2D lattice. `npm test`
+checks the study against the exact or high-precision results and, for percolation at finite sizes, against Ziff and
+Newman's measurements (`tests/critical.mjs`).
+
 Mistakes found along the way are in [CORRECTIONS.md](CORRECTIONS.md). Open questions are the
 [issues](https://github.com/Foundation-0/fractals/issues).
 
@@ -364,6 +414,17 @@ The crowd wave:
 - P. F. de Salas and A. Widmark, *Dark matter local density determination: recent observations and future prospects*, Rep. Prog. Phys. 84, 104901 (2021). https://doi.org/10.1088/1361-6633/ac24e7 (https://arxiv.org/abs/2012.11477)
 - A.-C. Eilers, D. W. Hogg, H.-W. Rix and M. K. Ness, *The circular velocity curve of the Milky Way from 5 to 25 kpc*, ApJ 871, 120 (2019). https://doi.org/10.3847/1538-4357/aaf648 (https://arxiv.org/abs/1810.09466)
 - GRAVITY Collaboration, *A geometric distance measurement to the Galactic Center black hole with 0.3% uncertainty*, A&A 625, L10 (2019). https://doi.org/10.1051/0004-6361/201935656 (https://arxiv.org/abs/1904.05721)
+
+The critical point (the full list is in [critical/README.md](critical/README.md#sources)):
+
+- L. Onsager, *Crystal statistics. I. A two-dimensional model with an order-disorder transition*, Phys. Rev. 65, 117 (1944). Not consulted directly; T_c and the energy are checked against Caselle et al. (2002). https://doi.org/10.1103/PhysRev.65.117
+- C. N. Yang, *The spontaneous magnetization of a two-dimensional Ising model*, Phys. Rev. 85, 808 (1952). Not consulted directly; the formula is checked against Caselle et al. (2002). https://doi.org/10.1103/PhysRev.85.808
+- M. Caselle, M. Hasenbusch, A. Pelissetto and E. Vicari, *Irrelevant operators in the two-dimensional Ising model*, J. Phys. A 35, 4861 (2002). https://doi.org/10.1088/0305-4470/35/23/305 (https://arxiv.org/abs/cond-mat/0106372)
+- M. E. J. Newman and R. M. Ziff, *Efficient Monte Carlo algorithm and high-precision results for percolation*, Phys. Rev. Lett. 85, 4104 (2000). https://doi.org/10.1103/PhysRevLett.85.4104 (https://arxiv.org/abs/cond-mat/0005264)
+- R. M. Ziff and M. E. J. Newman, *Convergence of threshold estimates for two-dimensional percolation*, Phys. Rev. E 66, 016129 (2002). https://doi.org/10.1103/PhysRevE.66.016129 (https://arxiv.org/abs/cond-mat/0203496)
+- F. Kos, D. Poland, D. Simmons-Duffin and A. Vichi, *Precision islands in the Ising and O(N) models*, JHEP 08, 036 (2016). https://doi.org/10.1007/JHEP08(2016)036 (https://arxiv.org/abs/1603.04436)
+- P. J. Linstrom and W. G. Mallard (eds.), *NIST Chemistry WebBook, NIST Standard Reference Database 69* (retrieved 18 October 2026), water, phase change data: critical point 647 ± 2 K and 220.64 bar. https://doi.org/10.18434/T4D303
+- A. Alexakis and L. Biferale, *Cascades and transitions in turbulent flows*, Phys. Rep. 767–769, 1 (2018). https://doi.org/10.1016/j.physrep.2018.08.001 (https://arxiv.org/abs/1808.06186)
 
 ## Licence
 
