@@ -24,8 +24,11 @@ with Claude (Anthropic), for [Foundation0](https://github.com/Foundation-0/f0).
   that roughness only if they kick it harder than its own momentum: a cold atom in a room-temperature vacuum,
   yes; nothing as warm as, and heavier than, the gas around it ([quantum-paths](quantum-paths/)).
 - **Cosmic structure is fractal only up to a point.** Galaxies cluster in a fractal-like way on small
-  scales, but beyond about 80 to 300 million parsecs (h⁻¹ Mpc, 80 to 300) they are spread almost evenly
-  (Scrimgeour et al., 2012). The nesting stops, the way a coastline's roughness stops at the size of molecules.
+  scales: well inside 5 h⁻¹ Mpc (the surveys' unit, about 1.5 million parsecs), the number of neighbours
+  within a distance r grows as r^1.2 rather than r³. Beyond a radius of about 70 to 80 h⁻¹ Mpc, roughly 100 to
+  120 million parsecs, the galaxies of the WiggleZ survey are spread evenly to within 1% (Scrimgeour et al.,
+  2012). The nesting stops at a largest scale, as a coastline's roughness stops at a smallest one, and where
+  depends on the galaxies and on how even counts as even ([cosmic-homogeneity](cosmic-homogeneity/)).
 - **Turbulence repeats, but not exactly.** Between the size where a flow is stirred and the size where viscosity
   takes over, the same energy flux passes through every scale. In a cascade model it holds to 0.2% over the first
   nine of 21 shells (2.4 decades), and a third-order law that follows from it to 0.1%. The bursts do not scale
