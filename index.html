@@ -2,198 +2,93 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Witness Map · fractals · Foundation0</title>
 <meta name="description" content="Every object from an electron to the Milky Way, asked whether it can be in two places at once. An order-of-magnitude model of how fast surroundings erase wave behaviour. Exploration, not peer reviewed.">
+<link rel="canonical" href="https://foundation-0.github.io/fractals/">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Witness Map: where quantum turns classical">
 <meta property="og:description" content="Every object from an electron to the Milky Way, asked whether it can be in two places at once. An order-of-magnitude model of how fast surroundings erase wave behaviour. Exploration, not peer reviewed.">
+<meta property="og:image" content="https://foundation-0.github.io/fractals/assets/og.png">
 <meta property="og:url" content="https://foundation-0.github.io/fractals/">
-<title>Witness Map</title>
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="The Witness Map: fourteen objects placed by witness number, wave on the left, watched on the right.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#070b0e" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#f5f0e6" media="(prefers-color-scheme: light)">
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=IBM+Plex+Mono:wght@400;500&family=Literata:opsz,wght@7..72,500;7..72,600&display=swap">
-<style>
-.srclink { color: var(--accent); }
-code { font-family: var(--font-data); font-size: 0.9em; }
-/* Layout: one reading column; a ruled instrument panel of rows (one per object) on a log scale of "witness number", detail readout below. */
-:root {
-  --bg: #f4f5f7;
-  --surface: #ffffff;
-  --ink: #15181d;
-  --muted: #59606d;
-  --faint: #8a909b;
-  --line: #dde0e6;
-  --accent: #0f6e66;
-  --accent-soft: #e2f0ee;
-  --wave: #2a78d6;
-  --wave-tint: rgba(42,120,214,0.07);
-  --watch: #e34948;
-  --watch-tint: rgba(227,73,72,0.06);
-  --edge: #8a8f99;
-  --bar: #3c4350;
-  --font-display: "Literata", "Iowan Old Style", Georgia, serif;
-  --font-body: "Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
-  --font-data: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
-}
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --bg: #101216; --surface: #171a1f; --ink: #e8eaee; --muted: #a3a9b5; --faint: #7b818c;
-    --line: #2a2e36; --accent: #4fb3a9; --accent-soft: #1b2e2c; --wave: #3987e5;
-    --wave-tint: rgba(57,135,229,0.10); --watch: #e66767; --watch-tint: rgba(230,103,103,0.08);
-    --edge: #8d929c; --bar: #c4c9d2; color-scheme: dark;
-  }
-}
-:root[data-theme="dark"] {
-  --bg: #101216; --surface: #171a1f; --ink: #e8eaee; --muted: #a3a9b5; --faint: #7b818c;
-  --line: #2a2e36; --accent: #4fb3a9; --accent-soft: #1b2e2c; --wave: #3987e5;
-  --wave-tint: rgba(57,135,229,0.10); --watch: #e66767; --watch-tint: rgba(230,103,103,0.08);
-  --edge: #8d929c; --bar: #c4c9d2; color-scheme: dark;
-}
-* { box-sizing: border-box; }
-body {
-  background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 16px; line-height: 1.55;
-  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
-  padding-block: 28px 56px;
-}
-.wrap { max-width: 860px; margin: 0 auto; display: grid; gap: 28px; }
-h1, h2, h3 { font-family: var(--font-display); font-weight: 600; text-wrap: balance; margin: 0; line-height: 1.15; }
-h1 { font-size: clamp(2rem, 6vw, 2.9rem); letter-spacing: -0.01em; }
-h2 { font-size: 1.35rem; }
-h3 { font-size: 1.05rem; }
-p { margin: 0; max-width: 65ch; }
-.eyebrow { font-family: var(--font-data); font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
-.lede { color: var(--muted); font-size: 1.05rem; }
-header { display: grid; gap: 10px; }
-.mono, .num { font-family: var(--font-data); font-variant-numeric: tabular-nums; }
-sup { font-size: 0.72em; line-height: 0; }
-
-/* Two clocks */
-.clocks { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-.clock { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; display: grid; gap: 6px; min-width: 0; }
-.clock .k { font-family: var(--font-data); font-size: 0.72rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
-.ratio { grid-column: 1 / -1; display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 14px; padding: 4px 2px; }
-.ratio .eq { font-family: var(--font-display); font-size: 1.15rem; }
-.ratio .eq b { font-weight: 600; }
-.legend { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 0.9rem; color: var(--muted); }
-.key { display: inline-flex; align-items: center; gap: 6px; }
-.sw { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
-.sw.wave { background: var(--wave); } .sw.watch { background: var(--watch); } .sw.edge { background: var(--edge); }
-.sw.none { background: transparent; border: 2px solid var(--wave); }
-
-/* Controls */
-.controls { display: grid; gap: 16px; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 16px; }
-.ctl { display: grid; gap: 8px; min-width: 0; }
-.ctl-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-label, .lbl { font-weight: 700; font-size: 0.92rem; }
-.gapread { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
-.gapread .num { font-size: 1.1rem; color: var(--accent); }
-input[type="range"] { width: 100%; accent-color: var(--accent); }
-.chips { display: flex; flex-wrap: wrap; gap: 6px; }
-.chip { font: inherit; font-size: 0.82rem; border: 1px solid var(--line); background: var(--bg); color: var(--ink); border-radius: 999px; padding: 4px 10px; cursor: pointer; }
-.chip:hover { border-color: var(--accent); }
-.chip[aria-pressed="true"] { background: var(--accent-soft); border-color: var(--accent); color: var(--ink); }
-select { font: inherit; font-size: 0.95rem; color: var(--ink); background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; width: 100%; }
-.check { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 0.92rem; }
-.check input { accent-color: var(--accent); width: 18px; height: 18px; }
-.hint { font-size: 0.85rem; color: var(--muted); }
-:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-
-/* Chart */
-.chart { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 12px 0 8px; overflow: hidden; }
-.grid { display: grid; grid-template-columns: minmax(0, 210px) minmax(0, 1fr) 82px; column-gap: 14px; align-items: center; padding: 0 16px; }
-.axis { padding-bottom: 6px; }
-.axis .track { height: 40px; }
-.regions { position: absolute; inset: 0 0 auto 0; height: 18px; font-size: 0.75rem; font-family: var(--font-data); letter-spacing: 0.04em; }
-.regions span { position: absolute; top: 0; white-space: nowrap; }
-.reg-wave { color: var(--wave); left: 0; }
-.reg-watch { color: var(--watch); transform: translateX(6px); }
-.regions .short { display: none; }
-.tick { position: absolute; top: 22px; transform: translateX(-50%); font-family: var(--font-data); font-size: 0.72rem; color: var(--muted); white-space: nowrap; }
-.axis-cap { font-family: var(--font-data); font-size: 0.72rem; color: var(--muted); text-align: right; }
-.rows { display: grid; }
-.row { all: unset; box-sizing: border-box; display: grid; grid-template-columns: minmax(0, 210px) minmax(0, 1fr) 82px; column-gap: 14px; align-items: center; padding: 7px 16px; cursor: pointer; border-top: 1px solid var(--line); }
-.row:hover { background: var(--bg); }
-.row[aria-pressed="true"] { background: var(--accent-soft); }
-.row:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
-.name { min-width: 0; display: grid; gap: 1px; }
-.name .n { font-weight: 700; font-size: 0.94rem; line-height: 1.25; }
-.name .m { font-family: var(--font-data); font-size: 0.72rem; color: var(--muted); }
-.seen { font-family: var(--font-data); font-size: 0.66rem; letter-spacing: 0.04em; text-transform: uppercase; color: var(--wave); margin-left: 6px; white-space: nowrap; }
-.track { position: relative; height: 24px; }
-.band-wave, .band-watch { position: absolute; top: 0; bottom: 0; }
-.band-wave { left: 0; background: var(--wave-tint); }
-.band-watch { right: 0; background: var(--watch-tint); }
-.zero { position: absolute; top: -8px; bottom: -8px; width: 0; border-left: 1.5px solid var(--ink); opacity: 0.55; }
-.axis .zero { top: 18px; bottom: 0; }
-.gridline { position: absolute; top: 0; bottom: 0; width: 0; border-left: 1px dashed var(--line); }
-.dot { position: absolute; top: 50%; width: 12px; height: 12px; border-radius: 50%; transform: translate(-50%, -50%); background: var(--edge); box-shadow: 0 0 0 2px var(--surface); transition: left 260ms ease, background-color 260ms ease; }
-.dot.wave { background: var(--wave); } .dot.watch { background: var(--watch); }
-.dot.none { background: var(--surface); border: 2px solid var(--wave); }
-.dot.clip::after { content: ""; position: absolute; top: 50%; width: 0; height: 0; border-block: 5px solid transparent; transform: translateY(-50%); }
-.dot.clip-l::after { right: 14px; border-right: 7px solid var(--wave); }
-.dot.clip-r::after { left: 14px; border-left: 7px solid var(--watch); }
-.val { font-family: var(--font-data); font-size: 0.82rem; text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
-.val.none { color: var(--wave); font-size: 0.72rem; white-space: normal; line-height: 1.2; }
-@media (prefers-reduced-motion: reduce) { .dot { transition: none; } }
-
-/* Detail */
-.detail { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 18px 16px; display: grid; gap: 16px; }
-.detail-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 6px 16px; }
-.verdict { font-family: var(--font-data); font-size: 0.8rem; padding: 3px 9px; border-radius: 999px; border: 1px solid currentColor; white-space: nowrap; }
-.verdict.wave { color: var(--wave); } .verdict.watch { color: var(--watch); } .verdict.edge { color: var(--edge); }
-.facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
-.fact { display: grid; gap: 2px; min-width: 0; }
-.fact .k { font-size: 0.8rem; color: var(--muted); }
-.fact .v { font-family: var(--font-data); font-size: 1rem; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
-.fact .s { font-size: 0.8rem; color: var(--muted); }
-.who { display: grid; gap: 8px; }
-.who-row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr) 66px; gap: 10px; align-items: center; font-size: 0.9rem; }
-.who-bar { height: 8px; background: var(--line); border-radius: 0 4px 4px 0; position: relative; }
-.who-bar i { position: absolute; inset: 0 auto 0 0; background: var(--bar); border-radius: 0 4px 4px 0; }
-.who-row .num { text-align: right; font-size: 0.8rem; color: var(--muted); }
-.note { font-size: 0.9rem; color: var(--muted); }
-
-/* The crowd: a separate panel, never on the W axis */
-.crowd { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 18px 16px; display: grid; gap: 14px; }
-.crowd-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 6px 16px; }
-.tag { font-family: var(--font-data); font-size: 0.8rem; padding: 3px 9px; border-radius: 999px; border: 1px dashed var(--muted); color: var(--muted); white-space: nowrap; }
-.crowd-list { display: grid; gap: 0; }
-.crowd-card { display: grid; gap: 10px; padding: 14px 0; border-top: 1px solid var(--line); }
-.crowd-card:last-child { padding-bottom: 0; }
-.crowd-card .name .n { font-size: 1rem; }
-
-/* Prose sections */
-.notes { display: grid; gap: 14px; }
-.notes ul { margin: 0; padding-left: 1.1rem; display: grid; gap: 8px; max-width: 68ch; }
-.method { display: grid; gap: 12px; font-size: 0.95rem; }
-.method p, .method li { color: var(--muted); }
-.method ul { margin: 0; padding-left: 1.1rem; display: grid; gap: 6px; max-width: 68ch; }
-.src a { color: var(--accent); }
-.formula { font-family: var(--font-data); font-size: 0.86rem; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; overflow-x: auto; white-space: nowrap; color: var(--ink); }
-
-@media (max-width: 640px) {
-  .clocks, .ctl-row { grid-template-columns: 1fr; }
-  .grid { grid-template-columns: minmax(0, 1fr); }
-  .grid .spacer, .grid .axis-cap { display: none; }
-  .row { grid-template-columns: minmax(0, 1fr) auto; grid-template-areas: "name val" "track track"; row-gap: 6px; padding: 9px 16px; }
-  .row .name { grid-area: name; } .row .val { grid-area: val; } .row .track { grid-area: track; }
-  .facts { grid-template-columns: 1fr 1fr; }
-  .regions .long { display: none; } .regions .short { display: inline; }
-  .who-row { grid-template-columns: minmax(0, 1fr) 70px; }
-  .who-row .who-bar { grid-column: 1 / -1; grid-row: 2; }
-}
-</style>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap">
+<link rel="stylesheet" href="assets/f0.css">
+<link rel="stylesheet" href="witness-map/page.css">
+<script>
+/* theme + motion bootstrap, before paint: ?theme=dark|light and ?motion=on|off override the stored choice */
+(function(){var d=document.documentElement;d.classList.add('js');try{var q=new URLSearchParams(location.search),t=q.get('theme')||localStorage.getItem('f0-theme'),m=q.get('motion')||localStorage.getItem('f0-motion');if(t==='dark'||t==='light')d.setAttribute('data-theme',t);if(m==='on'||m==='off')d.setAttribute('data-motion-pref',m);}catch(e){}var r=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches,p=d.getAttribute('data-motion-pref');d.setAttribute('data-motion',p?p:(r?'off':'on'));})();
+</script>
+<script defer src="assets/f0.js"></script>
 </head>
-<body>
-<div class="wrap">
-  <header>
-    <div class="eyebrow">fractals · first study · where quantum turns classical</div>
-    <h1>Witness Map</h1>
-    <p class="lede">Every object here is asked the same question: can it be in two places at once, a set gap apart? The answer comes down to a race between two clocks.</p>
-    <p class="hint">Exploration, not peer reviewed, no new result claimed. By Aska Digital with Claude (Anthropic) for Foundation0. Model, checks and open questions: <a class="srclink" href="https://github.com/Foundation-0/fractals">Foundation-0/fractals</a>.</p>
-  </header>
+<body data-page="witness-map">
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <symbol id="zero" viewBox="-50 -50 100 100">
+      <!-- The incentre mark: a square, its diagonals, and the incircle of each triangle (r = (sqrt2 - 1) x half-side).
+           Neighbouring incircles touch at one point: gold (biological) meets cyan (digital). -->
+      <path d="M-40-40L40 40M40-40L-40 40" fill="none" stroke-width="2" style="stroke:var(--ink-3)"/>
+      <g fill="none" stroke-width="4"><circle cy="-23.431" r="16.569" style="stroke:var(--bio)"/><circle cy="23.431" r="16.569" style="stroke:var(--bio)"/><circle cx="-23.431" r="16.569" style="stroke:var(--dig)"/><circle cx="23.431" r="16.569" style="stroke:var(--dig)"/></g>
+      <g><circle cy="-23.431" r="3.4" style="fill:var(--bio)"/><circle cy="23.431" r="3.4" style="fill:var(--bio)"/><circle cx="-23.431" r="3.4" style="fill:var(--dig)"/><circle cx="23.431" r="3.4" style="fill:var(--dig)"/></g>
+      <rect x="-40" y="-40" width="80" height="80" fill="none" stroke-width="4.4" style="stroke:var(--ink)"/>
+    </symbol>
+  </defs>
+</svg>
+<a class="skip" href="#main">Skip to content</a>
 
-  <section class="clocks" aria-label="The two clocks">
+<header class="site-head">
+  <div class="wrap">
+    <a class="brand" href="./" aria-label="fractals home"><svg aria-hidden="true"><use href="#zero"/></svg>fractals</a>
+    <nav class="nav" aria-label="Main">
+      <a href="./" aria-current="page">Witness Map</a><a href="gravitational-atom/">Gravitational atom</a><a href="https://github.com/Foundation-0/fractals">Repository</a><a href="https://foundation-0.github.io/f0/">Foundation0</a>
+    </nav>
+    <div class="tools">
+      <button class="tbtn" type="button" data-motion-toggle aria-pressed="true" aria-label="Motion"><span class="ico"></span><span class="t-txt">Motion</span></button>
+      <button class="tbtn" type="button" data-theme-toggle aria-label="Theme: switch"><span class="ico"></span><span class="t-txt">Theme</span></button>
+    </div>
+    <details class="menu">
+      <summary class="tbtn" aria-label="Menu"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 4h12M2 8h12M2 12h12" stroke="currentColor" stroke-width="1.4"/></svg><span class="t-txt">Menu</span></summary>
+      <nav class="menu-panel" aria-label="Main (compact)">
+        <a href="./" aria-current="page">Witness Map <span>01</span></a><a href="gravitational-atom/">Gravitational atom <span>02</span></a><a href="https://github.com/Foundation-0/fractals">Repository <span>03</span></a><a href="https://foundation-0.github.io/f0/">Foundation0 <span>04</span></a>
+      </nav>
+    </details>
+  </div>
+</header>
+<nav class="hud" data-hud aria-label="On this page"></nav>
+
+<main id="main">
+  <header class="page-hero" style="--acc:var(--dig)">
+    <div class="wrap">
+      <p class="kicker"><span class="pair" aria-hidden="true"><i></i><i></i></span>fractals · first study · where quantum turns classical</p>
+      <h1 class="display">Witness Map</h1>
+      <p class="promise">Every object here is asked the same question: can it be in two places at once, a set gap apart? The answer comes down to a race between two clocks.</p>
+      <p class="hint">Exploration, not peer reviewed, no new result claimed. By Aska Digital with Claude (Anthropic) for Foundation0. The same model file runs this page and the automated checks.</p>
+      <dl class="stats" aria-label="The map in numbers">
+        <div class="stat"><dt class="k">objects on the map</dt><dd class="v" style="margin:0">14</dd></div>
+        <div class="stat"><dt class="k">surroundings</dt><dd class="v" style="margin:0">6</dd></div>
+        <div class="stat"><dt class="k">powers of ten spanned</dt><dd class="v" style="margin:0">&gt;150</dd></div>
+        <div class="stat"><dt class="k">method</dt><dd class="v" style="margin:0">order of magnitude</dd></div>
+      </dl>
+      <div class="prov">
+        <a class="chip" href="witness-map/model.js"><span class="dot live" aria-hidden="true"></span>live from witness-map/model.js</a>
+        <a class="chip" href="https://github.com/Foundation-0/fractals/tree/main/tests">checked by npm test</a>
+      </div>
+    </div>
+  </header>
+  <section class="sec alt wm" id="clocks" data-index="The two clocks" data-num="00" aria-labelledby="clocks-h">
+    <div class="wrap">
+      <div class="sec-head"><p class="sec-label"><b>00</b><i>//</i>The two clocks</p><span class="chip">W = wave clock / witness clock</span></div>
+      <h2 class="h2" id="clocks-h">Two clocks race.</h2>
+      <p class="lede">One clock says how fast the wave spreads. The other says how fast the surroundings find out where the object is. Whichever finishes first decides how it behaves.</p>
+      <div class="clocks">
     <div class="clock">
       <span class="k">Wave clock</span>
       <p>How long the object's wave needs to spread across the gap. Heavier things spread slower, so their clock runs long.</p>
@@ -211,54 +106,96 @@ select { font: inherit; font-size: 0.95rem; color: var(--ink); background: var(-
         <span class="key"><span class="sw none"></span>nothing witnesses it</span>
       </div>
     </div>
+  </div>
+    </div>
   </section>
-
-  <section class="controls" aria-label="Settings">
+  <section class="sec wm" id="map" data-index="The map" data-num="01" aria-labelledby="map-h">
+    <div class="wrap">
+      <div class="sec-head"><p class="sec-label"><b>01</b><i>//</i>The map</p><span class="chip">live from witness-map/model.js</span></div>
+      <h2 class="h2" id="map-h">Slide the gap. Watch who crosses.</h2>
+      <p class="lede">Each row is one object in its surroundings, placed by its witness number W. Pick a row for the full readout. Share a view with <span class="mono">?gap=</span> (metres), <span class="mono">?env=</span>, <span class="mono">?bh=1</span> and <span class="mono">?sel=</span> in the address.</p>
+      <noscript><p class="hint">JavaScript is off, so the controls cannot recompute the map. The rows below are the default view (250 nm gap, each object at home); <a href="https://github.com/Foundation-0/fractals#readme">the README</a> carries the same table.</p></noscript>
+      <div class="controls" role="group" aria-label="Settings">
     <div class="ctl">
       <div class="gapread"><label for="gap">Gap between the two places</label><span class="num" id="gapText">250 nm</span></div>
       <input type="range" id="gap" min="-9" max="20" step="0.01" value="-6.602">
-      <div class="chips" id="chips"></div>
+      <div class="chips" id="chips"><button type="button" class="chip" data-lg="-9" aria-pressed="false">1 nm</button><button type="button" class="chip" data-lg="-6.602" aria-pressed="true">250 nm · molecule experiments</button><button type="button" class="chip" data-lg="-3" aria-pressed="false">1 mm</button><button type="button" class="chip" data-lg="0" aria-pressed="false">1 m</button><button type="button" class="chip" data-lg="7.105169427999332" aria-pressed="false">Earth's width</button><button type="button" class="chip" data-lg="19.48939592172713" aria-pressed="false">1 kpc · wave dark matter scale</button></div>
     </div>
     <div class="ctl-row">
       <div class="ctl">
         <label for="env">Surroundings</label>
-        <select id="env"></select>
+        <select id="env"><option value="natural">Each in its natural home</option><option value="uhv">Everything in: Lab vacuum, room temperature</option><option value="cryo">Everything in: Cold vacuum box, 4 K</option><option value="air">Everything in: Room air</option><option value="sunlit">Everything in: Open space near Earth, in sunlight</option><option value="interstellar">Everything in: Interstellar space</option><option value="intergalactic">Everything in: Intergalactic void</option></select>
         <span class="hint" id="envHint">Each object sits where it's normally found.</span>
       </div>
       <div class="ctl">
         <label class="check"><input type="checkbox" id="bh"> Add the Milky Way's black hole as a witness</label>
-        <select id="bhDist" aria-label="Distance from the black hole" disabled></select>
+        <select id="bhDist" aria-label="Distance from the black hole" disabled><option value="3">3 horizon radii (0.25 AU)</option><option value="10">10 horizon radii (0.85 AU)</option><option value="100">100 horizon radii (8.5 AU)</option><option value="10000">10⁴ horizon radii (8.5e+2 AU)</option><option value="1000000">10⁶ horizon radii (1.3 light-years)</option><option value="100000000">10⁸ horizon radii (1.3e+2 light-years)</option></select>
         <span class="hint" id="bhHint">Sagittarius A*, 4.3 million Suns. Uses the horizon formula of Danielson, Satishchandran and Wald.</span>
       </div>
     </div>
-  </section>
-
-  <section class="chart" aria-label="Witness number for each object">
+  </div>
+      <div class="chart" role="group" aria-label="Witness number for each object">
     <div class="grid axis">
       <span class="spacer"></span>
-      <div class="track" id="axisTrack"></div>
+      <div class="track" id="axisTrack"><div class="regions"><span class="reg-wave">◀ wave<span class="long"> wins</span></span><span class="reg-watch" style="left:25%">witness<span class="long">es win</span><span class="short">ed</span> ▶</span></div><span class="zero" style="left:25%"></span><span class="tick" style="left:0%">10<sup>−40</sup></span><span class="tick" style="left:25%">1</span><span class="tick" style="left:50%">10<sup>40</sup></span><span class="tick" style="left:75%">10<sup>80</sup></span><span class="tick" style="left:100%">10<sup>120</sup></span></div>
       <span class="axis-cap">W</span>
     </div>
-    <div class="rows" id="rows"></div>
+    <!--prerender:rows--><div class="rows" id="rows"><button type="button" class="row" aria-pressed="false" title="Electron: W ≈ 10^-13. Main witness: leftover gas molecules"><span class="name"><span class="n">Electron<span class="seen">seen as a wave</span></span><span class="m">9.1×10<sup>−31</sup> kg</span></span>
+    <span class="track"><span class="band-wave" style="width: 25%;"></span><span class="band-watch" style="width: 75%;"></span><span class="zero" style="left: 25%;"></span><span class="dot wave" style="left: 17.007%;"></span></span><span class="val">10<sup>−13</sup></span></button><button type="button" class="row" aria-pressed="false" title="Rubidium atom: W ≈ 10^-7. Main witness: leftover gas molecules"><span class="name"><span class="n">Rubidium atom<span class="seen">seen as a wave</span></span><span class="m">1.4×10<sup>−25</sup> kg</span></span>
+    <span class="track"><span class="band-wave" style="width: 25%;"></span><span class="band-watch" style="width: 75%;"></span><span class="zero" style="left: 25%;"></span><span class="dot wave" style="left: 20.7893%;"></span></span><span class="val">10<sup>−7</sup></span></button><button type="button" class="row" aria-pressed="false" title="Buckyball (60 carbon atoms): W ≈ 10^-4. Main witness: its own heat glow"><span class="name"><span class="n">Buckyball (60 carbon atoms)<span class="seen">seen as a wave</span></span><span class="m">1.2×10<sup>−24</sup> kg</span></span>
+    <span class="track"><span class="band-wave" style="width: 25%;"></span><span class="band-watch" style="width: 75%;"></span><span class="zero" style="left: 25%;"></span><span class="dot wave" style="left: 22.5829%;"></span></span><span class="val">10<sup>−4</sup></span></button><button type="button" class="row" aria-pressed="true" title="Giant molecule (~2,000 atoms): W ≈ 10^-2. Main witness: its own heat glow"><span class="name"><span class="n">Giant molecule (~2,000 atoms)<span class="seen">seen as a wave</span></span><span class="m">4.2×10<sup>−23</sup> kg</span></span>
+    <span class="track"><span class="band-wave" style="width: 25%;"></span><span class="band-watch" style="width: 75%;"></span><span class="zero" style="left: 25%;"></span><span class="dot wave" style="left: 24.0215%;"></span></span><span class="val">10<sup>−2</sup></span></button><button type="button" class="row" aria-pressed="false" title="Virus: W ≈ 10^17. Main witness: air molecules"><span class="name"><span class="n">Virus</span><span class="m">6×10<sup>−19</sup> kg</span></span>
+    <span class="track"><span class="band-wave" style="width: 25%;"></span><span class="band-watch" style="width: 75%;"></span><span class="zero" style="left: 25%;"></span><span class="dot watch" style="left: 35.3279%;"></span></span><span class="val">10<sup>17</sup></span></button><button type="button" class="row" aria-pressed="false" title="Interstellar dust grain: W ≈ 10^7. Main witness: starlight"><span class="name"><span class="n">Interstellar dust grain</span><span class="m">10<sup>−15</sup> kg</span></span>
+    <span class="track"><span class="band-wave" style="width: 25%;"></span><span class="band-watch" style="width: 75%;"></span><span class="zero" style="left: 25%;"></span><span class="dot watch" style="left: 29.5616%;"></span></span><span class="val">10<sup>7</sup></span></button><button type="button" class="row" aria-pressed="false" title="Grain of sand: W ≈ 10^37. Main witness: air molecules"><span class="name"><span class="n">Grain of sand</span><span class="m">1.4×10<sup>−6</sup> kg</span></span>
+    <span class="track"><span class="band-wave" style="width: 25%;"></span><span class="band-watch" style="width: 75%;"></span><span class="zero" style="left: 25%;"></span><span class="dot watch" style="left: 48.0562%;"></span></span><span class="val">10<sup>37</sup></span></button><button type="button" class="row" aria-pressed="false" title="Cat (alive, 38 °C): W ≈ 10^48. Main witness: air molecules"><span class="name"><span class="n">Cat (alive, 38 °C)</span><span class="m">4.0 kg</span></span>
+    <span class="track"><span class="band-wave" style="width: 25%;"></span><span class="band-watch" style="width: 75%;"></span><span class="zero" style="left: 25%;"></span><span class="dot watch" style="left: 55.1876%;"></span></span><span class="val">10<sup>48</sup></span></button><button type="button" class="row" aria-pressed="false" title="Moon: W ≈ 10^78. Main witness: sunlight"><span class="name"><span class="n">Moon</span><span class="m">7.4×10<sup>22</sup> kg</span></span>
+    <span class="track"><span class="band-wave" style="width: 25%;"></span><span class="band-watch" style="width: 75%;"></span><span class="zero" style="left: 25%;"></span><span class="dot watch" style="left: 73.8449%;"></span></span><span class="val">10<sup>78</sup></span></button><button type="button" class="row" aria-pressed="false" title="Earth: W ≈ 10^81. Main witness: sunlight"><span class="name"><span class="n">Earth</span><span class="m">6×10<sup>24</sup> kg</span></span>
+    <span class="track"><span class="band-wave" style="width: 25%;"></span><span class="band-watch" style="width: 75%;"></span><span class="zero" style="left: 25%;"></span><span class="dot watch" style="left: 75.7449%;"></span></span><span class="val">10<sup>81</sup></span></button><button type="button" class="row" aria-pressed="false" title="Sun: W ≈ 10^96. Main witness: its own heat glow"><span class="name"><span class="n">Sun</span><span class="m">2×10<sup>30</sup> kg</span></span>
+    <span class="track"><span class="band-wave" style="width: 25%;"></span><span class="band-watch" style="width: 75%;"></span><span class="zero" style="left: 25%;"></span><span class="dot watch" style="left: 84.9716%;"></span></span><span class="val">10<sup>96</sup></span></button><button type="button" class="row" aria-pressed="false" title="Milky Way (whole galaxy): W ≈ 10^119. Main witness: its own starlight"><span class="name"><span class="n">Milky Way (whole galaxy)</span><span class="m">3×10<sup>42</sup> kg</span></span>
+    <span class="track"><span class="band-wave" style="width: 25%;"></span><span class="band-watch" style="width: 75%;"></span><span class="zero" style="left: 25%;"></span><span class="dot watch" style="left: 99.1491%;"></span></span><span class="val">10<sup>119</sup></span></button><button type="button" class="row" aria-pressed="false" title="Wave dark matter particle: nothing in its surroundings can record where it is"><span class="name"><span class="n">Wave dark matter particle</span><span class="m">1.8×10<sup>−58</sup> kg</span></span>
+    <span class="track"><span class="band-wave" style="width: 25%;"></span><span class="band-watch" style="width: 75%;"></span><span class="zero" style="left: 25%;"></span><span class="dot none" style="left: 1.5%;"></span></span><span class="val none">no witnesses</span></button><button type="button" class="row" aria-pressed="false" title="Heavy dark matter particle: nothing in its surroundings can record where it is"><span class="name"><span class="n">Heavy dark matter particle</span><span class="m">1.8×10<sup>−25</sup> kg</span></span>
+    <span class="track"><span class="band-wave" style="width: 25%;"></span><span class="band-watch" style="width: 75%;"></span><span class="zero" style="left: 25%;"></span><span class="dot none" style="left: 1.5%;"></span></span><span class="val none">no witnesses</span></button></div><!--/prerender:rows-->
+  </div>
+      <!--prerender:detail--><div class="detail" id="detail" aria-live="polite">
+    <div class="detail-head"><h2>Giant molecule (~2,000 atoms)</h2><span class="verdict wave">Wave wins · W ≈ 10<sup>−2</sup></span></div>
+    <p>Its wave crosses the gap about 10<sup>2</sup> times faster than the surroundings can record which side it's on.</p>
+    <div class="facts">
+      <div class="fact"><span class="k">Wave clock</span><span class="v">25 ms</span><span class="s">to spread across 250 nm</span></div>
+      <div class="fact"><span class="k">Witness clock</span><span class="v">900 ms</span><span class="s">until a record of its place exists</span></div>
+      <div class="fact"><span class="k">Surroundings</span><span class="v" style="font-family:var(--font-body);font-size:.95rem">Lab vacuum, room temperature</span><span class="s">4.2×10<sup>−23</sup> kg · 4 nm across</span></div>
+    </div>
+    <div class="who"><h3>Who's watching, by share of records</h3><div class="who-row"><span>Its own heat glow</span><span class="who-bar"><i style="width:100%"></i></span><span class="num">94%</span></div><div class="who-row"><span>Leftover gas molecules</span><span class="who-bar"><i style="width:5.929864995298191%"></i></span><span class="num">5.6%</span></div><div class="who-row"><span>Glow of room-temperature walls</span><span class="who-bar"><i style="width:0.6%"></i></span><span class="num">&lt;0.1%</span></div></div>
+    
+    <p class="note">Seen behaving as a wave in experiments (Vienna, 2019), at gaps of roughly a few hundred nanometres or less.</p>
+    </div><!--/prerender:detail-->
+    </div>
   </section>
-
-  <section class="detail" id="detail" aria-live="polite"></section>
-
-  <section class="notes">
-    <h2>What the map shows</h2>
-    <ul id="findings"></ul>
+  <section class="sec alt wm" id="what-it-shows" data-index="What the map shows" data-num="02" aria-labelledby="what-it-shows-h">
+    <div class="wrap">
+      <div class="sec-head"><p class="sec-label"><b>02</b><i>//</i>What the map shows</p></div>
+      <div class="notes">
+    <h2 class="h2" id="what-it-shows-h">What the map shows.</h2>
+    <!--prerender:findings--><ul id="findings"><li><b>Lab-proven waves sit on the wave side.</b> At the current gap (250 nm), 4 of the 4 objects that have been seen acting as waves in experiments land left of the line. Slide the gap up and the giant molecule crosses first, watched by its own heat glow.</li><li><b>Everything bigger is flooded with witnesses at home.</b> The closest call among the rest is the interstellar dust grain, at W ≈ 10<sup>7</sup> in interstellar space.</li><li><b>Silence the witnesses and size matters less.</b> A virus moved into a 4 K vacuum scores W ≈ 10<sup>−1</sup> at this gap. That is why physicists have proposed putting a virus in two places at once inside a cold vacuum.</li><li><b>Wave dark matter has no witnesses here.</b> One light particle stays on the wave side at every gap: nothing in this model records where it is. A heavy particle is different, but not because it is watched: its wave clock at a 1 kpc gap is about 10<sup>30</sup> ages of the universe at 100 GeV, so the superposition never forms. And the galaxy-sized wave is a crowd anyway, its lumps felt by every star (see the crowd panel).</li><li><b>A black hole watches, but feebly.</b> Even 10 horizon radii from the Milky Way's black hole, a wave dark matter particle split across a 1 µm gap would wait about 1.7×10<sup>170</sup> years for the horizon to record it in the formula. This is a formal extrapolation below the particle's reduced Compton wavelength, ħ/(mc), about 0.06 pc for 10⁻²² eV. It is not a validated prediction for a particle confined to such a small region. The horizon only beats ordinary witnesses for objects that are already classical.</li><li><b>Mass still counts, through the wave clock.</b> Heavier objects spread slowly, so they need to stay unwatched for longer. At this gap the Sun's wave clock is 3.7×10<sup>43</sup> years, so even a trickle of witnesses settles it.</li></ul><!--/prerender:findings-->
+  </div>
+    </div>
   </section>
-
-  <section class="crowd" aria-labelledby="crowdTitle">
-    <div class="crowd-head"><h2 id="crowdTitle">The crowd: where the map stops</h2><span class="tag">not a witness number</span></div>
+  <section class="sec wm" id="crowd" data-index="The crowd" data-num="03" aria-labelledby="crowd-h">
+    <div class="wrap">
+      <div class="sec-head"><p class="sec-label"><b>03</b><i>//</i>The crowd</p></div>
+      <div class="crowd">
+    <div class="crowd-head"><h2 class="h2" id="crowd-h">The crowd: where the map stops.</h2><span class="tag">not a witness number</span></div>
     <p>Every row above asks about one particle. Wave dark matter in a galaxy is never one particle. Its wave breaks into lumps, and each lump is shared by so many particles that together they act as one ordinary wave, the way countless photons make one radio wave. The crowd keeps its own clocks, and they are measured against the age of the universe, not against a gap.</p>
     <p>And the crowd is watched. One particle's pull is far too weak to leave a record, but a lump is a vast number of particles pulling together, and every star it passes is nudged. A nudge of that size is enormous by quantum standards, so the star now holds a record of where the lump was. The wave survives anyway: recording the shape of an ordinary wave does not erase it, any more than measuring a sea wave flattens the sea.</p>
-    <div class="crowd-list" id="crowdList"></div>
+    <!--prerender:crowd--><div class="crowd-list" id="crowdList"><div class="crowd-card"><span class="name"><span class="n">Milky Way halo at the Sun's orbit</span><span class="m">particle of 10⁻²² eV, the map's wave dark matter particle</span></span><div class="facts"><div class="fact"><span class="k">Lump size</span><span class="v">1,200 light-years</span><span class="s">half a de Broglie wavelength</span></div><div class="fact"><span class="k">Lump mass</span><span class="v">9.7×10<sup>4</sup> Suns</span><span class="s">1.1×10<sup>93</sup> particles share it</span></div><div class="fact"><span class="k">Lump lifetime</span><span class="v">710,000 years</span><span class="s">one particle's wave clock at a 390 light-years gap</span></div><div class="fact"><span class="k">Stirring time</span><span class="v">4.7×10<sup>12</sup> years</span><span class="s">340 times the age of the universe</span></div><div class="fact"><span class="k">Kick from one lump</span><span class="v">44 m/s</span><span class="s">on each star it passes</span></div><div class="fact"><span class="k">Witnessed?</span><span class="v">Yes, by gravity</span><span class="s">every star it nudges holds a record</span></div></div></div><div class="crowd-card"><span class="name"><span class="n">Milky Way halo at the Sun's orbit</span><span class="m">particle of 3×10⁻¹⁹ eV, the lowest mass dwarf-galaxy stars allow</span></span><div class="facts"><div class="fact"><span class="k">Lump size</span><span class="v">0.4 light-years</span><span class="s">half a de Broglie wavelength</span></div><div class="fact"><span class="k">Lump mass</span><span class="v">3.6×10<sup>−6</sup> Suns</span><span class="s">about 1.2 Earths; 1.3×10<sup>79</sup> particles share it</span></div><div class="fact"><span class="k">Lump lifetime</span><span class="v">240 years</span><span class="s">one particle's wave clock at a 0.13 light-years gap</span></div><div class="fact"><span class="k">Stirring time</span><span class="v">4.8×10<sup>22</sup> years</span><span class="s">3.5×10<sup>12</sup> times the age of the universe</span></div><div class="fact"><span class="k">Kick from one lump</span><span class="v">4.9 µm/s</span><span class="s">on each star it passes</span></div><div class="fact"><span class="k">Witnessed?</span><span class="v">Yes, by gravity</span><span class="s">every star it nudges holds a record</span></div></div></div><div class="crowd-card"><span class="name"><span class="n">Core of a dwarf galaxy like Eridanus II</span><span class="m">particle of 8×10⁻²³ eV, core 0.7 kpc in radius (simulated)</span></span><div class="facts"><div class="fact"><span class="k">Core radius</span><span class="v">2,300 light-years</span><span class="s">one standing wave, no lumps inside</span></div><div class="fact"><span class="k">Core mass</span><span class="v">5.1×10<sup>8</sup> Suns</span><span class="s">7.1×10<sup>96</sup> particles share it</span></div><div class="fact"><span class="k">Peak density</span><span class="v">0.13 Suns per pc³</span><span class="s">12 times the dark matter density near the Sun</span></div><div class="fact"><span class="k">Wave turns over every</span><span class="v">110 million years</span><span class="s">the core wanders on this time</span></div><div class="fact"><span class="k">Breathes every</span><span class="v">260 million years</span><span class="s">central density swings more than twofold</span></div><div class="fact"><span class="k">Witnessed?</span><span class="v">Yes, by gravity</span><span class="s">its stars are shaken by it</span></div></div></div></div><!--/prerender:crowd-->
     <p class="note">Order of magnitude, like the map. Lump lifetime ħ/(mσ²), lump mass π<sup>3/2</sup>ρ(ħ/mσ)³ and stirring time from <a class="srclink" href="https://arxiv.org/abs/1809.07673">Bar-Or, Fouvry &amp; Tremaine 2019</a>; the core is the ground state of the Schrödinger–Poisson equations, checked against <a class="srclink" href="https://arxiv.org/abs/1406.6586">Schive et al. 2014</a> and <a class="srclink" href="https://arxiv.org/abs/1912.09483">2020</a>; breathing from <a class="srclink" href="https://arxiv.org/abs/1804.09647">Veltmaat et al. 2018</a>. Inputs and derivations: <a class="srclink" href="https://github.com/Foundation-0/fractals#the-crowd-wave-where-the-map-stops">README</a>.</p>
+  </div>
+    </div>
   </section>
-
-  <section class="method">
-    <h2>How it's computed</h2>
+  <section class="sec alt wm" id="method" data-index="Method and checks" data-num="04" aria-labelledby="method-h">
+    <div class="wrap">
+      <div class="sec-head"><p class="sec-label"><b>04</b><i>//</i>Method and checks</p><span class="chip">tolerance: a factor of a few</span></div>
+      <div class="method">
+    <h2 class="h2" id="method-h">How it&rsquo;s computed.</h2>
     <p>Everything runs live in this page from first principles. Treat the numbers as order-of-magnitude: the method is good to within a factor of a few, and the map spans more than 150 powers of ten.</p>
     <div class="formula">wave clock = m·Δx² / ħ &nbsp;&nbsp;·&nbsp;&nbsp; witness rate Γ = Σ (hits per second) × (information per hit) &nbsp;&nbsp;·&nbsp;&nbsp; W = Γ × wave clock</div>
     <ul>
@@ -270,7 +207,7 @@ select { font: inherit; font-size: 0.95rem; color: var(--ink); background: var(-
     <h3>Checks against published numbers</h3>
     <ul>
       <li>Light and gas scattering match the closed-form decoherence formulas to within 2%. They match 11 of the 15 entries of the Joos–Zeh table and 7 of the 8 entries of Schlosshauer's table to within a factor of 5. The tables give powers of ten only, and where they disagree with the model they also disagree with each other.</li>
-      <li>The horizon formula reproduces both worked examples in the Wald paper: Earth split by its own radius beside a Sun-mass black hole (paper: ~10 µs, here: ~20 µs) and an electron split by 1 m (paper: ~10⁴³ years, here: ~4×10⁴² years).</li>
+      <li>The horizon formula reproduces both worked examples in Danielson, Satishchandran and Wald (2022): Earth split by its own radius beside a Sun-mass black hole (paper: ~10 µs, here: ~22 µs) and an electron split by 1 m (paper: ~10⁴³ years, here: ~4×10⁴² years).</li>
       <li>Heated C₇₀, the molecule of the 2004 Vienna heating experiment, loses half its fringe visibility here at about 2,475 K, against about 2,500 K measured. The glow is fitted to that point, and the fit gets the light itself wrong: too little of it is visible.</li>
       <li>The crowd's lump mass and stirring time reproduce the worked numbers of Bar-Or, Fouvry and Tremaine (2019) to 2%. The core, solved here from first principles, matches the density and mass formulas of Schive, Chiueh and Broadhurst (2014) to about 2% and their core wave period (2020) to 1%.</li>
       <li>All of these run as <a class="srclink" href="https://github.com/Foundation-0/fractals/tree/main/tests">automated checks</a> (<code>npm test</code>). Mistakes and disagreements found along the way are in <a class="srclink" href="https://github.com/Foundation-0/fractals/blob/main/CORRECTIONS.md">CORRECTIONS.md</a>.</li>
@@ -285,8 +222,49 @@ select { font: inherit; font-size: 0.95rem; color: var(--ink); background: var(-
     </ul>
     <p class="src">Code: <a href="https://github.com/Foundation-0/fractals">Foundation-0/fractals</a> · <a href="https://github.com/Foundation-0/fractals/issues">open questions</a></p>
     <p class="src">Sources: <a href="https://doi.org/10.1007/BF01725541">Joos &amp; Zeh 1985</a> · <a href="https://arxiv.org/abs/2205.06279">Danielson, Satishchandran &amp; Wald 2022</a> · <a href="https://www.doi.org/10.1038/25653">Dürr, Nonn &amp; Rempe 1998</a> · <a href="https://arxiv.org/abs/2211.00449">Bild et al. 2023</a> · <a href="https://arxiv.org/pdf/1001.3419">Riedel &amp; Zurek 2010</a> · <a href="https://doi.org/10.1038/nature02276">Hackermüller et al. 2004</a> · <a href="https://arxiv.org/abs/quant-ph/0412003">Hornberger et al. 2005</a> · <a href="https://arxiv.org/abs/1911.06282">Schlosshauer 2019</a> · <a href="https://arxiv.org/abs/1610.08297">Hui, Ostriker, Tremaine &amp; Witten 2017</a> · <a href="https://arxiv.org/abs/1809.07673">Bar-Or, Fouvry &amp; Tremaine 2019</a> · <a href="https://arxiv.org/abs/2005.12287">Allali &amp; Hertzberg 2020</a></p>
+  </div>
+    </div>
   </section>
-</div>
+  <section class="sec wm" id="studies" data-index="The studies" data-num="05" aria-labelledby="studies-h">
+    <div class="wrap">
+      <div class="sec-head"><p class="sec-label"><b>05</b><i>//</i>The studies</p></div>
+      <h2 class="h2" id="studies-h">One question, asked at every scale.</h2>
+      <p class="lede">fractals asks where reality repeats itself across scales, and where the repetition stops. Each study is a small model, checked against published numbers, with its mistakes kept on the record.</p>
+      <div class="notes"><ul>
+        <li><b><a href="./">The Witness Map</a></b> (this page): where quantum turns classical, object by object.</li>
+        <li><b><a href="gravitational-atom/">Gravitational atom beside hydrogen</a></b>: the same wave equation at two scales, drawn at matched size.</li>
+        <li><b><a href="https://github.com/Foundation-0/fractals/tree/main/quantum-paths">Quantum paths</a></b>: where a recorded path's fractal dimension 2 starts and stops.</li>
+        <li><b><a href="https://github.com/Foundation-0/fractals/tree/main/critical">The critical point</a></b>: a magnet whose spins point only up or down repeats itself across scales only when tuned to its critical point; away from it the repetition stops at the correlation length.</li>
+        <li><b><a href="https://github.com/Foundation-0/fractals/tree/main/turbulence">Turbulence</a></b>: from the size where a flow is stirred down to a smallest size, the same energy flux passes through every scale; the bursts do not scale exactly, and what sets that smallest size depends on the medium: viscosity in air and water, the ions' own motion in the solar wind.</li>
+        <li><b>Cosmic homogeneity</b>: the scale where galaxy clustering stops looking fractal. Model and checks written; <a href="https://github.com/Foundation-0/fractals/issues/17">issue 17</a> tracks publication.</li>
+        <li><b>Open questions</b>: halos within halos. <a href="https://github.com/Foundation-0/fractals/issues">The issue list</a> is the programme.</li>
+      </ul></div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-foot">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <div class="foot-brand"><svg aria-hidden="true"><use href="#zero"/></svg>fractals</div>
+        <p>Self-similarity across scales, tested with first principles. Exploration, not peer reviewed; every number on this page is computed live by the model the checks test, and mistakes stay on the record in CORRECTIONS.md.</p>
+        <p>Source code under the <a href="https://github.com/Foundation-0/fractals/blob/main/LICENSE">Apache License 2.0</a>.</p>
+      </div>
+      <div class="foot-cols">
+        <div><h2 class="foot-h">Studies</h2><ul><li><a href="./">Witness Map</a></li><li><a href="gravitational-atom/">Gravitational atom</a></li><li><a href="https://github.com/Foundation-0/fractals/tree/main/quantum-paths">Quantum paths</a></li><li><a href="https://github.com/Foundation-0/fractals/tree/main/critical">The critical point</a></li><li><a href="https://github.com/Foundation-0/fractals/tree/main/turbulence">Turbulence</a></li><li><a href="https://github.com/Foundation-0/fractals/issues">Open questions</a></li></ul></div>
+        <div><h2 class="foot-h">Record</h2><ul><li><a href="witness-map/model.js">The model (JS)</a></li><li><a href="https://github.com/Foundation-0/fractals/tree/main/tests">Checks</a></li><li><a href="https://github.com/Foundation-0/fractals/blob/main/CORRECTIONS.md">Corrections</a></li></ul></div>
+        <div><h2 class="foot-h">Source</h2><ul><li><a href="https://github.com/Foundation-0/fractals">Repository</a></li><li><a href="https://github.com/Foundation-0/fractals/issues/new">Report an error</a></li><li><a href="https://foundation-0.github.io/f0/">Foundation0</a></li></ul></div>
+      </div>
+    </div>
+    <div class="stamp">
+      <span>fractals colophon</span>
+      <span>Model and checks in the repository; design system shared with the Foundation0 site</span>
+      <span class="who"><i style="background:var(--bio)" aria-hidden="true"></i>Human: Ahraz Arifuddin &middot; Aska Digital</span>
+      <span class="who"><i style="background:var(--dig)" aria-hidden="true"></i>Digital: Claude (Anthropic) and the agentic team</span>
+    </div>
+  </div>
+</footer>
 
 <script src="witness-map/model.js"></script>
 <script>
@@ -349,9 +327,16 @@ const PRESETS = [
 const BH_OPTS = [3, 10, 100, 1e4, 1e6, 1e8];
 const $ = id => document.getElementById(id);
 try { const saved = JSON.parse(localStorage.getItem("witness-map") || "null"); if (saved && typeof saved === "object") Object.assign(state, saved); } catch (e) {}
+try { const q = new URLSearchParams(location.search);
+  if (q.has("gap")) { const g = parseFloat(q.get("gap")); if (g > 0) state.lgap = Math.min(20, Math.max(-9, Math.log10(g))); }
+  if (q.has("env") && (q.get("env") === "natural" || ENVS[q.get("env")])) state.env = q.get("env");
+  if (q.has("bh")) state.bh = q.get("bh") === "1";
+  if (q.has("bhr")) { const r = parseFloat(q.get("bhr")); if (BH_OPTS.includes(r)) state.bhR = r; }
+  if (q.has("sel") && OBJECTS.some(o => o.id === q.get("sel"))) state.sel = q.get("sel");
+} catch (e) {}
 function save() { try { localStorage.setItem("witness-map", JSON.stringify(state)); } catch (e) {} }
 
-const chips = $("chips");
+const chips = $("chips"); chips.textContent = "";
 PRESETS.forEach(p => { const b = document.createElement("button"); b.type = "button"; b.className = "chip"; b.textContent = p.t; b.dataset.lg = p.lg;
   b.addEventListener("click", () => { state.lgap = p.lg; $("gap").value = p.lg; update(); }); chips.appendChild(b); });
 const envSel = $("env");
@@ -366,7 +351,7 @@ $("bh").addEventListener("change", e => { state.bh = e.target.checked; bhSel.dis
 bhSel.addEventListener("change", e => { state.bhR = parseFloat(e.target.value); update(); });
 
 // rows
-const rowsEl = $("rows");
+const rowsEl = $("rows"); rowsEl.textContent = "";
 const rowEls = {};
 OBJECTS.forEach(o => {
   const b = document.createElement("button"); b.type = "button"; b.className = "row"; b.setAttribute("aria-pressed", "false");
@@ -464,7 +449,7 @@ function renderFindings(res) {
     `<b>Lab-proven waves sit on the wave side.</b> At the current gap (${fmtLen(dx)}), ${seenWave} of the ${seen.length} objects that have been seen acting as waves in experiments land left of the line. Slide the gap up and the giant molecule crosses first, watched by its own heat glow.`,
     closest ? `<b>Everything bigger is flooded with witnesses at home.</b> The closest call among the rest is the ${closest.o.name.toLowerCase()}, at W ≈ ${pow10only(closest.r.W)} in ${(state.env === "natural" ? ENVS[closest.o.home] : ENVS[state.env]).name.toLowerCase()}.` : "",
     `<b>Silence the witnesses and size matters less.</b> A virus moved into a 4 K vacuum scores W ≈ ${pow10only(vCold)} at this gap. That is why physicists have proposed putting a virus in two places at once inside a cold vacuum.`,
-    `<b>Dark matter has no witnesses at all here.</b> It is the only thing on the map that stays on the wave side at every gap, however heavy the particle. That is true of one particle. The galaxy-sized dark matter wave is a crowd, and its lumps are felt by every star (see the crowd panel).`,
+    `<b>Wave dark matter has no witnesses here.</b> One light particle stays on the wave side at every gap: nothing in this model records where it is. A heavy particle is different, but not because it is watched: its wave clock at a 1 kpc gap is about 10<sup>30</sup> ages of the universe at 100 GeV, so the superposition never forms. And the galaxy-sized wave is a crowd anyway, its lumps felt by every star (see the crowd panel).`,
     `<b>A black hole watches, but feebly.</b> Even 10 horizon radii from the Milky Way's black hole, a wave dark matter particle split across a 1 µm gap would wait about ${fmtTime(1 / rates(OBJECTS.find(o => o.id === "fdm"), ENVS.intergalactic, 1e-6, { M: BH_M, b: 10 * RS }).gamma)} for the horizon to record it in the formula. This is a formal extrapolation below the particle's reduced Compton wavelength, ħ/(mc), about 0.06 pc for 10⁻²² eV. It is not a validated prediction for a particle confined to such a small region. The horizon only beats ordinary witnesses for objects that are already classical.`,
     `<b>Mass still counts, through the wave clock.</b> Heavier objects spread slowly, so they need to stay unwatched for longer. At this gap the Sun's wave clock is ${fmtTime(sun.tWave)}, so even a trickle of witnesses settles it.`,
   ].filter(Boolean);
@@ -503,6 +488,7 @@ function renderCrowd() {
 
 renderCrowd();
 update();
+
 </script>
 </body>
 </html>

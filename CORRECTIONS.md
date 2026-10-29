@@ -75,11 +75,11 @@ Claims made during the exploration that did not survive it, kept so the record s
 
 ## 16 October 2026: the gravitational atom (issue #4)
 
-12. **Atoms as little solar systems.** Claimed (README, and issue #4): "Atoms are not little solar systems ... Except
-    in one case, where they are", the one place where that picture "becomes literally true". Too strong. In the
-    gravitational atom the light particles form a wave cloud with hydrogen's shapes and levels; nothing in it moves
-    on an orbit. What carries over from a solar system is the force, gravity, and for a heavy hole the size: in
-    Baumann, Chia and Porto's 2019 example the 211 cloud is most likely found 1.4 AU out. The README now says
+12. **Atoms as little solar systems.** Claimed (README, and issue #4): "Atoms are not little solar systems ...
+    Except in one case, where they are", the one place where that picture "becomes literally true". Too strong. In
+    the gravitational atom the light particles form a wave cloud with hydrogen's shapes and levels; nothing in it
+    moves on an orbit. What carries over from a solar system is the force, gravity, and for a heavy hole the size:
+    in Baumann, Chia and Porto's 2019 example the 211 cloud is most likely found 1.4 AU out. The README now says
     gravity builds a real atom.
 13. **"The same energy levels as a hydrogen atom."** Means the same pattern, falling as 1/n², not the same
     energies. In the same example the levels are 2×10¹⁹ times closer together than hydrogen's, and the pattern
@@ -99,16 +99,16 @@ Claims made during the exploration that did not survive it, kept so the record s
 ## 16 October 2026: black hole and wave dark matter lensing (issue #1)
 
 15. **Superradiance as a second route.** Issue #1 said a spinning black hole amplifying very light particles into a
-    cloud was not ruled out as a way for a galaxy's central black hole to shape wave dark matter where lensing looks.
-    For a 10⁻²² eV particle and a 10⁸ to 10⁹ M☉ black hole it is ruled out: the cloud would take 10²⁶ to 10³⁴ years
-    to grow, and at its radius the galaxy, not the black hole, holds the particles. Any cloud these black holes can
-    grow within the age of the universe, at any particle mass, peaks within about 0.1 pc. See
+    cloud was not ruled out as a way for a galaxy's central black hole to shape wave dark matter where lensing
+    looks. For a 10⁻²² eV particle and a 10⁸ to 10⁹ M☉ black hole it is ruled out: the cloud would take 10²⁶ to 10³⁴
+    years to grow, and at its radius the galaxy, not the black hole, holds the particles. Any cloud these black
+    holes can grow within the age of the universe, at any particle mass, peaks within about 0.1 pc. See
     [notes/bh-lensing.md](notes/bh-lensing.md).
 
 ## 18 October 2026: the black hole lensing note revisited (issue #28)
 
-16. **SDP.81 as the anomaly lens with a bound on its black hole.** Claimed (notes/bh-lensing.md, issue #1): "Only one
-    anomaly lens, SDP.81, has even a bound on its black hole". The note paired a 10^(8.96±0.12) M☉ dark lump at
+16. **SDP.81 as the anomaly lens with a bound on its black hole.** Claimed (notes/bh-lensing.md, issue #1): "Only
+    one anomaly lens, SDP.81, has even a bound on its black hole". The note paired a 10^(8.96±0.12) M☉ dark lump at
     6.9σ (Hezaveh et al. 2016) with a black hole above 3×10⁸ M☉ from the missing central image. That no longer
     holds. Stacey et al. (A&A, 2025) re-analysed the same ALMA data. They find the lump most likely spurious,
     produced by poorly fitting multipoles, and no evidence for either previously reported lump, only for extra
@@ -136,21 +136,61 @@ Claims made during the exploration that did not survive it, kept so the record s
     `tests/quantum-paths.mjs` records that as a disagreement. (The first draft on #25 used the nominal 3 µm,
     which hid the gap, and called the trapped path smooth, then rough, then smooth; review there caught both.)
 
+## 18 October 2026: turbulence (issue #19)
+
+19. **Issue #19's numbers, written from recall.** Checked against search text, and in #34's review against the
+    papers (see [turbulence](turbulence/)), two did not survive and five needed qualifying.
+    - Did not survive: "σ = 0.72 S^0.5 km/s". Solomon et al.'s fit is 1.0 S^0.5; with their effective radius
+      R = 1.92 S it becomes 0.72 R^0.5 (this study's conversion), so 0.72 goes with R. The 0.07 pc sonic scale it
+      gave is a radius, 0.15 pc across.
+    - Did not survive: Larson's σ ∝ L^0.38 against Solomon et al.'s 0.5 as "a change of cascade". Over most of
+      Larson's range his relation is supersonic (non-thermal Mach 1.0 at 0.1 pc to 19 at 100 pc), and the four
+      objects he plots at 0.1 to 0.2 pc scatter from Mach 0.44 (TMC2) to 2.45 (L1407/L1257), with only TMC1 and TMC2
+      subsonic in his own words, so his 0.38 is not the subsonic cascade's. That the difference lies in his sample
+      and size definition is this study's inference; Larson read it as supersonic turbulence, or subsonic turbulence
+      in warmer gas.
+    - Qualified: "the spectral break near 0.6 Hz". V/(2π d_i) gives 0.63 Hz, but the fluctuations are elongated
+      along the field, so the frequency carries sin θ_BV: 0.46 Hz at the 47° Parker angle. Observed breaks spread
+      from 0.1 to 1 Hz (Chen et al. 2014), and Leamon et al.'s intervals average near 0.38 Hz, so both values lie
+      inside the spread and the data do not choose.
+    - Qualified: "a kinetic-range slope near −2.8 (Bruno and Carbone)". −2.8 is one measurement (Alexandrova et al.
+      2009); Bruno and Carbone give about −7/3 as typical (as read on p. 146 in #34's re-review), and measured
+      slopes run from about −2 to −4 (as Alexandrova et al. and Bruno and Carbone summarise them; Smith et al. 2006
+      find −1 to −4).
+    - Qualified: "the Kolmogorov scale is about a millimetre in the atmosphere and upper ocean". Right as an order
+      of magnitude, with a factor of 10 either way: 0.3 mm in strong wind to over a centimetre on a quiet night,
+      and 2 to 3 mm at the one upper-ocean station checked.
+    - Qualified: "the Kolmogorov constant (~1.5)". Fair for the 3D spectrum. Sreenivasan's (1995) compilation gives
+      0.53 (scatter 0.055) for the 1D spectrum, 1.62 ± 0.17 in 3D.
+    - Qualified: Nastrom and Gage's k⁻³ range "above ~500 km". The transition is quoted between 400 and 1,000 km,
+      most often near 600.
+20. **"A fractional-Brownian estimate gives 7/6" for cloud edges.** The wrong formula for single loops without
+    holes. 7/6 = 2 − H is the dimension of all the contours at one level together, the relation Stutzki et al.
+    (1998) take from Voss, so the issue followed the literature. A perimeter-area relation over separate clouds, if
+    holes are not counted, measures single loops, (3 − H)/2 (Kondev and Henley 1995, a conjecture exact only at
+    H = 0 and 1), which is 13/12 for projected Kolmogorov density. Computed on Gaussian surfaces, the loops follow
+    (3 − H)/2: across six spectra their dimension falls with the effective roughness H_eff at a slope of −0.53
+    ± 0.05 (−0.44 against the nominal H), not −1. They also sit 0.02 to 0.04 above it, depending on where H_eff is
+    measured, for reasons not found. The issue's conclusion survives: projected Kolmogorov density gives 1.15 there,
+    not 1.36. Whether the clouds' 1.36 matches the laboratory's 1.3 to 1.4 for a shared reason is not shown. The
+    laboratory measures sections of turbulent surfaces (7/3 in 3D for the interface), the clouds a projection of
+    supersonic gas, and the two only meet near 4/3.
+
 ## 18 October 2026: cosmic homogeneity (issue #17)
 
-19. **"Beyond about 80 to 300 million parsecs (h⁻¹ Mpc, 80 to 300)."** Two errors, and a missing caveat. The 80
+21. **"Beyond about 80 to 300 million parsecs (h⁻¹ Mpc, 80 to 300)."** Two errors, and a missing caveat. The 80
     to 300 h⁻¹ Mpc in Scrimgeour et al. (2012) is the range over which they rule out a fractal with D₂ below
     2.97, and 300 is the largest scale their survey reached. Their homogeneity scale is 70 to 81 h⁻¹ Mpc: 71 ± 8,
     70 ± 5, 81 ± 5 and 75 ± 4 at z ≈ 0.2, 0.4, 0.6 and 0.8. And h⁻¹ Mpc is not Mpc: with h = 0.674, 70 to
     81 h⁻¹ Mpc is 104 to 120 Mpc. The caveat: the scale is a convention, not a fixed length. It depends on the
     tracer, the epoch and the threshold; a 0.1% threshold instead of 1% puts it at 185 h⁻¹ Mpc for matter today.
     See [cosmic-homogeneity](cosmic-homogeneity/).
-20. **"The nesting stops, the way a coastline's roughness stops at the size of molecules."** Points the wrong
+22. **"The nesting stops, the way a coastline's roughness stops at the size of molecules."** Points the wrong
     way. A coastline is rough down to a smallest scale; galaxy clustering is clumpy up to a largest one.
 
 ## 19 October 2026: halos within halos (issue #18)
 
-21. **"Halos sit inside halos with nearly the same shape from about an Earth mass up to galaxy clusters, some 20
+23. **"Halos sit inside halos with nearly the same shape from about an Earth mass up to galaxy clusters, some 20
     decades in mass (Wang et al. 2020)."** Two slips, the second partly contested. Wang et al. zoomed eight times, each
     time into a smaller region of the previous level chosen to avoid any massive halo: their 20 decades are field
     halos of many masses, not a chain of halos inside halos. Inside a Milky Way the nesting of a 100 GeV WIMP spans
@@ -160,18 +200,18 @@ Claims made during the exploration that did not survive it, kept so the record s
     centres. Whether those survive inside later halos is contested: Wang et al. find NFW and Einasto profiles down to
     an Earth mass, Delos and White suggest the steeper centres lie at radii those simulations do not resolve, and a
     later study finds them buried in NFW-like profiles but not destroyed. See [halos](halos/).
-22. **"Hu–Barkana–Gruzinov's quoted k_J ≈ 66.5 a^¼ Mpc⁻¹ and M_J ≈ 1.5×10⁷ M☉ for 10⁻²² eV are not mutually
+24. **"Hu–Barkana–Gruzinov's quoted k_J ≈ 66.5 a^¼ Mpc⁻¹ and M_J ≈ 1.5×10⁷ M☉ for 10⁻²² eV are not mutually
     consistent with ρ = ρ_m."** Neither number is Hu, Barkana and Gruzinov's (2000), who give the Jeans
     wavenumber at equality, 9 m₂₂^½ Mpc⁻¹, and a Jeans length. The 66.5 form is Marsh's (2016) and uses the dark
     matter density alone, 0.12 ρ_crit/h². 1.5×10⁷ M☉ is Hui et al.'s (2017, as quoted in search text), and a sphere
     of diameter λ_J reproduces it. With the dark matter density the two agree (66.5 Mpc⁻¹ and 1.47×10⁷ M☉); with
     all matter they are 69.5 Mpc⁻¹ and 1.54×10⁷ M☉. Both go as ρ^¼, 4.5% between the two densities: quoted to two
     figures, 1.5×10⁷ hides the difference, while 66.5, quoted to three, does not.
-23. **"About 18 decades for a 100 GeV WIMP and only 2 to 4.5 for 10⁻²² eV wave dark matter."** The WIMP figure
+25. **"About 18 decades for a 100 GeV WIMP and only 2 to 4.5 for 10⁻²² eV wave dark matter."** The WIMP figure
     survives: 16 to 18 decades. The wave figure mixes definitions. Where the halo population turns down (half
     mode, half power, Schive et al.'s M₀) it is 1.3 to 1.8 decades; 4.8 is from the Jeans mass today, which bounds
     any halo from below but is not where halos become rare.
-24. **"Excluded by Lyman-α and Milky Way satellite bounds (from about 2×10⁻²¹ to 3×10⁻¹⁹ eV)."** Out of date at
+26. **"Excluded by Lyman-α and Milky Way satellite bounds (from about 2×10⁻²¹ to 3×10⁻¹⁹ eV)."** Out of date at
     the top: Ursa Major III, if it is a galaxy, would raise the dwarf-galaxy bound from 3×10⁻¹⁹ to 8×10⁻¹⁸ eV (May,
     Dalal and Kravtsov 2025). The issue's "at 2×10⁻²⁰ eV the suppression mass falls to about 10⁷ M☉" holds for
     Schive et al.'s M₀ (1.4×10⁷ M☉); the half-mode and half-power masses are 3.4 and 4.6×10⁷ M☉.
