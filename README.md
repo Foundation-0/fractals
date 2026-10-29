@@ -33,6 +33,16 @@ with Claude (Anthropic), for [Foundation0](https://github.com/Foundation-0/f0).
 - **Cosmic structure is fractal only up to a point.** Galaxies cluster in a fractal-like way on small
   scales, but beyond about 80 to 300 million parsecs (h⁻¹ Mpc, 80 to 300) they are spread almost evenly
   (Scrimgeour et al., 2012). The nesting stops, the way a coastline's roughness stops at the size of molecules.
+- **Turbulence repeats, but not exactly.** Between the size where a flow is stirred and the size where viscosity
+  takes over, the same energy flux passes through every scale. In a cascade model it holds to 0.2% over the first
+  nine of 21 shells (2.4 decades), and a third-order law that follows from it to 0.1%. The bursts do not scale
+  exactly: the distribution's tails fatten from scale to scale (intermittency). Where the cascade ends depends on
+  the medium: about a millimetre in air and water, give or take a factor of 10; the ion scales (about 100 km) in
+  the solar wind, where collisions are too rare for viscosity and a steeper kinetic cascade takes over. In
+  molecular clouds the supersonic range ends at the sonic scale (about 0.1 pc), and a shallower subsonic cascade
+  continues. The fractal edges of the Taurus clouds (dimension 1.36) agree in number with laboratory turbulent
+  surfaces, but the two measure different things, and across clouds the dimension runs from about 1.2 to 1.6
+  ([turbulence](turbulence/)).
 
 Some repetition across scales has to be tuned, and some sets its own range. At a critical point, such as water's
 liquid-vapour critical point or the Curie temperature of a magnet whose spins point only up or down, fluctuations
@@ -334,9 +344,9 @@ and the hole's loss of mass; interactions between the particles; anything else n
 Why does anything repeat across scales at all? At a critical point, such as water at 647 K and 22 MPa or a magnet
 at its Curie temperature, fluctuations of every size appear, from the size of a molecule up to a correlation length
 ξ that grows without limit as the temperature approaches T_c. A 2D Ising lattice and site percolation, run with
-seeded random numbers in `critical/model.js`, come out at or close to the exact answers: the Ising results within
-1.5 standard deviations, the percolation threshold within one standard error once open edges are allowed for, and
-the spanning cluster's dimension 0.8% low (details in
+seeded random numbers in `critical/model.js`, come out at or close to the exact or high-precision answers: the
+Ising results within 1.5 standard deviations, the percolation threshold within one standard error once open edges
+are allowed for, and the spanning cluster's dimension 0.8% low (details in
 [critical/README.md](critical/README.md#what-it-reproduces), issue #20):
 
 - T_c from where the Binder cumulants of two lattice sizes cross: 2.2704 ± 0.0017 J/k_B, against Onsager's
@@ -352,12 +362,13 @@ the spanning cluster's dimension 0.8% low (details in
 
 Here the scale-free range has to be tuned: the temperature to T_c and the magnetic field to zero. Turbulent
 cascades, and gravitational clustering grown from a nearly scale-invariant start, are scale-free over a range that
-nobody tunes: the flow's Reynolds number, or the time gravity has had to act, sets it (sources in
+nobody tunes: the flow's own numbers, or the time gravity has had to act, set it (sources in
 [critical/README.md](critical/README.md#tuned-scale-invariance-against-self-organised-ranges); the clustering turns
 smooth on the largest scales, as the [opening section](#where-the-intuition-holds-and-where-it-breaks) describes).
 Real fluids have the same mechanism with three-dimensional exponents: ξ grows 4.27-fold for each tenfold approach
 to T_c (ν = 0.630; Kos, Poland, Simmons-Duffin and Vichi 2016), against tenfold for the 2D lattice. `npm test`
-checks the study against the exact results (`tests/critical.mjs`).
+checks the study against the exact or high-precision results and, for percolation at finite sizes, against Ziff and
+Newman's measurements (`tests/critical.mjs`).
 
 Mistakes found along the way are in [CORRECTIONS.md](CORRECTIONS.md). Open questions are the
 [issues](https://github.com/Foundation-0/fractals/issues).

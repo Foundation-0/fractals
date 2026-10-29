@@ -32,4 +32,7 @@ jobs:
       - run: node witness-map/table.mjs
       - run: node witness-map/table.mjs 1e-6 cryo
       - run: node notes/bh-lensing.mjs
+      - run: node turbulence/table.mjs quick
+      - run: node turbulence/edges.mjs quick
+      - run: node turbulence/edges.mjs 256
       - run: node orbits/table.mjs quick
