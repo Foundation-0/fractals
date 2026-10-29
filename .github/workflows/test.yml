@@ -34,3 +34,4 @@ jobs:
       - run: node turbulence/table.mjs quick
       - run: node turbulence/edges.mjs quick
       - run: node turbulence/edges.mjs 256
+      - run: node halos/table.mjs

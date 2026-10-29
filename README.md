@@ -39,6 +39,13 @@ with Claude (Anthropic), for [Foundation0](https://github.com/Foundation-0/f0).
   continues. The fractal edges of the Taurus clouds (dimension 1.36) agree in number with laboratory turbulent
   surfaces, but the two measure different things, and across clouds the dimension runs from about 1.2 to 1.6
   ([turbulence](turbulence/)).
+- **Halos nest inside halos, down to a floor the dark matter particle sets.** Dark matter clumps from the
+  bottom up, and a Milky Way's halo holds subhalos that hold their own. For a 100 GeV WIMP the nesting spans
+  16 to 18 decades in mass, down to halos of 10⁻⁶ to 10⁻⁴ Suns; below that, the particle's coupling to the
+  radiation, and then its own motion, have smoothed everything out. For wave dark matter at the lightest masses
+  still allowed it spans only 3 to 8 decades, depending on which bound holds, cut off by quantum pressure.
+  The first halos form with steeper centres; whether those survive inside the halos built from them is still
+  argued ([halos](halos/)).
 
 Some repetition across scales has to be tuned, and some sets its own range. At a critical point, such as water's
 liquid-vapour critical point or the Curie temperature of a magnet whose spins point only up or down, fluctuations
