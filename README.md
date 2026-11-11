@@ -18,6 +18,13 @@ with Claude (Anthropic), for [Foundation0](https://github.com/Foundation-0/f0).
   with gravity in place of electric attraction (the "gravitational atom"). It is still a wave cloud, not
   planets on orbits. The same equation, a wave held by a pull that weakens with distance, gives the same
   solution at any scale. The nesting lives in the equations, not the objects.
+- **Solar systems are not little galaxies, except at the Milky Way's centre.** Around one dominant mass, orbits follow
+  Kepler's law at every radius. The planets match it to 0.13%, about what they weigh together against the Sun. Across
+  the Milky Way's disk the speed instead stays between 200 and 234 km/s, because the mass is spread out. A Kepler
+  region ends where its host's tide wins, at a density ratio rather than a size: 1.4 pc for the Sun in the Galaxy,
+  0.36 au for Jupiter. In a three-body model a planet keeps moons, and the Sun comets, out to about half that
+  radius, though passing stars cut the Oort cloud shorter. The Milky Way has its own small solar system around its
+  central black hole, about 1.3 pc in radius ([orbits](orbits/)).
 - **Quantum paths are fractal, between two lengths.** A free particle's path, recorded by position
   measurements finer than ħ/p, has fractal dimension 2, against 1 for a classical trajectory (Abbott and Wise,
   1981); below ħ/mc, in a single-particle model, the speed of light makes it smooth again. Its surroundings draw
@@ -211,13 +218,15 @@ node witness-map/table.mjs               # every object at a 250 nm gap, then th
 node witness-map/table.mjs 1e-6 cryo     # 1 µm gap, everything in a 4 K vacuum
 node notes/bh-lensing.mjs                # every number in the black hole note
 node critical/table.mjs                  # the critical-point study's numbers (about 65 s)
+node orbits/table.mjs quick              # the orbits study's numbers, without its stability scans
 ```
 
 `witness-map/model.js` is the whole model, including `gravAtom` for the black hole note. It loads in Node
 (`require`) and in a browser (`window.WM`). `npm test` also checks `gravitational-atom/atom.js` (second study,
 below). The third study's checks, `tests/critical.mjs`, add about 65 s of seeded Monte Carlo runs, most of it
 percolation with nine seeds. CI runs every line above except the `critical/table.mjs` line: it repeats the tests'
-seeded runs and prints the results without checking them.
+seeded runs and prints the results without checking them. The orbits study's full table (`node orbits/table.mjs`,
+about 11 minutes) is not run by CI either.
 
 ## Checks
 
