@@ -44,6 +44,8 @@ clustering are scale-free over a range the system sets itself ([third study](#th
 
 ## First study: the Witness Map
 
+Related research: [scaling across cosmic time](notes/acceleration-evolution.md) connects this project's bounded scaling tests to gravity's acceleration-evolution audit. The evolution exponent is not a fractal dimension, and visual resemblance alone supplies no cosmological mechanism.
+
 Why do electrons act as waves and planets do not? Ask any object one question: can it be in two places
 at once, a gap Δx apart?
 
