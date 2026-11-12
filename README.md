@@ -44,23 +44,27 @@ clustering are scale-free over a range the system sets itself ([third study](#th
 
 ## First study: the Witness Map
 
-Why do electrons act as waves and planets do not? Ask any object one question: can it be in two places
-at once, a gap Δx apart?
+How quickly does an environment suppress interference between positions a gap Δx apart?
+The Witness Map compares an estimated decoherence time with a free spreading time.
 
 - **Wave clock**: how long its wave needs to spread across the gap, `m·Δx²/ħ`. Heavier things spread slower.
-- **Witness clock**: how long until something around it (a scattered photon, a gas atom, its own heat
-  glow, a black hole horizon) carries off a record of which place it is in.
-- **Witness number** `W = wave clock ÷ witness clock`. Below 1 the wave wins and the object can act
-  quantum. Above 1 the witnesses win and it acts classical.
+- **Decoherence clock**: the estimated time for the surroundings to suppress position interference.
+  The modeled channels include scattered photons, gas collisions, emitted light and a black hole horizon.
+- **Witness number** `W = wave clock ÷ decoherence clock`. Below 1 spreading is faster.
+  Above 1 modeled decoherence is faster. This is a timescale comparison, not a sufficient test of classical behavior.
 
-What destroys the wave is the *record*, not the push of the detector: in 1998 Dürr, Nonn and Rempe marked
-which path atoms took with a classical kick far too small to matter, and the interference still vanished.
-The idea that scattered light carries records of an object's position is also studied by Riedel and
-Zurek (2010).
+Interference can disappear without a large classical kick, as Dürr, Nonn and Rempe demonstrated in 1998.
+Whether observers can read position information from the surroundings is a separate calculation.
+In [Riedel and Zurek's photon model](https://arxiv.org/html/1102.3179v2), isotropic thermal illumination
+can decohere an object without producing redundant position records in scattered photons.
+
+This model supplies temperature and photon dilution, but no angular density matrix or information-fragment
+calculation. Its rates therefore estimate coherence loss, not readable records per second.
+Preparing a superposition, following a classical trajectory and obtaining redundant records require further physics.
 
 At a 250 nm gap, each object in its usual surroundings:
 
-| Object | W | Main witness |
+| Object | W | Main modeled channel |
 |---|---|---|
 | Electron (lab vacuum) | ~10⁻¹³ | leftover gas |
 | Rubidium atom | ~10⁻⁷ | leftover gas |
@@ -75,15 +79,15 @@ At a 250 nm gap, each object in its usual surroundings:
 
 What it shows:
 
-1. The four objects seen acting as waves in experiments all land on the wave side.
-2. Mass enters through the wave clock. Silence the witnesses and big things can cross: a virus in a 4 K
+1. The four objects seen acting as waves in experiments all have W below 1 in the listed benchmark environments.
+2. Mass enters through the wave clock. Reducing environmental decoherence can move bigger objects below W = 1: a virus in a 4 K
    vacuum scores W ≈ 0.04.
-3. A lone dark matter particle has no witnesses at any gap or particle mass. That is a statement about one
-   particle. The galaxy-sized wave of wave dark matter is a crowd, and its lumps are watched by every star they
-   pass (see [The crowd wave](#the-crowd-wave-where-the-map-stops) below).
-4. A black hole horizon is a real witness (Danielson, Satishchandran and Wald, 2022) but a feeble one:
+3. The idealized dark particles have zero modeled rate with the horizon channel off. Other gravitational
+   environments are omitted. The galaxy-sized wave of wave dark matter is a crowd, and its lumps can change stellar
+   motion (see [The crowd wave](#the-crowd-wave-where-the-map-stops) below).
+4. A black hole horizon provides a decoherence channel (Danielson, Satishchandran and Wald, 2022):
    ten horizon radii from the Milky Way's black hole, a wave dark matter particle split by 1 µm waits about
-   10¹⁷⁰ years to be recorded in the formula. This is a formal extrapolation below the particle's reduced
+   10¹⁷⁰ years for decoherence in the formula. This is a formal extrapolation below the particle's reduced
    Compton wavelength, ħ/(mc), about 0.06 pc for 10⁻²² eV. It is not a validated prediction for a particle
    confined to such a small region.
 
@@ -144,11 +148,11 @@ shorter-lived lumps: lump mass falls as m⁻³ and stirring time grows as m³.
 
 **One particle against the crowd.**
 
-- *One particle has no witnesses. The crowd has many.* Nothing in the map records where one particle is (W = 0).
+- *A single-particle rate does not describe a collective field.* The idealized particle has W = 0 with the horizon off.
   A lump is about 10⁹³ particles pulling together, so its pull is 10⁹³ times one particle's. As a lump passes a
   star near the Sun, it changes the star's speed by about 2G·m_lump/(ƛσ) ≈ 44 m/s (impulse estimate), and the star
   meets a fresh lump about every 0.7 million years. A change of tens of metres per second in a star's motion is
-  enormous by quantum standards, so the star holds a record of where the lump was. Summed over near and far lumps,
+  a gravitational response. This calculation does not determine the information accessible in each star. Summed over near and far lumps,
   these kicks give Bar-Or et al.'s stirring time to within a factor of 3 (checked in `npm test`). Allali and
   Hertzberg (2020, 2021) compute gravitational records of this kind, with the galaxy's gas as the recorder, for
   dark matter put in two places at once. In the Milky Way, a superposition of where the dark matter is does not
@@ -156,14 +160,14 @@ shorter-lived lumps: lump mass falls as m⁻³ and stirring time grows as m³.
   ripples.
 - *The crowd's wave survives being watched.* It is a classical wave. Recording the shape of a classical wave does
   not erase it, any more than measuring a sea wave flattens the sea. Witnesses erase superpositions of different
-  shapes, and the lumps are interference inside one shape. So the records keep the halo in one definite pattern,
-  and that pattern keeps its lumps (Allali and Hertzberg 2020: dark matter condensates decohere fast and are well
+  shapes, and the lumps are interference inside one shape. Decoherence between field configurations can coexist with interference inside a classical field,
+  whose configuration continues to evolve (Allali and Hertzberg 2020: dark matter condensates decohere fast and are well
   described by classical field theory). Bar-Or et al. (2019) make the same point from the other side: their
   calculation is classical field theory, with quantum mechanics entering only through the way the wave spreads.
-- *What W = 0 does say.* Nothing knocks single particles out of the crowd. A particle's whole momentum in the wave
+- *What W = 0 does say.* No included channel suppresses this single-particle position interference. A particle's whole momentum in the wave
   is about mσ = ħ/ƛ, tiny. A hit from any photon or gas atom, whose wavelength is far shorter than ƛ, would carry
-  much more (ħk ≫ ħ/ƛ) and throw the particle out of the wave. Where W is not zero, the per-particle witness rate
-  is the rate at which particles leave the crowd.
+  much more (ħk ≫ ħ/ƛ) and throw the particle out of the wave. A nonzero decoherence rate is not generally a particle-loss rate. Scattering that ejects particles requires
+  its own kinematic calculation.
 
 **Where the map stops applying.**
 
