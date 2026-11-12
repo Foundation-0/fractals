@@ -426,3 +426,7 @@ The critical point (the full list is in [critical/README.md](critical/README.md#
 ## Licence
 
 Apache License 2.0.
+
+## Research value assessment
+
+The [12 November assessment](research/value-assessment-20261112/) records the bounded next study, evidence and stopping gates.
