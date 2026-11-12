@@ -7,6 +7,10 @@ principles and checks it against what is measured: where the repetition is real,
 Status: **exploration, not peer reviewed, no new result claimed.** Started 16 October 2026 by Aska Digital
 with Claude (Anthropic), for [Foundation0](https://github.com/Foundation-0/f0).
 
+## Connections across Foundation0
+
+[Research note: records, changing scales and collective waves](notes/convergences-20261112.md) connects this repository to the 12 November 2026 convergence study. It separates published evidence, model calculations and proposed tests.
+
 ## Where the intuition holds, and where it breaks
 
 - **Atoms are not little solar systems.** In a stationary atomic state, an electron has a spread of
