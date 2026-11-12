@@ -176,15 +176,16 @@ shorter-lived lumps: lump mass falls as m⁻³ and stirring time grows as m³.
    3×10⁻¹⁹ eV. Near the Sun the crowd thins to one particle per lump only for particles heavier than about 20 eV
    (model; Bar-Or et al. 2019: "a few tens of eV"). The map's heavy dark matter particle, at 100 GeV, has 10⁻³⁹
    particles per lump: for it, the per-particle picture is the right one.
-2. *For the galaxy-sized wave.* The pattern renews every lump lifetime whatever witnesses do, and its lumps are
-   watched by every star. W = 0 is silent on both.
-3. *For gravity's witnesses.* The map counts a black hole horizon as gravity's only witness, and only for one
-   particle. For the crowd, every star is a witness too. Gravity-only witnesses of a single particle are
+2. *For the galaxy-sized wave.* The pattern evolves on the lump lifetime, and its gravitational field can change
+   stellar motion. Neither effect is described by the single-particle W.
+3. *For gravitational environments.* The only single-particle gravitational decoherence channel included here is
+   a black hole horizon. Stellar gravitational responses are outside this W calculation and do not by themselves
+   establish readable records. Other single-particle gravitational channels remain
    [issue #3](https://github.com/Foundation-0/fractals/issues/3).
 
-**Does the crowd belong on the map?** Yes, but not on the W axis. W asks whether one object can be in two places a
-gap apart. The crowd's wave is classical, so that is not its live question, and a crowd W would put two different
-things on one scale. The interactive page has a separate panel below the map, marked "not a witness number", with
+**Does the crowd belong on the map?** Yes, but not on the W axis. W compares free spreading with modeled
+decoherence for one particle and a specified position gap. The crowd panel instead describes a classical field
+and its gravitational effects. Those are different calculations. The interactive page has a separate panel below the map, marked "not a witness number", with
 the crowd's clocks set against the age of the universe. In code: `crowd()` and `CROWDS` in `witness-map/model.js`,
 a separate table in `node witness-map/table.mjs`, and checks in `npm test`.
 
