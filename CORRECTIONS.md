@@ -187,3 +187,31 @@ Claims made during the exploration that did not survive it, kept so the record s
     See [cosmic-homogeneity](cosmic-homogeneity/).
 22. **"The nesting stops, the way a coastline's roughness stops at the size of molecules."** Points the wrong
     way. A coastline is rough down to a smallest scale; galaxy clustering is clumpy up to a largest one.
+
+## 19 October 2026: halos within halos (issue #18)
+
+23. **"Halos sit inside halos with nearly the same shape from about an Earth mass up to galaxy clusters, some 20
+    decades in mass (Wang et al. 2020)."** Two slips, the second partly contested. Wang et al. zoomed eight times, each
+    time into a smaller region of the previous level chosen to avoid any massive halo: their 20 decades are field
+    halos of many masses, not a chain of halos inside halos. Inside a Milky Way the nesting of a 100 GeV WIMP spans
+    16 to 18 decades: at most 9 to 11 levels at the ratio the Aquarius subhalo law gives (masses of all the matter;
+    counting the dark matter alone, the 9 becomes 10), and 7 to 9 if sub-subhalos are 2 or 3 times fewer, as
+    Aquarius finds (it resolves four levels itself). And halos near the cut-off form with steeper ρ ∝ r^−1.5
+    centres. Whether those survive inside later halos is contested: Wang et al. find NFW and Einasto profiles down to
+    an Earth mass, Delos and White suggest the steeper centres lie at radii those simulations do not resolve, and a
+    later study finds them buried in NFW-like profiles but not destroyed. See [halos](halos/).
+24. **"Hu–Barkana–Gruzinov's quoted k_J ≈ 66.5 a^¼ Mpc⁻¹ and M_J ≈ 1.5×10⁷ M☉ for 10⁻²² eV are not mutually
+    consistent with ρ = ρ_m."** Neither number is Hu, Barkana and Gruzinov's (2000), who give the Jeans
+    wavenumber at equality, 9 m₂₂^½ Mpc⁻¹, and a Jeans length. The 66.5 form is Marsh's (2016) and uses the dark
+    matter density alone, 0.12 ρ_crit/h². 1.5×10⁷ M☉ is Hui et al.'s (2017, as quoted in search text), and a sphere
+    of diameter λ_J reproduces it. With the dark matter density the two agree (66.5 Mpc⁻¹ and 1.47×10⁷ M☉); with
+    all matter they are 69.5 Mpc⁻¹ and 1.54×10⁷ M☉. Both go as ρ^¼, 4.5% between the two densities: quoted to two
+    figures, 1.5×10⁷ hides the difference, while 66.5, quoted to three, does not.
+25. **"About 18 decades for a 100 GeV WIMP and only 2 to 4.5 for 10⁻²² eV wave dark matter."** The WIMP figure
+    survives: 16 to 18 decades. The wave figure mixes definitions. Where the halo population turns down (half
+    mode, half power, Schive et al.'s M₀) it is 1.3 to 1.8 decades; 4.8 is from the Jeans mass today, which bounds
+    any halo from below but is not where halos become rare.
+26. **"Excluded by Lyman-α and Milky Way satellite bounds (from about 2×10⁻²¹ to 3×10⁻¹⁹ eV)."** Out of date at
+    the top: Ursa Major III, if it is a galaxy, would raise the dwarf-galaxy bound from 3×10⁻¹⁹ to 8×10⁻¹⁸ eV (May,
+    Dalal and Kravtsov 2025). The issue's "at 2×10⁻²⁰ eV the suppression mass falls to about 10⁷ M☉" holds for
+    Schive et al.'s M₀ (1.4×10⁷ M☉); the half-mode and half-power masses are 3.4 and 4.6×10⁷ M☉.
