@@ -31,7 +31,9 @@ this study claims about prior work.
 | all pairs | every slope between any two scales |
 
 Window is the loosest. Steps and all pairs are stricter, so they reject series that a fit over the whole range accepts:
-they ask whether the exponent is steady along the range, not whether its average is right.
+they ask whether the exponent is steady along the range, not whether its average is right. Steps and all pairs always
+give the same verdict. The slope over a longer stretch is an average of the step slopes inside it, weighted by
+ln(x_b / x_a), so it stays in any bracket that holds every step. All pairs is kept as a cross-check of steps.
 
 `exponentInLog2` is the same test for a printed column that already holds base-2 logarithms of y at x = 2^n, such as
 log2 <|u_n|^2> against shell n. The test then reads q (L_b - L_a) >= p (n_b - n_a), a comparison of decimals.
@@ -63,25 +65,29 @@ the verdicts.
 
 How to read the rows that reject:
 
-- **Percolation, one seed.** The printed masses 398, 1442, 5308, 19546 give a window slope of 1.8734, below 91/48 = 1.8958
-  by 0.022. Two things bear on it. This is the study seed alone: `critical/README.md` quotes the nine-seed mean,
-  1.880 ± 0.002, 0.8% below 91/48, and explains it as a finite-size shortfall. The check does not
-  test that explanation. And a bracket of plus and minus 1/100 is narrower than the shortfall the README already reports.
+- **Percolation, one seed.** The printed masses 398, 1442, 5308, 19546 give a window slope of 1.8727, below 91/48 = 1.8958
+  by 0.023. (The percolation table's own least-squares fit over the same four sizes prints 1.8735.) Two things bear on
+  it. This is the study seed alone, and the series starts at L = 32. `critical/README.md` quotes the nine-seed mean,
+  1.880 ± 0.002, 0.8% below 91/48, and explains it as a finite-size shortfall. From L = 64 on, this seed's window slope
+  is 1.8804, still 0.015 below 91/48 and still outside plus and minus 1/100. The check does not test the finite-size
+  explanation. And a bracket of plus and minus 1/100 is narrower than the shortfall the README already reports.
 - **Sabra, plain moment.** The printed column gives a window slope of 0.756 over shells 3 to 8. It lies outside
   0.720 ± 0.008 and outside the Kolmogorov value 2/3 ± 1/30. `turbulence/README.md` says the plain moments ripple from
   shell to shell and are "printed but not used": its exponents come from the flux-based moments against the third one
   (extended self-similarity), and its own table prints the plain-moment ζ₂ as 0.760. So the rejection restates a
-  difference the turbulence study already prints. What this study adds is that the plain-moment column is the one that
-  corresponds to L'vov et al.'s "moments of u", so a reader comparing that row of their Table I with this column
-  finds 0.756 to 0.760, not 0.720.
-- **Ising, steps and all pairs.** Each value is a Monte Carlo average with an error of 0.4% to 1.6%, and slopes between
+  difference the turbulence study already prints. L'vov et al.'s Table I gives ζ₂ = 0.720 for the plain moments
+  ⟨|u_n|^q⟩ and 0.719 for the flux-based ones. They fitted both with a power law that bends into the dissipative range
+  (their eq. 44), over 34 shells, not with a straight slope over a few shells. So this row measures how far the straight
+  slope of the printed column is from 0.720. It is not a test of the model against their table.
+- **Ising, steps and all pairs.** Each value is a Monte Carlo average with an error of 0.4% to 1.4%, and slopes between
   neighbouring sizes (a factor of 2) move by a few hundredths. Rejection at 1/100 by these two modes is expected and
   says the bracket is narrower than the noise.
 
 ## What is checked and what is not
 
 - Checked by `npm test`: the comparison against 80-digit logarithms on 3,000 random cases, exact ties, the printed-log2
-  form against the ratio form, four must-fail controls, and the verdict in the table for every series.
+  form against the ratio form, four must-fail controls, the verdict and the smallest half-width in the table for every
+  series, and that `scaling-check/table.mjs` runs and prints the same half-widths.
 - Checked by `node scaling-check/table.mjs verify`, not by `npm test` (it runs the Monte Carlo): that every pinned number
-  is in the output of the scripts at the pinned commit.
+  is in what the two scripts print in the current checkout. At the pinned commit every one of them is.
 - Not checked: that a different seed or a longer run gives the same verdicts.

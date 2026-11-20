@@ -4,7 +4,9 @@
 // deliberately broken version and the test requires the broken version to give the wrong answer), and the verdicts on the
 // series in scaling-check/series.mjs. Run: npm test (or node tests/scaling-check.mjs). Integers only: nothing here can
 // flake, and no check is an assert that a flag could strip. Each line states what it guards.
-import { cmpPower, cmpPowerByLogs, dec, exponentIn, exponentInLog2, pairsFor } from '../scaling-check/check.mjs';
+import { spawnSync } from 'node:child_process';
+import { fileURLToPath } from 'node:url';
+import { cmpPower, cmpPowerByLogs, dec, exponentIn, exponentInLog2, pairsFor, tightestHalfWidth } from '../scaling-check/check.mjs';
 import { SERIES, acceptor } from '../scaling-check/series.mjs';
 
 let fails = 0;
@@ -94,6 +96,21 @@ const throws = f => { try { f(); return false; } catch { return true; } };
     }
   }
   check('Printed-log2 form agrees with the ratio form on 1200 integer cases', bad === 0, `${n} compared, ${bad} disagree`);
+  // Steps and all pairs give the same verdict (a longer slope is a weighted average of the step slopes), and window is
+  // never stricter than steps. Checked on random ratio series with uneven scale steps.
+  let sameBad = 0, winBad = 0, differ = 0;
+  for (let i = 0; i < 400; i++) {
+    const m = rnd(3, 6), xs = [], ys = [];
+    let x = rnd(1, 5);
+    for (let j = 0; j < m; j++) { xs.push(R(x)); ys.push(R(rnd(1, 400), rnd(1, 9))); x *= rnd(2, 4); }
+    const lo = [rnd(-30, 10), 10], hi = [lo[0] + rnd(0, 30), 10];
+    const st = exponentIn(xs, ys, lo, hi, 'steps'), pr = exponentIn(xs, ys, lo, hi, 'pairs'), wi = exponentIn(xs, ys, lo, hi, 'window');
+    if (st !== pr) sameBad++;
+    if (st && !wi) winBad++;
+    if (wi && !st) differ++;
+  }
+  check('Steps and all pairs agree on 400 random series, window accepts whenever steps does, and window is looser on some',
+    sameBad === 0 && winBad === 0 && differ > 0, `${sameBad} steps/pairs disagreements, ${winBad} window rejections under accepted steps, ${differ} looser windows`);
   const ls = ['0', '1.5', '3', '4.5'].map(dec);
   check('Printed-log2 known answer: slope exactly 3/2 is accepted by [3/2, 3/2] and not by [1, 7/5] or [8/5, 2]',
     exponentInLog2([0, 1, 2, 3], ls, [3, 2], [3, 2]) && !exponentInLog2([0, 1, 2, 3], ls, [1, 1], [7, 5]) && !exponentInLog2([0, 1, 2, 3], ls, [8, 5], [2, 1]));
@@ -148,9 +165,48 @@ const throws = f => { try { f(); return false; } catch { return true; } };
   }
   // Rejections where the repository compares: stated plainly.
   const perc = acceptor(SERIES.find(x => x.id === 'perc-mass')), sab = acceptor(SERIES.find(x => x.id === 'sabra-u2'));
-  check('Rejected: the one-seed percolation mass slope is outside 91/48 +- 1/100 (D = 1.8734 on this seed)', !perc([8743, 4800], [8953, 4800], 'window'));
+  // 91/48 +- 1/100 is [9052/4800, 9148/4800]. The window slope 1.8727 is 0.0232 below 91/48: outside +- 23/1000, inside +- 24/1000.
+  check('Rejected: the one-seed percolation mass window slope (1.8727) is outside 91/48 +- 1/100 and +- 23/1000, inside +- 24/1000',
+    !perc([9052, 4800], [9148, 4800], 'window') && !perc([91000 - 23 * 48, 48000], [91000 + 23 * 48, 48000], 'window') &&
+    perc([91000 - 24 * 48, 48000], [91000 + 24 * 48, 48000], 'window'));
+  // From L = 64 on (the README's second reading), the window slope is 1.8804: 0.0155 below 91/48.
+  const p64 = SERIES.find(x => x.id === 'perc-mass'), x64 = p64.x.slice(1).map(v => [BigInt(v), 1n]), y64 = p64.y.slice(1).map(dec);
+  check('Rejected: from L = 64 on, the percolation window slope (1.8804) is still outside 91/48 +- 1/100 and +- 15/1000, inside +- 16/1000',
+    !exponentIn(x64, y64, [9052, 4800], [9148, 4800]) && !exponentIn(x64, y64, [91000 - 15 * 48, 48000], [91000 + 15 * 48, 48000]) &&
+    exponentIn(x64, y64, [91000 - 16 * 48, 48000], [91000 + 16 * 48, 48000]));
   check("Rejected: the plain moment's printed log2 slope is outside 0.720 +- 0.008 (slope 0.756 over shells 3 to 8)", !sab([-728, 1000], [-712, 1000], 'window'));
-  check('Rejected: and outside K41 2/3 +- 1/30; accepted by 0.756 +- 0.001 as a tie control', !sab([-21, 30], [-19, 30], 'window') && sab([-757, 1000], [-755, 1000], 'window'));
+  check('Rejected: and outside K41 2/3 +- 1/30; the window slope is exactly -0.756, an exact tie at [-756/1000, -756/1000]',
+    !sab([-21, 30], [-19, 30], 'window') && sab([-756, 1000], [-756, 1000], 'window') && !sab([-755, 1000], [-755, 1000], 'window'));
+}
+
+// 8. The smallest half-widths that table.mjs prints and README.md quotes, recomputed outside this repository with 60-digit
+// decimal logarithms of the same printed numbers. A changed digit, a wrong mode or a broken grid search turns these red.
+{
+  const WANT = { // window, steps, pairs, in thousandths
+    'ising-m': [1, 23, 23], 'ising-chi': [1, 32, 32], 'ising-g': [3, 39, 39], 'perc-mass': [24, 39, 39], 'sabra-u2': [36, 370, 370],
+  };
+  for (const s of SERIES) {
+    const acc = acceptor(s);
+    const have = ['window', 'steps', 'pairs'].map(m => { const w = tightestHalfWidth(acc, s.published, m); return w ? w[0] : null; });
+    check(`Series ${s.id}: smallest accepted half-width on a 0.001 grid (window, steps, pairs) is ${have.join(', ')} thousandths`,
+      have.join() === WANT[s.id].join(), `expected ${WANT[s.id].join(', ')}`);
+  }
+  // Known answer for the grid search itself: slope exactly 3/2; 1.4 and 1.6 need half-width 0.1 exactly (a tie at the edge).
+  const xs = [R(1), R(4)], ys = [R(1), R(8)];
+  const accT = (lo, hi, mode) => exponentIn(xs, ys, lo, hi, mode);
+  const w0 = tightestHalfWidth(accT, [3, 2], 'window'), w1 = tightestHalfWidth(accT, [7, 5], 'window'), w2 = tightestHalfWidth(accT, [8, 5], 'window');
+  const wNone = tightestHalfWidth(accT, [3, 2], 'window', 1000, -1);
+  check('Grid search known answer: 0 around 3/2, 100 thousandths around 7/5 and 8/5, null when no step is tried',
+    w0 && w0[0] === 0 && w1 && w1[0] === 100 && w2 && w2[0] === 100 && wNone === null);
+}
+
+// 9. The verdict script itself runs and prints the same half-widths (it is not in CI on its own).
+{
+  const r = spawnSync(process.execPath, [fileURLToPath(new URL('../scaling-check/table.mjs', import.meta.url))], { encoding: 'utf8', timeout: 60000 });
+  const lines = (r.stdout || '').split('\n').filter(l => l.includes('smallest half-width'));
+  check('scaling-check/table.mjs exits 0 and prints the five half-width lines above',
+    r.status === 0 && lines.length === 5 && lines[3].endsWith('window 0.024, steps 0.039, pairs 0.039') && lines[4].endsWith('window 0.036, steps 0.370, pairs 0.370'),
+    `exit ${r.status}, ${lines.length} half-width lines`);
 }
 
 console.log(fails ? `\n${fails} check(s) failed` : '\nall scaling-check checks pass');

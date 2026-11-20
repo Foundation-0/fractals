@@ -211,7 +211,6 @@ node witness-map/table.mjs               # every object at a 250 nm gap, then th
 node witness-map/table.mjs 1e-6 cryo     # 1 µm gap, everything in a 4 K vacuum
 node notes/bh-lensing.mjs                # every number in the black hole note
 node critical/table.mjs                  # the critical-point study's numbers (about 65 s)
-node scaling-check/table.mjs             # exponent brackets on those printed series, no logarithms (instant)
 ```
 
 `witness-map/model.js` is the whole model, including `gravAtom` for the black hole note. It loads in Node
