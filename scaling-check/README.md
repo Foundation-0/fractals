@@ -18,9 +18,10 @@ For positive rationals and a rational p/q with q > 0:
 Take natural logarithms of both sides and divide by the positive ln(x_b / x_a) to see it. Each side is a fraction raised
 to an integer power, so the test is a comparison of two integers. No logarithm is taken, no float is made, nothing is
 rounded, and a slope that equals p/q exactly counts as at least p/q. (For negative p the powers move to the other side.)
-That powers can stand in for logarithms in a comparison of this kind is elementary. A first web search turned up
-worked examples of the same move for other inequalities, and no tool that applies it to scaling brackets. That is all
-this study claims about prior work.
+That powers can stand in for logarithms in a comparison of this kind is elementary. The same move is stated for a
+bound on an entropy in Krohn-Grimberghe (2026, arXiv 2608.17376, section 6): "a claimed bound m/n on a rational power is
+an integer inequality". Two web searches found no tool that applies it to scaling brackets. That is all this study
+claims about prior work.
 
 `check.mjs` asks whether the slope lies in a closed bracket [p1/q1, p2/q2], in three modes:
 
