@@ -2,8 +2,9 @@
 // 80-digit natural logarithms (BigInt fixed point, no float), the same test on printed base-2 logarithms against the ratio
 // form, four must-fail controls (a wrong exponent, a dropped tie, a dropped sign, a perturbed point: each is run through a
 // deliberately broken version and the test requires the broken version to give the wrong answer), and the verdicts on the
-// series in scaling-check/series.mjs. Run: npm test (or node tests/scaling-check.mjs). Integers only: nothing here can
-// flake, and no check is an assert that a flag could strip. Each line states what it guards.
+// series in scaling-check/series.mjs, and a three-scale case with error bars where steps pass and all pairs fail.
+// Run: npm test (or node tests/scaling-check.mjs). Integers only: nothing here can flake, and no check is an assert
+// that a flag could strip. Each line states what it guards.
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { cmpPower, cmpPowerByLogs, dec, exponentIn, exponentInLog2, pairsFor, tightestHalfWidth } from '../scaling-check/check.mjs';
@@ -243,6 +244,9 @@ const throws = f => { try { f(); return false; } catch { return true; } };
     allOk(x, wide, one, one, stepsPairs) && allOk(x, wide, one, one, allPairs) !== allOk(x, boxes, one, one, allPairs));
   // The inequality is not vacuous: a corrupted lower bracket end breaks a case that passed.
   check('Control, corrupted bracket: the widened boxes fail the pair test against [2, 2]', !allOk(x, wide, [2, 1], [2, 1], allPairs));
+  // A bracket whose ends are not whole numbers, so that p and q swapped in either inequality makes this line fail.
+  check('Control, bracket [1/2, 2]: the widened boxes pass the pair test (the witness 1, 2, 4 has slope 1)',
+    allOk(x, wide, [1, 2], [2, 1], allPairs));
 }
 
 console.log(fails ? `\n${fails} check(s) failed` : '\nall scaling-check checks pass');

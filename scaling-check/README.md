@@ -39,13 +39,17 @@ step slopes inside it, weighted by ln(x_b / x_a), so it stays in any bracket tha
 a cross-check of steps.
 
 With error bars they can differ. Every step can fit the bracket while a longer stretch does not. Give each value a box
-[L, U] and the bracket [p1/q1, p2/q2]. The question is whether values inside the boxes exist with every step slope in the
-bracket. The interval form of all pairs decides it exactly: for every i < j, (U_j / L_i)^q1 >= (x_j / x_i)^p1 and
+[L, U] with 0 < L <= U, and take a bracket [p1/q1, p2/q2] with q1, q2 > 0 and p1/q1 <= p2/q2. The question is whether
+values inside the boxes exist with every step slope in the bracket.
+
+The interval form of all pairs decides it exactly: for every i < j, (U_j / L_i)^q1 >= (x_j / x_i)^p1 and
 (L_j / U_i)^q2 <= (x_j / x_i)^p2. This is the consistency test for a chain of difference constraints, the simple temporal
-problem of Dechter, Meiri and Pearl (1991). Foundation-0/fractals draft pull request 60 states it and applies it. The
-interval form is not a mode of `check.mjs`, which takes point values. `tests/scaling-check.mjs` pins the smallest case.
-The smallest case has scales 1, 2, 4, the bracket [1, 1] and boxes [1, 1], [3/2, 5/2] and [9/2, 5]. Each step alone
-admits slope 1, and the pair of the first and last scales does not.
+problem of Dechter, Meiri and Pearl (1991). Foundation-0/fractals draft pull request 60 states it and applies it.
+
+The interval form is not a mode of `check.mjs`, which takes point values. `tests/scaling-check.mjs` pins a smallest case.
+It has three scales, the fewest that can differ, since with two scales the only pair is the one step. The scales are 1,
+2, 4, the bracket is [1, 1] and the boxes are [1, 1], [3/2, 5/2] and [9/2, 5]. Each step alone admits slope 1, and the
+pair of the first and last scales does not.
 
 `exponentInLog2` is the same test for a printed column that already holds base-2 logarithms of y at x = 2^n, such as
 log2 <|u_n|^2> against shell n. The test then reads q (L_b - L_a) >= p (n_b - n_a), a comparison of decimals.
@@ -100,7 +104,8 @@ How to read the rows that reject:
 - Checked by `npm test`: the comparison against 80-digit logarithms on 3,000 random cases, exact ties, the printed-log2
   form against the ratio form, four must-fail controls, the verdict and the smallest half-width in the table for every
   series, and that `scaling-check/table.mjs` runs and prints the same half-widths.
-  The smallest error-bar case, where steps pass and all pairs fail, and its widened twin, are checked too.
+- Also checked by `npm test`: the three-scale case with error bars where steps pass and all pairs fail, its widened
+  twin, and two brackets that guard the interval inequality itself.
 - Checked by `node scaling-check/table.mjs verify`, not by `npm test` (it runs the Monte Carlo): that every pinned number
   is in what the two scripts print in the current checkout. At the pinned commit every one of them is.
 - Not checked: that a different seed or a longer run gives the same verdicts.
