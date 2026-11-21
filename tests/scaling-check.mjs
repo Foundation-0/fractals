@@ -209,5 +209,41 @@ const throws = f => { try { f(); return false; } catch { return true; } };
     `exit ${r.status}, ${lines.length} half-width lines`);
 }
 
+// 10. Error bars: steps and all pairs can differ. The interval form of all pairs, (U_j/L_i)^q1 >= (x_j/x_i)^p1 and
+// (L_j/U_i)^q2 <= (x_j/x_i)^p2 for every i < j, decides whether values inside the boxes exist with every step slope in the
+// bracket (a chain of difference constraints, Dechter, Meiri and Pearl 1991; Foundation-0/fractals draft pull request 60).
+// It is written here in exact BigInt fractions on purpose and is not a mode of check.mjs. The smallest disagreement: scales
+// 1, 2, 4, bracket [1, 1], boxes [1,1], [3/2,5/2], [9/2,5].
+{
+  const mul = (a, b) => [a[0] * b[0], a[1] * b[1]];
+  const rpow = (r, e) => (e >= 0n ? [r[0] ** e, r[1] ** e] : [r[1] ** -e, r[0] ** -e]); // r positive
+  const geq = (a, b) => a[0] * b[1] >= b[0] * a[1]; // denominators positive
+  const slopeOk = (x, box, i, j, lo, hi) => { // the interval inequalities for the pair (i, j)
+    const rx = [x[j][0] * x[i][1], x[j][1] * x[i][0]];
+    const up = mul(box[j][1], [box[i][0][1], box[i][0][0]]); // U_j / L_i
+    const dn = mul(box[j][0], [box[i][1][1], box[i][1][0]]); // L_j / U_i
+    return geq(rpow(up, BigInt(lo[1])), rpow(rx, BigInt(lo[0]))) && geq(rpow(rx, BigInt(hi[0])), rpow(dn, BigInt(hi[1])));
+  };
+  const allOk = (x, box, lo, hi, pairs) => pairs.every(([i, j]) => slopeOk(x, box, i, j, lo, hi));
+  const x = [R(1), R(2), R(4)], one = [1, 1];
+  const boxes = [[R(1), R(1)], [R(3, 2), R(5, 2)], [R(9, 2), R(5)]];
+  const stepsPairs = pairsFor(3, 'steps'), allPairs = pairsFor(3, 'pairs');
+  check('Boxes: each step of the smallest disagreement example admits slope 1, so the step test passes',
+    allOk(x, boxes, one, one, stepsPairs));
+  check('Boxes: the pair of the first and last scales does not (L_2/U_0 = 9/2 is above 4), so the all-pairs test fails',
+    !slopeOk(x, boxes, 0, 2, one, one) && !allOk(x, boxes, one, one, allPairs));
+  // Must-fail twin: widen the last box to [4, 5]. Now the pair test passes, and values y = 1, 2, 4 inside the boxes have slope 1.
+  const wide = [boxes[0], boxes[1], [R(4), R(5)]];
+  const inBox = (v, b) => geq(v, b[0]) && geq(b[1], v);
+  check('Control, widened last box [4, 5]: the pair test now passes, and the witness 1, 2, 4 sits in the boxes with slope 1 on every pair',
+    allOk(x, wide, one, one, allPairs) && [R(1), R(2), R(4)].every((v, k) => inBox(v, wide[k])) &&
+    allPairs.every(([i, j]) => cmpPower(x[i], x[j], [R(1), R(2), R(4)][i], [R(1), R(2), R(4)][j], 1, 1) === 0));
+  // The step test is blind to the widening: it gave the same verdict before, so it cannot be what tells the two cases apart.
+  check('Control: the step test gives the same verdict (pass) on the original and the widened boxes, only the pair test differs',
+    allOk(x, wide, one, one, stepsPairs) && allOk(x, wide, one, one, allPairs) !== allOk(x, boxes, one, one, allPairs));
+  // The inequality is not vacuous: a corrupted lower bracket end breaks a case that passed.
+  check('Control, corrupted bracket: the widened boxes fail the pair test against [2, 2]', !allOk(x, wide, [2, 1], [2, 1], allPairs));
+}
+
 console.log(fails ? `\n${fails} check(s) failed` : '\nall scaling-check checks pass');
 process.exit(fails ? 1 : 0);
