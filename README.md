@@ -423,10 +423,10 @@ The critical point (the full list is in [critical/README.md](critical/README.md#
 - P. J. Linstrom and W. G. Mallard (eds.), *NIST Chemistry WebBook, NIST Standard Reference Database 69* (retrieved 18 October 2026), water, phase change data: critical point 647 ± 2 K and 220.64 bar. https://doi.org/10.18434/T4D303
 - A. Alexakis and L. Biferale, *Cascades and transitions in turbulent flows*, Phys. Rep. 767–769, 1 (2018). https://doi.org/10.1016/j.physrep.2018.08.001 (https://arxiv.org/abs/1808.06186)
 
+## Research value assessment
+
+The [12 November assessment](notes/value-assessment-20261112.md) records the bounded next study on fold mechanics, its evidence and its stopping gates. It is pending independent reproduction and human scientific review.
+
 ## Licence
 
 Apache License 2.0.
-
-## Research value assessment
-
-The [12 November assessment](research/value-assessment-20261112/) records the bounded next study, evidence and stopping gates.
