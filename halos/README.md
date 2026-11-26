@@ -127,9 +127,10 @@ Moore and Stadel (2005) expect "over 10¹⁵" to survive: Aq-A's count clears th
 short by a factor 1.75. Their own M^−1.9 law, extrapolated the same way, gives about 5×10¹⁵. Like for like, the
 Aquarius law gives 4.8 times fewer for Aq-A and 8.8 times fewer for the 10¹² M☉ host; they give no host mass. The
 levels are a separate count. Each level's largest subhalo, where the law expects one, is μ = 0.025 of its host (1.6
-decades per level), an upper bound (above). Aquarius itself resolves "up to four generations" of subhalos within
-subhalos, and four levels at Aq-A's own ratio (0.027) reach 9×10⁵ M☉, within its resolved range. With sub-subhalos
-2 or 3 times fewer, four levels reach 9×10⁴ to 2×10⁴ M☉, at or below the law's fitted range.
+decades per level), an upper bound at that μ; Aq-A's own μ adds up to one level (above). Aquarius itself resolves
+"up to four generations" of subhalos within subhalos, and four levels at Aq-A's own ratio (0.027) reach 9×10⁵ M☉,
+within its resolved range. With sub-subhalos 2 or 3 times fewer, four levels reach 9×10⁴ to 2×10⁴ M☉, at or below
+the law's fitted range.
 
 Two cautions. The extrapolation runs 9 to 11 decades below where the law was fitted for the bino (8 to 16 across
 Bringmann's WIMP range, at most 1.3 for the wave masses at the bounds listed), and assumes that what forms

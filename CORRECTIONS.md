@@ -194,13 +194,14 @@ Claims made during the exploration that did not survive it, kept so the record s
     decades in mass (Wang et al. 2020)."** Two slips, the second partly contested. Wang et al. zoomed eight times,
     each time into a smaller region of the previous level chosen to avoid any massive halo: their 20 decades are
     field halos of many masses, not a chain of halos inside halos. Inside a Milky Way the nesting of a 100 GeV WIMP
-    spans 16 to 18 decades: at most 9 or 10 to 11 levels at the Aquarius subhalo law's ratio (masses of all the
-    matter; the 9 becomes 10 at Aq-A's own ratio, or with only the floor in dark matter), and 7 to 9 if sub-subhalos
-    are 2 or 3 times fewer, as Aquarius finds (it resolves four levels itself). And halos near the cut-off form with
-    steeper ρ ∝ r^−1.5 centres. Whether those survive inside later halos is contested: Wang et al. find NFW and
-    Einasto profiles down to an Earth mass, Delos and White suggest the steeper centres lie at radii those
-    simulations do not resolve, and a later study, of hosts of 5×10⁹ to 2×10¹⁰ M☉, finds them buried in NFW-like
-    profiles under smooth accretion but destroyed by major mergers and early clumpy accretion. See [halos](halos/).
+    spans 16 to 18 decades: at most 9 or 10 to 11 levels at the ratio the Aquarius subhalo law gives a 10¹² M☉ host
+    (masses of all the matter; the 9 becomes 10 at Aq-A's own ratio, or with only the floor in dark matter), and 7
+    to 9 if sub-subhalos are 2 or 3 times fewer, as Aquarius finds (it resolves four levels itself). And halos near
+    the cut-off form with steeper ρ ∝ r^−1.5 centres. Whether those survive inside later halos is contested: Wang et
+    al. find NFW and Einasto profiles down to an Earth mass, Delos and White suggest the steeper centres lie at
+    radii those simulations do not resolve, and a later study, of hosts of 5×10⁹ to 2×10¹⁰ M☉, finds them buried in
+    NFW-like profiles under smooth accretion but destroyed by major mergers and early clumpy accretion. See
+    [halos](halos/).
 24. **"Hu–Barkana–Gruzinov's quoted k_J ≈ 66.5 a^¼ Mpc⁻¹ and M_J ≈ 1.5×10⁷ M☉ for 10⁻²² eV are not mutually
     consistent with ρ = ρ_m."** Neither number is Hu, Barkana and Gruzinov's (2000), who give the Jeans
     wavenumber at equality, 9 m₂₂^½ Mpc⁻¹, and a Jeans length. The 66.5 form is Marsh's (2016) and uses the dark

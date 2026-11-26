@@ -111,7 +111,8 @@ console.log(`\n4. Nesting below a 1e12 Msun Milky Way: decades from the floor, a
 console.log('   (mu: where the Aquarius law expects the largest subhalo, N(>mu M_host) = 1). Subhalos above the floor, dN/dM = a0 (M/m0)^-1.9,');
 console.log('   m0 = 2.52e7 Msun: a0 = 1.77e-5/Msun for a 1e12 Msun host within 353 kpc, and 3.26e-5 for Aq-A (1.84e12, within 433 kpc);');
 console.log('   f_sub: the mass in subhalos from the floor to 1e10 Msun over 1e12 Msun. All extrapolated below about 1e5 Msun, tides ignored.');
-console.log('   Levels at mu (exact fraction in brackets) are self-similar, an upper bound (Springel et al.); 2x/3x: sub-subhalos 2 or 3 times fewer.\n');
+console.log('   Levels at mu (exact fraction in brackets) use this mu at every level, the self-similar case: an upper bound at this mu (Springel et al.);' +
+  '\n   Aq-A\'s own mu adds up to one level (below). 2x/3x: sub-subhalos 2 or 3 times fewer.\n');
 const floors = [
   ['WIMP range, lightest (Bringmann; all matter)', 1e-11 / bg.fc],
   ...[[40, 'bringmann'], [30, 'bringmann'], [30, 'halfMode'], [10, 'bringmann']].map(([Tkd, key]) =>

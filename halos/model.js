@@ -35,9 +35,9 @@
  *      add about 1% to g at 70 MeV and 7% at 100 MeV, as #35's review's own calculation agreed).
  *    Wave dark matter (Hu, Barkana & Gruzinov 2000): T = cos(x^3)/(1 + x^8), x = 1.61 m22^(1/18) k/k_Jeq,
  *      k_Jeq = 9 m22^(1/2) Mpc^-1, m22 = m/1e-22 eV. Schive et al. (2016) fit the halo mass function's turn-down at
- *      M0 = 1.6e10 m22^(-4/3) Msun (the equation labelled MFFit in their arXiv source, fitted to runs at m22 = 0.8,
- *      1.6 and 3.2, so every bound mass is an extrapolation). Both first seen as quoted by later papers in search
- *      text; #35's review read them in the papers' arXiv source.
+ *      M0 = 1.6e10 m22^(-4/3) Msun (the equation labelled eq:MFFit in their arXiv source, fitted to runs at
+ *      m22 = 0.8, 1.6 and 3.2, so every bound mass is an extrapolation). Both first seen as quoted by later papers
+ *      in search text; #35's review read them in the papers' arXiv source.
  * 3. The small-scale tail of the transfer function, as a check on extrapolating Eisenstein & Hu twenty decades in
  *    mass: a mode that enters the horizon in the radiation era leaves the dark matter with a logarithmic kick,
  *    delta_c -> -A ln(B k tau), after which it grows as in Meszaros's solution. Radiation-era perturbations in the
@@ -50,10 +50,11 @@
  *    k_J = (16 pi G rho)^(1/4) (m/hbar)^(1/2), and the Witness Map's wave clock across 1/k_J,
  *    m (1/k_J)^2/hbar = 1/(4 sqrt(pi G rho)), is gravity's own clock.
  * 5. Nesting: the decades of mass from a floor up to a host, and the subhalo counts of Springel et al. (2008),
- *    dN/dM = a0 (M/m0)^-1.9, extrapolated down to the floor. The levels apply the host's ratio at every level, the
- *    self-similar case Springel et al. call an upper limit; they find sub-subhalos 2 or 3 times fewer. That ratio is
- *    a 1e12 Msun host's (0.0249) with the law scaled as in Erkal et al., a0 in proportion to the host, under which it
- *    grows as M_host^(1/9); a law the same in M/M_host for all hosts gives them all Aq-A's 0.0267.
+ *    dN/dM = a0 (M/m0)^-1.9, extrapolated down to the floor. The levels apply one ratio at every level, the
+ *    self-similar case Springel et al. call an upper limit (they find sub-subhalos 2 or 3 times fewer): an upper
+ *    bound at that ratio. The ratio is a 1e12 Msun host's (0.0249) with the law scaled as in Erkal et al., a0 in
+ *    proportion to the host, under which it grows as M_host^(1/9); a law the same in M/M_host for all hosts gives
+ *    them all Aq-A's 0.0267, up to one level more.
  */
 (function (root) {
   'use strict';
@@ -382,8 +383,8 @@
   }
   // Jeans masses (Msun) under the definitions in use, in the comoving density rhoM (Msun Mpc^-3; mean matter by
   // default); lambda_J = 2 pi/k_J. halfWave, a sphere of diameter lambda_J, is Hui, Ostriker, Tremaine & Witten's
-  // (2017) definition, M_J = (4/3) pi rho (lambda_J/2)^3 in the wave's own density (the equation labelled jeans in
-  // their arXiv source, as #35's review read it; first seen quoted in search text).
+  // (2017) definition, M_J = (4/3) pi rho (lambda_J/2)^3 in the wave's own density (the equation labelled eq:jeans
+  // in their arXiv source, as #35's review read it; first seen quoted in search text).
   function jeansMasses(bg, kJ, rhoM = bg.rhoM) {
     const lam = 2 * Math.PI / kJ, V = r => 4 * Math.PI / 3 * r * r * r * rhoM;
     return { halfWave: V(lam / 2), fullWave: V(lam), inverseK: V(1 / kJ), cube: rhoM * lam * lam * lam };
