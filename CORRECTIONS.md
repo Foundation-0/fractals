@@ -175,3 +175,21 @@ Claims made during the exploration that did not survive it, kept so the record s
     not 1.36. Whether the clouds' 1.36 matches the laboratory's 1.3 to 1.4 for a shared reason is not shown. The
     laboratory measures sections of turbulent surfaces (7/3 in 3D for the interface), the clouds a projection of
     supersonic gas, and the two only meet near 4/3.
+
+
+## 12 November 2026: decoherence is not a record count
+
+21. **The Witness Map called its kernels information per hit and W > 1 classical behavior.**
+    The calculation estimates suppression of position interference relative to free spreading.
+    It does not calculate accessible information, redundant records or classical trajectories.
+    The model comments, page descriptions and readouts now state this distinction.
+
+    Riedel and Zurek's [thermal-illumination model](https://arxiv.org/html/1102.3179v2),
+    sections 2.3–2.4, distinguishes decoherence from the ability of scattered photons to carry
+    redundant position records. Isotropic thermal illumination can decohere without that redundancy.
+    Temperature and dilution in this repository do not specify the required angular photon state.
+
+    Numerical kernels, rates and public function names are unchanged. A long free spreading time
+    also does not forbid another method of preparing a superposition. The crowd panel computes
+    gravitational motion, not information stored in each star, and a decoherence rate is not
+    generally a particle-loss rate. These claims are now qualified.

@@ -1,11 +1,14 @@
 /* Witness Map model: order-of-magnitude, first-principles estimates. No dependencies.
- * Source of truth for https://github.com/Foundation-0/fractals (the f0 site page carries a copy).
+ * Source of truth for https://github.com/Foundation-0/fractals.
  *
  * For an object of mass m asked to be in two places a gap dx apart:
  *   wave clock     t_wave = m dx^2 / hbar   (time for its wave to spread across the gap)
- *   witness rate   Gamma  = sum over witnesses of (hits per second) x (information per hit)
- *   witness number W      = Gamma x t_wave  (W < 1: the wave wins; W > 1: witnesses win)
- * Information per hit with wavenumber k: 1 - exp(-(k dx)^2 / 3) for a scattered photon (Joos & Zeh 1985 long- and
+ *   decoherence rate Gamma = sum over channels of (hits per second) x (coherence-loss weight)
+ *   witness number W       = Gamma x t_wave (a comparison of suppression and spreading times)
+ * W does not measure readable records or certify classical trajectories. The name is historical.
+ * Photon temperature and dilution do not specify the angular state needed for a redundancy calculation
+ * (Riedel & Zurek 2011, arXiv:1102.3179, sections 2.3-2.4).
+ * Coherence-loss weight with wavenumber k: 1 - exp(-(k dx)^2 / 3) for a scattered photon (Joos & Zeh 1985 long- and
  * short-wavelength limits); 1 - sin(k dx) / (k dx) for an emitted one (Hackermueller et al. 2004, eq. 5).
  * Black hole horizon (Danielson, Satishchandran & Wald 2022, eqs. 15 and 19), valid for dx << b:
  *   gravity  Gamma = G^6 M^5 m^2 dx^4 / (hbar c^10 b^10);  electric  Gamma = G^3 M^3 q^2 dx^2 / (eps0 hbar c^6 b^6)
@@ -19,7 +22,7 @@
     sigmaT: 6.6524587e-29, amu: 1.66054e-27, rGas: 1.5e-10, ly: 9.4607e15, au: 1.496e11, kpc: 3.086e19,
     yr: 3.156e7, eV: 1.602176634e-19 / (2.99792458e8 * 2.99792458e8), // eV: kilograms per eV/c^2
   };
-  // Witness populations. dil = photon density relative to a full black body at T (sunlight at 1 AU is 5.4e-6).
+  // Environmental populations. dil = photon density relative to a full black body at T (sunlight at 1 AU is 5.4e-6).
   const ENVS = {
     uhv: { name: 'Lab vacuum, room temperature', Tamb: 300, pops: [
       { type: 'photon', label: 'Glow of room-temperature walls', T: 300, dil: 1 },
@@ -70,6 +73,7 @@
     for (const [x, dlx] of XS) { const k = x * k0; const nk = dil * k * k / (Math.PI * Math.PI) / Math.expm1(x); s += nk * f(k) * k * dlx; }
     return s;
   }
+  // Historical API names: these are decoherence kernels, not information in bits or probabilities of a record.
   const info = (k, dx) => -Math.expm1(-k * k * dx * dx / 3); // a scattered photon: two random directions (in and out)
   const info1 = (k, dx) => { const x = k * dx; return x < 1e-3 ? x * x / 6 : 1 - Math.sin(x) / x; }; // an emitted photon: one
   function sigmaScatter(o, k) {
