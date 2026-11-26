@@ -35,9 +35,9 @@
  *      add about 1% to g at 70 MeV and 7% at 100 MeV, as #35's review's own calculation agreed).
  *    Wave dark matter (Hu, Barkana & Gruzinov 2000): T = cos(x^3)/(1 + x^8), x = 1.61 m22^(1/18) k/k_Jeq,
  *      k_Jeq = 9 m22^(1/2) Mpc^-1, m22 = m/1e-22 eV. Schive et al. (2016) fit the halo mass function's turn-down at
- *      M0 = 1.6e10 m22^(-4/3) Msun (the equation labelled MFFit in their arXiv source, fitted to runs at m22 = 0.8, 1.6 and 3.2, so every bound mass is
- *      an extrapolation). Both first seen as quoted by later papers in search text; #35's review read them in the
- *      papers' arXiv source.
+ *      M0 = 1.6e10 m22^(-4/3) Msun (the equation labelled MFFit in their arXiv source, fitted to runs at m22 = 0.8,
+ *      1.6 and 3.2, so every bound mass is an extrapolation). Both first seen as quoted by later papers in search
+ *      text; #35's review read them in the papers' arXiv source.
  * 3. The small-scale tail of the transfer function, as a check on extrapolating Eisenstein & Hu twenty decades in
  *    mass: a mode that enters the horizon in the radiation era leaves the dark matter with a logarithmic kick,
  *    delta_c -> -A ln(B k tau), after which it grows as in Meszaros's solution. Radiation-era perturbations in the
@@ -51,7 +51,9 @@
  *    m (1/k_J)^2/hbar = 1/(4 sqrt(pi G rho)), is gravity's own clock.
  * 5. Nesting: the decades of mass from a floor up to a host, and the subhalo counts of Springel et al. (2008),
  *    dN/dM = a0 (M/m0)^-1.9, extrapolated down to the floor. The levels apply the host's ratio at every level, the
- *    self-similar case Springel et al. call an upper limit; they find sub-subhalos 2 or 3 times fewer.
+ *    self-similar case Springel et al. call an upper limit; they find sub-subhalos 2 or 3 times fewer. That ratio is
+ *    a 1e12 Msun host's (0.0249) with the law scaled as in Erkal et al., a0 in proportion to the host, under which it
+ *    grows as M_host^(1/9); a law the same in M/M_host for all hosts gives them all Aq-A's 0.0267.
  */
 (function (root) {
   'use strict';
@@ -380,8 +382,8 @@
   }
   // Jeans masses (Msun) under the definitions in use, in the comoving density rhoM (Msun Mpc^-3; mean matter by
   // default); lambda_J = 2 pi/k_J. halfWave, a sphere of diameter lambda_J, is Hui, Ostriker, Tremaine & Witten's
-  // (2017) definition, M_J = (4/3) pi rho (lambda_J/2)^3 in the wave's own density (the equation labelled jeans in their arXiv source, as #35's review
-  // read it in the arXiv source; first seen quoted in search text).
+  // (2017) definition, M_J = (4/3) pi rho (lambda_J/2)^3 in the wave's own density (the equation labelled jeans in
+  // their arXiv source, as #35's review read it; first seen quoted in search text).
   function jeansMasses(bg, kJ, rhoM = bg.rhoM) {
     const lam = 2 * Math.PI / kJ, V = r => 4 * Math.PI / 3 * r * r * r * rhoM;
     return { halfWave: V(lam / 2), fullWave: V(lam), inverseK: V(1 / kJ), cube: rhoM * lam * lam * lam };
@@ -397,8 +399,9 @@
   // ---- Subhalos. Springel et al. 2008 (Aquarius, MNRAS 391, 1685) fit dN/dM = a0 (M/m0)^-n for Aq-A-1 within
   // r50 = 433 kpc (host M200 = 1.84e12 Msun): a0 = 3.26e-5 Msun^-1, m0 = 2.52e7 Msun, n = 1.9; and the same law scaled
   // to a 1e12 Msun host within 353 kpc, a0 = 1.77e-5 (both as quoted by Erkal et al. 2016, arXiv:1606.04946; #35's
-  // review found Aq-A's in Springel et al. directly). m50, the mass inside r50: Aq-A's 2.52e12 Msun (their Table 1,
-  // recalled; it gives the mu of 0.0195 against M50 that #35's review found), scaled with the host.
+  // review read the 1e12 Msun scaling there and found Aq-A's in Springel et al. directly). m50, the mass inside r50:
+  // Aq-A's 2.52e12 Msun (their Table 1, recalled; #35's review read 2.523e12 there; 2.52e12 gives the mu of 0.0195
+  // against M50 that the review found), scaled with the host.
   const AQUARIUS = { a0: 3.26e-5, m0: 2.52e7, n: 1.9, host: 1.84e12, r: 433, m50: 2.52e12 };
   const AQUARIUS_MW = { a0: 1.77e-5, m0: 2.52e7, n: 1.9, host: 1e12, r: 353, m50: 2.52e12 / 1.84 };
   const subhaloCount = (Mmin, Mmax = Infinity, s = AQUARIUS_MW) =>
@@ -406,15 +409,18 @@
   const subhaloMass = (Mmin, Mmax, s = AQUARIUS_MW) =>
     s.a0 * s.m0 * s.m0 / (2 - s.n) * (Math.pow(Mmax / s.m0, 2 - s.n) - Math.pow(Mmin / s.m0, 2 - s.n));
   // The largest subhalo to expect, N(>M) = 1, as a fraction mu of its host's M200 (of its M50 with {m50: true}).
+  // With a0 in proportion to the host and m0 fixed, as in AQUARIUS_MW, mu grows as host^(1/(n-1) - 1) = host^(1/9).
   const muAquarius = (s = AQUARIUS_MW, { m50 = false } = {}) => s.m0 * Math.pow(s.a0 * s.m0 / (s.n - 1), 1 / (s.n - 1)) / (m50 ? s.m50 : s.host);
   // Decades of mass between a floor and a host, and levels of nesting if each level is a factor mu below its host:
-  // levels (whole), exact (the fraction dec/log10(1/mu), for each mu). suppressed: the levels at mu = muAquarius() if,
-  // below the first, each level's subhalos are a factor f = 2 or 3 fewer than the self-similar count (Springel et al.'s
-  // sub-subhalos). N(>M) ~ M^-(n-1), so each of those levels is mu f^(-1/(n-1)) of its host.
-  const nesting = (floor, host = MW, mus = [0.1, 0.01, muAquarius()]) => {
-    const dec = Math.log10(host / floor), d1 = -Math.log10(muAquarius());
-    const suppressed = [2, 3].map(f => (dec < d1 ? 0 : 1 + Math.floor((dec - d1) / (d1 + Math.log10(f) / (AQUARIUS_MW.n - 1)))));
-    return { decades: dec, levels: mus.map(mu => Math.max(0, Math.floor(dec / -Math.log10(mu)))), exact: mus.map(mu => dec / -Math.log10(mu)), suppressed };
+  // levels (whole), exact (the fraction dec/log10(1/mu), for each mu). suppressed: the levels at mu (by default the
+  // last of mus, so muAquarius() unless mus is given) if, below the first, each level's subhalos are a factor f = 2
+  // or 3 fewer than the self-similar count (Springel et al.'s sub-subhalos), and suppressedExact the same as
+  // fractions. N(>M) ~ M^-(n-1), so each of those levels is mu f^(-1/(n-1)) of its host.
+  const nesting = (floor, host = MW, mus = [0.1, 0.01, muAquarius()], mu = mus[mus.length - 1]) => {
+    const dec = Math.log10(host / floor), d1 = -Math.log10(mu);
+    const suppressedExact = [2, 3].map(f => (dec < d1 ? dec / d1 : 1 + (dec - d1) / (d1 + Math.log10(f) / (AQUARIUS_MW.n - 1))));
+    return { decades: dec, levels: mus.map(mu => Math.max(0, Math.floor(dec / -Math.log10(mu)))), exact: mus.map(mu => dec / -Math.log10(mu)),
+      suppressed: suppressedExact.map(x => Math.max(0, Math.floor(x))), suppressedExact };
   };
 
   const api = { C, PLANCK18, WMAP_ERA, DELTA_C, MW, R_NU, HOM, background, massOfK, radiusOfMass,

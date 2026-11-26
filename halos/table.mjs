@@ -119,18 +119,23 @@ const floors = [
   ['WIMP range, heaviest (Bringmann; all matter)', 1e-3 / bg.fc],
   ...wave.flatMap(w => [[`wave ${w.m.toExponential(1)} eV, M_hm`, w.Mhm], [`wave ${w.m.toExponential(1)} eV, Schive M0`, w.M0]]),
 ];
-console.log('   floor                                          M_floor   decades   levels 10x  100x   mu (exact)    2x/3x   N(>floor), 1e12   Aq-A      f_sub');
+console.log('   floor                                          M_floor   decades   levels 10x  100x   mu (exact)          2x/3x (exact)   N(>floor), 1e12   Aq-A      f_sub');
 for (const [name, M] of floors) {
   const n = H.nesting(M);
   console.log(`   ${name.padEnd(45)} ${pad(e2(M), 9)}  ${pad(n.decades.toFixed(1), 6)}  ${pad(n.levels[0], 10)}  ${pad(n.levels[1], 4)}  ${pad(`${n.levels[2]} (${n.exact[2].toFixed(2)})`, 11)}` +
-    `  ${pad(n.suppressed.join('/'), 7)}  ${pad(e2(H.subhaloCount(M)), 15)}  ${pad(e2(H.subhaloCount(M, Infinity, H.AQUARIUS)), 9)}  ${pad(M < 1e10 ? e2(H.subhaloMass(M, 1e10) / 1e12) : '-', 7)}`);
+    `  ${pad(`${n.suppressed.join('/')} (${n.suppressedExact.map(x => x.toFixed(3)).join('/')})`, 21)}  ${pad(e2(H.subhaloCount(M)), 15)}  ${pad(e2(H.subhaloCount(M, Infinity, H.AQUARIUS)), 9)}  ${pad(M < 1e10 ? e2(H.subhaloMass(M, 1e10) / 1e12) : '-', 7)}`);
 }
 const mu50 = H.muAquarius(H.AQUARIUS_MW, { m50: true }), lev50 = M => H.nesting(M, H.AQUARIUS_MW.m50, [mu50]).levels[0], f10 = H.wimpFloor(bg, { m: 100, Tkd: 10 }).bringmann;
 console.log(`\n   mu is against the host's M200. Against M50, the mass inside r50 where the law was fitted, it is ${mu50.toFixed(4)} (Aq-A: ` +
   `${H.muAquarius(H.AQUARIUS, { m50: true }).toFixed(4)}),\n   and the levels at mu, counted down from M50, are ${lev50(floors[0][1])} to ${lev50(floors[5][1])} for Bringmann's range and ` +
   `${lev50(floors[1][1])} to ${lev50(f10)} for the bino, against ${H.nesting(floors[0][1]).levels[2]} to ${H.nesting(floors[5][1]).levels[2]} and ${H.nesting(floors[1][1]).levels[2]} to ${H.nesting(f10).levels[2]}.`);
-console.log(`   In the dark matter density alone (Bringmann's convention) the bino at T_kd 10 MeV has ${H.nesting(bg.fc * f10).exact[2].toFixed(2)} levels at mu,` +
-  ` not ${H.nesting(f10).exact[2].toFixed(2)}: a knife edge between 9 and 10.`);
+console.log(`   With the floor in the dark matter density alone (Bringmann's convention; microhalos hold no baryons) and the host in all its matter,` +
+  `\n   the bino at T_kd 10 MeV has ${H.nesting(bg.fc * f10).exact[2].toFixed(2)} levels at mu, not ${H.nesting(f10).exact[2].toFixed(2)}: a knife edge between 9 and 10.` +
+  ` With both in the dark matter alone, ${H.nesting(bg.fc * f10, bg.fc * H.MW).exact[2].toFixed(2)}\n   again: the count depends only on host/floor.`);
+const muAqA = H.muAquarius(H.AQUARIUS), levAqA = M => H.nesting(M, H.MW, [muAqA]).exact[0].toFixed(2);
+console.log(`   mu = ${muAq.toFixed(4)} is a 1e12 Msun host's, with the law scaled as in Erkal et al. (a0 in proportion to the host, m0 fixed),` +
+  ` so mu grows as M_host^(1/9).\n   A law the same in M/M_host for all hosts gives them all Aq-A's mu, ${muAqA.toFixed(4)}: then the levels at mu are ` +
+  `${levAqA(floors[0][1])} to ${levAqA(floors[5][1])} for Bringmann's range\n   and ${levAqA(floors[1][1])} to ${levAqA(f10)} for the bino.`);
 console.log('\n   Wave dark matter, decades from the population floor (M_1/2, M_hm, M0) and, for comparison, from the Jeans mass today:');
 for (const w of wave) {
   const ns = [w.M2, w.Mhm, w.M0].map(M => H.nesting(M)), d = ns.map(n => n.decades);
@@ -161,7 +166,8 @@ console.log(`   Spread: ${e2(Jeq.fullWave / J0.inverseK)} between the largest an
 const s = H.solitonRelation(WM.SOL), u22 = H.hbar2Gm2(1e-22, WM.C) / (WM.C.Msun * WM.C.kpc);
 console.log(`\n   Soliton (the Schroedinger-Poisson ground state, solved in witness-map/model.js), r_c its half-density radius:`);
 console.log(`   M(<r_c) r_c = ${s.coreRc.toFixed(3)} hbar^2/(G m^2), M_total r_c = ${s.totalRc.toFixed(3)} hbar^2/(G m^2); ${(s.coreShare * 100).toFixed(1)}% of the mass lies inside r_c.`);
-{ // Schive, Chiueh & Broadhurst's fitted profile (recalled), rho = 1.9 m23^-2 (r_c/kpc)^-4 / [1 + 0.091 (r/r_c)^2]^8 Msun/pc^3.
+{ // Schive, Chiueh & Broadhurst's fitted profile (recalled; checked in review: the equation labelled Soliton in their
+  // Supplementary Information), rho = 1.9 m23^-2 (r_c/kpc)^-4 / [1 + 0.091 (r/r_c)^2]^8 Msun/pc^3.
   const n = 20000; let I = 0; for (let i = 0; i < n; i++) { const x = (i + 0.5) / n; I += x * x / Math.pow(1 + 0.091 * x * x, 8) / n; }
   const u23 = H.hbar2Gm2(1e-23, WM.C) / (WM.C.Msun * WM.C.kpc / 1e3);
   console.log(`   At 1e-23 eV that is ${e2(s.coreRc * u23)} Msun pc. Schive, Chiueh & Broadhurst (2014): their core mass-radius relation gives 5.5e12;`);

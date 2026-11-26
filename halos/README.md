@@ -13,7 +13,7 @@ fit between the floor and a Milky Way, and asks whether the halos stop looking a
 
 | Dark matter | Smallest halos (M☉) | Decades below a 10¹² M☉ Milky Way | Levels at the Aquarius ratio (an upper bound) |
 |---|---|---|---|
-| 100 GeV WIMP (bino), kinetic decoupling at 40 to 10 MeV | 1.4×10⁻⁶ to 1.0×10⁻⁴ | 17.9 to 16.0 | 11 to 9 |
+| 100 GeV WIMP (bino), kinetic decoupling at 40 to 10 MeV | 1.4×10⁻⁶ to 1.0×10⁻⁴ | 17.9 to 16.0 | 11 to 9 or 10 |
 | WIMPs in general (Bringmann 2009; his 10⁻¹¹ to 10⁻³ counts the dark matter alone) | 1.2×10⁻¹¹ to 1.2×10⁻³ | 23 to 15 | 14 to 9 |
 | Wave, 10⁻²² eV (the lensing notes' benchmark, excluded) | 1.6 to 5.4×10¹⁰ | 1.8 to 1.3 | 1 to 0 |
 | Wave, 2 to 2.9×10⁻²¹ eV (Lyman-α; Milky Way satellites) | 1.8 to 9.9×10⁸ | 3.7 to 3.0 | 2 to 1 |
@@ -24,12 +24,15 @@ fit between the floor and a Milky Way, and asks whether the halos stop looking a
 Each wave mass is the lower bound of the probe named (as seen in search text; checked in review); each assumes the
 wave is all of the dark matter. The ranges come from the definition of "smallest" (below) and, for the bino, from
 the decoupling temperature. A level is a factor μ = 0.025 in mass: where the subhalo law fitted to the Aquarius
-simulation expects the largest subhalo of a host, N(>μM_host) = 1. Using that ratio at every level is the
-self-similar case, which Springel et al. (2008) call an upper limit: they find sub-subhalos 2 or 3 times fewer.
-With that at every level below the first, the bino has 9 to 8 or 8 to 7 levels, Bringmann's range 11 to 7 or 10 to
-7, and no wave row loses more than one. μ is measured against the host's M200; against M50, the mass inside the
-radius where the law was fitted, it is 0.018, and counted down from M50 the levels drop by up to one. The bino's 9
-at 10 MeV is a knife edge between 9 and 10 (below). At 10× per level the bino has 15 to 17 levels; at 100×, 7 or 8.
+simulation expects the largest subhalo of a host, N(>μM_host) = 1. That is a 10¹² M☉ host's μ, with the law scaled
+as in Erkal et al. (2016): a₀ in proportion to the host, m₀ fixed, so μ grows as M_host^(1/9). A law the same in
+M/M_host for all hosts gives them all Aq-A's 0.027, and the bino's 9 becomes 10. Using one ratio at every level is
+the self-similar case, which Springel et al. (2008) call an upper limit: they find sub-subhalos 2 or 3 times fewer.
+With that at every level below the first, the bino has 9 to 8 or 8 to 7 levels, and Bringmann's range 11 to 7 or
+10 to 7, its light end a knife edge (11.999 and 10.991 levels); no wave row loses more than one. μ is measured
+against the host's M200; against M50, the mass inside the radius where the law was fitted, it is 0.018, and
+counted down from M50 the levels drop by up to one. The bino's 9 at 10 MeV is a knife edge between 9 and 10
+(below). At 10× per level the bino has 15 to 17 levels; at 100×, 7 or 8.
 
 So the two kinds of dark matter stop nesting eleven decades or more apart at the Lyman-α bounds, and eight to ten
 apart at the strongest bound proposed, 8×10⁻¹⁸ eV. Wave dark matter at the benchmark mass hardly nests at all: a
@@ -55,8 +58,10 @@ The floor is the larger of the two (Bringmann 2009). For a bino decoupling at 10
 larger than the free-streaming mass M(π/k_fs) throughout, and comparable to the half-mode mass at 30 to 40 MeV.
 Across WIMP models Bringmann finds floors from about 10⁻¹¹ to nearly 10⁻³ M☉. He writes both masses with the dark
 matter density ρ_χ, as Cornell, Profumo and Shepherd (2013) write the acoustic mass. Every mass here counts all the
-matter, 1.19 times more (0.07 decades), so the answer table converts his range. In his convention the bino at 10
-MeV has 10.01 levels at μ instead of 9.97, so its count sits on the edge between 9 and 10.
+matter, 1.19 times more (0.07 decades), so the answer table converts his range. Microhalos hold no baryons, so his
+convention suits the floor. With the floor in it and the Milky Way still in all its matter, the bino at 10 MeV has
+10.01 levels at μ instead of 9.97, so its count sits on the edge between 9 and 10. With both in the dark matter
+alone it has 9.97 again: the count depends only on their ratio.
 
 **"About 10⁻⁶ M☉" is a convention.** The same cut-off gives 1.05×10⁻⁶ M☉ for a sphere of radius π/k_fs = 1.85 pc,
 which is how Green, Hofmann and Schwarz define their "about 10⁻⁶ M☉" (2004 and 2005, as #35's review read them;
@@ -90,7 +95,8 @@ three decades higher. The Jeans masses alone span a factor 10⁵ between definit
 m^(−3/2), the population floor as m^(−4/3). At 2×10⁻²⁰ eV the population floor is 1.4 to 4.6×10⁷ M☉.
 
 Every row at a bound is an extrapolation. Hu, Barkana and Gruzinov's cut-off was computed near 10⁻²² eV, and Schive
-et al. fitted M₀ to runs at 0.8 to 3.2×10⁻²² eV and flag it as uncertain below 10⁹ M☉ (as #35's review read them).
+et al. fitted M₀ to runs at 0.8 to 3.2×10⁻²² eV and flag their mass function below about 10⁹ M☉ as uncertain
+(as #35's review read them). At every bound M₀ is below that: 3×10⁸ M☉ at 2×10⁻²¹ eV and lower at the others.
 At 2×10⁻²⁰ eV the particle is about 60 times heavier than the heaviest fitted. There Rogers and Peiris quote a
 half-mode mass of 7.2×10⁷ M☉, in a convention matched to warm dark matter (Drlica-Wagner et al. 2019); that is 2.1
 times the 3.4×10⁷ here.
@@ -98,8 +104,8 @@ times the 3.4×10⁷ here.
 **The wave clock and the Jeans scale.** In the Witness Map's terms, the wave clock m·Δx²/ħ at Δx = 1/k_J equals
 1/(4√(πGρ)), gravity's own clock: the Jeans condition restated, an identity for any constants. At Δx = λ_J/2 =
 π/k_J the clock is π² longer, so the factor is a convention. The often-quoted k_J = 66.5 a^¼ m₂₂^½ Mpc⁻¹ (Marsh
-2016; the equation labelled axion_jeans in the arXiv source) uses the dark matter density alone (0.12 ρ_crit/h²);
-all matter gives 69.5. Hui et al.'s M_J = 1.5×10⁷ m₂₂^(−3/2) M☉ (the equation labelled jeans) also uses the wave's
+2016; the equation labelled eqn:axion_jeans in the arXiv source) uses the dark matter density alone (0.12 ρ_crit/h²);
+all matter gives 69.5. Hui et al.'s M_J = 1.5×10⁷ m₂₂^(−3/2) M☉ (the equation labelled eq:jeans) also uses the wave's
 own density, with Ω = 0.27 and h = 0.7: there this model gives 1.505×10⁷. At Planck 2018 it gives 1.47×10⁷ in the
 dark matter alone and 1.54×10⁷ in all the matter.
 
@@ -117,7 +123,7 @@ combination. The soliton is that atom with its own mass for a nucleus, spread th
 Springel et al.'s Aquarius halo (2008) follows dN/dM = a₀ (M/m₀)^−1.9 above about 10⁵ M☉. Extended down to each
 floor, the law gives the counts in [`table.mjs`](table.mjs). Above 10⁻⁶ M☉ it gives 1.05×10¹⁵ subhalos in Aq-A
 (1.84×10¹² M☉) and 5.7×10¹⁴ in a 10¹² M☉ host ([`tests/halos.mjs`](../tests/halos.mjs)), tides ignored. Diemand,
-Moore and Stadel (2005) find "over 10¹⁵" that survive: Aq-A's count clears that by 5%, and the lighter host falls
+Moore and Stadel (2005) expect "over 10¹⁵" to survive: Aq-A's count clears that by 5%, and the lighter host falls
 short by a factor 1.75. Their own M^−1.9 law, extrapolated the same way, gives about 5×10¹⁵. Like for like, the
 Aquarius law gives 4.8 times fewer for Aq-A and 8.8 times fewer for the 10¹² M☉ host; they give no host mass. The
 levels are a separate count. Each level's largest subhalo, where the law expects one, is μ = 0.025 of its host (1.6
@@ -159,10 +165,10 @@ Halos near the cut-off form with a different shape: steeper ρ ∝ r^−1.5 cent
 of larger halos (Ishiyama 2014; Angulo et al. 2017; Delos and White 2023). Phase-space simulations free of
 artificial fragmentation find them too (Ondaro-Mallea et al. 2024, as seen in search text). The inner slope is
 still about −1.3 at fifty times the cut-off mass (Ishiyama 2014). Whether the shapes stay different inside the
-halos built from them is contested. Delos and White find that the cusps survive, at the smallest radii the
+halos built from them is contested. Delos and White (MNRAS) find that the cusps survive, at the smallest radii the
 simulations resolve; Angulo et al. find that major mergers flatten them. J. Wang et al. (2020) find NFW and Einasto
 profiles, nearly universal over 20 decades of mass from an Earth mass to clusters, and Delos and White suggest the
-cusps lie at radii those simulations do not resolve. Y. Wang, Bose, Frenk and Jenkins (2025), in zooms of hosts of
+cusps lie at radii those simulations do not resolve. Y. Wang, Bose, Frenk and Jenkins (2026), in zooms of hosts of
 5×10⁹ to 2×10¹⁰ M☉ with imposed free-streaming cut-offs, find both: under smooth accretion the whole profile turns
 NFW-like while the cusp stays visible in the particles of the original peak, "buried but not destroyed"; major
 mergers and early clumpy accretion destroy it (their early clumps are mostly artificial fragments, which they find
@@ -205,13 +211,14 @@ soliton.
 - the soliton's M r_c against Schive, Chiueh and Broadhurst's core mass-radius relation;
 - the Aquarius normalisation scaled from Aq-A to a 10¹² M☉ host against the quoted one (a guard on the transcribed
   constants);
-- Aq-A's count above 10⁻⁶ M☉ against the "over 10¹⁵" that Diemand, Moore and Stadel find survive (a 5% margin);
+- Aq-A's count above 10⁻⁶ M☉ against the "over 10¹⁵" that Diemand, Moore and Stadel expect to survive (a 5% margin);
 - the radiation-era kick against its closed form, and Eisenstein and Hu's tail against the derived one;
 - σ(M) against a direct quadrature, and its convergence in the grid.
 
 Four comparisons are notes, not checks: the fluid-neutrino tail; Aquarius's four generations; Diemand, Moore and
 Stadel's own extrapolated total, about 5×10¹⁵ above 10⁻⁶ M☉, which the Aquarius law falls short of by 4.8 to 8.8
-times; and the onset of nonlinearity for typical fluctuations against Green, Hofmann and Schwarz's z = 60 ± 20.
+times; and the onset of nonlinearity for typical fluctuations against Green, Hofmann and Schwarz's z_nl (60 ± 10 for
+n = 1; 40 to 80 with scale-dependent spectra).
 
 ## What the model leaves out
 
@@ -245,14 +252,15 @@ primary sources in their arXiv LaTeX and confirmed those values ("checked in rev
 range was not checked). Some values come from that reading alone ("as #35's review read it"): Green, Hofmann and
 Schwarz's transfer-function prefactor (the JCAP equations labelled dfs and dk), cut-off mass definition, damping
 mass and z_nl; Bringmann's and Cornell et al.'s use of the dark matter density; Diemand, Moore and Stadel's
-extrapolated 5×10¹⁵; Springel et al.'s sub-subhalo counts; Wang et al.'s method; Hui et al.'s (equation label
-jeans) and Marsh's (axion_jeans) normalisations; Schive, Chiueh and Broadhurst's core mass-radius relation; the
-runs Schive et al. fitted M₀ to (MFFit); May and Springel's result; and Rogers and Peiris's half-mode mass. Aq-A's
-M50 and Schive, Chiueh and Broadhurst's fitted profile (in `table.mjs`) are recalled.
+extrapolated 5×10¹⁵; Springel et al.'s sub-subhalo counts; Wang et al.'s method; Hui et al.'s (eq:jeans) and
+Marsh's (eqn:axion_jeans) normalisations; Schive, Chiueh and Broadhurst's core mass-radius relation; the
+runs Schive et al. fitted M₀ to (eq:MFFit); May and Springel's result; and Rogers and Peiris's half-mode mass. Aq-A's
+M50 (Springel et al.'s Table 1) and Schive, Chiueh and Broadhurst's fitted profile (in `table.mjs`; the equation
+labelled Soliton in their Supplementary Information) were recalled, then checked in review.
 
 - A. M. Green, S. Hofmann and D. J. Schwarz, *The power spectrum of SUSY-CDM on sub-galactic scales*, MNRAS 353, L23 (2004). https://arxiv.org/abs/astro-ph/0309621
 - A. M. Green, S. Hofmann and D. J. Schwarz, *The first WIMPy halos*, JCAP 0508, 003 (2005). https://arxiv.org/abs/astro-ph/0503387
-- A. M. Green, S. Hofmann and D. J. Schwarz, *Small scale WIMP physics*, AIP Conf. Proc. 805, 431 (2006). https://arxiv.org/abs/astro-ph/0508553
+- A. M. Green, S. Hofmann and D. J. Schwarz, *Small scale WIMP physics*, AIP Conf. Proc. 805, 431 (2005). https://arxiv.org/abs/astro-ph/0508553
 - A. Loeb and M. Zaldarriaga, *The small-scale power spectrum of cold dark matter*, Phys. Rev. D 71, 103520 (2005). https://arxiv.org/abs/astro-ph/0504112
 - E. Bertschinger, *Effects of cold dark matter decoupling and pair annihilation on cosmological perturbations*, Phys. Rev. D 74, 063509 (2006). https://arxiv.org/abs/astro-ph/0607319
 - T. Bringmann, *Particle models and the small-scale structure of dark matter*, New J. Phys. 11, 105027 (2009). https://arxiv.org/abs/0903.0189
@@ -264,10 +272,10 @@ M50 and Schive, Chiueh and Broadhurst's fitted profile (in `table.mjs`) are reca
 - T. Ishiyama, *Hierarchical formation of dark matter halos and the free streaming scale*, ApJ 788, 27 (2014). https://arxiv.org/abs/1404.1650
 - T. Ishiyama and S. Ando, *The abundance and structure of subhaloes near the free streaming scale and their impact on indirect dark matter searches*, MNRAS 492, 3662 (2020). https://arxiv.org/abs/1907.03642
 - R. E. Angulo, O. Hahn, A. D. Ludlow and S. Bonoli, *Earth-mass haloes and the emergence of NFW density profiles*, MNRAS 471, 4687 (2017). https://arxiv.org/abs/1604.03131
-- M. S. Delos and S. D. M. White, *Inner cusps of the first dark matter haloes: formation and survival in a cosmological context*, MNRAS 518, 3509 (2023). https://arxiv.org/abs/2207.05082
-- M. S. Delos and S. D. M. White, *Prompt cusps and the dark matter annihilation signal*, JCAP 10, 008 (2023). https://arxiv.org/abs/2209.11237
+- M. S. Delos and S. D. M. White, *Inner cusps of the first dark matter haloes: formation and survival in a cosmological context*, MNRAS 518, 3509 (2023), for the cusps' formation and survival, and the radii J. Wang et al. do not resolve. https://arxiv.org/abs/2207.05082
+- M. S. Delos and S. D. M. White, *Prompt cusps and the dark matter annihilation signal*, JCAP 10, 008 (2023), for the cusps' formation. https://arxiv.org/abs/2209.11237
 - L. Ondaro-Mallea et al., *Phase-space simulations of prompt cusps: simulating the formation of the first haloes without artificial fragmentation*, MNRAS 527, 10802 (2024). https://arxiv.org/abs/2309.05707
-- Y. Wang, S. Bose, C. S. Frenk and A. Jenkins, *Buried but not destroyed: the evolution from prompt cusps to NFW haloes* (2025). https://arxiv.org/abs/2512.13804
+- Y. Wang, S. Bose, C. S. Frenk and A. Jenkins, *Buried but not destroyed: the evolution from prompt cusps to NFW haloes*, MNRAS 549, stag907 (2026). https://arxiv.org/abs/2512.13804
 - H. Zhao, D. Hooper, G. W. Angus, J. E. Taylor and J. Silk, *Tidal disruption of the first dark microhalos*, ApJ 654, 697 (2007). https://arxiv.org/abs/astro-ph/0508215
 - B. Moore, J. Diemand, J. Stadel and T. Quinn, *On the survival and disruption of Earth mass CDM micro-haloes* (2005). https://arxiv.org/abs/astro-ph/0502213
 - T. Goerdt, O. Y. Gnedin, B. Moore, J. Diemand and J. Stadel, *The survival and disruption of cold dark matter microhaloes: implications for direct and indirect detection experiments*, MNRAS 375, 191 (2007). https://arxiv.org/abs/astro-ph/0608495
@@ -275,7 +283,7 @@ M50 and Schive, Chiueh and Broadhurst's fitted profile (in `table.mjs`) are reca
 - A. Schneider, R. E. Smith, A. V. Macciò and B. Moore, *Non-linear evolution of cosmological structures in warm dark matter models*, MNRAS 424, 684 (2012), for the half-mode mass. https://arxiv.org/abs/1112.0330
 - A. Schneider, R. E. Smith and D. Reed, *Halo mass function and the free streaming scale*, MNRAS 433, 1573 (2013). https://arxiv.org/abs/1303.0839
 - W. Hu, R. Barkana and A. Gruzinov, *Fuzzy cold dark matter: the wave properties of ultralight particles*, Phys. Rev. Lett. 85, 1158 (2000). https://arxiv.org/abs/astro-ph/0003365
-- L. Hui, J. P. Ostriker, S. Tremaine and E. Witten, *Ultralight scalars as cosmological dark matter*, Phys. Rev. D 95, 043541 (2017). https://arxiv.org/abs/1610.08297; its Jeans mass as quoted by F. Toguz, D. Kawata, G. Seabroke and J. I. Read, MNRAS 511, 1757 (2022). https://arxiv.org/abs/2106.02526
+- L. Hui, J. P. Ostriker, S. Tremaine and E. Witten, *Ultralight scalars as cosmological dark matter*, Phys. Rev. D 95, 043541 (2017). https://arxiv.org/abs/1610.08297; its Jeans mass as quoted by F. Toguz, D. Kawata, G. Seabroke and J. I. Read, *Constraining ultra light dark matter with the Galactic nuclear star cluster*, MNRAS 511, 1757 (2022). https://arxiv.org/abs/2106.02526
 - D. J. E. Marsh, *Axion cosmology*, Phys. Rep. 643, 1 (2016). https://arxiv.org/abs/1510.07633; the 66.5 form as quoted by M. Kulkarni and J. P. Ostriker, *What is the halo mass function in a fuzzy dark matter cosmology?*, MNRAS 510, 1425 (2022). https://arxiv.org/abs/2011.02116
 - H.-Y. Schive, T. Chiueh and T. Broadhurst, *Cosmic structure as the quantum interference of a coherent dark wave*, Nature Phys. 10, 496 (2014), and its Supplementary Information. https://arxiv.org/abs/1406.6586; the 5.5×10¹² first seen restated by D. Wardana, K. Hayashi, M. Chiba and E. G. M. Ferreira, *Fuzzy dark matter and the impact of core–halo diversity on its particle mass constraints* (2026), which credits it to Phys. Rev. Lett. 113, 261302. https://arxiv.org/abs/2603.07175
 - H.-Y. Schive, T. Chiueh, T. Broadhurst and K.-W. Huang, *Contrasting galaxy formation from quantum wave dark matter, ψDM, with ΛCDM, using Planck and Hubble data*, ApJ 818, 89 (2016). https://arxiv.org/abs/1508.04621
