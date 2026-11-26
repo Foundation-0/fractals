@@ -44,8 +44,6 @@ clustering are scale-free over a range the system sets itself ([third study](#th
 
 ## First study: the Witness Map
 
-Related research: [scaling across cosmic time](notes/acceleration-evolution.md) connects this project's bounded scaling tests to gravity's acceleration-evolution audit. The evolution exponent is not a fractal dimension, and visual resemblance alone supplies no cosmological mechanism.
-
 Why do electrons act as waves and planets do not? Ask any object one question: can it be in two places
 at once, a gap Δx apart?
 
@@ -365,6 +363,10 @@ Newman's measurements (`tests/critical.mjs`).
 
 Mistakes found along the way are in [CORRECTIONS.md](CORRECTIONS.md). Open questions are the
 [issues](https://github.com/Foundation-0/fractals/issues).
+
+## Scaling across cosmic time
+
+[Research note: scaling across cosmic time](notes/acceleration-evolution.md) connects this project's bounded scaling tests to gravity's acceleration-evolution study (pending independent reproduction). The evolution exponent is not a fractal dimension, and visual resemblance alone supplies no cosmological mechanism.
 
 ## Sources
 

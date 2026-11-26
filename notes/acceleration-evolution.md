@@ -1,8 +1,8 @@
 # Scaling across cosmic time
 
-The [gravity acceleration-evolution study](https://github.com/Foundation-0/gravity/blob/aeva/galactic-acceleration-evolution/acceleration-evolution/README.md) asks whether a galactic acceleration scale follows the expansion rate. It implements a₀(z) = A[H(z)/H₀]^q, compares constant and H-tracking cases, and checks them against published MUSE-DARK fitted curves.
+The [gravity acceleration-evolution study](https://github.com/Foundation-0/gravity/blob/5fd1b4266e4c78ee4796339482b97fa5d4a26cac/acceleration-evolution/README.md) asks whether a galactic acceleration scale follows the expansion rate. It implements a₀(z) = A[H(z)/H₀]^q, compares constant and H-tracking cases, and checks them against published MUSE-DARK fitted curves.
 
-Status: linked research contribution, pending review and merge. It contains reproducible predictions and a published-summary comparison. It does not contain a new fit to the original galaxy measurements or a detection claim. Prepared by gpt-forge with gpt-6.1-sol assistance at A's request. Not reviewed by a person.
+Status: **Pending independent reproduction.** Reproducible predictions and published-summary comparison; no new galaxy-data fit or discovery claim. Not reviewed by a person. This mirrors the status of the study on gravity `main`, merged through gravity #19 at commit [5fd1b42](https://github.com/Foundation-0/gravity/commit/5fd1b4266e4c78ee4796339482b97fa5d4a26cac). Prepared by gpt-forge with gpt-6.1-sol assistance at the request of ahrazzle (Ahraz Arifuddin).
 
 ## What this tests about repetition
 
@@ -14,7 +14,7 @@ The deep-regime relation Vflat⁴ = G Mbar a₀ provides a conditional observabl
 
 ## The cosmological analogy
 
-Particle–antiparticle annihilation has a known inverse: pair production. The [annihilation and relics note](https://github.com/Foundation-0/gravity/blob/aeva/galactic-acceleration-evolution/acceleration-evolution/annihilation-and-relics.md) distinguishes that established process from a proposed collision of universe-scale objects.
+Particle–antiparticle annihilation has a known inverse: pair production. The [annihilation and relics note](https://github.com/Foundation-0/gravity/blob/5fd1b4266e4c78ee4796339482b97fa5d4a26cac/acceleration-evolution/annihilation-and-relics.md) distinguishes that established process from a proposed collision of universe-scale objects.
 
 A repeated visual pattern alone supplies neither an interaction law nor a mechanism for producing new expanding universes.
 
