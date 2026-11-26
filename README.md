@@ -368,6 +368,10 @@ Newman's measurements (`tests/critical.mjs`).
 Mistakes found along the way are in [CORRECTIONS.md](CORRECTIONS.md). Open questions are the
 [issues](https://github.com/Foundation-0/fractals/issues).
 
+## Scaling across cosmic time
+
+[Research note: scaling across cosmic time](notes/acceleration-evolution.md) connects this project's bounded scaling tests to gravity's acceleration-evolution study (pending independent reproduction). The evolution exponent is not a fractal dimension, and visual resemblance alone supplies no cosmological mechanism.
+
 ## Sources
 
 - E. Joos and H. D. Zeh, *The emergence of classical properties through interaction with the environment*, Z. Phys. B 59, 223 (1985). https://doi.org/10.1007/BF01725541
