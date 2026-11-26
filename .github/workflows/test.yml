@@ -17,6 +17,7 @@ concurrency:
 jobs:
   test:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     strategy:
       matrix:
         node-version: [18, 20, 22]
@@ -34,3 +35,4 @@ jobs:
       - run: node turbulence/table.mjs quick
       - run: node turbulence/edges.mjs quick
       - run: node turbulence/edges.mjs 256
+      - run: node orbits/table.mjs quick
