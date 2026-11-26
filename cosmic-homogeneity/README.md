@@ -68,7 +68,7 @@ model's 1% scale is about 130. Yadav et al. (2005) and Sarkar et al. (2009) foun
 multifractal dimensions. Ntelis et al. (2017) used D₂ = 2.97 on BOSS CMASS galaxies, corrected the counts for bias
 and redshift-space distortion, and found 63.3 ± 0.7 h⁻¹ Mpc for the matter distribution, against a ΛCDM 62.0
 (abstract; their Conclusions give 61.9 ± 0.8 for 0.538 < z < 0.592). The 62.0 is a real-space matter value: the
-paper's matter values (Sec. 5.5, Table 5) run from 59 to 67, its galaxy values from 109 to 147. In their
+paper's matter values (Sec. 5.5; Table 3 in JCAP) run from 59 to 67, its galaxy values from 109 to 147. In their
 fiducial cosmology, Planck 2015, the model gives 61.2 for matter at z = 0.57, near the middle of that slice (the
 paper attaches no redshift to 62.0). With Planck 2018 it gives 59.9, mostly because σ₈ is lower (0.811 against 0.831).
 For galaxies of their bias in that slice (b ≈ 1.94) in redshift space the model gives 124; they measure 114 ± 6.
