@@ -186,6 +186,11 @@ but only within about 100 pc of the centre, too far in for the lensed images to 
 copy of its algebra, and `npm test` fails if the two disagree. Details, the lens systems with anomaly and black
 hole data, and a reshaped test: [notes/bh-lensing.md](notes/bh-lensing.md) (issue #1).
 
+## Fractal landscapes
+
+[Midpoint-displacement landscapes](fractal-landscapes/README.md): a 1D generator with Hurst parameter H and a
+variogram estimator, with the estimator's measured bias and exact-moment checks in `npm test`.
+
 ## Run it
 
 Needs Node 18 or later, nothing else. The checks run on every pull request, on Node 18, 20 and 22.
