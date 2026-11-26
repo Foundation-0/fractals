@@ -1,10 +1,10 @@
-# Multi-scale pont_beta(tau) Hurst/cutoff analyzer and two-clock witness separability.
-import cmath, math, random
+# Multi-scale pont_beta(tau) Hurst/cutoff analyzer and a period-ratio separability check on synthetic M-dwarf light curves.
+import cmath, fractions, math, random
 
-EMPIRICAL_MDWARFS = {
-    "TOI-540_b": {"tic": "TIC 200322593", "p_rot_d": 0.72631, "p_orb_d": 1.23915},
-    "TIC_181015118": {"tic": "TIC 181015118", "p_rot_d": 0.93900, "p_orb_d": 2.18500},
-    "TIC_246897668": {"tic": "TIC 246897668", "p_rot_d": 1.37740, "p_orb_d": 3.19200},
+# The cases only supply catalogue periods; every light curve in this module is synthetic
+# (synth_mdwarf_lightcurve) and no observed photometry is loaded.
+SYNTHETIC_PERIOD_CASES = {
+    "TOI-540_b": {"tic": "TIC 200322593", "p_rot_d": 0.72610, "p_orb_d": 1.239149, "source": "Ment et al. 2021, AJ 161, 23 (P_rot = 17.4264 h, P_orb = 1.239149 d)"},
 }
 def _median(xs):
     s, n = sorted(xs), len(xs)
@@ -16,6 +16,7 @@ def _scatter(xs, metric="mad"):
 def mad_rms_ratio(xs):
     return _scatter(xs, "mad") / max(_scatter(xs, "rms"), 1e-12)
 def pont_beta(t, y, tau, clip_floor=False, metric="mad"):
+    # clip_floor applies the [1, 50] clamp, this script's choice for a conservative detection floor.
     s1, t0, t1 = _scatter(y, metric), float(t[0]), float(t[-1])
     nb, inv = int((t1 - t0) / max(tau, 1e-6)), 1.0 / max(tau, 1e-6)
     if s1 <= 0.0 or nb < 8: return 1.0
@@ -101,13 +102,22 @@ def bls_folded_mes(t, y, period, dur):
     sums, cnts = [0.0] * nb, [0] * nb
     for ti, yi in zip(t, y): b = int(((ti % period) / period) * nb) % nb; sums[b] += yi; cnts[b] += 1
     return max((-sums[b] / cnts[b]) / (s1 / math.sqrt(cnts[b])) for b in range(nb) if cnts[b] >= 5)
-def two_clock_separability(p_orb, p_rot, depth=0.0021, dur=0.034, span_d=20.0, dt_d=0.002, seed=31):
-    w_ratio, detune, t = p_orb / p_rot, min(abs(p_orb / p_rot - r) / r for r in (0.5, 1.0, 2.0)), [k * dt_d for k in range(int(span_d / dt_d))]
+def resonance_ratios(n_harm=5, j_max=2):
+    # The pre-whitening basis fits harmonics m/P_rot and a transit comb at P_orb has components
+    # j/P_orb, so they overlap when R = P_orb/P_rot = j/m.
+    return sorted(float(r) for r in {fractions.Fraction(j, m) for m in range(1, n_harm + 1) for j in range(1, j_max + 1)})
+def period_ratio_separability(p_orb, p_rot, depth=0.0021, dur=0.034, span_d=20.0, dt_d=0.002, seed=31, n_harm=5, j_max=2, tol=0.02):
+    """R = P_orb/P_rot is a period ratio, not the Witness Map's W; the light curve is synthetic;
+    a large detune is not a general separability guarantee, only the absence of overlap with the
+    fitted harmonic basis."""
+    ratio, res = p_orb / p_rot, resonance_ratios(n_harm, j_max)
+    detune = min(abs(ratio - r) / r for r in res)
+    t = [k * dt_d for k in range(int(span_d / dt_d))]
     y, in_tr = synth_mdwarf_lightcurve(t, p_rot, p_orb=p_orb, depth=depth, dur=dur, seed=seed)
-    clean = asymmetric_huber_prewhiten(t, y, p_rot)
+    clean = asymmetric_huber_prewhiten(t, y, p_rot, n_harm=n_harm)
     rec = _median([c for c, m in zip(clean, in_tr) if not m]) - _median([c for c, m in zip(clean, in_tr) if m])
-    return {"w_ratio": w_ratio, "detune": detune, "resonant_lock": detune < 0.02, "depth_retention": rec / depth, "mes_orb": bls_folded_mes(t, clean, p_orb, dur), "mes_rot": bls_folded_mes(t, clean, p_rot, dur)}
+    return {"period_ratio": ratio, "detune": detune, "nearest_resonance": min(res, key=lambda r: abs(ratio - r) / r), "resonant_lock": detune < tol, "depth_retention": rec / depth, "mes_orb": bls_folded_mes(t, clean, p_orb, dur), "mes_rot": bls_folded_mes(t, clean, p_rot, dur)}
 if __name__ == "__main__":
-    for name, cfg in EMPIRICAL_MDWARFS.items():
-        r = two_clock_separability(cfg["p_orb_d"], cfg["p_rot_d"])
-        print(f"{name:14s} W={r['w_ratio']:.4f} detune={r['detune']:.4f} retain={r['depth_retention']:.3f} MES_orb={r['mes_orb']:.2f}")
+    for name, cfg in SYNTHETIC_PERIOD_CASES.items():
+        r = period_ratio_separability(cfg["p_orb_d"], cfg["p_rot_d"])
+        print(f"{name:14s} R={r['period_ratio']:.4f} detune={r['detune']:.4f} retain={r['depth_retention']:.3f} MES_orb={r['mes_orb']:.2f} (synthetic light curve, catalogue periods)")

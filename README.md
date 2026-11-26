@@ -203,7 +203,8 @@ hole data, and a reshaped test: [notes/bh-lensing.md](notes/bh-lensing.md) (issu
 
 ## Run it
 
-Needs Node 18 or later, nothing else. The checks run on every pull request, on Node 18, 20 and 22.
+Needs Node 18 or later. `tests/pont-witness.mjs` also needs `python3` (3.10 or later; CI pins 3.12) for the
+[stellar red-noise note](notes/mhd-intermittency.md). The checks run on every pull request, on Node 18, 20 and 22.
 
 ```
 npm test                                 # checks the model against published numbers

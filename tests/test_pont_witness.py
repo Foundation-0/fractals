@@ -1,4 +1,4 @@
-# Unit tests for pont_beta(tau) Hurst/cutoff scaling and two-clock witness separability.
+# Unit tests for pont_beta(tau) Hurst/cutoff scaling and period-ratio separability.
 import os, sys, unittest
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "scripts"))
@@ -48,7 +48,7 @@ class TestPontWitnessScaling(unittest.TestCase):
 
     def test_rotational_finite_cutoff_turnover(self):
         t = [i * 0.01 for i in range(12000)]
-        for cfg in pw.EMPIRICAL_MDWARFS.values():
+        for cfg in pw.SYNTHETIC_PERIOD_CASES.values():
             p_rot = cfg["p_rot_d"]
             y, _ = pw.synth_mdwarf_lightcurve(t, p_rot, p_orb=None, flare_rate=0.2, seed=42)
             sub_rot = pw.scaling_law_fit(t, y, [0.04 * p_rot, 0.08 * p_rot, 0.14 * p_rot, 0.22 * p_rot], metric="rms")
@@ -70,14 +70,14 @@ class TestPontWitnessScaling(unittest.TestCase):
         self.assertAlmostEqual(h_clean, 0.50, delta=0.06)
         self.assertGreater(rec / depth, 0.93)
 
-    def test_two_clock_resonant_breakdown_vs_toi540_separability(self):
-        p_rot = pw.EMPIRICAL_MDWARFS["TOI-540_b"]["p_rot_d"]
-        p_orb = pw.EMPIRICAL_MDWARFS["TOI-540_b"]["p_orb_d"]
-        off = pw.two_clock_separability(p_orb, p_rot)
-        res_1 = pw.two_clock_separability(1.000 * p_rot, p_rot)
-        res_half = pw.two_clock_separability(0.500 * p_rot, p_rot)
+    def test_period_ratio_resonant_breakdown_vs_toi540_separability(self):
+        p_rot = pw.SYNTHETIC_PERIOD_CASES["TOI-540_b"]["p_rot_d"]
+        p_orb = pw.SYNTHETIC_PERIOD_CASES["TOI-540_b"]["p_orb_d"]
+        off = pw.period_ratio_separability(p_orb, p_rot)
+        res_1 = pw.period_ratio_separability(1.000 * p_rot, p_rot)
+        res_half = pw.period_ratio_separability(0.500 * p_rot, p_rot)
         self.assertFalse(off["resonant_lock"])
-        self.assertAlmostEqual(off["w_ratio"], 1.7061, delta=0.001)
+        self.assertAlmostEqual(off["period_ratio"], 1.239149/0.72610, delta=1e-4)
         self.assertGreater(off["depth_retention"], 0.90)
         self.assertGreater(off["mes_orb"], 14.0)
         self.assertGreater(off["mes_orb"], 3.0 * off["mes_rot"])
@@ -90,6 +90,18 @@ class TestPontWitnessScaling(unittest.TestCase):
         hw = 100
         naive = [y[i] - pw._median(y[max(0, i - hw):min(len(y), i + hw + 1)]) for i in range(len(y))]
         self.assertGreater(pw.bls_folded_mes(t, naive, p_rot, 0.034), 3.0 * pw.bls_folded_mes(t, naive, p_orb, 0.034))
+
+    def test_subharmonic_ratios_are_flagged(self):
+        p_rot = pw.SYNTHETIC_PERIOD_CASES["TOI-540_b"]["p_rot_d"]
+        for k in (3, 4, 5):
+            self.assertTrue(pw.period_ratio_separability(p_rot / k, p_rot)["resonant_lock"])
+        rr = pw.resonance_ratios(5, 2)
+        for target in (0.2, 0.25, 1/3, 0.5, 1.0, 2.0):
+            self.assertAlmostEqual(min(abs(r - target) for r in rr), 0.0, delta=1e-12)
+
+    def test_resonance_set_tracks_n_harm(self):
+        self.assertEqual(pw.resonance_ratios(2, 2), [0.5, 1.0, 2.0])
+        self.assertEqual(len(pw.resonance_ratios(5, 2)), 8)
 
 if __name__ == "__main__":
     unittest.main()
