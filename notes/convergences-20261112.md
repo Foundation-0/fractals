@@ -2,6 +2,8 @@
 
 Research note, 12 November 2026. This note connects the Witness Map, collective waves and turbulence to the Foundation0 convergence study. It records model calculations and proposed tests. It reports no new observation or universal microscopic mechanism.
 
+Status: exploratory model calculations, pending independent reproduction; not reviewed by a person. Prepared by gpt-forge (an OpenAI Codex agent) for ahrazzle (Ahraz Arifuddin), with gpt-6-astra research agents and gpt-6.1-sol publication preparation. The authorship record is the bundle's [PROVENANCE.md](https://github.com/Foundation-0/gravity/blob/975d0287dc805536f04430e4b361503230b841af/research/convergences-20261112/PROVENANCE.md).
+
 ## Interference loss, readable records and feedback
 
 The convergence probes construct environments with the same reduced system state and the same complete dephasing channel, which removes interference. In one example a single environment qubit reveals the pointer bit. In another, every one- or two-qubit fragment is uninformative because the information resides in joint correlations. The latter uses an established error-correcting code.
@@ -12,7 +14,7 @@ This separates three questions for the Witness Map: how fast interference disapp
 
 ## Predict the movement of a boundary
 
-The turbulent viscous scale obeys η = (ν³/ε)¹⁄⁴ under the usual incompressible-flow assumptions. Increasing viscosity ν by 100 at fixed dissipation rate ε moves the scale by 31.62.
+The turbulent viscous scale obeys η = (ν³/ε)¹⁄⁴ under the usual incompressible-flow assumptions. Increasing viscosity ν by 100 at fixed dissipation rate ε multiplies η by about 31.6 (100^(3/4) = 31.62).
 
 The point of comparison is this predicted response, rather than a coincident length or fitted slope. [Kolmogorov's primary scaling paper](https://www.ams.jhu.edu/~eyink/Turbulence/classics/Kolmogorov41a.pdf) gives the underlying construction.
 
@@ -20,7 +22,7 @@ A sonic transition is another boundary, with different controls. [Federrath et a
 
 Collective wave behavior needs its own description. A single particle's witness number does not specify the persistence or energy transport of a classical field pattern. [Mossman et al.](https://arxiv.org/html/1712.06689) connect shock behavior in a driven atomic condensate with three-dimensional wave dynamics and transverse instabilities.
 
-That atomic-gas result does not establish a dark-field pressure floor or AeST dynamics.
+That atomic-gas result does not establish a dark-field pressure floor or AeST dynamics. Here AeST is the aether scalar-tensor theory of modified gravity (Skordis and Złośnik 2021, [arXiv:2007.00082](https://arxiv.org/abs/2007.00082)), and a dark-field pressure floor is the proposal that a collapsing dark field develops an effective pressure that halts collapse. Gravity's [AeST response benchmark](https://github.com/Foundation-0/gravity/tree/975d0287dc805536f04430e4b361503230b841af/research/aest-response-gate-20261112) states what such a test requires.
 
 ## Next tests
 
@@ -30,6 +32,6 @@ That atomic-gas result does not establish a dark-field pressure floor or AeST dy
 
 ## Evidence and credit
 
-The [canonical research bundle](https://github.com/Foundation-0/gravity/tree/02013ae95fa5913894b829c8e2e63a3efcde9e63/research/convergences-20261112) contains the synthesis, route reports, primary-source ledgers and reproducible probes. Its reports retain assumptions, objections and limits for each calculation. The research used gpt-6-astra with ultra reasoning. Publication preparation used gpt-6.1-sol.
+The [research bundle](https://github.com/Foundation-0/gravity/tree/975d0287dc805536f04430e4b361503230b841af/research/convergences-20261112), pinned at gravity `main` commit 975d028 (merge of gravity #24, which landed the gravity #8 collection with its authorship and status record), contains the synthesis, route reports, primary-source ledgers and reproducible probes. Its reports retain assumptions, objections and limits for each calculation. The research used gpt-6-astra with ultra reasoning. Publication preparation used gpt-6.1-sol.
 
 The canonical bundle records the full division of work.
