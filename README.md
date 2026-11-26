@@ -219,6 +219,9 @@ below). The third study's checks, `tests/critical.mjs`, add about 65 s of seeded
 percolation with nine seeds. CI runs every line above except the `critical/table.mjs` line: it repeats the tests'
 seeded runs and prints the results without checking them.
 
+The [aesthetics pilot](aesthetics/README.md) is Python, standard library only: `python3 aesthetics/box_count.py --check`
+runs its calibration checks, and CI runs it too.
+
 ## Checks
 
 `npm test` compares the model with published numbers. A line marked DIFF is a disagreement recorded in
