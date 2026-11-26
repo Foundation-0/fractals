@@ -143,15 +143,17 @@ decades, all collapse within 157 million years (z = 24 to 14).
 For the bino the first halos (1σ, half-mode mass) collapse at z ≈ 16, or 11 to 13 once the dark matter grows
 alone: the gas never falls into wells this small, which the growth factor assumes it does after the drag epoch.
 
-Green, Hofmann and Schwarz's z = 60 ± 20 (JCAP 2005, section "The first structures") is a different quantity. It is
-z_nl, the redshift at which typical fluctuations reach σ(R, z_nl) = 1, with a top-hat window, σ₈ = 0.9, n = 1 and
-the baryons ignored; they put Nσ peaks at about 60N. The same definition here, at M_hm to M(π/k_fs), gives z_nl =
-28 to 29 with Planck 2018, 39 with WMAP-era round numbers (h = 0.7, Ω_m = 0.3, n_s = 1, σ₈ = 0.9), and 44 to 45
-with those numbers and the baryons removed, inside their range. A factor of about 1.3 in 1 + z remains. At this
-model's own threshold, 1.686, the WMAP-era numbers collapse 1σ and 2σ peaks at z = 22.5 and 46, and with Planck
-2018 collapse at z = 60 takes a 3.5σ peak (reaching δ = 1 there, their threshold, takes 2.1σ). These use the growth
-factor without the baryon lag, as Green, Hofmann and Schwarz ignore the baryons; with the lag, z = 60 takes 3.7 to
-4.4σ.
+Green, Hofmann and Schwarz's z_nl (JCAP 2005, section "The first structures") is a different quantity: the redshift
+at which typical fluctuations reach σ(R, z_nl) = 1, with a top-hat window, σ₈ = 0.9 and the baryons ignored. For a
+scale-invariant spectrum, n = 1, they give z_nl = 60 ± 10 (about 50 to 65 across their WIMP benchmarks); the
+abstract's 60 ± 20 also spans scale-dependent primordial spectra, which give 40 to 80. They put Nσ peaks at about
+60N. The same definition here, at M_hm to M(π/k_fs), gives z_nl = 28 to 29 with Planck 2018, 39 with WMAP-era round
+numbers (h = 0.7, Ω_m = 0.3, n_s = 1, σ₈ = 0.9), and 44 to 45 with those numbers and the baryons removed: below
+their 60 ± 10 for n = 1, and inside only the 40 to 80 that includes scale-dependent spectra. A factor of about 1.3
+in 1 + z remains. At this model's own threshold, 1.686, the WMAP-era numbers collapse 1σ and 2σ peaks at z = 22.5 and
+46, and with Planck 2018 collapse at z = 60 takes a 3.5σ peak (reaching δ = 1 there, their threshold, takes 2.1σ).
+These use the growth factor without the baryon lag, as Green, Hofmann and Schwarz ignore the baryons; with the lag,
+z = 60 takes 3.7 to 4.4σ.
 
 Halos near the cut-off form with a different shape: steeper ρ ∝ r^−1.5 centres, prompt cusps, not the r^−1 centres
 of larger halos (Ishiyama 2014; Angulo et al. 2017; Delos and White 2023). Phase-space simulations free of
@@ -160,9 +162,11 @@ still about −1.3 at fifty times the cut-off mass (Ishiyama 2014). Whether the 
 halos built from them is contested. Delos and White find that the cusps survive, at the smallest radii the
 simulations resolve; Angulo et al. find that major mergers flatten them. J. Wang et al. (2020) find NFW and Einasto
 profiles, nearly universal over 20 decades of mass from an Earth mass to clusters, and Delos and White suggest the
-cusps lie at radii those simulations do not resolve. Y. Wang, Bose, Frenk and Jenkins (2025, as seen in search
-text) find the whole profile turning NFW-like while the cusp stays visible in the particles of the original peak:
-"buried but not destroyed". J. Wang et al. zoomed eight times, each time into a smaller region of the previous
+cusps lie at radii those simulations do not resolve. Y. Wang, Bose, Frenk and Jenkins (2025), in zooms of hosts of
+5×10⁹ to 2×10¹⁰ M☉ with imposed free-streaming cut-offs, find both: under smooth accretion the whole profile turns
+NFW-like while the cusp stays visible in the particles of the original peak, "buried but not destroyed"; major
+mergers and early clumpy accretion destroy it (their early clumps are mostly artificial fragments, which they find
+act like real ones). J. Wang et al. zoomed eight times, each time into a smaller region of the previous
 level chosen to avoid any massive halo: their 20 decades are field halos of many masses, not a chain of halos
 inside halos.
 

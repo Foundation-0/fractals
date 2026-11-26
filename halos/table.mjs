@@ -92,14 +92,16 @@ const nuF = H.model(P18, { perDecade: 160, factor: ramp });
 console.log(`   Neutrinos coupled at horizon entry (the fluid tail from ${e2(10 * kNu)} Mpc^-1 up): sigma(M_hm) ${nuF.sigma(Mb, bino).toFixed(1)}, z_c ${nuF.zc(Mb, bino).toFixed(1)}`);
 const wm = H.model(H.WMAP_ERA, { perDecade: 160 }), MbW = H.massOfK(wm.bg, H.halfMode(bino));
 console.log(`   WMAP-era round numbers (h 0.7, Om 0.3, n_s 1, sigma8 0.9): sigma(M_hm) ${wm.sigma(MbW, bino).toFixed(1)}, z_c 1 sigma ${wm.zc(MbW, bino).toFixed(1)}, 2 sigma ${wm.zc(MbW, bino, { nu: 2 }).toFixed(1)}`);
-// Green, Hofmann & Schwarz's z = 60 +- 20 (JCAP 2005, "The first structures") is z_nl, where typical fluctuations reach
-// sigma(R, z_nl) = 1: top hat, sigma8 = 0.9, n = 1, baryons ignored. The same here, at M_hm and M(pi/k_fs).
+// Green, Hofmann & Schwarz's z_nl (JCAP 2005, "The first structures") is where typical fluctuations reach
+// sigma(R, z_nl) = 1: top hat, sigma8 = 0.9, baryons ignored. For n = 1 they give 60 +- 10 (about 50 to 65 across their
+// WIMP benchmarks); the abstract's 60 +- 20 also spans scale-dependent spectra (40 to 80). The same here, at M_hm and M(pi/k_fs).
 const ghsLike = H.model({ ...H.WMAP_ERA, Ob: 1e-7 }, { perDecade: 160 });
 const znl = m => [H.halfMode(bino), bino.kfs].map(k => m.zc(H.massOfK(m.bg, k), bino, { delta: 1 }));
 const zn = [md, wm, ghsLike].map(znl);
 console.log(`   Onset of nonlinearity for typical fluctuations, sigma(M, z_nl) = 1, at M_hm / M(pi/k_fs): Planck 2018 ${zn[0].map(z => z.toFixed(1)).join(' / ')};` +
   ` WMAP-era ${zn[1].map(z => z.toFixed(1)).join(' / ')};`);
-console.log(`   WMAP-era without baryons ${zn[2].map(z => z.toFixed(1)).join(' / ')}. Green, Hofmann & Schwarz 2005: z_nl = 60 +- 20, (1 + 60)/(1 + z_nl) = ` +
+console.log(`   WMAP-era without baryons ${zn[2].map(z => z.toFixed(1)).join(' / ')}. Green, Hofmann & Schwarz 2005: z_nl = 60 +- 10 for n = 1 (below it),` +
+  ` 40 to 80 with scale-dependent spectra (inside it); (1 + 60)/(1 + z_nl) = ` +
   `${zn[2].map(z => (61 / (1 + z)).toFixed(2)).join(' / ')}`);
 console.log(`   The bino's power per log k, Delta^2 T^2, peaks at k = ${e2(md.peak(bino))} Mpc^-1, a factor ${(hm(bino).k / md.peak(bino)).toFixed(1)} below k_hm: just before the cut-off.`);
 

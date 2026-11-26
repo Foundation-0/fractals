@@ -199,7 +199,8 @@ Claims made during the exploration that did not survive it, kept so the record s
     Aquarius finds (it resolves four levels itself). And halos near the cut-off form with steeper ρ ∝ r^−1.5
     centres. Whether those survive inside later halos is contested: Wang et al. find NFW and Einasto profiles down to
     an Earth mass, Delos and White suggest the steeper centres lie at radii those simulations do not resolve, and a
-    later study finds them buried in NFW-like profiles but not destroyed. See [halos](halos/).
+    later study, of hosts of 5×10⁹ to 2×10¹⁰ M☉, finds them buried in NFW-like profiles under smooth accretion but
+    destroyed by major mergers and early clumpy accretion. See [halos](halos/).
 24. **"Hu–Barkana–Gruzinov's quoted k_J ≈ 66.5 a^¼ Mpc⁻¹ and M_J ≈ 1.5×10⁷ M☉ for 10⁻²² eV are not mutually
     consistent with ρ = ρ_m."** Neither number is Hu, Barkana and Gruzinov's (2000), who give the Jeans
     wavenumber at equality, 9 m₂₂^½ Mpc⁻¹, and a Jeans length. The 66.5 form is Marsh's (2016) and uses the dark

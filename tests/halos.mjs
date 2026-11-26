@@ -143,16 +143,18 @@ near('Aquarius normalisation scaled from the 1.84e12 Msun Aq-A to a 1e12 Msun ho
     'Springel et al. (2008), abstract, as seen in search text; Sec. 4, as #35\'s review read it');
 }
 
-// 5. When the bino's fluctuations go nonlinear. Green, Hofmann & Schwarz's z = 60 +- 20 is z_nl, where typical
-//    fluctuations reach sigma(R, z_nl) = 1 (top hat, sigma8 = 0.9, n = 1, baryons ignored), not this model's 1.686.
+// 5. When the bino's fluctuations go nonlinear. Green, Hofmann & Schwarz's z_nl is where typical fluctuations reach
+//    sigma(R, z_nl) = 1 (top hat, sigma8 = 0.9, baryons ignored), not this model's 1.686. For n = 1 they give
+//    60 +- 10 (about 50 to 65 across their WIMP benchmarks); the abstract's 60 +- 20 also spans scale-dependent
+//    primordial spectra (40 to 80).
 //    A comparison, not a check: the rest of their calculation is not this one, and a factor of about 1.3 in 1 + z
 //    remains.
 {
   const nl = m => [H.halfMode(bino), bino.kfs].map(k => m.zc(H.massOfK(m.bg, k), bino, { delta: 1 }).toFixed(1)).join('-');
   const wm = H.model(H.WMAP_ERA, { perDecade: 60 }), ghsLike = H.model({ ...H.WMAP_ERA, Ob: 1e-7 }, { perDecade: 60 }), z0 = ghsLike.zc(H.massOfK(ghsLike.bg, bino.kfs), bino, { delta: 1 });
-  note('Bino: onset of nonlinearity for typical fluctuations, sigma(M, z_nl) = 1 at M_hm to M(pi/k_fs): published z_nl = 60 +- 20',
+  note('Bino: onset of nonlinearity for typical fluctuations, sigma(M, z_nl) = 1 at M_hm to M(pi/k_fs): published z_nl = 60 +- 10 for n = 1, 40 to 80 with scale-dependent spectra',
     `Planck 2018 ${nl(md)}; WMAP-era round numbers (h = 0.7, Omega_m = 0.3, n_s = 1, sigma8 = 0.9) ${nl(wm)}; the same without baryons ${nl(ghsLike)}, ` +
-    `inside their range, (1 + 60)/(1 + z_nl) = ${(61 / (1 + z0)).toFixed(2)}; this model's first halos (1 sigma, 1.686, M_hm) collapse at z = ${md.zc(Mhm, bino).toFixed(1)}`,
+    `below their 60 +- 10 for n = 1 and inside only their 40 to 80 with scale-dependent spectra, (1 + 60)/(1 + z_nl) = ${(61 / (1 + z0)).toFixed(2)}; this model's first halos (1 sigma, 1.686, M_hm) collapse at z = ${md.zc(Mhm, bino).toFixed(1)}`,
     GHS + ', section "The first structures", as #35\'s review read it in the arXiv source');
 }
 
