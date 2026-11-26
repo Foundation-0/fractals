@@ -36,7 +36,8 @@ check('The other definition (N = 1.01) gives a few h^-1 Mpc more, as in their LC
   rows.map(s => `z ${s.z}: ${s.modelN.toFixed(1)} vs ${s.RHlcdmN}`).join('; '), S12 + ', Table 4');
 
 // 2. Ntelis et al. (2017), BOSS CMASS galaxies, corrected for bias and redshift-space distortion: their abstract gives
-//    LCDM R_H = 62.0 h^-1 Mpc, a real-space matter value (Sec. 5.5, Table 5), in their fiducial Planck 2015 cosmology.
+//    LCDM R_H = 62.0 h^-1 Mpc, a real-space matter value (their matter values are in Sec. 5.5 and JCAP's Table 3), in
+//    their fiducial Planck 2015 cosmology.
 //    The paper attaches no redshift to it; z = 0.57 is the CMASS effective redshift.
 const p15 = H.cosmology(H.PLANCK15);
 within('Matter homogeneity scale at z = 0.57, Planck 2015 (h^-1 Mpc)', H.homogeneityScale(p15, H.amplitude(p15, { z: 0.57 })), 62.0, 1.05,
