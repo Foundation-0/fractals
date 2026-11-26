@@ -1,0 +1,123 @@
+{
+  "instrument": "Exact Zero-Log Multiplicative Quotient-LP, 4-Ray Farkas Convergence, & Portal 2 DSI Null-Equivalence",
+  "fm_vs_4ray_completeness": {
+    "cases": 500,
+    "exact_agreements": 500,
+    "feasible": 166,
+    "nonlocal_4pt_only_obstructions": 18
+  },
+  "invariance_and_controls": {
+    "scale_invariance_verified": true,
+    "positive_dsi3_max_dev": "0",
+    "positive_dsi2_max_dev": "0",
+    "must_fail_controls_rejected": [
+      "bool_rejected",
+      "float_rejected",
+      "zero_rejected",
+      "inverted_interval_rejected",
+      "inverted_bracket_rejected",
+      "4pt_nonlocal_ray_u21_only_obstruction_detected",
+      "4pt_nonlocal_ray_u12_only_obstruction_detected"
+    ]
+  },
+  "live_fractals_verification": {
+    "sabra_live": {
+      "seed1": {
+        "F2_k41_5SE_sheaf_obstruction": {
+          "local_ok": true,
+          "global_ok": false,
+          "sheaf_obstruction": true,
+          "minimal_witness": {
+            "kind": "lower",
+            "i": 0,
+            "j": 5,
+            "span": 5,
+            "cert": "(y_hi[5]/y_lo[0])^3 < (x[5]/x[0])^-2"
+          }
+        },
+        "F6_k41_5SE_sheaf_obstruction": {
+          "local_ok": true,
+          "global_ok": false,
+          "sheaf_obstruction": true,
+          "minimal_witness": {
+            "kind": "upper",
+            "i": 0,
+            "j": 4,
+            "span": 4,
+            "cert": "(y_lo[4]/y_hi[0])^1 > (x[4]/x[0])^-2"
+          }
+        },
+        "plain_S2_max_dev_p1_p2_p3": [
+          0.583359,
+          0.376759,
+          0.484754
+        ],
+        "flux_F2_max_dev_p1": 0.024289,
+        "flux_flattening_factor": 24.02
+      },
+      "seed7": {
+        "F2_k41_5SE_sheaf_obstruction": {
+          "local_ok": true,
+          "global_ok": false,
+          "sheaf_obstruction": true,
+          "minimal_witness": {
+            "kind": "lower",
+            "i": 0,
+            "j": 5,
+            "span": 5,
+            "cert": "(y_hi[5]/y_lo[0])^3 < (x[5]/x[0])^-2"
+          }
+        },
+        "F6_k41_5SE_sheaf_obstruction": {
+          "local_ok": true,
+          "global_ok": false,
+          "sheaf_obstruction": true,
+          "minimal_witness": {
+            "kind": "upper",
+            "i": 0,
+            "j": 4,
+            "span": 4,
+            "cert": "(y_lo[4]/y_hi[0])^1 > (x[4]/x[0])^-2"
+          }
+        },
+        "plain_S2_max_dev_p1_p2_p3": [
+          0.537422,
+          0.334498,
+          0.563938
+        ],
+        "flux_F2_max_dev_p1": 0.022329,
+        "flux_flattening_factor": 24.07
+      }
+    },
+    "percolation_5seed_2SE": {
+      "seeds": [
+        401,
+        5010,
+        5020,
+        5030,
+        5040
+      ],
+      "Ls": [
+        32,
+        64,
+        128,
+        256
+      ],
+      "rising_D_convex": {
+        "mode": "convex",
+        "feasible": true,
+        "failed_rays": []
+      },
+      "falling_D_concave": {
+        "mode": "concave",
+        "feasible": false,
+        "failed_rays": [
+          "u=(2,1)",
+          "u=(1,2)"
+        ]
+      }
+    }
+  },
+  "elapsed_s": 74.918,
+  "status": "ALL_EXACT_CHECKS_PASS"
+}
