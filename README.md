@@ -3,6 +3,8 @@
 Does reality repeat itself across scales? Atoms look a little like solar systems, solar systems a little
 like galaxies, galaxies cluster into clusters. This repository follows that intuition with first
 principles and checks it against what is measured: where the repetition is real, where it breaks, and why.
+The definitions the studies share (box-counting, Hausdorff and correlation dimensions, multifractal spectra,
+critical exponents) and several of the windows' ends are collected in [notes/self-similarity.md](notes/self-similarity.md).
 
 Status: **exploration, not peer reviewed, no new result claimed.** Started 16 October 2026 by Aska Digital
 with Claude (Anthropic), for [Foundation0](https://github.com/Foundation-0/f0).
